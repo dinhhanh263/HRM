@@ -1,0 +1,56 @@
+{
+  "forbidden": {
+    "title": "Access denied",
+    "description": "You don't have permission to view this content. Please contact your administrator if you believe this is a mistake.",
+    "backHome": "Back to home",
+    "back": "Go back"
+  },
+  "resources": {
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "departments": "Departments",
+    "positions": "Positions",
+    "timesheet": "Timesheet",
+    "leave": "Leave",
+    "payroll": "Payroll",
+    "users": "Users",
+    "roles": "Roles & permissions",
+    "settings": "Settings",
+    "recruitment": "Recruitment",
+    "probation": "Probation"
+  },
+  "actions": {
+    "view": "View",
+    "create": "Create",
+    "update": "Edit",
+    "delete": "Delete",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "terminate": "Terminate",
+    "export": "Export",
+    "approve": "Approve",
+    "process": "Process",
+    "job_view": "View jobs",
+    "job_create": "Create jobs",
+    "job_update": "Edit jobs",
+    "candidate_view": "View candidates",
+    "candidate_create": "Add candidates",
+    "candidate_update": "Edit candidates",
+    "application_view": "View applications",
+    "application_create": "Create applications",
+    "application_move": "Move pipeline stage",
+    "application_reject": "Reject application",
+    "application_hire": "Hire candidate",
+    "application_withdraw": "Withdraw application",
+    "interview_schedule": "Schedule interview",
+    "scorecard_submit": "Submit scorecard",
+    "review": "Review probation",
+    "decide": "Decide probation",
+    "configure": "Configure criteria",
+    "self": "Probation self-evaluation"
+  },
+  "matrix": {
+    "selectRow": "Select all",
+    "clearRow": "Clear"
+  }
+}

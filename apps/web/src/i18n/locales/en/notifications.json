@@ -1,0 +1,15 @@
+{
+  "title": "Notifications",
+  "ariaLabel": "Notifications",
+  "markAllRead": "Mark all as read",
+  "empty": "You're all caught up",
+  "loadError": "Unable to load notifications",
+  "viewAll": "View all",
+  "unreadCount_one": "{{count}} unread",
+  "unreadCount_other": "{{count}} unread",
+  "kinds": {
+    "probation_ending": "Probation ending",
+    "contract_expiring": "Contract expiring",
+    "probation_self_requested": "Probation self-evaluation"
+  }
+}

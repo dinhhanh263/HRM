@@ -1,0 +1,62 @@
+{
+  "list": {
+    "title": "Vai trò & phân quyền",
+    "subtitle": "Cấu hình vai trò và quyền truy cập theo từng màn hình, hành động.",
+    "rolesHeading": "Danh sách vai trò",
+    "userCount": "{{count}} người dùng",
+    "permissionCount": "{{count}} quyền"
+  },
+  "detail": {
+    "systemBadge": "Vai trò hệ thống",
+    "systemNote": "Đây là vai trò hệ thống. Bạn có thể chỉnh sửa quyền của vai trò này, nhưng không thể đổi tên hoặc xóa.",
+    "emptyTitle": "Chọn một vai trò",
+    "emptyDescription": "Chọn vai trò ở danh sách bên trái để xem và cấu hình quyền."
+  },
+  "system": {
+    "names": {
+      "super_admin": "Quản trị hệ thống",
+      "hr_manager": "Quản lý nhân sự",
+      "payroll_approver": "Phê duyệt lương",
+      "manager": "Quản lý",
+      "employee": "Nhân viên"
+    },
+    "descriptions": {
+      "super_admin": "Toàn quyền cấu hình hệ thống và phân quyền",
+      "hr_manager": "Toàn quyền nghiệp vụ nhân sự",
+      "payroll_approver": "Phê duyệt kỳ lương do nhân sự gửi (Giám đốc/Kế toán trưởng)",
+      "manager": "Xem thông tin và duyệt cho nhóm phụ trách",
+      "employee": "Tự phục vụ: chấm công, nghỉ phép, hồ sơ cá nhân"
+    }
+  },
+  "form": {
+    "create": "Thêm vai trò",
+    "createTitle": "Tạo vai trò mới",
+    "createDescription": "Đặt tên và chọn các quyền cho vai trò tùy chỉnh.",
+    "nameLabel": "Tên vai trò",
+    "namePlaceholder": "VD: Trưởng nhóm tuyển dụng",
+    "nameRequired": "Vui lòng nhập tên vai trò",
+    "descriptionLabel": "Mô tả",
+    "descriptionPlaceholder": "Mô tả ngắn về phạm vi của vai trò này",
+    "permissionsLabel": "Phân quyền",
+    "submitCreate": "Tạo vai trò"
+  },
+  "delete": {
+    "title": "Xóa vai trò?",
+    "description": "Vai trò \"{{name}}\" sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.",
+    "hasUsers": "Không thể xóa \"{{name}}\" vì đang có {{count}} người dùng được gán vai trò này. Hãy chuyển họ sang vai trò khác trước."
+  },
+  "errorState": {
+    "title": "Không thể tải danh sách vai trò"
+  },
+  "toast": {
+    "created": "Đã tạo vai trò",
+    "createError": "Tạo vai trò thất bại",
+    "createErrorDescription": "Tên vai trò có thể đã tồn tại. Vui lòng thử lại.",
+    "updated": "Đã lưu thay đổi",
+    "updateError": "Lưu thất bại",
+    "updateErrorDescription": "Vui lòng thử lại sau.",
+    "deleted": "Đã xóa vai trò",
+    "deleteError": "Xóa thất bại",
+    "deleteErrorDescription": "Vui lòng thử lại sau."
+  }
+}

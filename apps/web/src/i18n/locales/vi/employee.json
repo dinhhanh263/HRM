@@ -1,0 +1,202 @@
+{
+  "list": {
+    "title": "Quản lý nhân viên",
+    "subtitle": "Danh sách tất cả nhân viên trong công ty",
+    "addEmployee": "Thêm nhân viên",
+    "searchPlaceholder": "Tìm tên, email, mã NV...",
+    "departmentPlaceholder": "Phòng ban",
+    "allDepartments": "Tất cả phòng ban",
+    "statusPlaceholder": "Trạng thái",
+    "allStatuses": "Tất cả trạng thái",
+    "clearFilters": "Xóa lọc",
+    "countSuffix": "nhân viên",
+    "loadError": "Không thể tải danh sách nhân viên",
+    "pagination": {
+      "showing": "Hiển thị",
+      "of": "trong",
+      "suffix": "nhân viên",
+      "prev": "Trước",
+      "next": "Sau"
+    }
+  },
+  "table": {
+    "columns": {
+      "employee": "Nhân viên",
+      "employeeCode": "Mã NV",
+      "department": "Phòng ban",
+      "position": "Chức vụ",
+      "joinDate": "Ngày vào",
+      "status": "Trạng thái"
+    },
+    "empty": {
+      "title": "Không có nhân viên nào",
+      "subtitle": "Thêm nhân viên mới để bắt đầu quản lý",
+      "subtitleReadonly": "Hiện chưa có nhân viên nào để hiển thị",
+      "cta": "Thêm nhân viên"
+    },
+    "actions": {
+      "viewDetail": "Xem chi tiết",
+      "edit": "Chỉnh sửa",
+      "activate": "Kích hoạt",
+      "deactivate": "Tạm nghỉ",
+      "terminate": "Cho nghỉ việc"
+    }
+  },
+  "status": {
+    "active": "Đang làm việc",
+    "inactive": "Tạm nghỉ",
+    "terminated": "Đã nghỉ việc"
+  },
+  "form": {
+    "sections": {
+      "account": "Thông tin tài khoản",
+      "accountDescription": "Email và mật khẩu để đăng nhập hệ thống",
+      "personal": "Thông tin cá nhân",
+      "personalDescription": "Họ tên, ngày sinh, giới tính và thông tin liên hệ",
+      "work": "Thông tin công việc",
+      "workDescription": "Phòng ban, chức vụ và loại hợp đồng"
+    },
+    "email": "Email",
+    "password": "Mật khẩu",
+    "role": "Vai trò",
+    "fullName": "Họ và tên",
+    "phone": "Số điện thoại",
+    "dateOfBirth": "Ngày sinh",
+    "gender": "Giới tính",
+    "idNumber": "Số CCCD/CMND",
+    "address": "Địa chỉ",
+    "department": "Phòng ban",
+    "position": "Chức vụ",
+    "manager": "Quản lý trực tiếp",
+    "noManager": "Không có",
+    "joinDate": "Ngày vào làm",
+    "probationEndDate": "Ngày hết thử việc",
+    "contractType": "Loại hợp đồng",
+    "dependentsCount": "Số người phụ thuộc",
+    "placeholders": {
+      "email": "email@company.com",
+      "password": "Tối thiểu 8 ký tự",
+      "fullName": "Nguyễn Văn A",
+      "phone": "0901234567",
+      "idNumber": "001012345678",
+      "address": "123 Đường ABC, Quận XYZ",
+      "selectRole": "Chọn vai trò",
+      "selectGender": "Chọn giới tính",
+      "selectDepartment": "Chọn phòng ban",
+      "selectPosition": "Chọn chức vụ",
+      "selectManager": "Chọn quản lý trực tiếp",
+      "selectContractType": "Chọn loại HĐ"
+    },
+    "avatar": {
+      "title": "Ảnh đại diện",
+      "hint": "PNG, JPG tối đa 2MB",
+      "upload": "Tải ảnh lên",
+      "change": "Đổi ảnh",
+      "remove": "Xóa",
+      "invalidType": "Vui lòng chọn file ảnh (PNG, JPG)",
+      "tooLarge": "Kích thước ảnh tối đa 2MB"
+    },
+    "roles": {
+      "EMPLOYEE": "Nhân viên",
+      "MANAGER": "Quản lý",
+      "HR_MANAGER": "HR Manager",
+      "PAYROLL_APPROVER": "Phê duyệt lương"
+    },
+    "genders": {
+      "MALE": "Nam",
+      "FEMALE": "Nữ",
+      "OTHER": "Khác"
+    },
+    "contractTypes": {
+      "FULL_TIME": "Toàn thời gian",
+      "PART_TIME": "Bán thời gian",
+      "CONTRACT": "Hợp đồng",
+      "PROBATION": "Thử việc",
+      "INTERN": "Thực tập"
+    },
+    "validation": {
+      "emailInvalid": "Email không hợp lệ",
+      "passwordMin": "Mật khẩu tối thiểu 8 ký tự",
+      "passwordUppercase": "Cần ít nhất 1 chữ hoa",
+      "passwordLowercase": "Cần ít nhất 1 chữ thường",
+      "passwordNumber": "Cần ít nhất 1 số",
+      "fullNameMin": "Họ tên tối thiểu 2 ký tự",
+      "fullNameRequired": "Vui lòng nhập họ tên",
+      "dependentsCountRange": "Số người phụ thuộc phải là số nguyên 0–20",
+      "emailExists": "Email này đã được sử dụng",
+      "idNumberExists": "Số CCCD/CMND này đã tồn tại"
+    },
+    "submitCreate": "Tạo nhân viên",
+    "submitUpdate": "Cập nhật",
+    "submitting": "Đang xử lý..."
+  },
+  "create": {
+    "title": "Thêm nhân viên mới",
+    "subtitle": "Tạo hồ sơ và tài khoản đăng nhập cho nhân viên mới",
+    "backToList": "Quay lại danh sách",
+    "cancel": "Hủy bỏ",
+    "submit": "Tạo nhân viên",
+    "submitting": "Đang tạo...",
+    "error": "Không thể tạo nhân viên. Vui lòng thử lại."
+  },
+  "edit": {
+    "title": "Chỉnh sửa nhân viên",
+    "backToList": "Quay lại danh sách",
+    "error": "Không thể cập nhật nhân viên. Vui lòng thử lại."
+  },
+  "detail": {
+    "title": "Chi tiết nhân viên",
+    "sections": {
+      "personal": "Thông tin cá nhân",
+      "work": "Thông tin công việc"
+    },
+    "tabs": {
+      "overview": "Tổng quan"
+    },
+    "fields": {
+      "fullName": "Họ và tên",
+      "gender": "Giới tính",
+      "dateOfBirth": "Ngày sinh",
+      "idNumber": "Số CCCD/CMND",
+      "phone": "Số điện thoại",
+      "email": "Email",
+      "employeeCode": "Mã nhân viên",
+      "systemRole": "Vai trò hệ thống",
+      "department": "Phòng ban",
+      "position": "Chức vụ",
+      "directManager": "Quản lý trực tiếp",
+      "joinDate": "Ngày vào làm",
+      "probationEndDate": "Ngày hết thử việc",
+      "contractType": "Loại hợp đồng",
+      "dependentsCount": "Số người phụ thuộc",
+      "terminatedAt": "Ngày nghỉ việc",
+      "terminationReason": "Lý do nghỉ"
+    },
+    "unassigned": "Chưa phân bổ"
+  },
+  "shared": {
+    "loading": "Đang tải dữ liệu...",
+    "notFoundTitle": "Không tìm thấy nhân viên",
+    "notFoundSubtitle": "Nhân viên không tồn tại hoặc đã bị xóa",
+    "back": "Quay lại",
+    "edit": "Chỉnh sửa",
+    "activate": "Kích hoạt",
+    "deactivate": "Tạm nghỉ",
+    "terminate": "Cho nghỉ việc",
+    "terminateConfirm": "Bạn có chắc chắn muốn cho nhân viên này nghỉ việc?"
+  },
+  "toast": {
+    "activated": "Nhân viên đã được kích hoạt",
+    "activateError": "Không thể kích hoạt nhân viên",
+    "deactivated": "Nhân viên đã được chuyển sang trạng thái tạm nghỉ",
+    "deactivateError": "Không thể cập nhật trạng thái",
+    "terminated": "Nhân viên đã được cho nghỉ việc",
+    "terminateError": "Không thể thực hiện thao tác",
+    "tryAgain": "Vui lòng thử lại."
+  },
+  "terminateDialog": {
+    "title": "Cho nhân viên nghỉ việc?",
+    "description": "Hành động này sẽ thay đổi trạng thái nhân viên thành \"Đã nghỉ việc\". Bạn có thể kích hoạt lại sau nếu cần.",
+    "confirm": "Xác nhận nghỉ việc"
+  }
+}

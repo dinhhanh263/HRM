@@ -1,0 +1,274 @@
+{
+  "title": "Leave",
+  "subtitle": "Manage leave requests, approvals and track leave balances",
+  "tabs": {
+    "mine": "My Requests",
+    "review": "Approvals",
+    "all": "All Requests",
+    "settings": "Leave Types",
+    "flows": "Approval Flows"
+  },
+  "balances": {
+    "title": "Leave balance {{year}}",
+    "allocated": "Allocated",
+    "used": "Used",
+    "pending": "Pending",
+    "remaining": "Remaining",
+    "days": "days",
+    "empty": "No leave types configured yet",
+    "unpaid": "Unpaid"
+  },
+  "allocation": {
+    "adjust": "Adjust",
+    "title": "Adjust leave allocation {{year}}",
+    "description": "Set the allocated days for this employee per leave type. Leaving an override unchanged keeps the leave type's default.",
+    "prevYear": "Previous year",
+    "nextYear": "Next year",
+    "save": "Save changes",
+    "cancel": "Cancel",
+    "saved": "Leave allocation updated",
+    "saveError": "Failed to update leave allocation"
+  },
+  "roster": {
+    "title": "Company-wide leave balances",
+    "subtitle": "Remaining leave days per employee, broken down by leave type.",
+    "year": "Year",
+    "prevYear": "Previous year",
+    "nextYear": "Next year",
+    "searchPlaceholder": "Search by name or employee code…",
+    "allDepartments": "All departments",
+    "export": "Export Excel",
+    "exporting": "Exporting…",
+    "exportError": "Could not export file",
+    "employee": "Employee",
+    "department": "Department",
+    "noDepartment": "—",
+    "remaining": "Remaining",
+    "used": "Used",
+    "pending": "Pending",
+    "days": "days",
+    "total": "{{count}} employees",
+    "empty": "No employees found",
+    "emptyHint": "Try changing the department filter or search term.",
+    "noLeaveTypes": "No leave types have been configured yet.",
+    "loadError": "Could not load leave balances",
+    "cellAria": "{{type}}: {{remaining}} days remaining, {{used}} used, {{pending}} pending",
+    "clearFilters": "Clear filters",
+    "pagination": {
+      "showing": "Showing",
+      "of": "of",
+      "suffix": "employees",
+      "prev": "Prev",
+      "next": "Next"
+    }
+  },
+  "requests": {
+    "newRequest": "New Request",
+    "searchPlaceholder": "Search by employee...",
+    "allStatuses": "All statuses",
+    "allTypes": "All types",
+    "empty": "No leave requests",
+    "emptyHint": "Create your first leave request",
+    "emptyReview": "No requests to review",
+    "loadError": "Failed to load requests",
+    "columns": {
+      "employee": "Employee",
+      "type": "Type",
+      "period": "Period",
+      "days": "Days",
+      "reason": "Reason",
+      "status": "Status",
+      "reviewer": "Reviewer"
+    },
+    "halfDay": "Half day",
+    "to": "to"
+  },
+  "status": {
+    "PENDING": "Pending",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "CANCELLED": "Cancelled",
+    "RETURNED": "Returned for edit"
+  },
+  "actions": {
+    "approve": "Approve",
+    "reject": "Return",
+    "cancel": "Cancel request",
+    "resubmit": "Resubmit",
+    "submit": "Submit",
+    "submitting": "Submitting..."
+  },
+  "form": {
+    "title": "New Leave Request",
+    "description": "Fill in the details to submit a leave request",
+    "resubmitTitle": "Resubmit Leave Request",
+    "resubmitDescription": "Edit and resubmit a request that was returned",
+    "leaveType": "Leave type",
+    "leaveTypePlaceholder": "Select a type",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "halfDay": "Half day",
+    "halfDayHint": "Only applies to single-day requests",
+    "reason": "Reason",
+    "reasonPlaceholder": "Enter a reason...",
+    "attachmentUrl": "Attachment (URL)",
+    "attachmentRequired": "This leave type requires an attachment",
+    "validation": {
+      "leaveTypeRequired": "Please select a leave type",
+      "startRequired": "Please select a start date",
+      "endRequired": "Please select an end date",
+      "endBeforeStart": "End date must be on or after start date",
+      "attachmentUrlInvalid": "Invalid URL"
+    }
+  },
+  "review": {
+    "approveTitle": "Approve this request?",
+    "approveDescription": "The request will be approved and deducted from the employee's balance.",
+    "rejectTitle": "Return request for edit",
+    "rejectDescription": "Enter a reason so the employee can edit and resubmit.",
+    "notePlaceholder": "Reason for returning...",
+    "confirmApprove": "Approve",
+    "confirmReject": "Return"
+  },
+  "detail": {
+    "title": "Leave Request Details",
+    "subtitle": "View request info and approval progress",
+    "viewAttachment": "View attachment",
+    "returnedReason": "Reason for return"
+  },
+  "timeline": {
+    "title": "Approval Progress",
+    "empty": "This request has no approval steps yet",
+    "step": "Step {{n}}",
+    "round": "Submission {{n}}",
+    "current": "Current",
+    "decidedBy": "{{name}} · {{date}}",
+    "state": {
+      "approved": "Approved",
+      "returned": "Returned",
+      "auto-skipped": "Auto-skipped",
+      "pending": "Pending",
+      "upcoming": "Upcoming"
+    },
+    "skipReason": {
+      "NO_APPROVER": "No approver found for this step",
+      "SELF_APPROVAL": "Skipped — you cannot approve your own request",
+      "DUPLICATE_APPROVER": "Skipped — same approver as a previous step"
+    }
+  },
+  "approverType": {
+    "MANAGER": "Direct manager",
+    "DEPARTMENT_HEAD": "Department head",
+    "ROLE": "By role",
+    "SPECIFIC_USER": "Specific person"
+  },
+  "flows": {
+    "title": "Leave Approval Flows",
+    "subtitle": "Configure approval steps per department or company-wide default",
+    "add": "Add flow",
+    "empty": "No approval flows yet",
+    "emptyHint": "Create your first flow to set up the process",
+    "default": "Default (company-wide)",
+    "active": "Active",
+    "inactive": "Inactive",
+    "columns": {
+      "name": "Flow name",
+      "department": "Department",
+      "steps": "Steps",
+      "status": "Status"
+    },
+    "form": {
+      "createTitle": "Add Approval Flow",
+      "editTitle": "Edit Approval Flow",
+      "description": "Define the order of approval steps for leave requests",
+      "name": "Flow name",
+      "namePlaceholder": "e.g. Engineering approval process",
+      "department": "Applies to department",
+      "departmentDefault": "Default (company-wide)",
+      "departmentHint": "Department cannot be changed after creation",
+      "steps": "Approval steps",
+      "addStep": "Add step",
+      "rolePlaceholder": "Select a role",
+      "userPlaceholder": "Select an employee",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "removeStep": "Remove step"
+    },
+    "deleteDialog": {
+      "title": "Delete this flow?",
+      "description": "This action cannot be undone.",
+      "confirm": "Delete"
+    }
+  },
+  "cancelDialog": {
+    "title": "Cancel this request?",
+    "description": "This action cannot be undone. The request will be marked as Cancelled.",
+    "confirm": "Cancel request"
+  },
+  "settings": {
+    "title": "Leave Types",
+    "addType": "Add type",
+    "empty": "No leave types",
+    "columns": {
+      "name": "Name",
+      "code": "Code",
+      "defaultDays": "Days/year",
+      "paid": "Paid",
+      "attachment": "Attachment",
+      "active": "Status"
+    },
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "required": "Required",
+    "notRequired": "No",
+    "active": "Active",
+    "inactive": "Inactive",
+    "form": {
+      "createTitle": "Add Leave Type",
+      "editTitle": "Edit Leave Type",
+      "name": "Type name",
+      "code": "Code (uppercase, no spaces)",
+      "codeHint": "Cannot be changed after creation",
+      "defaultDays": "Default days/year",
+      "colorHex": "Display color",
+      "paid": "Paid leave",
+      "requiresAttachment": "Requires attachment",
+      "active": "Active"
+    },
+    "deleteDialog": {
+      "title": "Delete this leave type?",
+      "description": "This action cannot be undone.",
+      "confirm": "Delete"
+    },
+    "prorata": {
+      "title": "Auto pro-rata leave by join month",
+      "label": "Enable pro-rata annual leave for new employees",
+      "help": "When enabled, creating a new employee auto-calculates annual leave based on the months remaining in the year (counting the join month), rounded to the nearest 0.5 day. HR can still adjust manually afterward.",
+      "saved": "Leave settings saved",
+      "saveError": "Could not save settings"
+    }
+  },
+  "toast": {
+    "created": "Leave request submitted",
+    "createError": "Failed to submit request",
+    "approved": "Request approved",
+    "approveError": "Failed to approve request",
+    "rejected": "Request rejected",
+    "rejectError": "Failed to reject request",
+    "cancelled": "Request cancelled",
+    "cancelError": "Failed to cancel request",
+    "typeSaved": "Leave type saved",
+    "typeSaveError": "Failed to save leave type",
+    "typeDeleted": "Leave type deleted",
+    "typeDeleteError": "Failed to delete leave type",
+    "tryAgain": "Please try again later",
+    "createErrors": {
+      "LEAVE_OVERLAP": "You already have a leave request overlapping these dates",
+      "LEAVE_INSUFFICIENT_BALANCE": "You don't have enough leave balance for this request",
+      "LEAVE_TYPE_INACTIVE": "This leave type is no longer active",
+      "LEAVE_ATTACHMENT_REQUIRED": "This leave type requires an attachment",
+      "LEAVE_NO_WORKING_DAYS": "The selected range contains no working days",
+      "LEAVE_TYPE_NOT_FOUND": "Leave type not found"
+    }
+  }
+}

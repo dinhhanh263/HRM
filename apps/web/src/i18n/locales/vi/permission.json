@@ -1,0 +1,56 @@
+{
+  "forbidden": {
+    "title": "Không có quyền truy cập",
+    "description": "Bạn không có quyền xem nội dung này. Vui lòng liên hệ quản trị viên nếu bạn cho rằng đây là nhầm lẫn.",
+    "backHome": "Về trang chủ",
+    "back": "Quay lại"
+  },
+  "resources": {
+    "dashboard": "Tổng quan",
+    "employees": "Nhân viên",
+    "departments": "Phòng ban",
+    "positions": "Chức vụ",
+    "timesheet": "Chấm công",
+    "leave": "Nghỉ phép",
+    "payroll": "Lương",
+    "users": "Người dùng",
+    "roles": "Vai trò & quyền",
+    "settings": "Cài đặt",
+    "recruitment": "Tuyển dụng",
+    "probation": "Thử việc"
+  },
+  "actions": {
+    "view": "Xem",
+    "create": "Tạo mới",
+    "update": "Chỉnh sửa",
+    "delete": "Xóa",
+    "activate": "Kích hoạt",
+    "deactivate": "Vô hiệu hóa",
+    "terminate": "Cho nghỉ việc",
+    "export": "Xuất dữ liệu",
+    "approve": "Phê duyệt",
+    "process": "Xử lý",
+    "job_view": "Xem tin tuyển dụng",
+    "job_create": "Tạo tin tuyển dụng",
+    "job_update": "Sửa tin tuyển dụng",
+    "candidate_view": "Xem ứng viên",
+    "candidate_create": "Thêm ứng viên",
+    "candidate_update": "Sửa ứng viên",
+    "application_view": "Xem hồ sơ ứng tuyển",
+    "application_create": "Tạo hồ sơ ứng tuyển",
+    "application_move": "Chuyển bước tuyển dụng",
+    "application_reject": "Từ chối ứng tuyển",
+    "application_hire": "Tuyển ứng viên",
+    "application_withdraw": "Rút hồ sơ ứng tuyển",
+    "interview_schedule": "Lên lịch phỏng vấn",
+    "scorecard_submit": "Nộp đánh giá phỏng vấn",
+    "review": "Đánh giá thử việc",
+    "decide": "Quyết định thử việc",
+    "configure": "Cấu hình tiêu chí",
+    "self": "Tự đánh giá thử việc"
+  },
+  "matrix": {
+    "selectRow": "Chọn tất cả",
+    "clearRow": "Bỏ chọn"
+  }
+}

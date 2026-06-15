@@ -1,0 +1,90 @@
+{
+  "trigger": "Import from Excel",
+  "title": "Bulk import assets",
+  "description": "Download the template, fill it in, then upload to validate before importing.",
+  "steps": {
+    "upload": "Upload",
+    "review": "Review",
+    "done": "Done"
+  },
+  "template": {
+    "title": "Step 1 — Download template",
+    "hint": "Use the provided template so columns and formats match the system.",
+    "downloadXlsx": "Download Excel (.xlsx)",
+    "downloadCsv": "Download CSV",
+    "downloaded": "Template downloaded",
+    "downloadError": "Could not download the template, please try again."
+  },
+  "upload": {
+    "title": "Step 2 — Upload file",
+    "choose": "Choose file",
+    "change": "Change file",
+    "empty": "No file selected",
+    "formats": "Supports .xlsx and .csv, up to 2,000 rows.",
+    "atomicHint": "All-or-nothing import: assets are created only when every row is valid.",
+    "validate": "Validate file",
+    "validating": "Validating..."
+  },
+  "review": {
+    "title": "Step 3 — Validation result",
+    "valid": "Valid",
+    "errors": "Errors",
+    "totalRows": "Total rows",
+    "errorsTitle": "Error list",
+    "colRow": "Row",
+    "colColumn": "Column",
+    "colMessage": "Message",
+    "mustFix": "The file still has errors. Since the import is all-or-nothing, fix every error and re-upload.",
+    "willImport": "All {{count}} rows are valid. Ready to import.",
+    "back": "Upload another file",
+    "confirm": "Import {{count}} assets",
+    "confirming": "Importing..."
+  },
+  "done": {
+    "title": "Import complete",
+    "created": "Assets created",
+    "assignmentsCreated": "Handovers created",
+    "successHint": "New assets have been created. Rows with an owner also created a handover pending acknowledgement."
+  },
+  "errors": {
+    "fileRequired": "Please choose a file before validating.",
+    "validateFailed": "File validation failed, please try again.",
+    "confirmFailed": "Import failed. An asset code may have just been taken — please re-validate."
+  },
+  "columns": {
+    "assetCode": "Asset code",
+    "name": "Asset name",
+    "category": "Category code",
+    "serialNumber": "Serial number",
+    "brand": "Brand",
+    "model": "Model",
+    "condition": "Condition",
+    "purchaseDate": "Purchase date",
+    "purchaseCost": "Purchase cost",
+    "warrantyEndDate": "Warranty end date",
+    "vendor": "Vendor",
+    "location": "Location",
+    "note": "Note",
+    "owner": "Owner",
+    "assignedAt": "Assigned date"
+  },
+  "code": {
+    "IMPORT_FILE_TOO_LARGE": "File too large",
+    "IMPORT_TOO_MANY_ROWS": "Too many rows (max 2,000)",
+    "IMPORT_EMPTY_FILE": "File has no data",
+    "IMPORT_UNREADABLE_FILE": "Could not read the file",
+    "IMPORT_MISSING_COLUMNS": "Missing required columns",
+    "IMPORT_MISSING_REQUIRED": "Missing required value",
+    "IMPORT_INVALID_ASSET_CODE": "Invalid asset code",
+    "IMPORT_INVALID_DATE": "Invalid date",
+    "IMPORT_INVALID_ENUM": "Invalid value",
+    "IMPORT_INVALID_COST": "Invalid purchase cost",
+    "IMPORT_ASSET_CODE_DUPLICATE_IN_FILE": "Duplicate asset code in file",
+    "IMPORT_OWNER_MISSING_ASSIGNED_DATE": "Owner set but assigned date missing",
+    "IMPORT_ASSET_CODE_EXISTS": "Asset code already exists",
+    "IMPORT_CATEGORY_NOT_FOUND": "Category not found",
+    "IMPORT_OWNER_NOT_FOUND": "Owner not found",
+    "IMPORT_STAGING_NOT_FOUND": "Import session expired, please re-validate the file",
+    "IMPORT_MISSING_IMPORT_ID": "Missing import session id, please re-validate the file"
+  }
+}

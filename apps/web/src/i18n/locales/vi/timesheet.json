@@ -1,0 +1,354 @@
+{
+  "title": "Chấm công",
+  "subtitle": "Theo dõi giờ làm, tăng ca và ngày công của nhân viên",
+  "toast": {
+    "tryAgain": "Vui lòng thử lại sau."
+  },
+  "prevMonth": "Tháng trước",
+  "nextMonth": "Tháng sau",
+  "view": {
+    "calendar": "Lịch",
+    "list": "Danh sách"
+  },
+  "checkIn": {
+    "title": "Chấm công hôm nay",
+    "subtitle": "Ghi nhận giờ vào và giờ ra của bạn",
+    "checkInAt": "Giờ vào",
+    "checkOutAt": "Giờ ra",
+    "note": "Ghi chú",
+    "notePlaceholder": "VD: Làm tại văn phòng",
+    "checkIn": "Chấm công vào",
+    "checkOut": "Chấm công ra",
+    "done": "Đã hoàn tất chấm công hôm nay",
+    "workedHours": "{{hours}} giờ làm",
+    "toast": {
+      "checkedIn": "Đã chấm công vào",
+      "checkedOut": "Đã chấm công ra",
+      "error": "Không thể chấm công"
+    }
+  },
+  "summary": {
+    "title": "Tổng quan {{month}}",
+    "workingDays": "Ngày làm việc",
+    "presentDays": "Ngày công",
+    "daysAbsent": "Ngày vắng",
+    "paidLeave": "Nghỉ có lương",
+    "unpaidLeave": "Nghỉ không lương",
+    "holidays": "Ngày lễ",
+    "workedHours": "Giờ làm",
+    "overtimeTitle": "Tăng ca đã duyệt",
+    "noOvertime": "Chưa có tăng ca được duyệt tháng này"
+  },
+  "calendar": {
+    "legend": {
+      "present": "Có mặt",
+      "absent": "Vắng",
+      "holiday": "Ngày lễ",
+      "weekend": "Cuối tuần"
+    }
+  },
+  "list": {
+    "col": {
+      "date": "Ngày",
+      "checkIn": "Giờ vào",
+      "checkOut": "Giờ ra",
+      "hours": "Giờ làm",
+      "note": "Ghi chú"
+    },
+    "adjusted": "Điều chỉnh",
+    "empty": {
+      "title": "Chưa có dữ liệu chấm công",
+      "desc": "Các lần chấm công trong tháng sẽ hiển thị tại đây."
+    }
+  },
+  "team": {
+    "title": "Chấm công nhóm",
+    "subtitle": "Xem và điều chỉnh chấm công của nhân viên",
+    "scope": {
+      "team": "Nhóm của tôi",
+      "all": "Toàn công ty"
+    },
+    "col": {
+      "employee": "Nhân viên",
+      "date": "Ngày",
+      "checkIn": "Giờ vào",
+      "checkOut": "Giờ ra",
+      "hours": "Giờ làm",
+      "source": "Nguồn"
+    },
+    "source": {
+      "self": "Tự chấm",
+      "adjust": "Điều chỉnh"
+    },
+    "adjustAction": "Điều chỉnh",
+    "tab": "Nhóm",
+    "tabMine": "Của tôi",
+    "empty": {
+      "title": "Chưa có dữ liệu chấm công",
+      "desc": "Chấm công của nhân viên trong tháng sẽ hiển thị tại đây."
+    }
+  },
+  "adjust": {
+    "title": "Điều chỉnh chấm công",
+    "checkIn": "Giờ vào",
+    "checkOut": "Giờ ra",
+    "note": "Ghi chú",
+    "notePlaceholder": "Lý do điều chỉnh",
+    "hint": "Để trống giờ vào/ra nếu muốn xóa mốc thời gian. Giờ tính theo UTC.",
+    "invalidRange": "Giờ ra phải sau giờ vào.",
+    "toast": {
+      "saved": "Đã lưu điều chỉnh",
+      "error": "Không thể lưu điều chỉnh"
+    }
+  },
+  "overtime": {
+    "night": "Làm đêm",
+    "mineTitle": "Tăng ca của tôi",
+    "mineSubtitle": "Gửi và theo dõi đơn tăng ca trong tháng",
+    "teamTitle": "Tăng ca nhóm",
+    "teamSubtitle": "Xem đơn tăng ca của nhân viên",
+    "submitAction": "Gửi tăng ca",
+    "col": {
+      "employee": "Nhân viên",
+      "date": "Ngày",
+      "hours": "Số giờ",
+      "category": "Phân loại",
+      "reason": "Lý do",
+      "status": "Trạng thái",
+      "actions": "Thao tác"
+    },
+    "category": {
+      "OT_WEEKDAY": "Ngày thường",
+      "OT_WEEKEND": "Cuối tuần",
+      "OT_HOLIDAY": "Ngày lễ"
+    },
+    "review": {
+      "approve": "Duyệt",
+      "reject": "Từ chối",
+      "cancel": "Hủy",
+      "approved": "Đã duyệt tăng ca",
+      "rejected": "Đã từ chối tăng ca",
+      "cancelled": "Đã thu hồi đơn tăng ca",
+      "actionError": "Không thể cập nhật đơn tăng ca",
+      "capTitle": "Đã duyệt — vượt giới hạn luật định",
+      "cap": {
+        "month": "Tăng ca tháng đã {{total}} giờ, vượt mức {{limit}} giờ",
+        "year": "Tăng ca năm đã {{total}} giờ, vượt mức {{limit}} giờ"
+      },
+      "rejectTitle": "Từ chối tăng ca",
+      "rejectDesc": "Cho nhân viên biết lý do đơn bị từ chối.",
+      "rejectNote": "Lý do",
+      "rejectPlaceholder": "VD: Ngoài thời gian dự án được duyệt",
+      "rejectConfirm": "Từ chối đơn",
+      "cancelTitle": "Thu hồi đơn tăng ca?",
+      "cancelDesc": "Đơn tăng ca đang chờ duyệt sẽ bị hủy. Hành động này không thể hoàn tác.",
+      "cancelConfirm": "Thu hồi",
+      "timeline": "Tiến trình",
+      "timelineTitle": "Tiến trình duyệt",
+      "timelineDesc": "Lịch sử các bước duyệt của đơn tăng ca này",
+      "return": "Trả về",
+      "returnTitle": "Trả về đơn tăng ca",
+      "returnDesc": "Nêu lý do để nhân viên chỉnh sửa và nộp lại",
+      "returnConfirm": "Trả về",
+      "returned": "Đã trả về đơn",
+      "resubmit": "Nộp lại"
+    },
+    "status": {
+      "PENDING": "Chờ duyệt",
+      "APPROVED": "Đã duyệt",
+      "REJECTED": "Từ chối",
+      "CANCELLED": "Đã hủy",
+      "RETURNED": "Đã trả về"
+    },
+    "empty": {
+      "title": "Chưa có đơn tăng ca",
+      "desc": "Các đơn tăng ca trong tháng sẽ hiển thị tại đây."
+    },
+    "form": {
+      "title": "Gửi đơn tăng ca",
+      "desc": "Phân loại tăng ca được hệ thống xác định theo ngày làm và lịch lễ.",
+      "workDate": "Ngày làm",
+      "hours": "Số giờ tăng ca",
+      "hoursHint": "Từ 0.5 đến {{max}} giờ cho mỗi đơn.",
+      "night": "Ca đêm",
+      "nightLabel": "Tăng ca vào ban đêm",
+      "reason": "Lý do",
+      "reasonPlaceholder": "VD: Hoàn thành bản phát hành",
+      "categoryHint": "Hệ số tăng ca được chốt khi quản lý duyệt đơn.",
+      "submit": "Gửi đơn",
+      "resubmitTitle": "Nộp lại đơn tăng ca",
+      "resubmitDesc": "Chỉnh sửa thông tin và gửi lại để duyệt từ đầu",
+      "resubmit": "Nộp lại"
+    },
+    "toast": {
+      "submitted": "Đã gửi đơn tăng ca",
+      "submitError": "Không thể gửi đơn tăng ca",
+      "resubmitted": "Đã nộp lại đơn tăng ca"
+    },
+    "restDay": {
+      "subtitle": "Hôm nay là ngày nghỉ — không cần chấm công",
+      "holiday": {
+        "title": "Ngày lễ — {{name}}",
+        "desc": "Đây là ngày nghỉ lễ có hưởng lương. Nếu bạn đi làm, hãy tạo đơn tăng ca ngày lễ (≥300%) để được duyệt và tính công."
+      },
+      "weekend": {
+        "title": "Ngày nghỉ cuối tuần",
+        "desc": "Đây là ngày nghỉ hằng tuần. Nếu bạn đi làm, hãy tạo đơn tăng ca cuối tuần (≥200%) để được duyệt và tính công."
+      },
+      "cta": "Tạo đơn tăng ca",
+      "hasOt": "Đã có đơn tăng ca cho hôm nay"
+    }
+  },
+  "policy": {
+    "title": "Quy tắc chấm công",
+    "subtitle": "Cấu hình ngày làm việc, ca đêm và hệ số tăng ca theo luật lao động",
+    "workdays": "Ngày làm việc trong tuần",
+    "dayShort": {
+      "0": "CN",
+      "1": "T2",
+      "2": "T3",
+      "3": "T4",
+      "4": "T5",
+      "5": "T6",
+      "6": "T7"
+    },
+    "standardHoursPerDay": "Giờ công chuẩn / ngày",
+    "nightStart": "Bắt đầu ca đêm",
+    "nightEnd": "Kết thúc ca đêm",
+    "multipliers": "Hệ số tăng ca",
+    "multipliersHint": "Theo Điều 98 BLLĐ 2019: ngày thường ≥150%, cuối tuần ≥200%, ngày lễ ≥300%, làm đêm +30%, tăng ca đêm +20%.",
+    "fields": {
+      "otWeekday": "Ngày thường",
+      "otWeekend": "Cuối tuần",
+      "otHoliday": "Ngày lễ",
+      "nightExtra": "Phụ trội đêm",
+      "nightOtExtra": "Tăng ca đêm"
+    },
+    "toast": {
+      "saved": "Đã lưu quy tắc chấm công",
+      "saveError": "Không lưu được quy tắc chấm công"
+    }
+  },
+  "holiday": {
+    "title": "Ngày lễ, Tết",
+    "subtitle": "Lịch nghỉ lễ theo năm — dùng để phân loại tăng ca ngày lễ",
+    "add": "Thêm ngày lễ",
+    "prevYear": "Năm trước",
+    "nextYear": "Năm sau",
+    "recurring": "Hằng năm",
+    "editAction": "Sửa ngày lễ",
+    "deleteAction": "Xóa ngày lễ",
+    "empty": {
+      "title": "Chưa có ngày lễ",
+      "desc": "Thêm ngày nghỉ lễ cho năm này để hệ thống tính đúng hệ số tăng ca."
+    },
+    "form": {
+      "addTitle": "Thêm ngày lễ",
+      "editTitle": "Chỉnh sửa ngày lễ",
+      "desc": "Ngày lễ sẽ ghi đè phân loại ngày thường/cuối tuần khi tính tăng ca.",
+      "date": "Ngày",
+      "name": "Tên ngày lễ",
+      "namePlaceholder": "VD: Quốc khánh",
+      "recurring": "Lặp lại hằng năm",
+      "recurringHint": "Bật cho ngày lễ cố định theo dương lịch (30/4, 1/5, 2/9). Tắt cho ngày theo âm lịch (Tết, Giỗ Tổ)."
+    },
+    "delete": {
+      "title": "Xóa ngày lễ?",
+      "desc": "Ngày lễ \"{{name}}\" sẽ bị xóa. Hành động này không thể hoàn tác."
+    },
+    "toast": {
+      "created": "Đã thêm ngày lễ",
+      "updated": "Đã cập nhật ngày lễ",
+      "deleted": "Đã xóa ngày lễ",
+      "saveError": "Không lưu được ngày lễ",
+      "deleteError": "Không xóa được ngày lễ",
+      "conflict": "Đã có ngày lễ vào ngày này"
+    },
+    "seed": {
+      "button": "Nạp ngày lễ VN năm {{year}}",
+      "dialogTitle": "Nạp ngày lễ chuẩn năm {{year}}?",
+      "dialogDesc": "Hệ thống sẽ thêm các ngày nghỉ lễ, Tết theo luật lao động VN cho năm {{year}}. Những ngày đã có cùng ngày sẽ bị ghi đè tên và trạng thái lặp lại. Thao tác an toàn để chạy lại.",
+      "confirm": "Nạp ngày lễ",
+      "toast": {
+        "success": "Đã nạp {{count}} ngày lễ cho năm {{year}}",
+        "noLunar": "Năm {{year}} chưa có dữ liệu Tết",
+        "noLunarDesc": "Chỉ nạp được {{count}} ngày lễ dương lịch. Tết và Giỗ Tổ chưa có — hãy thêm thủ công hoặc cập nhật hệ thống.",
+        "error": "Không nạp được ngày lễ"
+      }
+    }
+  },
+  "settings": {
+    "title": "Cài đặt chấm công",
+    "subtitle": "Cấu hình chính sách chấm công và lịch nghỉ lễ, Tết của công ty"
+  },
+  "timeline": {
+    "title": "Tiến trình duyệt",
+    "empty": "Đơn này chưa có bước duyệt nào",
+    "step": "Bước {{n}}",
+    "round": "Lần gửi {{n}}",
+    "current": "Hiện tại",
+    "decidedBy": "{{name}} · {{date}}",
+    "state": {
+      "approved": "Đã duyệt",
+      "returned": "Đã trả về",
+      "auto-skipped": "Tự bỏ qua",
+      "pending": "Đang chờ",
+      "upcoming": "Sắp tới"
+    },
+    "skipReason": {
+      "NO_APPROVER": "Không tìm thấy người duyệt cho bước này",
+      "SELF_APPROVAL": "Bỏ qua — không thể tự duyệt đơn của mình",
+      "DUPLICATE_APPROVER": "Bỏ qua — trùng người duyệt với bước trước"
+    }
+  },
+  "flows": {
+    "title": "Luồng duyệt tăng ca",
+    "subtitle": "Cấu hình các bước duyệt tăng ca theo phòng ban hoặc mặc định toàn công ty",
+    "add": "Thêm luồng",
+    "empty": "Chưa có luồng duyệt tăng ca nào",
+    "emptyHint": "Tạo luồng đầu tiên để thiết lập quy trình duyệt tăng ca",
+    "default": "Mặc định (toàn công ty)",
+    "active": "Đang dùng",
+    "inactive": "Tạm tắt",
+    "columns": {
+      "name": "Tên luồng",
+      "department": "Phòng ban",
+      "steps": "Các bước",
+      "status": "Trạng thái"
+    },
+    "form": {
+      "createTitle": "Thêm luồng duyệt tăng ca",
+      "editTitle": "Sửa luồng duyệt tăng ca",
+      "description": "Định nghĩa thứ tự các bước duyệt cho đơn tăng ca",
+      "name": "Tên luồng",
+      "namePlaceholder": "VD: Quy trình duyệt OT phòng Kỹ thuật",
+      "department": "Phòng ban áp dụng",
+      "departmentDefault": "Mặc định (toàn công ty)",
+      "departmentHint": "Không thể đổi phòng ban sau khi tạo",
+      "steps": "Các bước duyệt",
+      "addStep": "Thêm bước",
+      "rolePlaceholder": "Chọn vai trò",
+      "userPlaceholder": "Chọn nhân viên",
+      "moveUp": "Lên",
+      "moveDown": "Xuống",
+      "removeStep": "Xóa bước"
+    },
+    "deleteDialog": {
+      "title": "Xóa luồng duyệt?",
+      "description": "Hành động này không thể hoàn tác.",
+      "confirm": "Xóa"
+    },
+    "toast": {
+      "saved": "Đã lưu luồng duyệt",
+      "saveError": "Lưu luồng thất bại",
+      "deleted": "Đã xóa luồng duyệt",
+      "deleteError": "Xóa luồng thất bại"
+    }
+  },
+  "approverType": {
+    "MANAGER": "Quản lý trực tiếp",
+    "DEPARTMENT_HEAD": "Trưởng phòng ban",
+    "ROLE": "Theo vai trò",
+    "SPECIFIC_USER": "Người cụ thể"
+  }
+}

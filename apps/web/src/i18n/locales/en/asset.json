@@ -1,0 +1,367 @@
+{
+  "status": {
+    "AVAILABLE": "Available",
+    "ASSIGNED": "Assigned",
+    "UNDER_MAINTENANCE": "Under maintenance",
+    "RETIRED": "Retired",
+    "LOST": "Lost / damaged"
+  },
+  "condition": {
+    "NEW": "New",
+    "GOOD": "Good",
+    "FAIR": "Fair",
+    "POOR": "Poor"
+  },
+  "asset": {
+    "list": {
+      "title": "Assets",
+      "subtitle": "Manage all company equipment and fixed assets",
+      "searchPlaceholder": "Search by code, name, serial...",
+      "categoryPlaceholder": "Category",
+      "allCategories": "All categories",
+      "statusPlaceholder": "Status",
+      "allStatuses": "All statuses",
+      "clearFilters": "Clear filters",
+      "export": "Export CSV",
+      "countSuffix": "assets",
+      "loadError": "Could not load assets",
+      "pagination": {
+        "showing": "Showing",
+        "of": "of",
+        "suffix": "assets",
+        "prev": "Prev",
+        "next": "Next"
+      }
+    },
+    "table": {
+      "code": "Code",
+      "name": "Asset name",
+      "category": "Category",
+      "status": "Status",
+      "holder": "Holder",
+      "location": "Location"
+    },
+    "detail": {
+      "title": "Asset details",
+      "back": "Back",
+      "loading": "Loading...",
+      "notFoundTitle": "Asset not found",
+      "notFoundSubtitle": "This asset does not exist or has been deleted.",
+      "edit": "Edit",
+      "unassigned": "Unassigned",
+      "tabs": {
+        "info": "Information",
+        "history": "Assignment history",
+        "maintenance": "Maintenance"
+      },
+      "sections": {
+        "general": "General information",
+        "purchase": "Purchase & warranty",
+        "note": "Note"
+      },
+      "fields": {
+        "category": "Category",
+        "location": "Location",
+        "holder": "Holder",
+        "brand": "Brand",
+        "model": "Model",
+        "serialNumber": "Serial number",
+        "condition": "Condition",
+        "purchaseDate": "Purchase date",
+        "purchaseCost": "Purchase cost",
+        "warrantyEndDate": "Warranty end date",
+        "vendor": "Vendor"
+      }
+    },
+    "form": {
+      "create": "Add asset",
+      "edit": "Edit asset",
+      "createDescription": "Add a new asset to the catalog.",
+      "editDescription": "Update the asset details.",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select a category",
+      "codeLabel": "Asset code",
+      "codePlaceholder": "e.g. LP-001",
+      "nameLabel": "Asset name",
+      "namePlaceholder": "e.g. MacBook Pro 14 inch",
+      "locationLabel": "Location",
+      "locationPlaceholder": "e.g. 3rd floor office",
+      "advancedToggle": "More details",
+      "brandLabel": "Brand",
+      "modelLabel": "Model",
+      "serialLabel": "Serial number",
+      "conditionLabel": "Condition",
+      "conditionPlaceholder": "Select condition",
+      "purchaseDateLabel": "Purchase date",
+      "purchaseCostLabel": "Purchase cost (VND)",
+      "warrantyLabel": "Warranty end",
+      "vendorLabel": "Vendor",
+      "noteLabel": "Note",
+      "submitCreate": "Create asset"
+    },
+    "validation": {
+      "categoryRequired": "Please select a category",
+      "codeRequired": "Please enter an asset code",
+      "codeMax": "Maximum 50 characters",
+      "codeFormat": "Code may only contain uppercase letters, digits, hyphen or underscore",
+      "nameRequired": "Please enter an asset name",
+      "nameMax": "Maximum 150 characters",
+      "locationMax": "Maximum 120 characters",
+      "serialMax": "Maximum 120 characters",
+      "brandMax": "Maximum 80 characters",
+      "modelMax": "Maximum 80 characters",
+      "vendorMax": "Maximum 120 characters",
+      "noteMax": "Maximum 1000 characters",
+      "costInvalid": "Purchase cost must be a non-negative number"
+    },
+    "delete": {
+      "title": "Delete asset?",
+      "description": "This action cannot be undone. The asset \"{{name}}\" will be permanently deleted."
+    },
+    "empty": {
+      "title": "No assets yet",
+      "description": "Add your first asset to start managing"
+    },
+    "toast": {
+      "created": "Asset added",
+      "updated": "Asset updated",
+      "deleted": "Asset deleted",
+      "createError": "Could not add asset",
+      "updateError": "Could not update asset",
+      "codeTakenHint": "The asset code may already exist.",
+      "deleteError": "Could not delete asset",
+      "deleteHistoryHint": "The asset already has assignment or maintenance history.",
+      "exported": "Asset list exported",
+      "exportError": "Could not export asset list"
+    },
+    "assign": {
+      "action": "Assign",
+      "title": "Assign asset",
+      "description": "Hand this asset to an active employee.",
+      "employeeLabel": "Employee",
+      "employeeSearchPlaceholder": "Search employee by name, code...",
+      "employeePlaceholder": "Select an employee",
+      "dateLabel": "Assignment date",
+      "conditionLabel": "Condition on handover",
+      "noteLabel": "Note",
+      "notePlaceholder": "Note about this assignment (optional)",
+      "submit": "Confirm assignment",
+      "validation": {
+        "employeeRequired": "Please select an employee",
+        "dateRequired": "Please select an assignment date",
+        "noteMax": "Maximum 1000 characters"
+      },
+      "toast": {
+        "success": "Asset assigned",
+        "error": "Could not assign asset",
+        "errorHint": "The asset must be in Available status."
+      }
+    },
+    "handover": {
+      "signOnAssign": "Capture signature now",
+      "signOnAssignHint": "Turn on to have the recipient sign at handover. Leave off to sign later.",
+      "signaturePadLabel": "Signature area",
+      "signatureHint": "Sign here",
+      "signatureClear": "Redraw",
+      "status": {
+        "PENDING": "Awaiting signature",
+        "SIGNED": "Signed"
+      },
+      "method": {
+        "ON_SCREEN": "On-screen",
+        "IN_APP": "In-app"
+      },
+      "pendingCardTitle": "Handover awaiting signature",
+      "pendingCardDescription": "Please sign to confirm you received this asset.",
+      "signNow": "Sign to confirm",
+      "ackDialog": {
+        "title": "Sign handover acknowledgement",
+        "description": "Sign to confirm you have received the asset and agree with the handover details.",
+        "submit": "Confirm receipt",
+        "signatureRequired": "Please sign before confirming"
+      },
+      "downloadPdf": "Export record (PDF)",
+      "viewSignature": "View signature",
+      "signaturePreview": {
+        "title": "Handover signature",
+        "description": "The recipient's signature confirming the handover record.",
+        "loadError": "Could not load the signature",
+        "imageAlt": "Recipient signature image"
+      },
+      "signedAt": "Signed on {{date}}",
+      "toast": {
+        "ackSuccess": "Handover acknowledged",
+        "ackError": "Could not acknowledge handover",
+        "ackErrorHint": "The record may already be signed or returned.",
+        "pdfError": "Could not download the record"
+      }
+    },
+    "return": {
+      "action": "Return",
+      "title": "Return asset",
+      "description": "Return this asset to inventory.",
+      "descriptionHolder": "Return the asset currently held by {{name}}.",
+      "dateLabel": "Return date",
+      "conditionLabel": "Condition on return",
+      "noteLabel": "Note",
+      "notePlaceholder": "Note about this return (optional)",
+      "submit": "Confirm return",
+      "validation": {
+        "dateRequired": "Please select a return date",
+        "noteMax": "Maximum 1000 characters"
+      },
+      "toast": {
+        "success": "Asset returned",
+        "error": "Could not return asset",
+        "errorHint": "The asset must be in Assigned status."
+      }
+    },
+    "history": {
+      "emptyTitle": "No assignment history",
+      "emptyDescription": "This asset has never been assigned to any employee.",
+      "assignedAt": "Assigned on",
+      "assignedBy": "Assigned by",
+      "conditionOut": "Condition out",
+      "returnedAt": "Returned on",
+      "returnedBy": "Returned by",
+      "conditionIn": "Condition in",
+      "assignmentStatus": {
+        "ACTIVE": "Active",
+        "RETURNED": "Returned"
+      }
+    },
+    "mine": {
+      "title": "My assets",
+      "subtitle": "Equipment and assets currently assigned to you",
+      "countSuffix": "assets",
+      "loadError": "Could not load your assets",
+      "emptyTitle": "You have no assigned assets",
+      "emptyDescription": "Assets will appear here once they are assigned to you.",
+      "assignedAt": "Assigned on"
+    },
+    "maintenance": {
+      "startAction": "Maintenance",
+      "completeAction": "Complete maintenance",
+      "startTitle": "Start maintenance",
+      "startDescription": "Move the asset into maintenance / repair.",
+      "completeTitle": "Complete maintenance",
+      "completeDescription": "Finish maintenance and return the asset to available.",
+      "startedAtLabel": "Start date",
+      "completedAtLabel": "Completion date",
+      "descriptionLabel": "Maintenance details",
+      "descriptionPlaceholder": "Describe the maintenance or repair work",
+      "vendorLabel": "Service provider",
+      "vendorPlaceholder": "e.g. Warranty center",
+      "costLabel": "Cost (VND)",
+      "startSubmit": "Start maintenance",
+      "completeSubmit": "Complete maintenance",
+      "emptyTitle": "No maintenance history",
+      "emptyDescription": "This asset has never been maintained or repaired.",
+      "totalCost": "Total maintenance cost",
+      "startedAt": "Start date",
+      "completedAt": "Completion date",
+      "vendor": "Provider",
+      "cost": "Cost",
+      "createdBy": "Created by",
+      "recordStatus": {
+        "OPEN": "In progress",
+        "COMPLETED": "Completed"
+      },
+      "validation": {
+        "dateRequired": "Please select a date",
+        "descriptionRequired": "Please enter the maintenance details",
+        "descriptionMax": "Maximum 1000 characters",
+        "vendorMax": "Maximum 120 characters"
+      },
+      "toast": {
+        "started": "Maintenance started",
+        "completed": "Maintenance completed",
+        "startError": "Could not start maintenance",
+        "startErrorHint": "The asset must be in Available status.",
+        "completeError": "Could not complete maintenance",
+        "completeErrorHint": "The asset must be Under maintenance."
+      }
+    },
+    "dispose": {
+      "action": "Dispose",
+      "title": "Dispose asset",
+      "description": "Mark the asset as retired or lost / damaged. This action cannot be undone.",
+      "statusLabel": "Type",
+      "dateLabel": "Disposal date",
+      "reasonLabel": "Reason",
+      "reasonPlaceholder": "Reason for disposal or details of loss / damage",
+      "submit": "Confirm disposal",
+      "validation": {
+        "dateRequired": "Please select a disposal date",
+        "reasonRequired": "Please enter a reason",
+        "reasonMax": "Maximum 500 characters"
+      },
+      "toast": {
+        "success": "Asset disposed",
+        "error": "Could not dispose asset",
+        "errorHint": "An assigned asset must be returned first."
+      }
+    }
+  },
+  "category": {
+    "list": {
+      "title": "Asset categories",
+      "subtitle": "Configure the asset categories used to classify company equipment and fixed assets",
+      "searchPlaceholder": "Search categories...",
+      "count": "categories"
+    },
+    "table": {
+      "name": "Category name",
+      "code": "Code",
+      "description": "Description",
+      "assetColumn": "Assets",
+      "noDescription": "—"
+    },
+    "form": {
+      "create": "Add category",
+      "edit": "Edit category",
+      "createDescription": "Create a new category to classify equipment and assets.",
+      "editDescription": "Update the category details.",
+      "nameLabel": "Category name",
+      "namePlaceholder": "e.g. Laptop",
+      "codeLabel": "Code",
+      "codePlaceholder": "e.g. LAPTOP",
+      "codeImmutable": "The code cannot be changed after creation.",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Short description of the category (optional)",
+      "submitCreate": "Create category"
+    },
+    "validation": {
+      "nameRequired": "Please enter a category name",
+      "nameMax": "Maximum 100 characters",
+      "codeRequired": "Please enter a code",
+      "codeMax": "Maximum 40 characters",
+      "codeFormat": "Code may only contain uppercase letters, digits, hyphen or underscore",
+      "descriptionMax": "Maximum 500 characters"
+    },
+    "delete": {
+      "title": "Delete category?",
+      "description": "This action cannot be undone. The category \"{{name}}\" will be permanently deleted.",
+      "inUse": "The category \"{{name}}\" still has {{count}} asset(s). Move those assets to another category before deleting."
+    },
+    "empty": {
+      "title": "No categories yet",
+      "description": "Add your first category to start managing assets"
+    },
+    "errorState": {
+      "title": "Something went wrong",
+      "description": "Could not load asset categories"
+    },
+    "toast": {
+      "created": "Category added",
+      "updated": "Category updated",
+      "deleted": "Category deleted",
+      "createError": "Could not add category",
+      "createErrorDescription": "The code may already exist.",
+      "updateError": "Could not update category",
+      "updateErrorDescription": "Please try again.",
+      "deleteError": "Could not delete category",
+      "deleteErrorDescription": "The category may still be in use."
+    }
+  }
+}

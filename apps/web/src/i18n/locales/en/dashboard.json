@@ -1,0 +1,62 @@
+{
+  "greeting": "Hello, {{name}}!",
+  "errorLoad": "Could not load dashboard data. Please try again.",
+  "actions": {
+    "viewEmployees": "View employees",
+    "addEmployee": "Add employee"
+  },
+  "stats": {
+    "totalEmployees": "Total employees",
+    "onLeaveToday": "On leave today",
+    "pendingApprovals": "Pending approvals",
+    "activeWorking": "{{count}} actively working",
+    "needAction": "Needs action"
+  },
+  "deptDistribution": {
+    "empty": "No department data yet"
+  },
+  "sections": {
+    "deptDistribution": "Employees by department",
+    "pendingLeave": "Leave requests pending approval",
+    "upcomingEvents": "Upcoming events",
+    "leaveBalance": "My leave balance"
+  },
+  "leaveBalance": {
+    "remaining": "Remaining",
+    "usedOf": "Used {{used}}/{{allocated}} days"
+  },
+  "links": {
+    "detail": "Details",
+    "viewAll": "View all",
+    "viewCalendar": "View calendar"
+  },
+  "leave": {
+    "days": "{{count}} days",
+    "nonePending": "No requests pending approval"
+  },
+  "footer": {
+    "newHires": "New hires this month",
+    "terminated": "Terminated this month",
+    "departments": "Departments",
+    "upcomingEvents": "Upcoming events"
+  },
+  "events": {
+    "birthday": "{{name}}'s birthday",
+    "anniversary": "{{years}} year anniversary - {{name}}",
+    "onboarding": "Onboarding {{name}}",
+    "probationEnding": "Probation ending - {{name}}",
+    "contractExpiring": "Contract expiring - {{name}}",
+    "none": "No upcoming events"
+  },
+  "calendar": {
+    "title": "Event calendar",
+    "subtitle": "HR events and holidays by month",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "today": "Today",
+    "holiday": "Holiday",
+    "more": "+{{count}} more",
+    "errorLoad": "Could not load the event calendar. Please try again.",
+    "empty": "No events this month"
+  }
+}

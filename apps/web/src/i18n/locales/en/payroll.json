@@ -1,0 +1,240 @@
+{
+  "title": "Payroll",
+  "subtitle": "Monthly pay calculation, insurance and personal income tax",
+  "comingSoon": "Your payslips will appear here.",
+  "tabs": {
+    "runs": "Pay runs",
+    "salaries": "Salaries",
+    "settings": "Configuration"
+  },
+  "runs": {
+    "hint": "Each pay run aggregates pay, insurance and tax for every payable employee.",
+    "period": "Period",
+    "create": "Create run",
+    "status": {
+      "DRAFT": "Draft",
+      "PENDING_APPROVAL": "Pending approval",
+      "APPROVED": "Approved",
+      "PAID": "Paid",
+      "CANCELLED": "Cancelled"
+    },
+    "columns": {
+      "period": "Period",
+      "status": "Status",
+      "headcount": "Headcount",
+      "totalGross": "Total gross",
+      "totalNet": "Net pay"
+    },
+    "actions": {
+      "menu": "Run actions",
+      "recompute": "Recompute",
+      "submit": "Submit for approval",
+      "approve": "Approve",
+      "reject": "Reject",
+      "mark-paid": "Mark as paid",
+      "cancel": "Cancel run"
+    },
+    "empty": {
+      "title": "No pay runs yet",
+      "body": "Pick a month and create your first pay run to start calculating payroll."
+    },
+    "confirm": {
+      "cancelButton": "Close",
+      "recompute": {
+        "title": "Recompute run {{period}}?",
+        "body": "Lines are recomputed from current salaries, attendance and settings. Draft runs only.",
+        "confirmButton": "Recompute"
+      },
+      "submit": {
+        "title": "Submit run {{period}} for approval?",
+        "body": "The run moves to Pending approval and is sent to users with approval rights. You will not be able to recompute it until it is approved or rejected.",
+        "confirmButton": "Submit for approval"
+      },
+      "approve": {
+        "title": "Approve run {{period}}?",
+        "body": "The current payroll settings are frozen onto the run and it is locked. It cannot be edited after approval.",
+        "confirmButton": "Approve"
+      },
+      "reject": {
+        "title": "Reject run {{period}}?",
+        "body": "The run returns to Draft so HR can edit it and submit again for approval.",
+        "confirmButton": "Reject"
+      },
+      "mark-paid": {
+        "title": "Mark run {{period}} as paid?",
+        "body": "Confirm this run has been disbursed. Its status becomes Paid.",
+        "confirmButton": "Mark as paid"
+      },
+      "cancel": {
+        "title": "Cancel run {{period}}?",
+        "body": "The run becomes Cancelled. You can re-create a run for the same month afterwards.",
+        "confirmButton": "Cancel run"
+      }
+    },
+    "toast": {
+      "created": "Pay run created",
+      "createError": "Could not create pay run",
+      "createErrorBody": "An approved or paid run may already exist for this month.",
+      "recompute": { "success": "Run recomputed", "error": "Could not recompute run" },
+      "submit": { "success": "Run submitted for approval", "error": "Could not submit run for approval" },
+      "approve": { "success": "Run approved", "error": "Could not approve run" },
+      "reject": { "success": "Run rejected", "error": "Could not reject run" },
+      "mark-paid": { "success": "Run marked as paid", "error": "Could not mark run as paid" },
+      "cancel": { "success": "Run cancelled", "error": "Could not cancel run" }
+    }
+  },
+  "salary": {
+    "searchPlaceholder": "Search by name or code…",
+    "allDepartments": "All departments",
+    "notSet": "Not set",
+    "columns": {
+      "employee": "Employee",
+      "department": "Department",
+      "baseSalary": "Base salary",
+      "effectiveFrom": "Effective from"
+    },
+    "actions": {
+      "setSalary": "Set new salary",
+      "history": "Salary history"
+    },
+    "empty": {
+      "title": "No employees found",
+      "body": "Adjust the search or department filter to see employees."
+    },
+    "form": {
+      "title": "Set salary",
+      "subtitle": "New effective-dated salary for {{name}} · {{code}}",
+      "baseSalary": "Base salary (VND)",
+      "effectiveFrom": "Effective from",
+      "allowances": "Allowances",
+      "addAllowance": "Add allowance",
+      "noAllowances": "No allowances added.",
+      "allowanceName": "Allowance name",
+      "taxable": "Taxable",
+      "nonTaxable": "Non-taxable",
+      "removeAllowance": "Remove allowance",
+      "note": "Note",
+      "notePlaceholder": "Optional note about this change…",
+      "submit": "Save salary",
+      "errors": {
+        "baseSalary": "Base salary must be a non-negative amount.",
+        "effectiveFrom": "Effective date must be a valid date.",
+        "allowanceName": "Allowance name is required.",
+        "allowanceAmount": "Allowance amount must be non-negative."
+      },
+      "toast": {
+        "saved": "Salary saved",
+        "error": "Failed to save salary",
+        "tryAgain": "Please check the effective date and try again."
+      }
+    },
+    "history": {
+      "title": "Salary history",
+      "subtitle": "Effective-dated history for {{name}} · {{code}}",
+      "current": "Current",
+      "ongoing": "ongoing",
+      "allowanceTotal": "Allowances",
+      "empty": "No salary records yet.",
+      "remove": "Remove",
+      "confirmTitle": "Remove latest salary record?",
+      "confirmBody": "This reopens the previous record. Only the most recent record can be removed.",
+      "toast": {
+        "removed": "Salary record removed",
+        "error": "Could not remove record",
+        "headOnly": "Only the most recent salary record may be removed."
+      }
+    }
+  },
+  "settings": {
+    "title": "Payroll settings",
+    "subtitle": "Insurance rates, deductions and the tax table used when running payroll",
+    "insuranceRates": "Insurance rates (employee-side)",
+    "taxBrackets": "Progressive PIT table",
+    "taxBracketsHint": "Each bracket applies to taxable income. Leave the last bracket's bound empty for the open-ended top rate.",
+    "addBracket": "Add bracket",
+    "removeBracket": "Remove bracket",
+    "uncapped": "Uncapped",
+    "insuranceBaseOption": {
+      "BASE_SALARY": "Base salary",
+      "GROSS": "Gross pay"
+    },
+    "fields": {
+      "socialInsuranceRate": "Social (BHXH)",
+      "healthInsuranceRate": "Health (BHYT)",
+      "unemploymentInsuranceRate": "Unemployment (BHTN)",
+      "unionFeeRate": "Union fee",
+      "insuranceBase": "Insurance base",
+      "insuranceCap": "Insurance cap (VND)",
+      "payDay": "Pay day",
+      "personalDeduction": "Personal deduction (VND)",
+      "dependentDeduction": "Dependent deduction (VND)"
+    },
+    "bracket": {
+      "upTo": "Up to (VND)",
+      "rate": "Rate",
+      "andAbove": "And above"
+    },
+    "toast": {
+      "saved": "Payroll settings saved",
+      "saveError": "Failed to save settings",
+      "tryAgain": "Please try again later."
+    }
+  },
+  "payslip": {
+    "title": "Payslip",
+    "subtitle": "{{period}} · {{name}}",
+    "netPay": "Net pay",
+    "download": "Download PDF",
+    "downloadError": "Could not download the payslip",
+    "otNight": "night",
+    "sections": {
+      "attendance": "Attendance",
+      "earnings": "Earnings",
+      "deductions": "Deductions"
+    },
+    "attendance": {
+      "workingDays": "Working days",
+      "daysPresent": "Days present",
+      "paidLeaveDays": "Paid leave",
+      "unpaidLeaveDays": "Unpaid leave",
+      "daysAbsent": "Days absent",
+      "holidayCount": "Holidays"
+    },
+    "earnings": {
+      "proratedBase": "Base salary (prorated)",
+      "allowanceTotal": "Allowances",
+      "otPay": "Overtime pay",
+      "grossPay": "Gross pay"
+    },
+    "deductions": {
+      "socialInsurance": "Social insurance (BHXH)",
+      "healthInsurance": "Health insurance (BHYT)",
+      "unemploymentInsurance": "Unemployment insurance (BHTN)",
+      "personalIncomeTax": "Personal income tax",
+      "unionFee": "Union fee",
+      "otherDeductions": "Other deductions",
+      "taxableIncome": "Taxable income"
+    },
+    "otCategory": {
+      "OT_WEEKDAY": "Weekday OT",
+      "OT_WEEKEND": "Weekend OT",
+      "OT_HOLIDAY": "Holiday OT"
+    },
+    "mine": {
+      "subtitle": "Your monthly payslips",
+      "hint": "Tap a payslip to see the full breakdown of pay, insurance and tax.",
+      "netLabel": "Net pay",
+      "empty": {
+        "title": "No payslips yet",
+        "body": "Your payslips will appear here once a pay run is approved."
+      }
+    }
+  },
+  "runDetail": {
+    "title": "Pay run {{period}}",
+    "subtitle": "Tap an employee to see their payslip breakdown.",
+    "empty": "This run has no payslip lines.",
+    "export": "Export PDF",
+    "exportError": "Could not export the pay run"
+  }
+}

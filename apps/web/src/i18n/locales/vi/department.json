@@ -1,0 +1,57 @@
+{
+  "list": {
+    "title": "Phòng ban",
+    "subtitle": "Quản lý các phòng ban trong công ty",
+    "searchPlaceholder": "Tìm phòng ban...",
+    "count": "phòng ban"
+  },
+  "table": {
+    "name": "Tên phòng ban",
+    "description": "Mô tả",
+    "employeeColumn": "Số nhân viên",
+    "noDescription": "—"
+  },
+  "form": {
+    "create": "Thêm phòng ban",
+    "edit": "Chỉnh sửa phòng ban",
+    "createDescription": "Tạo phòng ban mới để phân loại nhân viên.",
+    "editDescription": "Cập nhật thông tin phòng ban.",
+    "nameLabel": "Tên phòng ban",
+    "namePlaceholder": "Ví dụ: Phòng Nhân sự",
+    "descriptionLabel": "Mô tả",
+    "descriptionPlaceholder": "Mô tả ngắn về chức năng của phòng ban (tùy chọn)",
+    "managerLabel": "Trưởng phòng",
+    "managerPlaceholder": "Chọn trưởng phòng",
+    "noManager": "Không có",
+    "submitCreate": "Tạo phòng ban"
+  },
+  "validation": {
+    "nameRequired": "Vui lòng nhập tên phòng ban",
+    "nameMax": "Tối đa 100 ký tự",
+    "descriptionMax": "Tối đa 500 ký tự"
+  },
+  "delete": {
+    "title": "Xóa phòng ban?",
+    "description": "Hành động này không thể hoàn tác. Phòng ban \"{{name}}\" sẽ bị xóa vĩnh viễn.",
+    "hasEmployees": "Phòng ban \"{{name}}\" đang có {{count}} nhân viên. Vui lòng chuyển nhân viên sang phòng ban khác trước khi xóa."
+  },
+  "empty": {
+    "title": "Chưa có phòng ban nào",
+    "description": "Thêm phòng ban đầu tiên để bắt đầu phân loại nhân viên"
+  },
+  "errorState": {
+    "title": "Có lỗi xảy ra",
+    "description": "Không thể tải danh sách phòng ban"
+  },
+  "toast": {
+    "created": "Đã thêm phòng ban",
+    "updated": "Đã cập nhật phòng ban",
+    "deleted": "Đã xóa phòng ban",
+    "createError": "Không thể thêm phòng ban",
+    "createErrorDescription": "Tên phòng ban có thể đã tồn tại.",
+    "updateError": "Không thể cập nhật phòng ban",
+    "updateErrorDescription": "Vui lòng thử lại.",
+    "deleteError": "Không thể xóa phòng ban",
+    "deleteErrorDescription": "Vui lòng thử lại."
+  }
+}

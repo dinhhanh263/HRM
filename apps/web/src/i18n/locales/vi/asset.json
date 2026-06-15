@@ -1,0 +1,367 @@
+{
+  "status": {
+    "AVAILABLE": "Sẵn sàng",
+    "ASSIGNED": "Đang cấp phát",
+    "UNDER_MAINTENANCE": "Đang bảo trì",
+    "RETIRED": "Đã thanh lý",
+    "LOST": "Mất / hỏng"
+  },
+  "condition": {
+    "NEW": "Mới",
+    "GOOD": "Tốt",
+    "FAIR": "Khá",
+    "POOR": "Kém"
+  },
+  "asset": {
+    "list": {
+      "title": "Tài sản",
+      "subtitle": "Quản lý toàn bộ thiết bị, tài sản cố định của công ty",
+      "searchPlaceholder": "Tìm theo mã, tên, serial...",
+      "categoryPlaceholder": "Loại tài sản",
+      "allCategories": "Tất cả loại",
+      "statusPlaceholder": "Trạng thái",
+      "allStatuses": "Tất cả trạng thái",
+      "clearFilters": "Xóa lọc",
+      "export": "Xuất CSV",
+      "countSuffix": "tài sản",
+      "loadError": "Không thể tải danh sách tài sản",
+      "pagination": {
+        "showing": "Hiển thị",
+        "of": "trong tổng số",
+        "suffix": "tài sản",
+        "prev": "Trước",
+        "next": "Sau"
+      }
+    },
+    "table": {
+      "code": "Mã TS",
+      "name": "Tên tài sản",
+      "category": "Loại",
+      "status": "Trạng thái",
+      "holder": "Người giữ",
+      "location": "Vị trí"
+    },
+    "detail": {
+      "title": "Chi tiết tài sản",
+      "back": "Quay lại",
+      "loading": "Đang tải dữ liệu...",
+      "notFoundTitle": "Không tìm thấy tài sản",
+      "notFoundSubtitle": "Tài sản không tồn tại hoặc đã bị xóa.",
+      "edit": "Chỉnh sửa",
+      "unassigned": "Chưa cấp phát",
+      "tabs": {
+        "info": "Thông tin",
+        "history": "Lịch sử cấp phát",
+        "maintenance": "Bảo trì"
+      },
+      "sections": {
+        "general": "Thông tin chung",
+        "purchase": "Mua sắm & bảo hành",
+        "note": "Ghi chú"
+      },
+      "fields": {
+        "category": "Loại tài sản",
+        "location": "Vị trí",
+        "holder": "Người giữ",
+        "brand": "Hãng",
+        "model": "Model",
+        "serialNumber": "Số serial",
+        "condition": "Tình trạng",
+        "purchaseDate": "Ngày mua",
+        "purchaseCost": "Giá mua",
+        "warrantyEndDate": "Hạn bảo hành",
+        "vendor": "Nhà cung cấp"
+      }
+    },
+    "form": {
+      "create": "Thêm tài sản",
+      "edit": "Chỉnh sửa tài sản",
+      "createDescription": "Thêm một tài sản mới vào danh mục quản lý.",
+      "editDescription": "Cập nhật thông tin tài sản.",
+      "categoryLabel": "Loại tài sản",
+      "categoryPlaceholder": "Chọn loại tài sản",
+      "codeLabel": "Mã tài sản",
+      "codePlaceholder": "Ví dụ: LP-001",
+      "nameLabel": "Tên tài sản",
+      "namePlaceholder": "Ví dụ: MacBook Pro 14 inch",
+      "locationLabel": "Vị trí",
+      "locationPlaceholder": "Ví dụ: Văn phòng tầng 3",
+      "advancedToggle": "Thông tin chi tiết",
+      "brandLabel": "Hãng",
+      "modelLabel": "Model",
+      "serialLabel": "Số serial",
+      "conditionLabel": "Tình trạng",
+      "conditionPlaceholder": "Chọn tình trạng",
+      "purchaseDateLabel": "Ngày mua",
+      "purchaseCostLabel": "Giá mua (VND)",
+      "warrantyLabel": "Hạn bảo hành",
+      "vendorLabel": "Nhà cung cấp",
+      "noteLabel": "Ghi chú",
+      "submitCreate": "Tạo tài sản"
+    },
+    "validation": {
+      "categoryRequired": "Vui lòng chọn loại tài sản",
+      "codeRequired": "Vui lòng nhập mã tài sản",
+      "codeMax": "Tối đa 50 ký tự",
+      "codeFormat": "Mã chỉ gồm chữ in hoa, số, gạch ngang hoặc gạch dưới",
+      "nameRequired": "Vui lòng nhập tên tài sản",
+      "nameMax": "Tối đa 150 ký tự",
+      "locationMax": "Tối đa 120 ký tự",
+      "serialMax": "Tối đa 120 ký tự",
+      "brandMax": "Tối đa 80 ký tự",
+      "modelMax": "Tối đa 80 ký tự",
+      "vendorMax": "Tối đa 120 ký tự",
+      "noteMax": "Tối đa 1000 ký tự",
+      "costInvalid": "Giá mua phải là số không âm"
+    },
+    "delete": {
+      "title": "Xóa tài sản?",
+      "description": "Hành động này không thể hoàn tác. Tài sản \"{{name}}\" sẽ bị xóa vĩnh viễn."
+    },
+    "empty": {
+      "title": "Chưa có tài sản nào",
+      "description": "Thêm tài sản đầu tiên để bắt đầu quản lý"
+    },
+    "toast": {
+      "created": "Đã thêm tài sản",
+      "updated": "Đã cập nhật tài sản",
+      "deleted": "Đã xóa tài sản",
+      "createError": "Không thể thêm tài sản",
+      "updateError": "Không thể cập nhật tài sản",
+      "codeTakenHint": "Mã tài sản có thể đã tồn tại.",
+      "deleteError": "Không thể xóa tài sản",
+      "deleteHistoryHint": "Tài sản đã có lịch sử cấp phát hoặc bảo trì.",
+      "exported": "Đã xuất danh sách tài sản",
+      "exportError": "Không thể xuất danh sách tài sản"
+    },
+    "assign": {
+      "action": "Cấp phát",
+      "title": "Cấp phát tài sản",
+      "description": "Giao tài sản này cho một nhân viên đang làm việc.",
+      "employeeLabel": "Nhân viên nhận",
+      "employeeSearchPlaceholder": "Tìm nhân viên theo tên, mã...",
+      "employeePlaceholder": "Chọn nhân viên",
+      "dateLabel": "Ngày cấp phát",
+      "conditionLabel": "Tình trạng khi giao",
+      "noteLabel": "Ghi chú",
+      "notePlaceholder": "Ghi chú về việc cấp phát (tùy chọn)",
+      "submit": "Xác nhận cấp phát",
+      "validation": {
+        "employeeRequired": "Vui lòng chọn nhân viên",
+        "dateRequired": "Vui lòng chọn ngày cấp phát",
+        "noteMax": "Tối đa 1000 ký tự"
+      },
+      "toast": {
+        "success": "Đã cấp phát tài sản",
+        "error": "Không thể cấp phát tài sản",
+        "errorHint": "Tài sản phải đang ở trạng thái Sẵn sàng."
+      }
+    },
+    "handover": {
+      "signOnAssign": "Lấy chữ ký nhận tại chỗ",
+      "signOnAssignHint": "Bật để người nhận ký xác nhận ngay khi bàn giao. Bỏ qua nếu sẽ ký sau.",
+      "signaturePadLabel": "Khu vực ký tên",
+      "signatureHint": "Ký tên vào đây",
+      "signatureClear": "Vẽ lại",
+      "status": {
+        "PENDING": "Chờ ký",
+        "SIGNED": "Đã ký"
+      },
+      "method": {
+        "ON_SCREEN": "Ký tại chỗ",
+        "IN_APP": "Ký trên ứng dụng"
+      },
+      "pendingCardTitle": "Phiếu bàn giao chờ ký",
+      "pendingCardDescription": "Vui lòng ký xác nhận đã nhận tài sản này.",
+      "signNow": "Ký xác nhận",
+      "ackDialog": {
+        "title": "Ký xác nhận bàn giao",
+        "description": "Ký tên để xác nhận bạn đã nhận tài sản và đồng ý với nội dung bàn giao.",
+        "submit": "Xác nhận đã nhận",
+        "signatureRequired": "Vui lòng ký tên trước khi xác nhận"
+      },
+      "downloadPdf": "Xuất biên bản (PDF)",
+      "viewSignature": "Xem chữ ký",
+      "signaturePreview": {
+        "title": "Chữ ký bàn giao",
+        "description": "Chữ ký người nhận đã xác nhận trên biên bản bàn giao.",
+        "loadError": "Không thể tải chữ ký",
+        "imageAlt": "Ảnh chữ ký người nhận"
+      },
+      "signedAt": "Đã ký lúc {{date}}",
+      "toast": {
+        "ackSuccess": "Đã ký xác nhận bàn giao",
+        "ackError": "Không thể ký xác nhận",
+        "ackErrorHint": "Phiếu có thể đã được ký hoặc đã thu hồi.",
+        "pdfError": "Không thể tải biên bản"
+      }
+    },
+    "return": {
+      "action": "Thu hồi",
+      "title": "Thu hồi tài sản",
+      "description": "Thu hồi tài sản này về kho.",
+      "descriptionHolder": "Thu hồi tài sản đang được {{name}} giữ.",
+      "dateLabel": "Ngày thu hồi",
+      "conditionLabel": "Tình trạng khi nhận",
+      "noteLabel": "Ghi chú",
+      "notePlaceholder": "Ghi chú về việc thu hồi (tùy chọn)",
+      "submit": "Xác nhận thu hồi",
+      "validation": {
+        "dateRequired": "Vui lòng chọn ngày thu hồi",
+        "noteMax": "Tối đa 1000 ký tự"
+      },
+      "toast": {
+        "success": "Đã thu hồi tài sản",
+        "error": "Không thể thu hồi tài sản",
+        "errorHint": "Tài sản phải đang ở trạng thái Đang cấp phát."
+      }
+    },
+    "history": {
+      "emptyTitle": "Chưa có lịch sử cấp phát",
+      "emptyDescription": "Tài sản này chưa từng được cấp phát cho nhân viên nào.",
+      "assignedAt": "Ngày cấp",
+      "assignedBy": "Người cấp",
+      "conditionOut": "Tình trạng giao",
+      "returnedAt": "Ngày thu hồi",
+      "returnedBy": "Người thu hồi",
+      "conditionIn": "Tình trạng nhận",
+      "assignmentStatus": {
+        "ACTIVE": "Đang giữ",
+        "RETURNED": "Đã trả"
+      }
+    },
+    "mine": {
+      "title": "Tài sản của tôi",
+      "subtitle": "Danh sách thiết bị, tài sản bạn đang được cấp phát",
+      "countSuffix": "tài sản",
+      "loadError": "Không thể tải danh sách tài sản của bạn",
+      "emptyTitle": "Bạn chưa được cấp phát tài sản nào",
+      "emptyDescription": "Khi được cấp phát thiết bị, tài sản sẽ hiển thị ở đây.",
+      "assignedAt": "Cấp phát ngày"
+    },
+    "maintenance": {
+      "startAction": "Bảo trì",
+      "completeAction": "Hoàn tất bảo trì",
+      "startTitle": "Bắt đầu bảo trì",
+      "startDescription": "Đưa tài sản vào trạng thái bảo trì / sửa chữa.",
+      "completeTitle": "Hoàn tất bảo trì",
+      "completeDescription": "Kết thúc bảo trì và trả tài sản về trạng thái sẵn sàng.",
+      "startedAtLabel": "Ngày bắt đầu",
+      "completedAtLabel": "Ngày hoàn tất",
+      "descriptionLabel": "Nội dung bảo trì",
+      "descriptionPlaceholder": "Mô tả công việc bảo trì, sửa chữa",
+      "vendorLabel": "Đơn vị thực hiện",
+      "vendorPlaceholder": "Ví dụ: Trung tâm bảo hành",
+      "costLabel": "Chi phí (VND)",
+      "startSubmit": "Bắt đầu bảo trì",
+      "completeSubmit": "Hoàn tất bảo trì",
+      "emptyTitle": "Chưa có lịch sử bảo trì",
+      "emptyDescription": "Tài sản này chưa từng được bảo trì hay sửa chữa.",
+      "totalCost": "Tổng chi phí bảo trì",
+      "startedAt": "Ngày bắt đầu",
+      "completedAt": "Ngày hoàn tất",
+      "vendor": "Đơn vị",
+      "cost": "Chi phí",
+      "createdBy": "Người tạo",
+      "recordStatus": {
+        "OPEN": "Đang bảo trì",
+        "COMPLETED": "Đã hoàn tất"
+      },
+      "validation": {
+        "dateRequired": "Vui lòng chọn ngày",
+        "descriptionRequired": "Vui lòng nhập nội dung bảo trì",
+        "descriptionMax": "Tối đa 1000 ký tự",
+        "vendorMax": "Tối đa 120 ký tự"
+      },
+      "toast": {
+        "started": "Đã bắt đầu bảo trì",
+        "completed": "Đã hoàn tất bảo trì",
+        "startError": "Không thể bắt đầu bảo trì",
+        "startErrorHint": "Tài sản phải đang ở trạng thái Sẵn sàng.",
+        "completeError": "Không thể hoàn tất bảo trì",
+        "completeErrorHint": "Tài sản phải đang ở trạng thái Đang bảo trì."
+      }
+    },
+    "dispose": {
+      "action": "Thanh lý",
+      "title": "Thanh lý tài sản",
+      "description": "Đánh dấu tài sản đã thanh lý hoặc mất / hỏng. Hành động này không thể hoàn tác.",
+      "statusLabel": "Hình thức",
+      "dateLabel": "Ngày thanh lý",
+      "reasonLabel": "Lý do",
+      "reasonPlaceholder": "Lý do thanh lý hoặc tình trạng mất / hỏng",
+      "submit": "Xác nhận thanh lý",
+      "validation": {
+        "dateRequired": "Vui lòng chọn ngày thanh lý",
+        "reasonRequired": "Vui lòng nhập lý do",
+        "reasonMax": "Tối đa 500 ký tự"
+      },
+      "toast": {
+        "success": "Đã thanh lý tài sản",
+        "error": "Không thể thanh lý tài sản",
+        "errorHint": "Tài sản đang cấp phát phải được thu hồi trước."
+      }
+    }
+  },
+  "category": {
+    "list": {
+      "title": "Loại tài sản",
+      "subtitle": "Cấu hình các loại tài sản dùng để phân loại thiết bị, tài sản của công ty",
+      "searchPlaceholder": "Tìm loại tài sản...",
+      "count": "loại tài sản"
+    },
+    "table": {
+      "name": "Tên loại",
+      "code": "Mã loại",
+      "description": "Mô tả",
+      "assetColumn": "Số tài sản",
+      "noDescription": "—"
+    },
+    "form": {
+      "create": "Thêm loại tài sản",
+      "edit": "Chỉnh sửa loại tài sản",
+      "createDescription": "Tạo loại tài sản mới để phân loại thiết bị, tài sản.",
+      "editDescription": "Cập nhật thông tin loại tài sản.",
+      "nameLabel": "Tên loại",
+      "namePlaceholder": "Ví dụ: Máy tính xách tay",
+      "codeLabel": "Mã loại",
+      "codePlaceholder": "Ví dụ: LAPTOP",
+      "codeImmutable": "Mã loại không thể thay đổi sau khi tạo.",
+      "descriptionLabel": "Mô tả",
+      "descriptionPlaceholder": "Mô tả ngắn về loại tài sản (tùy chọn)",
+      "submitCreate": "Tạo loại tài sản"
+    },
+    "validation": {
+      "nameRequired": "Vui lòng nhập tên loại tài sản",
+      "nameMax": "Tối đa 100 ký tự",
+      "codeRequired": "Vui lòng nhập mã loại",
+      "codeMax": "Tối đa 40 ký tự",
+      "codeFormat": "Mã chỉ gồm chữ in hoa, số, gạch ngang hoặc gạch dưới",
+      "descriptionMax": "Tối đa 500 ký tự"
+    },
+    "delete": {
+      "title": "Xóa loại tài sản?",
+      "description": "Hành động này không thể hoàn tác. Loại tài sản \"{{name}}\" sẽ bị xóa vĩnh viễn.",
+      "inUse": "Loại tài sản \"{{name}}\" đang có {{count}} tài sản. Vui lòng chuyển các tài sản sang loại khác trước khi xóa."
+    },
+    "empty": {
+      "title": "Chưa có loại tài sản nào",
+      "description": "Thêm loại tài sản đầu tiên để bắt đầu quản lý tài sản"
+    },
+    "errorState": {
+      "title": "Có lỗi xảy ra",
+      "description": "Không thể tải danh sách loại tài sản"
+    },
+    "toast": {
+      "created": "Đã thêm loại tài sản",
+      "updated": "Đã cập nhật loại tài sản",
+      "deleted": "Đã xóa loại tài sản",
+      "createError": "Không thể thêm loại tài sản",
+      "createErrorDescription": "Mã loại có thể đã tồn tại.",
+      "updateError": "Không thể cập nhật loại tài sản",
+      "updateErrorDescription": "Vui lòng thử lại.",
+      "deleteError": "Không thể xóa loại tài sản",
+      "deleteErrorDescription": "Loại tài sản có thể đang được sử dụng."
+    }
+  }
+}

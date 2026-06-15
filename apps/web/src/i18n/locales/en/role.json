@@ -1,0 +1,62 @@
+{
+  "list": {
+    "title": "Roles & permissions",
+    "subtitle": "Configure roles and access per screen and action.",
+    "rolesHeading": "Roles",
+    "userCount": "{{count}} users",
+    "permissionCount": "{{count}} permissions"
+  },
+  "detail": {
+    "systemBadge": "System role",
+    "systemNote": "This is a system role. You can edit its permissions, but it cannot be renamed or deleted.",
+    "emptyTitle": "Select a role",
+    "emptyDescription": "Pick a role from the list on the left to view and configure its permissions."
+  },
+  "system": {
+    "names": {
+      "super_admin": "Super Admin",
+      "hr_manager": "HR Manager",
+      "payroll_approver": "Payroll Approver",
+      "manager": "Manager",
+      "employee": "Employee"
+    },
+    "descriptions": {
+      "super_admin": "Full control over system configuration and permissions",
+      "hr_manager": "Full access to HR operations",
+      "payroll_approver": "Approves pay runs submitted by HR (Director/Chief Accountant)",
+      "manager": "View information and approve for the managed team",
+      "employee": "Self-service: timesheet, leave, personal profile"
+    }
+  },
+  "form": {
+    "create": "Add role",
+    "createTitle": "Create a new role",
+    "createDescription": "Name the role and choose the permissions for this custom role.",
+    "nameLabel": "Role name",
+    "namePlaceholder": "e.g. Recruitment Lead",
+    "nameRequired": "Please enter a role name",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "A short description of this role's scope",
+    "permissionsLabel": "Permissions",
+    "submitCreate": "Create role"
+  },
+  "delete": {
+    "title": "Delete role?",
+    "description": "The role \"{{name}}\" will be permanently deleted. This action cannot be undone.",
+    "hasUsers": "Cannot delete \"{{name}}\" because {{count}} users are assigned to it. Move them to another role first."
+  },
+  "errorState": {
+    "title": "Could not load roles"
+  },
+  "toast": {
+    "created": "Role created",
+    "createError": "Failed to create role",
+    "createErrorDescription": "The role name may already exist. Please try again.",
+    "updated": "Changes saved",
+    "updateError": "Save failed",
+    "updateErrorDescription": "Please try again later.",
+    "deleted": "Role deleted",
+    "deleteError": "Delete failed",
+    "deleteErrorDescription": "Please try again later."
+  }
+}

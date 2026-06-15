@@ -1,0 +1,32 @@
+{
+  "actions": {
+    "save": "Save",
+    "saveChanges": "Save changes",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "add": "Add",
+    "search": "Search",
+    "clearSearch": "Clear search",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "retry": "Retry",
+    "viewDetail": "View detail",
+    "actions": "Actions",
+    "more": "More"
+  },
+  "states": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "deleting": "Deleting...",
+    "error": "Something went wrong",
+    "noResults": "No results found"
+  },
+  "validation": {
+    "required": "This field is required"
+  }
+}

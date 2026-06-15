@@ -1,0 +1,263 @@
+{
+  "title": "Probation Review",
+  "subtitle": "Evaluate probationary employees against criteria and decide outcomes",
+  "tabs": {
+    "reviews": "Reviews",
+    "criteria": "Criteria",
+    "guidelines": "Guidelines"
+  },
+  "guidelines": {
+    "yearFilter": "Filter by year",
+    "add": "Add guideline",
+    "meta": "Year {{year}} · Updated {{date}}",
+    "empty": {
+      "title": "No guidelines for {{year}} yet",
+      "description": "HR has not published any evaluation guidelines for this year."
+    },
+    "error": {
+      "title": "Could not load guidelines",
+      "description": "Something went wrong while loading. Please try again.",
+      "retry": "Retry"
+    },
+    "form": {
+      "createTitle": "Add guideline",
+      "editTitle": "Edit guideline",
+      "description": "Guidelines help managers understand how to evaluate probation for the applicable year.",
+      "title": "Title",
+      "titleRequired": "Title is required (max 200 characters)",
+      "year": "Applicable year",
+      "yearInvalid": "Year must be between 2000–2100",
+      "order": "Display order",
+      "orderInvalid": "Order must be a non-negative integer",
+      "language": "Content language",
+      "languages": {
+        "vi": "Tiếng Việt",
+        "en": "English"
+      },
+      "content": "Content",
+      "contentPlaceholder": "Write the guideline content… Line breaks are preserved. For a table, write ≥2 consecutive lines like: Col A | Col B | Col C",
+      "contentRequired": "Content is required (max 20,000 characters)"
+    },
+    "deleteDialog": {
+      "title": "Delete this guideline?",
+      "description": "The guideline will be permanently deleted. This action cannot be undone.",
+      "confirm": "Delete"
+    },
+    "toast": {
+      "saved": "Guideline saved",
+      "saveError": "Could not save the guideline",
+      "deleted": "Guideline deleted",
+      "deleteError": "Could not delete the guideline"
+    }
+  },
+  "toast": {
+    "tryAgain": "Please try again later."
+  },
+  "status": {
+    "DRAFT": "Draft",
+    "PENDING_HR": "Pending HR",
+    "DECIDED": "Decided",
+    "CANCELLED": "Cancelled"
+  },
+  "outcome": {
+    "CONFIRM": "Confirm — make permanent",
+    "EXTEND": "Extend probation",
+    "FAIL": "Fail"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "subtitle": "Probation reviews (manager proposes, HR decides).",
+    "create": "New review",
+    "noReviewer": "—",
+    "noRecommendation": "—",
+    "columns": {
+      "employee": "Employee",
+      "probationEnd": "Probation end",
+      "reviewer": "Reviewer",
+      "recommendation": "Recommendation",
+      "status": "Status",
+      "created": "Created"
+    },
+    "filter": {
+      "all": "All statuses"
+    },
+    "empty": {
+      "title": "No reviews yet",
+      "description": "Create the first review for a probationary employee."
+    },
+    "createDialog": {
+      "title": "New probation review",
+      "employee": "Probationary employee",
+      "employeePlaceholder": "Select an employee",
+      "noCandidates": "No probationary employees available.",
+      "confirm": "Create"
+    },
+    "toast": {
+      "created": "Review created",
+      "createError": "Could not create review",
+      "openExists": "This employee already has an open review.",
+      "notOnProbation": "Employee is not on probation."
+    }
+  },
+  "scorecard": {
+    "scores": "Scores (1–5)",
+    "groups": {
+      "PERFORMANCE": "Performance (What)",
+      "VALUES": "Values & Culture (How)"
+    },
+    "subScore": "Average",
+    "rubricGuide": "Scoring guide: {{name}}",
+    "deliverables": {
+      "title": "Work evidence",
+      "add": "Add evidence",
+      "empty": "No evidence yet. Log delivered work items to back up the review.",
+      "titlePlaceholder": "Deliverable, e.g. Integrate Google SSO",
+      "linkPlaceholder": "https://… (ClickUp, Jira, PR…)",
+      "outcomePlaceholder": "Outcome",
+      "notePlaceholder": "Short note (optional)",
+      "remove": "Remove evidence {{index}}",
+      "outcomes": {
+        "MET": "Met",
+        "EXCEEDED": "Exceeded",
+        "NOT_MET": "Not met"
+      },
+      "toast": {
+        "titleRequired": "Each evidence item needs a deliverable title.",
+        "invalidLink": "Evidence links must be valid http/https URLs."
+      }
+    },
+    "strengths": "Strengths",
+    "weaknesses": "Areas to improve",
+    "comment": "Comment",
+    "recommendation": "Recommendation",
+    "recommendationPlaceholder": "Select an outcome",
+    "newProbationEndDate": "Proposed new probation end date",
+    "noCriteria": "No active criteria. Ask HR to configure evaluation criteria first.",
+    "saveDraft": "Save draft",
+    "submit": "Submit",
+    "toast": {
+      "draftSaved": "Draft saved",
+      "saveError": "Could not save the draft",
+      "submitted": "Review submitted to HR",
+      "submitError": "Could not submit the review",
+      "incomplete": "Please score all criteria before submitting.",
+      "extendDate": "Extending probation requires a future end date."
+    },
+    "selfSubScore": "Self",
+    "selfBadge": "Self: {{score}}",
+    "selfComment": "Employee self-comment",
+    "selfNotSubmitted": "The employee has not self-evaluated yet — you can still score and submit."
+  },
+  "decide": {
+    "title": "HR decision",
+    "subtitle": "Choose the final outcome. Consequences apply immediately and cannot be undone.",
+    "managerRecommends": "Manager recommends",
+    "decision": "Outcome",
+    "decisionPlaceholder": "Select an outcome",
+    "note": "Decision note",
+    "notePlaceholder": "Reason / note (required when failing)",
+    "newDate": "New probation end date",
+    "confirm": "Submit decision",
+    "cancelReview": "Cancel review",
+    "failWarning": {
+      "title": "Confirm Fail?",
+      "description": "The employee will be terminated as soon as you confirm. This action cannot be undone.",
+      "confirm": "Confirm Fail"
+    },
+    "cancelDialog": {
+      "title": "Cancel this review?",
+      "description": "The review will move to Cancelled and can no longer proceed.",
+      "confirm": "Cancel review"
+    },
+    "toast": {
+      "decided": "Decision recorded",
+      "decideError": "Could not record the decision",
+      "cancelled": "Review cancelled",
+      "cancelError": "Could not cancel the review",
+      "failReason": "Failing requires a decision note.",
+      "extendDate": "Extending requires a future end date.",
+      "notDecidable": "This review is not awaiting HR.",
+      "notCancellable": "This review cannot be cancelled."
+    }
+  },
+  "criteria": {
+    "title": "Evaluation criteria",
+    "subtitle": "The criteria used to score probation (scale 1–5).",
+    "add": "Add criteria",
+    "active": "Active",
+    "inactive": "Inactive",
+    "columns": {
+      "order": "Order",
+      "name": "Criteria name",
+      "group": "Group",
+      "status": "Status"
+    },
+    "groups": {
+      "PERFORMANCE": "Performance",
+      "VALUES": "Values"
+    },
+    "empty": {
+      "title": "No criteria yet",
+      "description": "Add the first criteria to start scoring probation reviews."
+    },
+    "form": {
+      "createTitle": "Add criteria",
+      "editTitle": "Edit criteria",
+      "name": "Criteria name",
+      "order": "Display order",
+      "isActive": "Active",
+      "group": "Evaluation group",
+      "rubric": "Scoring rubric (5 levels)",
+      "rubricHint": "Leave everything blank for no guide. If used, every level needs a label.",
+      "levelPlaceholder": "Level {{score}} label (e.g. Meets expectations)",
+      "definitionPlaceholder": "Short definition",
+      "observablePlaceholder": "Observable behavior",
+      "levelRequired": "This level needs a label"
+    },
+    "deleteDialog": {
+      "title": "Delete criteria?",
+      "description": "The criteria will be permanently deleted. If it has been used in a review, deactivate it instead.",
+      "confirm": "Delete"
+    },
+    "toast": {
+      "saved": "Criteria saved",
+      "saveError": "Could not save criteria",
+      "deleted": "Criteria deleted",
+      "deleteError": "Could not delete criteria",
+      "inUse": "This criteria has been used in a review. Deactivate it instead of deleting."
+    }
+  },
+  "steps": {
+    "ariaLabel": "Review progress",
+    "self": "Self evaluation",
+    "manager": "Manager",
+    "final": "Final results"
+  },
+  "self": {
+    "title": "Probation self-evaluation",
+    "subtitle": "Step 1 of the review flow: score yourself against the criteria before your manager reviews.",
+    "instruction": "Rate 1–5 on each criterion (press ⓘ for the level guide). You cannot edit after submitting.",
+    "submittedNotice": "You have submitted your self-evaluation. Your manager and HR will reference it.",
+    "comment": "Your comment",
+    "commentPlaceholder": "What went well, challenges you faced, support you need… (optional)",
+    "saveDraft": "Save draft",
+    "submit": "Submit self-evaluation",
+    "empty": {
+      "title": "No open self-evaluation",
+      "description": "When your manager opens your probation review, you will be notified and can fill it in here."
+    },
+    "confirmDialog": {
+      "title": "Submit self-evaluation?",
+      "description": "You cannot edit after submitting. Your manager and HR will see your self scores.",
+      "confirm": "Submit"
+    },
+    "toast": {
+      "draftSaved": "Draft saved",
+      "saveError": "Could not save the draft",
+      "submitted": "Self-evaluation submitted",
+      "submitError": "Could not submit",
+      "incomplete": "Please score every criterion before submitting.",
+      "notEditable": "Self-evaluation is locked (already submitted or the manager has finished)."
+    }
+  }
+}

@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+
+/* The app toggles dark mode via a `.dark` class on <html> (see useThemeStore),
+   so bind Tailwind's `dark:` variant to that class instead of its default
+   prefers-color-scheme media query. Without this, every `dark:` utility only
+   fires when the OS is in dark mode, silently leaving light styles in place. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Ocean Blue Theme (default) */
+  --color-primary: #4A9EBF;
+  --color-primary-light: #E8F4F8;
+  --color-primary-dark: #2E7A96;
+  --color-primary-hover: #3D8DAD;
+  --color-primary-foreground: #FFFFFF;
+
+  /* Theme preview swatches (fixed, independent of active theme) */
+  --color-swatch-ocean: #4A9EBF;
+  --color-swatch-sage: #5BA68A;
+
+  /* Brand logo tile — fixed dark so the reversed (white-arc) logo reads in any theme */
+  --color-brand: #0F1117;
+
+  /* Semantic Colors */
+  --color-success: #22C55E;
+  --color-success-light: #DCFCE7;
+  --color-warning: #F59E0B;
+  --color-warning-light: #FEF3C7;
+  --color-danger: #EF4444;
+  --color-danger-light: #FEE2E2;
+  --color-info: #3B82F6;
+  --color-info-light: #DBEAFE;
+
+  /* Light Mode Surfaces */
+  --color-background: #F9FAFB;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #F3F4F6;
+  --color-sidebar: #F1F3F5;
+  --color-border: #E5E7EB;
+  --color-border-strong: #D1D5DB;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6B7280;
+  --color-text-muted: #9CA3AF;
+
+  /* Font */
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-text-primary font-sans antialiased;
+  }
+}
+
+/* Dark mode */
+.dark {
+  /* Paint native form controls (number spinners, date pickers, scrollbars,
+     autofill) with the dark UA scheme to match our token-based surfaces. */
+  color-scheme: dark;
+  --color-background: #0F1117;
+  --color-surface: #1A1D27;
+  --color-surface-alt: #1F2335;
+  --color-sidebar: #161921;
+  --color-border: #2D3048;
+  --color-border-strong: #3D4166;
+  --color-text-primary: #F1F5F9;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+}
+
+/* Sage Green Theme */
+[data-theme="sage"] {
+  --color-primary: #5BA68A;
+  --color-primary-light: #E8F5F0;
+  --color-primary-dark: #3D8A6E;
+  --color-primary-hover: #4E9279;
+}
+
+/* Mobile: sidebar hidden, main content full width */
+@media (max-width: 767px) {
+  #main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* Accessibility: honor reduced-motion — disable non-essential animation/transition (WCAG 2.2) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "list": {
+    "title": "Employee Management",
+    "subtitle": "List of all employees in the company",
+    "addEmployee": "Add Employee",
+    "searchPlaceholder": "Search name, email, code...",
+    "departmentPlaceholder": "Department",
+    "allDepartments": "All departments",
+    "statusPlaceholder": "Status",
+    "allStatuses": "All statuses",
+    "clearFilters": "Clear filters",
+    "countSuffix": "employees",
+    "loadError": "Unable to load the employee list",
+    "pagination": {
+      "showing": "Showing",
+      "of": "of",
+      "suffix": "employees",
+      "prev": "Previous",
+      "next": "Next"
+    }
+  },
+  "table": {
+    "columns": {
+      "employee": "Employee",
+      "employeeCode": "Code",
+      "department": "Department",
+      "position": "Position",
+      "joinDate": "Join Date",
+      "status": "Status"
+    },
+    "empty": {
+      "title": "No employees yet",
+      "subtitle": "Add a new employee to start managing",
+      "subtitleReadonly": "There are no employees to display",
+      "cta": "Add Employee"
+    },
+    "actions": {
+      "viewDetail": "View details",
+      "edit": "Edit",
+      "activate": "Activate",
+      "deactivate": "Set on leave",
+      "terminate": "Terminate"
+    }
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "On leave",
+    "terminated": "Terminated"
+  },
+  "form": {
+    "sections": {
+      "account": "Account Information",
+      "accountDescription": "Email and password to sign in to the system",
+      "personal": "Personal Information",
+      "personalDescription": "Full name, date of birth, gender and contact details",
+      "work": "Work Information",
+      "workDescription": "Department, position and contract type"
+    },
+    "email": "Email",
+    "password": "Password",
+    "role": "Role",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "dateOfBirth": "Date of Birth",
+    "gender": "Gender",
+    "idNumber": "ID/Citizen Number",
+    "address": "Address",
+    "department": "Department",
+    "position": "Position",
+    "manager": "Direct Manager",
+    "noManager": "None",
+    "joinDate": "Join Date",
+    "probationEndDate": "Probation End Date",
+    "contractType": "Contract Type",
+    "dependentsCount": "Dependents",
+    "placeholders": {
+      "email": "email@company.com",
+      "password": "At least 8 characters",
+      "fullName": "John Doe",
+      "phone": "0901234567",
+      "idNumber": "001012345678",
+      "address": "123 ABC Street, XYZ District",
+      "selectRole": "Select role",
+      "selectGender": "Select gender",
+      "selectDepartment": "Select department",
+      "selectPosition": "Select position",
+      "selectManager": "Select direct manager",
+      "selectContractType": "Select contract type"
+    },
+    "avatar": {
+      "title": "Profile Photo",
+      "hint": "PNG, JPG up to 2MB",
+      "upload": "Upload photo",
+      "change": "Change photo",
+      "remove": "Remove",
+      "invalidType": "Please choose an image file (PNG, JPG)",
+      "tooLarge": "Image size must not exceed 2MB"
+    },
+    "roles": {
+      "EMPLOYEE": "Employee",
+      "MANAGER": "Manager",
+      "HR_MANAGER": "HR Manager",
+      "PAYROLL_APPROVER": "Payroll Approver"
+    },
+    "genders": {
+      "MALE": "Male",
+      "FEMALE": "Female",
+      "OTHER": "Other"
+    },
+    "contractTypes": {
+      "FULL_TIME": "Full-time",
+      "PART_TIME": "Part-time",
+      "CONTRACT": "Contract",
+      "PROBATION": "Probation",
+      "INTERN": "Internship"
+    },
+    "validation": {
+      "emailInvalid": "Invalid email",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordUppercase": "At least 1 uppercase letter required",
+      "passwordLowercase": "At least 1 lowercase letter required",
+      "passwordNumber": "At least 1 number required",
+      "fullNameMin": "Full name must be at least 2 characters",
+      "fullNameRequired": "Please enter a full name",
+      "dependentsCountRange": "Dependents must be an integer between 0 and 20",
+      "emailExists": "This email is already in use",
+      "idNumberExists": "This ID number already exists"
+    },
+    "submitCreate": "Create Employee",
+    "submitUpdate": "Update",
+    "submitting": "Processing..."
+  },
+  "create": {
+    "title": "Add New Employee",
+    "subtitle": "Create a profile and login account for the new employee",
+    "backToList": "Back to list",
+    "cancel": "Cancel",
+    "submit": "Create Employee",
+    "submitting": "Creating...",
+    "error": "Unable to create employee. Please try again."
+  },
+  "edit": {
+    "title": "Edit Employee",
+    "backToList": "Back to list",
+    "error": "Unable to update employee. Please try again."
+  },
+  "detail": {
+    "title": "Employee Details",
+    "sections": {
+      "personal": "Personal Information",
+      "work": "Work Information"
+    },
+    "tabs": {
+      "overview": "Overview"
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "gender": "Gender",
+      "dateOfBirth": "Date of Birth",
+      "idNumber": "ID/Citizen Number",
+      "phone": "Phone Number",
+      "email": "Email",
+      "employeeCode": "Employee Code",
+      "systemRole": "System Role",
+      "department": "Department",
+      "position": "Position",
+      "directManager": "Direct Manager",
+      "joinDate": "Join Date",
+      "probationEndDate": "Probation End Date",
+      "contractType": "Contract Type",
+      "dependentsCount": "Dependents",
+      "terminatedAt": "Termination Date",
+      "terminationReason": "Termination Reason"
+    },
+    "unassigned": "Unassigned"
+  },
+  "shared": {
+    "loading": "Loading data...",
+    "notFoundTitle": "Employee not found",
+    "notFoundSubtitle": "The employee does not exist or has been deleted",
+    "back": "Back",
+    "edit": "Edit",
+    "activate": "Activate",
+    "deactivate": "Set on leave",
+    "terminate": "Terminate",
+    "terminateConfirm": "Are you sure you want to terminate this employee?"
+  },
+  "toast": {
+    "activated": "Employee has been activated",
+    "activateError": "Unable to activate employee",
+    "deactivated": "Employee has been set to on leave",
+    "deactivateError": "Unable to update status",
+    "terminated": "Employee has been terminated",
+    "terminateError": "Unable to perform the action",
+    "tryAgain": "Please try again."
+  },
+  "terminateDialog": {
+    "title": "Terminate this employee?",
+    "description": "This action will change the employee status to \"Terminated\". You can reactivate them later if needed.",
+    "confirm": "Confirm termination"
+  }
+}

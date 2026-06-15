@@ -1,0 +1,678 @@
+{
+  "page": {
+    "title": "Tuyển dụng",
+    "subtitle": "Quản lý vị trí, ứng viên và quy trình tuyển dụng"
+  },
+  "status": {
+    "checking": "Đang kiểm tra kết nối module...",
+    "ok": "Module tuyển dụng đã sẵn sàng",
+    "error": "Không kết nối được module tuyển dụng"
+  },
+  "empty": {
+    "title": "Tính năng đang được xây dựng",
+    "description": "Các màn hình quản lý vị trí, ứng viên, pipeline và phỏng vấn sẽ sớm xuất hiện tại đây."
+  },
+  "pipeline": {
+    "board": {
+      "moveStage": "Chuyển bước",
+      "actionsMenu": "Thao tác hồ sơ",
+      "disposition": "Kết thúc hồ sơ",
+      "moveToast": "Đã chuyển {{name}} sang {{stage}}",
+      "moveError": "Không chuyển được bước, vui lòng thử lại",
+      "loadError": "Không tải được danh sách ứng viên",
+      "emptyStage": "Chưa có ứng viên",
+      "actions": {
+        "hire": "Tuyển ứng viên",
+        "reject": "Từ chối",
+        "withdraw": "Rút hồ sơ"
+      },
+      "rejectToast": "Đã từ chối {{name}}",
+      "hireToast": "Đã tuyển {{name}}",
+      "withdrawToast": "Đã rút hồ sơ của {{name}}",
+      "dispositionError": "Thao tác không thành công, vui lòng thử lại",
+      "offerGateTooltip": "Cần ít nhất 1 buổi phỏng vấn đã hoàn tất và 1 đánh giá đã gửi trước khi chuyển sang Đề nghị",
+      "offerForceTooltip": "Chưa đủ điều kiện — chuyển bắt buộc và phải nhập lý do",
+      "dragHandle": "Kéo để chuyển bước hồ sơ của {{name}}",
+      "dropBlocked": "Không thể chuyển ứng viên tới cột này"
+    },
+    "forceMoveDialog": {
+      "title": "Chuyển bước khi chưa đủ điều kiện?",
+      "description": "Chuyển {{name}} sang \"{{stage}}\" dù chưa đủ điều kiện (cần phỏng vấn đã hoàn tất và đánh giá đã gửi).",
+      "warning": "Đây là thao tác ghi đè quy tắc. Lý do của bạn sẽ được lưu vào lịch sử hồ sơ để đối chiếu.",
+      "reasonLabel": "Lý do ghi đè",
+      "reasonPlaceholder": "Nhập lý do chuyển bước khi chưa đủ điều kiện",
+      "confirm": "Vẫn chuyển"
+    },
+    "rejectDialog": {
+      "title": "Từ chối ứng viên?",
+      "description": "Từ chối hồ sơ của {{name}}. Hồ sơ sẽ được đóng và giữ nguyên ở bước hiện tại.",
+      "reasonLabel": "Lý do từ chối",
+      "reasonPlaceholder": "Chọn lý do",
+      "noteLabel": "Ghi chú",
+      "notePlaceholder": "Thêm ghi chú (tùy chọn)",
+      "confirm": "Từ chối"
+    },
+    "hireDialog": {
+      "title": "Tuyển ứng viên này?",
+      "description": "Xác nhận tuyển {{name}}. Hồ sơ sẽ chuyển sang bước \"Đã tuyển\" và được đóng.",
+      "confirm": "Tuyển"
+    },
+    "withdrawDialog": {
+      "title": "Rút hồ sơ ứng tuyển?",
+      "description": "Đánh dấu {{name}} đã rút khỏi quy trình. Hồ sơ sẽ được đóng và giữ nguyên ở bước hiện tại.",
+      "confirm": "Rút hồ sơ"
+    },
+    "sectionTitle": "Quy trình tuyển dụng (Pipeline)",
+    "sectionSubtitle": "Mẫu quy trình dùng chung cho các tin tuyển dụng. Mỗi tin sẽ sao chép các bước từ mẫu khi tạo.",
+    "create": "Tạo quy trình",
+    "defaultBadge": "Mặc định",
+    "stagesCount": "{{count}} bước",
+    "setDefault": "Đặt làm mặc định",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "empty": {
+      "title": "Chưa có quy trình nào",
+      "description": "Tạo quy trình tuyển dụng đầu tiên để bắt đầu thiết lập các bước."
+    },
+    "loadError": "Không tải được danh sách quy trình",
+    "toast": {
+      "created": "Đã tạo quy trình",
+      "updated": "Đã cập nhật quy trình",
+      "deleted": "Đã xóa quy trình",
+      "defaultSet": "Đã đặt làm quy trình mặc định",
+      "error": "Có lỗi xảy ra, vui lòng thử lại"
+    },
+    "deleteDialog": {
+      "title": "Xóa quy trình này?",
+      "description": "Hành động này không thể hoàn tác. Mẫu quy trình sẽ bị xóa vĩnh viễn."
+    },
+    "form": {
+      "createTitle": "Tạo quy trình tuyển dụng",
+      "editTitle": "Chỉnh sửa quy trình",
+      "createDescription": "Định nghĩa các bước trong quy trình tuyển dụng.",
+      "editDescription": "Cập nhật tên và các bước của quy trình.",
+      "nameLabel": "Tên quy trình",
+      "namePlaceholder": "VD: Quy trình kỹ thuật",
+      "isDefaultLabel": "Đặt làm quy trình mặc định",
+      "stagesLabel": "Các bước",
+      "stageNamePlaceholder": "Tên bước",
+      "addStage": "Thêm bước",
+      "removeStage": "Xóa bước",
+      "submitCreate": "Tạo quy trình",
+      "hint": "Quy trình phải có ít nhất bước \"Đã tuyển\" (HIRED) và \"Từ chối\" (REJECTED)."
+    },
+    "defaultStages": {
+      "sourced": "Ứng viên mới",
+      "screen": "Sàng lọc CV",
+      "interview": "Phỏng vấn",
+      "hired": "Đã tuyển",
+      "rejected": "Từ chối"
+    },
+    "stageType": {
+      "SOURCED": "Nguồn ứng viên",
+      "SCREEN": "Sàng lọc CV",
+      "ASSESSMENT": "Bài đánh giá",
+      "INTERVIEW": "Phỏng vấn",
+      "OFFER": "Đề nghị",
+      "HIRED": "Đã tuyển",
+      "REJECTED": "Từ chối"
+    },
+    "validation": {
+      "nameRequired": "Vui lòng nhập tên quy trình",
+      "nameMax": "Tên quy trình tối đa 100 ký tự",
+      "stageNameRequired": "Vui lòng nhập tên bước",
+      "minStages": "Cần ít nhất 2 bước",
+      "needHired": "Quy trình phải có bước \"Đã tuyển\" (HIRED)",
+      "needRejected": "Quy trình phải có bước \"Từ chối\" (REJECTED)"
+    }
+  },
+  "activity": {
+    "title": "Hoạt động",
+    "empty": "Chưa có hoạt động nào",
+    "loadError": "Không tải được lịch sử hoạt động",
+    "system": "Hệ thống",
+    "openDetail": "Xem hồ sơ của {{name}}",
+    "event": {
+      "APPLIED": "đã thêm ứng viên vào vị trí",
+      "STAGE_CHANGED": "đã chuyển bước",
+      "NOTE": "đã thêm ghi chú",
+      "INTERVIEW_SCHEDULED": "đã lên lịch phỏng vấn",
+      "REJECTED": "đã từ chối hồ sơ",
+      "HIRED": "đã tuyển ứng viên",
+      "WITHDRAWN": "đã rút hồ sơ"
+    },
+    "note": {
+      "label": "Nội dung ghi chú",
+      "placeholder": "Thêm ghi chú nội bộ về ứng viên...",
+      "submit": "Gửi ghi chú",
+      "error": "Không gửi được ghi chú, vui lòng thử lại"
+    }
+  },
+  "interview": {
+    "title": "Phỏng vấn",
+    "schedule": "Lên lịch PV",
+    "empty": "Chưa có buổi phỏng vấn nào",
+    "loadError": "Không tải được lịch phỏng vấn",
+    "changeStatus": "Đổi trạng thái phỏng vấn",
+    "joinLink": "Vào phòng họp",
+    "interviewersLabel": "Người phỏng vấn",
+    "mode": {
+      "ONSITE": "Trực tiếp",
+      "VIDEO": "Trực tuyến",
+      "PHONE": "Điện thoại"
+    },
+    "status": {
+      "SCHEDULED": "Đã lên lịch",
+      "COMPLETED": "Hoàn thành",
+      "CANCELLED": "Đã hủy",
+      "NO_SHOW": "Vắng mặt"
+    },
+    "setStatus": {
+      "COMPLETED": "Đánh dấu hoàn thành",
+      "CANCELLED": "Hủy buổi phỏng vấn",
+      "NO_SHOW": "Đánh dấu vắng mặt"
+    },
+    "form": {
+      "scheduledAt": "Thời gian",
+      "durationMin": "Thời lượng (phút)",
+      "mode": "Hình thức",
+      "location": "Địa điểm",
+      "locationPlaceholder": "VD: Phòng họp tầng 3, Văn phòng HN",
+      "meetingUrl": "Link cuộc họp",
+      "meetingUrlPlaceholder": "https://meet.google.com/...",
+      "interviewers": "Người phỏng vấn",
+      "interviewerSearch": "Tìm nhân viên theo tên...",
+      "removeInterviewer": "Bỏ {{name}}",
+      "submit": "Lên lịch"
+    },
+    "toast": {
+      "scheduled": "Đã lên lịch phỏng vấn",
+      "statusUpdated": "Đã cập nhật trạng thái phỏng vấn",
+      "error": "Có lỗi xảy ra, vui lòng thử lại"
+    },
+    "mine": {
+      "title": "PV của tôi",
+      "subtitle": "Các buổi phỏng vấn bạn được phân công",
+      "empty": "Bạn chưa được phân công buổi phỏng vấn nào",
+      "loadError": "Không tải được danh sách phỏng vấn",
+      "viewCandidate": "Xem hồ sơ ứng viên",
+      "tabs": {
+        "upcoming": "Sắp tới",
+        "pending": "Đang chờ đánh giá",
+        "reviewed": "Đã đánh giá"
+      },
+      "upcomingEmpty": "Không có buổi phỏng vấn nào sắp tới",
+      "pendingEmpty": "Không có buổi phỏng vấn nào chờ đánh giá",
+      "reviewedEmpty": "Bạn chưa đánh giá buổi phỏng vấn nào",
+      "scored": "Đã đánh giá",
+      "enterScorecard": "Nhập đánh giá",
+      "editScorecard": "Sửa đánh giá",
+      "closeScorecard": "Đóng"
+    }
+  },
+  "scorecard": {
+    "title": "Đánh giá phỏng vấn",
+    "loadError": "Không tải được đánh giá",
+    "progress": "{{submitted}}/{{total}} đã đánh giá",
+    "overall": {
+      "label": "Khuyến nghị tuyển",
+      "STRONG_NO": "Rất không nên",
+      "NO": "Không nên",
+      "YES": "Nên tuyển",
+      "STRONG_YES": "Rất nên tuyển"
+    },
+    "criteria": {
+      "label": "Tiêu chí đánh giá",
+      "TECHNICAL": "Chuyên môn",
+      "COMMUNICATION": "Giao tiếp",
+      "PROBLEM_SOLVING": "Giải quyết vấn đề",
+      "CULTURE_FIT": "Phù hợp văn hóa"
+    },
+    "ratingScale": "1 = Kém · 4 = Xuất sắc",
+    "notes": {
+      "label": "Nhận xét",
+      "placeholder": "Ghi chú thêm về ứng viên (không bắt buộc)"
+    },
+    "submit": "Gửi đánh giá",
+    "resubmit": "Cập nhật đánh giá",
+    "edit": "Sửa đánh giá của tôi",
+    "mineTitle": "Đánh giá của tôi",
+    "othersTitle": "Đánh giá của thành viên khác",
+    "notSubmitted": "Chưa đánh giá",
+    "noPeek": "Bạn cần gửi đánh giá của mình trước khi xem đánh giá của người khác (chống thiên kiến).",
+    "emptyForViewer": "Chưa có đánh giá nào được gửi.",
+    "averageLabel": "Điểm trung bình",
+    "submittedAt": "Gửi lúc {{when}}",
+    "toast": {
+      "submitted": "Đã gửi đánh giá",
+      "error": "Có lỗi xảy ra, vui lòng thử lại"
+    }
+  },
+  "job": {
+    "status": {
+      "DRAFT": "Nháp",
+      "OPEN": "Đang tuyển",
+      "ON_HOLD": "Tạm dừng",
+      "CLOSED": "Đã đóng",
+      "CANCELLED": "Đã hủy"
+    },
+    "employmentType": {
+      "FULL_TIME": "Toàn thời gian",
+      "PART_TIME": "Bán thời gian",
+      "CONTRACT": "Hợp đồng",
+      "INTERN": "Thực tập"
+    },
+    "list": {
+      "title": "Tin tuyển dụng",
+      "subtitle": "Quản lý các vị trí đang tuyển và quy trình ứng tuyển",
+      "searchPlaceholder": "Tìm theo tên vị trí...",
+      "count": "tin tuyển dụng",
+      "loadError": "Không tải được danh sách tin tuyển dụng",
+      "managePipelines": "Quản lý quy trình",
+      "create": "Tạo tin tuyển dụng",
+      "stageCount": "{{count}} bước",
+      "headcount": "{{count}} vị trí",
+      "activeApplications": "{{count}} hồ sơ",
+      "noDepartment": "Chưa gán phòng ban"
+    },
+    "filters": {
+      "allStatuses": "Tất cả trạng thái",
+      "allDepartments": "Tất cả phòng ban"
+    },
+    "empty": {
+      "title": "Chưa có tin tuyển dụng",
+      "description": "Tạo tin tuyển dụng đầu tiên để bắt đầu quản lý quy trình ứng tuyển.",
+      "noResultTitle": "Không tìm thấy tin phù hợp",
+      "noResultDescription": "Thử thay đổi từ khóa hoặc bộ lọc."
+    },
+    "actions": {
+      "edit": "Chỉnh sửa",
+      "open": "Mở tuyển dụng",
+      "hold": "Tạm dừng",
+      "close": "Đóng tin",
+      "reopen": "Mở lại",
+      "cancel": "Hủy tin"
+    },
+    "toast": {
+      "created": "Đã tạo tin tuyển dụng",
+      "updated": "Đã cập nhật tin tuyển dụng",
+      "statusChanged": "Đã cập nhật trạng thái tin tuyển dụng",
+      "error": "Có lỗi xảy ra, vui lòng thử lại"
+    },
+    "form": {
+      "createTitle": "Tạo tin tuyển dụng",
+      "editTitle": "Chỉnh sửa tin tuyển dụng",
+      "createDescription": "Nhập thông tin vị trí cần tuyển và chọn quy trình ứng tuyển.",
+      "editDescription": "Cập nhật thông tin vị trí tuyển dụng.",
+      "titleLabel": "Tên vị trí",
+      "titlePlaceholder": "VD: Kỹ sư Backend cấp cao",
+      "departmentLabel": "Phòng ban",
+      "departmentPlaceholder": "Chọn phòng ban",
+      "positionLabel": "Chức danh",
+      "positionPlaceholder": "Chọn chức danh",
+      "noneOption": "Không chọn",
+      "employmentTypeLabel": "Hình thức làm việc",
+      "headcountLabel": "Số lượng cần tuyển",
+      "locationLabel": "Địa điểm",
+      "locationPlaceholder": "VD: Hà Nội / Remote",
+      "descriptionLabel": "Mô tả công việc",
+      "descriptionPlaceholder": "Mô tả trách nhiệm, yêu cầu và quyền lợi...",
+      "pipelineLabel": "Quy trình tuyển dụng",
+      "pipelinePlaceholder": "Chọn quy trình",
+      "pipelineHint": "Các bước của quy trình sẽ được sao chép vào tin tuyển dụng khi tạo và không thay đổi khi mẫu được chỉnh sửa.",
+      "statusLabel": "Trạng thái khi tạo",
+      "submitCreate": "Tạo tin tuyển dụng"
+    },
+    "validation": {
+      "titleRequired": "Vui lòng nhập tên vị trí",
+      "titleMax": "Tên vị trí tối đa 150 ký tự",
+      "headcountMin": "Số lượng cần tuyển tối thiểu là 1",
+      "pipelineRequired": "Vui lòng chọn quy trình tuyển dụng"
+    },
+    "detail": {
+      "backToList": "Tin tuyển dụng",
+      "loadError": "Không tải được tin tuyển dụng",
+      "notFound": "Không tìm thấy tin tuyển dụng",
+      "createdAt": "Tạo ngày {{date}}",
+      "openings": "{{count}} vị trí",
+      "applications": "{{count}} hồ sơ đang xử lý",
+      "tabs": {
+        "pipeline": "Quy trình",
+        "config": "Cấu hình"
+      }
+    },
+    "stageEditor": {
+      "title": "Quy trình ứng tuyển",
+      "subtitle": "Sắp xếp, đổi tên hoặc thêm bước cho riêng tin này. Thay đổi không ảnh hưởng tới mẫu quy trình gốc.",
+      "edit": "Chỉnh sửa",
+      "save": "Lưu thay đổi",
+      "cancel": "Hủy",
+      "addStage": "Thêm bước",
+      "moveUp": "Lên",
+      "moveDown": "Xuống",
+      "remove": "Xóa bước",
+      "terminalHint": "Bước \"Đã tuyển\" và \"Từ chối\" luôn được giữ lại.",
+      "saved": "Đã cập nhật quy trình",
+      "errorHasApplications": "Không thể xóa bước đang có hồ sơ ứng tuyển",
+      "error": "Có lỗi xảy ra, vui lòng thử lại",
+      "validation": {
+        "minStages": "Cần ít nhất 2 bước",
+        "needHired": "Quy trình phải có bước \"Đã tuyển\" (HIRED)",
+        "needRejected": "Quy trình phải có bước \"Từ chối\" (REJECTED)",
+        "stageNameRequired": "Vui lòng nhập tên bước"
+      }
+    },
+    "hiringTeam": {
+      "title": "Đội tuyển dụng",
+      "subtitle": "Những người tham gia tuyển dụng cho vị trí này.",
+      "add": "Thêm thành viên",
+      "empty": "Chưa có thành viên nào trong đội tuyển dụng.",
+      "remove": "Gỡ khỏi đội",
+      "noDepartment": "Chưa gán phòng ban",
+      "toast": {
+        "added": "Đã thêm thành viên",
+        "updated": "Đã cập nhật vai trò",
+        "removed": "Đã gỡ thành viên",
+        "error": "Có lỗi xảy ra, vui lòng thử lại",
+        "duplicate": "Thành viên đã có trong đội tuyển dụng"
+      },
+      "removeDialog": {
+        "title": "Gỡ thành viên này?",
+        "description": "Thành viên sẽ bị gỡ khỏi đội tuyển dụng của tin này."
+      },
+      "form": {
+        "title": "Thêm thành viên",
+        "description": "Chọn nhân viên và vai trò trong đội tuyển dụng.",
+        "employeeLabel": "Nhân viên",
+        "employeePlaceholder": "Tìm và chọn nhân viên",
+        "roleLabel": "Vai trò",
+        "submit": "Thêm vào đội"
+      },
+      "role": {
+        "RECRUITER": "Tuyển dụng",
+        "HIRING_MANAGER": "Quản lý tuyển dụng",
+        "INTERVIEWER": "Người phỏng vấn",
+        "COORDINATOR": "Điều phối"
+      }
+    }
+  },
+  "candidate": {
+    "source": {
+      "CAREER_SITE": "Trang tuyển dụng",
+      "JOB_BOARD": "Sàn việc làm",
+      "REFERRAL": "Giới thiệu",
+      "SOURCED": "Chủ động tìm",
+      "AGENCY": "Đơn vị tuyển dụng",
+      "EVENT": "Sự kiện",
+      "DIRECT": "Trực tiếp"
+    },
+    "gender": {
+      "MALE": "Nam",
+      "FEMALE": "Nữ",
+      "OTHER": "Khác"
+    },
+    "list": {
+      "title": "Ứng viên",
+      "subtitle": "Kho hồ sơ ứng viên dùng chung cho mọi tin tuyển dụng",
+      "searchPlaceholder": "Tìm theo tên, email, SĐT...",
+      "create": "Thêm ứng viên",
+      "count": "ứng viên",
+      "loadError": "Không tải được danh sách ứng viên",
+      "pagination": {
+        "showing": "Hiển thị",
+        "of": "trong tổng số",
+        "suffix": "ứng viên",
+        "prev": "Trước",
+        "next": "Sau"
+      }
+    },
+    "filters": {
+      "allSources": "Tất cả nguồn",
+      "skillsPlaceholder": "Lọc theo kỹ năng…",
+      "anyExp": "Mọi mức kinh nghiệm",
+      "minExp": "Từ {{count}} năm KN"
+    },
+    "table": {
+      "name": "Ứng viên",
+      "currentTitle": "Vị trí hiện tại",
+      "source": "Nguồn",
+      "exp": "Kinh nghiệm",
+      "noContact": "Chưa có liên hệ",
+      "years": "{{count}} năm"
+    },
+    "empty": {
+      "title": "Chưa có ứng viên",
+      "description": "Thêm ứng viên đầu tiên để bắt đầu xây dựng kho hồ sơ.",
+      "noResultTitle": "Không tìm thấy ứng viên phù hợp",
+      "noResultDescription": "Thử thay đổi từ khóa hoặc bộ lọc."
+    },
+    "toast": {
+      "created": "Đã thêm ứng viên",
+      "updated": "Đã cập nhật ứng viên",
+      "error": "Có lỗi xảy ra, vui lòng thử lại"
+    },
+    "form": {
+      "createTitle": "Thêm ứng viên",
+      "editTitle": "Chỉnh sửa ứng viên",
+      "createDescription": "Nhập thông tin ứng viên vào kho hồ sơ.",
+      "editDescription": "Cập nhật thông tin ứng viên.",
+      "nameLabel": "Họ và tên",
+      "namePlaceholder": "VD: Nguyễn Văn An",
+      "emailLabel": "Email",
+      "phoneLabel": "Số điện thoại",
+      "currentTitleLabel": "Vị trí hiện tại",
+      "currentTitlePlaceholder": "VD: Kỹ sư Backend",
+      "expLabel": "Số năm kinh nghiệm",
+      "sourceLabel": "Nguồn ứng viên",
+      "skillsLabel": "Kỹ năng",
+      "skillsPlaceholder": "VD: Node.js, React, PostgreSQL",
+      "skillsHint": "Phân tách các kỹ năng bằng dấu phẩy.",
+      "advancedToggle": "Thông tin bổ sung",
+      "locationLabel": "Địa điểm",
+      "locationPlaceholder": "VD: Hà Nội",
+      "dobLabel": "Ngày sinh",
+      "genderLabel": "Giới tính",
+      "genderNone": "Không chọn",
+      "linkedinLabel": "LinkedIn",
+      "githubLabel": "GitHub",
+      "portfolioLabel": "Portfolio",
+      "consentTitle": "Đồng ý xử lý dữ liệu (PDPL)",
+      "consentHint": "Ghi nhận cơ sở pháp lý để lưu trữ dữ liệu cá nhân của ứng viên.",
+      "consentGivenAtLabel": "Ngày đồng ý",
+      "retentionUntilLabel": "Lưu trữ đến",
+      "consentSourceLabel": "Nguồn đồng ý",
+      "consentSourcePlaceholder": "VD: Nộp hồ sơ qua email",
+      "submitCreate": "Thêm ứng viên"
+    },
+    "validation": {
+      "nameRequired": "Vui lòng nhập họ và tên",
+      "nameMax": "Họ và tên tối đa 150 ký tự",
+      "emailInvalid": "Email không hợp lệ",
+      "urlInvalid": "Đường dẫn không hợp lệ"
+    },
+    "duplicate": {
+      "title": "Có thể trùng ứng viên đã tồn tại",
+      "description": "Tìm thấy ứng viên có tên tương tự. Hãy kiểm tra trước khi tạo mới.",
+      "forceCreate": "Vẫn tạo mới"
+    },
+    "detail": {
+      "backToList": "Ứng viên",
+      "loadError": "Không tải được hồ sơ ứng viên",
+      "notFound": "Không tìm thấy ứng viên",
+      "edit": "Chỉnh sửa",
+      "profileTitle": "Thông tin ứng viên",
+      "consentTitle": "Đồng ý & lưu trữ dữ liệu",
+      "tabs": {
+        "profile": "Hồ sơ",
+        "applications": "Ứng tuyển",
+        "documents": "Tài liệu"
+      }
+    },
+    "documents": {
+      "title": "CV & tài liệu",
+      "subtitle": "Tải lên CV của ứng viên (PDF hoặc DOCX). Mỗi lần tải lên được lưu thành một phiên bản riêng.",
+      "upload": "Tải CV lên",
+      "download": "Tải xuống",
+      "noText": "Không trích được text",
+      "reparse": "Quét lại",
+      "parseStatus": {
+        "PENDING": "Đang chờ quét",
+        "PROCESSING": "Đang quét...",
+        "DONE": "Đã quét",
+        "FAILED": "Quét thất bại"
+      },
+      "suggest": {
+        "title": "Đề xuất từ CV",
+        "subtitle": "Hệ thống đã trích các trường sau từ CV. Xem lại và áp dụng vào hồ sơ ứng viên — không có gì bị ghi đè cho đến khi bạn xác nhận.",
+        "apply": "Áp dụng đề xuất",
+        "empty": "Không trích được trường nào từ CV này.",
+        "applied": "Đã áp dụng đề xuất vào hồ sơ ứng viên",
+        "applyError": "Không áp dụng được đề xuất, vui lòng thử lại",
+        "fields": {
+          "fullName": "Họ và tên",
+          "email": "Email",
+          "phone": "Số điện thoại",
+          "currentTitle": "Chức danh hiện tại",
+          "totalYearsExp": "Số năm kinh nghiệm",
+          "skills": "Kỹ năng",
+          "linkedin": "LinkedIn",
+          "github": "GitHub",
+          "portfolio": "Portfolio"
+        }
+      },
+      "empty": {
+        "title": "Chưa có tài liệu",
+        "description": "Tải lên CV để trích xuất nội dung và xây dựng hồ sơ ứng viên."
+      },
+      "toast": {
+        "uploaded": "Đã tải CV lên",
+        "uploadedNoText": "Đã tải CV lên, nhưng không trích được text (có thể là ảnh scan)",
+        "unsupported": "Chỉ chấp nhận tệp PDF hoặc DOCX",
+        "tooLarge": "Tệp vượt quá dung lượng cho phép",
+        "error": "Không tải lên được tệp, vui lòng thử lại",
+        "downloadError": "Không tải xuống được tệp",
+        "reparseStarted": "Đang quét lại CV...",
+        "reparseError": "Không bắt đầu quét được, vui lòng thử lại"
+      }
+    }
+  },
+  "application": {
+    "status": {
+      "ACTIVE": "Đang xử lý",
+      "HIRED": "Đã tuyển",
+      "REJECTED": "Từ chối",
+      "WITHDRAWN": "Đã rút",
+      "ON_HOLD": "Tạm hoãn"
+    },
+    "rejectionReason": {
+      "UNDERQUALIFIED": "Chưa đủ năng lực",
+      "OVERQUALIFIED": "Vượt yêu cầu vị trí",
+      "FAILED_ASSESSMENT": "Không đạt bài đánh giá",
+      "CULTURE_FIT": "Không phù hợp văn hóa",
+      "COMP_MISMATCH": "Không khớp mức lương",
+      "POSITION_FILLED": "Vị trí đã tuyển đủ",
+      "CANDIDATE_WITHDREW": "Ứng viên rút lui",
+      "NO_SHOW": "Không tham gia phỏng vấn",
+      "OTHER": "Lý do khác"
+    },
+    "addToJob": {
+      "trigger": "Thêm vào vị trí",
+      "title": "Thêm ứng viên vào vị trí",
+      "description": "Đưa ứng viên vào quy trình tuyển dụng của một vị trí đang mở.",
+      "jobLabel": "Vị trí",
+      "jobPlaceholder": "Chọn vị trí đang tuyển",
+      "noOpenJobs": "Chưa có vị trí nào đang tuyển. Hãy mở một tin tuyển dụng trước.",
+      "sourceLabel": "Nguồn ứng tuyển",
+      "sourceHint": "Mặc định theo nguồn của ứng viên.",
+      "submit": "Thêm vào vị trí",
+      "toastSuccess": "Đã thêm ứng viên vào vị trí",
+      "errors": {
+        "DUPLICATE": "Ứng viên đã có hồ sơ đang xử lý ở vị trí này.",
+        "JOB_CLOSED": "Vị trí đã hủy, không thể thêm ứng viên.",
+        "GENERIC": "Không thêm được vào vị trí, vui lòng thử lại."
+      }
+    },
+    "tab": {
+      "loadError": "Không tải được danh sách ứng tuyển",
+      "empty": {
+        "title": "Chưa ứng tuyển vị trí nào",
+        "description": "Thêm ứng viên vào một vị trí đang mở để bắt đầu quy trình."
+      },
+      "appliedOn": "Ứng tuyển ngày {{date}}",
+      "stageLabel": "Bước hiện tại"
+    },
+    "detail": {
+      "backToBoard": "Về bảng tuyển dụng",
+      "openFullPage": "Mở trang đầy đủ",
+      "loadError": "Không tải được hồ sơ ứng tuyển này",
+      "notFound": "Không tìm thấy hồ sơ ứng tuyển",
+      "sourceLabel": "Nguồn",
+      "appliedOn": "Ứng tuyển {{date}}",
+      "viewJob": "Xem vị trí",
+      "stage": {
+        "title": "Bước trong quy trình",
+        "current": "Bước hiện tại"
+      },
+      "interviews": {
+        "title": "Phỏng vấn"
+      },
+      "scorecards": {
+        "title": "Tổng hợp đánh giá",
+        "empty": "Chưa có buổi phỏng vấn nào để đánh giá.",
+        "progress": "{{submitted}}/{{total}} đã đánh giá",
+        "averageLabel": "TB",
+        "noScore": "Chưa có điểm",
+        "redacted": "Bạn cần nộp đánh giá của mình trước khi xem kết quả của người khác"
+      },
+      "activity": {
+        "title": "Hoạt động"
+      }
+    }
+  },
+  "bulkImport": {
+    "trigger": "Nhập CV hàng loạt",
+    "title": "Nhập CV hàng loạt",
+    "description": "Kéo-thả nhiều CV để hệ thống tự đọc và tạo ứng viên cho vị trí này.",
+    "upload": {
+      "dropHint": "Kéo-thả CV vào đây hoặc bấm để chọn",
+      "accept": "Hỗ trợ PDF, DOCX · Tối đa {{max}} tệp · 10MB mỗi tệp",
+      "selectedCount": "Đã chọn {{count}} tệp",
+      "clear": "Xóa hết",
+      "removeFile": "Bỏ tệp",
+      "start": "Tải lên & phân tích"
+    },
+    "review": {
+      "parsing": "Đang phân tích {{done}}/{{total}} CV...",
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "noName": "Chưa có tên — sẽ dùng tên tệp khi tạo",
+      "noText": "Không trích được text",
+      "parseFailed": "Không phân tích được CV này",
+      "duplicate": "Có thể trùng ứng viên đã tồn tại",
+      "resolution": {
+        "NEW": "Tạo mới",
+        "LINK_EXISTING": "Gắn vào ứng viên cũ",
+        "SKIP": "Bỏ qua"
+      },
+      "cancel": "Hủy & xóa",
+      "confirm": "Xác nhận tạo ứng viên"
+    },
+    "done": {
+      "title": "Đã nhập xong",
+      "created": "Tạo mới",
+      "linked": "Gắn ứng viên cũ",
+      "skipped": "Bỏ qua",
+      "failed": "Thất bại",
+      "close": "Đóng"
+    },
+    "toast": {
+      "uploadError": "Không tải lên được, vui lòng thử lại",
+      "tooManyFiles": "Tối đa {{max}} tệp mỗi lần tải lên",
+      "unsupported": "Chỉ chấp nhận tệp PDF hoặc DOCX",
+      "tooLarge": "Có tệp vượt quá dung lượng cho phép",
+      "confirmError": "Không xác nhận được, vui lòng thử lại",
+      "confirmSuccess": "Đã tạo {{created}} ứng viên mới"
+    }
+  }
+}

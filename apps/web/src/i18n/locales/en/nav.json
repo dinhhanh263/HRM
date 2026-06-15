@@ -1,0 +1,88 @@
+{
+  "appName": "HRM System",
+  "groups": {
+    "overview": "Overview",
+    "hr": "Human Resources",
+    "operations": "Operations",
+    "system": "System"
+  },
+  "items": {
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "departments": "Departments",
+    "positions": "Positions",
+    "recruitment": "Recruitment",
+    "candidates": "Candidates",
+    "myInterviews": "My interviews",
+    "timesheet": "Timesheet",
+    "leave": "Leave",
+    "leaveBalances": "Leave balances",
+    "probation": "Probation",
+    "payroll": "Payroll",
+    "assets": "Assets",
+    "roles": "Roles & permissions",
+    "timesheetSettings": "Timesheet settings",
+    "assetSettings": "Asset categories",
+    "settings": "Settings",
+    "probationSelf": "My evaluation"
+  },
+  "titles": {
+    "dashboard": "Dashboard",
+    "employees": "Employee Management",
+    "employeeNew": "Add Employee",
+    "departments": "Departments",
+    "positions": "Positions",
+    "recruitment": "Recruitment",
+    "candidates": "Candidates",
+    "timesheet": "Timesheet",
+    "leave": "Leave",
+    "leaveBalances": "Company-wide leave balances",
+    "probation": "Probation Review",
+    "payroll": "Payroll",
+    "assets": "Assets",
+    "timesheetSettings": "Timesheet settings",
+    "assetSettings": "Asset categories",
+    "settings": "Settings"
+  },
+  "sidebar": {
+    "collapse": "Collapse",
+    "expandAria": "Expand sidebar",
+    "collapseAria": "Collapse sidebar",
+    "closeMenu": "Close menu"
+  },
+  "header": {
+    "home": "Home",
+    "openMenu": "Open menu",
+    "notifications": "Notifications",
+    "preferences": "Display preferences"
+  },
+  "userMenu": {
+    "profile": "Profile",
+    "account": "Account settings",
+    "logout": "Sign out"
+  },
+  "preferences": {
+    "language": "Language",
+    "themeColor": "Theme color",
+    "appearance": "Appearance",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "comingSoon": "{{feature}} (Coming soon)",
+  "commandPalette": {
+    "title": "Command palette",
+    "placeholder": "Search pages or actions...",
+    "empty": "No results",
+    "trigger": "Quick search",
+    "groups": {
+      "actions": "Actions",
+      "navigation": "Navigation"
+    },
+    "actions": {
+      "createJob": "Create job posting",
+      "addCandidate": "Add candidate",
+      "findCandidates": "Find candidates",
+      "myInterviews": "My interviews"
+    }
+  }
+}

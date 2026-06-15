@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.next/
+.turbo/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Testing
+coverage/
+
+# Prisma
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+
+# Uploaded files (CVs, attachments)
+apps/api/storage/
+
+# Misc
+*.tsbuildinfo
+.ast-graph/
+
+# Claude local (personal, not shared)
+.claude/settings.local.json
+.claude/CLAUDE.local.md
+
+# Temp / junk
+_tmp_*
+.tmp.driveupload/

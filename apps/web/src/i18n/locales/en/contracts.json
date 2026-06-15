@@ -1,0 +1,74 @@
+{
+  "tab": "Contracts",
+  "title": "Labor Contracts",
+  "subtitle": "Manage the employee's contracts",
+  "addContract": "Add Contract",
+  "editContract": "Edit Contract",
+  "endContract": "End Contract",
+  "loadError": "Unable to load contracts",
+  "indefinite": "Indefinite term",
+  "columns": {
+    "type": "Contract Type",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "status": "Status",
+    "signedAt": "Signed Date",
+    "note": "Note"
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "EXPIRED": "Expired",
+    "TERMINATED": "Terminated"
+  },
+  "types": {
+    "FULL_TIME": "Full-time",
+    "PART_TIME": "Part-time",
+    "CONTRACT": "Contract",
+    "PROBATION": "Probation",
+    "INTERN": "Internship"
+  },
+  "form": {
+    "type": "Contract Type",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "endDateHint": "Leave empty for an indefinite-term contract",
+    "signedAt": "Signed Date",
+    "note": "Note",
+    "selectType": "Select contract type",
+    "notePlaceholder": "Additional note (optional)"
+  },
+  "empty": {
+    "title": "No contracts yet",
+    "subtitle": "Add the first contract for this employee",
+    "cta": "Add Contract"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "end": "End",
+    "delete": "Delete",
+    "confirmEnd": "Confirm end"
+  },
+  "endDialog": {
+    "title": "End this contract?",
+    "description": "Pick an end date. The contract will be marked Terminated."
+  },
+  "deleteDialog": {
+    "title": "Delete this contract?",
+    "description": "This action cannot be undone.",
+    "confirm": "Delete"
+  },
+  "toast": {
+    "created": "Contract added",
+    "updated": "Contract updated",
+    "ended": "Contract ended",
+    "deleted": "Contract deleted",
+    "error": "Something went wrong. Please try again."
+  },
+  "validation": {
+    "typeRequired": "Please select a contract type",
+    "startRequired": "Please select a start date",
+    "endBeforeStart": "End date cannot be earlier than start date"
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "title": "Nghỉ phép",
+  "subtitle": "Quản lý đơn nghỉ phép, duyệt đơn và theo dõi số ngày phép",
+  "tabs": {
+    "mine": "Đơn của tôi",
+    "review": "Duyệt đơn",
+    "all": "Tất cả đơn",
+    "settings": "Loại nghỉ phép",
+    "flows": "Luồng duyệt"
+  },
+  "balances": {
+    "title": "Số dư phép {{year}}",
+    "allocated": "Được cấp",
+    "used": "Đã dùng",
+    "pending": "Chờ duyệt",
+    "remaining": "Còn lại",
+    "days": "ngày",
+    "empty": "Chưa có loại nghỉ phép nào được cấu hình",
+    "unpaid": "Không lương"
+  },
+  "allocation": {
+    "adjust": "Điều chỉnh",
+    "title": "Điều chỉnh số ngày phép {{year}}",
+    "description": "Đặt số ngày phép được cấp cho nhân viên theo từng loại. Để trống override sẽ dùng số ngày mặc định của loại nghỉ.",
+    "prevYear": "Năm trước",
+    "nextYear": "Năm sau",
+    "save": "Lưu thay đổi",
+    "cancel": "Hủy",
+    "saved": "Đã cập nhật số ngày phép",
+    "saveError": "Không cập nhật được số ngày phép"
+  },
+  "roster": {
+    "title": "Số dư phép toàn công ty",
+    "subtitle": "Số ngày phép còn lại của từng nhân viên theo từng loại nghỉ.",
+    "year": "Năm",
+    "prevYear": "Năm trước",
+    "nextYear": "Năm sau",
+    "searchPlaceholder": "Tìm theo tên hoặc mã nhân viên…",
+    "allDepartments": "Tất cả phòng ban",
+    "export": "Xuất Excel",
+    "exporting": "Đang xuất…",
+    "exportError": "Không xuất được file",
+    "employee": "Nhân viên",
+    "department": "Phòng ban",
+    "noDepartment": "—",
+    "remaining": "Còn lại",
+    "used": "Đã dùng",
+    "pending": "Chờ duyệt",
+    "days": "ngày",
+    "total": "Tổng {{count}} nhân viên",
+    "empty": "Không có nhân viên nào",
+    "emptyHint": "Thử đổi bộ lọc phòng ban hoặc từ khóa tìm kiếm.",
+    "noLeaveTypes": "Chưa có loại nghỉ phép nào được cấu hình.",
+    "loadError": "Không tải được số dư phép",
+    "cellAria": "{{type}}: còn lại {{remaining}} ngày, đã dùng {{used}}, chờ duyệt {{pending}}",
+    "clearFilters": "Xóa lọc",
+    "pagination": {
+      "showing": "Hiển thị",
+      "of": "trong",
+      "suffix": "nhân viên",
+      "prev": "Trước",
+      "next": "Sau"
+    }
+  },
+  "requests": {
+    "newRequest": "Tạo đơn nghỉ",
+    "searchPlaceholder": "Tìm theo nhân viên...",
+    "allStatuses": "Tất cả trạng thái",
+    "allTypes": "Tất cả loại",
+    "empty": "Chưa có đơn nghỉ phép",
+    "emptyHint": "Tạo đơn nghỉ phép đầu tiên của bạn",
+    "emptyReview": "Không có đơn nào cần duyệt",
+    "loadError": "Không tải được danh sách đơn",
+    "columns": {
+      "employee": "Nhân viên",
+      "type": "Loại nghỉ",
+      "period": "Thời gian",
+      "days": "Số ngày",
+      "reason": "Lý do",
+      "status": "Trạng thái",
+      "reviewer": "Người duyệt"
+    },
+    "halfDay": "Nửa ngày",
+    "to": "đến"
+  },
+  "status": {
+    "PENDING": "Chờ duyệt",
+    "APPROVED": "Đã duyệt",
+    "REJECTED": "Từ chối",
+    "CANCELLED": "Đã hủy",
+    "RETURNED": "Trả về sửa lại"
+  },
+  "actions": {
+    "approve": "Duyệt",
+    "reject": "Trả về",
+    "cancel": "Hủy đơn",
+    "resubmit": "Gửi lại",
+    "submit": "Gửi đơn",
+    "submitting": "Đang gửi..."
+  },
+  "form": {
+    "title": "Tạo đơn nghỉ phép",
+    "description": "Điền thông tin để gửi đơn nghỉ phép",
+    "resubmitTitle": "Gửi lại đơn nghỉ phép",
+    "resubmitDescription": "Chỉnh sửa và gửi lại đơn đã bị trả về",
+    "leaveType": "Loại nghỉ phép",
+    "leaveTypePlaceholder": "Chọn loại nghỉ",
+    "startDate": "Từ ngày",
+    "endDate": "Đến ngày",
+    "halfDay": "Nghỉ nửa ngày",
+    "halfDayHint": "Chỉ áp dụng khi nghỉ trong 1 ngày",
+    "reason": "Lý do",
+    "reasonPlaceholder": "Nhập lý do nghỉ phép...",
+    "attachmentUrl": "Tệp đính kèm (URL)",
+    "attachmentRequired": "Loại nghỉ này yêu cầu tệp đính kèm",
+    "validation": {
+      "leaveTypeRequired": "Vui lòng chọn loại nghỉ",
+      "startRequired": "Vui lòng chọn ngày bắt đầu",
+      "endRequired": "Vui lòng chọn ngày kết thúc",
+      "endBeforeStart": "Ngày kết thúc phải sau ngày bắt đầu",
+      "attachmentUrlInvalid": "URL không hợp lệ"
+    }
+  },
+  "review": {
+    "approveTitle": "Duyệt đơn nghỉ phép?",
+    "approveDescription": "Đơn nghỉ phép sẽ được duyệt và trừ vào số ngày phép của nhân viên.",
+    "rejectTitle": "Trả đơn về để sửa",
+    "rejectDescription": "Nhập lý do trả về để nhân viên chỉnh sửa và gửi lại.",
+    "notePlaceholder": "Lý do trả về...",
+    "confirmApprove": "Duyệt đơn",
+    "confirmReject": "Trả về"
+  },
+  "detail": {
+    "title": "Chi tiết đơn nghỉ phép",
+    "subtitle": "Xem thông tin đơn và tiến trình duyệt",
+    "viewAttachment": "Xem tệp đính kèm",
+    "returnedReason": "Lý do trả về"
+  },
+  "timeline": {
+    "title": "Tiến trình duyệt",
+    "empty": "Đơn này chưa có bước duyệt nào",
+    "step": "Bước {{n}}",
+    "round": "Lần gửi {{n}}",
+    "current": "Hiện tại",
+    "decidedBy": "{{name}} · {{date}}",
+    "state": {
+      "approved": "Đã duyệt",
+      "returned": "Đã trả về",
+      "auto-skipped": "Tự bỏ qua",
+      "pending": "Đang chờ",
+      "upcoming": "Sắp tới"
+    },
+    "skipReason": {
+      "NO_APPROVER": "Không tìm thấy người duyệt cho bước này",
+      "SELF_APPROVAL": "Bỏ qua — không thể tự duyệt đơn của mình",
+      "DUPLICATE_APPROVER": "Bỏ qua — trùng người duyệt với bước trước"
+    }
+  },
+  "approverType": {
+    "MANAGER": "Quản lý trực tiếp",
+    "DEPARTMENT_HEAD": "Trưởng phòng ban",
+    "ROLE": "Theo vai trò",
+    "SPECIFIC_USER": "Người cụ thể"
+  },
+  "flows": {
+    "title": "Luồng duyệt nghỉ phép",
+    "subtitle": "Cấu hình các bước duyệt theo phòng ban hoặc mặc định toàn công ty",
+    "add": "Thêm luồng",
+    "empty": "Chưa có luồng duyệt nào",
+    "emptyHint": "Tạo luồng duyệt đầu tiên để thiết lập quy trình",
+    "default": "Mặc định (toàn công ty)",
+    "active": "Đang dùng",
+    "inactive": "Tạm tắt",
+    "columns": {
+      "name": "Tên luồng",
+      "department": "Phòng ban",
+      "steps": "Các bước",
+      "status": "Trạng thái"
+    },
+    "form": {
+      "createTitle": "Thêm luồng duyệt",
+      "editTitle": "Sửa luồng duyệt",
+      "description": "Định nghĩa thứ tự các bước duyệt cho đơn nghỉ phép",
+      "name": "Tên luồng",
+      "namePlaceholder": "VD: Quy trình duyệt phòng Kỹ thuật",
+      "department": "Phòng ban áp dụng",
+      "departmentDefault": "Mặc định (toàn công ty)",
+      "departmentHint": "Không thể đổi phòng ban sau khi tạo",
+      "steps": "Các bước duyệt",
+      "addStep": "Thêm bước",
+      "rolePlaceholder": "Chọn vai trò",
+      "userPlaceholder": "Chọn nhân viên",
+      "moveUp": "Lên",
+      "moveDown": "Xuống",
+      "removeStep": "Xóa bước"
+    },
+    "deleteDialog": {
+      "title": "Xóa luồng duyệt?",
+      "description": "Hành động này không thể hoàn tác.",
+      "confirm": "Xóa"
+    }
+  },
+  "cancelDialog": {
+    "title": "Hủy đơn nghỉ phép?",
+    "description": "Hành động này không thể hoàn tác. Đơn sẽ chuyển sang trạng thái Đã hủy.",
+    "confirm": "Hủy đơn"
+  },
+  "settings": {
+    "title": "Loại nghỉ phép",
+    "addType": "Thêm loại nghỉ",
+    "empty": "Chưa có loại nghỉ phép",
+    "columns": {
+      "name": "Tên",
+      "code": "Mã",
+      "defaultDays": "Số ngày/năm",
+      "paid": "Có lương",
+      "attachment": "Đính kèm",
+      "active": "Trạng thái"
+    },
+    "paid": "Có lương",
+    "unpaid": "Không lương",
+    "required": "Bắt buộc",
+    "notRequired": "Không",
+    "active": "Đang dùng",
+    "inactive": "Tạm tắt",
+    "form": {
+      "createTitle": "Thêm loại nghỉ phép",
+      "editTitle": "Sửa loại nghỉ phép",
+      "name": "Tên loại nghỉ",
+      "code": "Mã (chữ in hoa, không dấu)",
+      "codeHint": "Không thể đổi sau khi tạo",
+      "defaultDays": "Số ngày mặc định/năm",
+      "colorHex": "Màu hiển thị",
+      "paid": "Tính lương",
+      "requiresAttachment": "Yêu cầu tệp đính kèm",
+      "active": "Đang sử dụng"
+    },
+    "deleteDialog": {
+      "title": "Xóa loại nghỉ phép?",
+      "description": "Hành động này không thể hoàn tác.",
+      "confirm": "Xóa"
+    },
+    "prorata": {
+      "title": "Tự động chia phép theo tháng vào làm",
+      "label": "Bật pro-rata phép năm cho nhân viên mới",
+      "help": "Khi bật, lúc tạo nhân viên mới hệ thống tự tính số ngày phép năm theo số tháng còn lại trong năm (tính cả tháng vào làm), làm tròn tới 0.5 ngày. HR vẫn có thể điều chỉnh thủ công sau đó.",
+      "saved": "Đã lưu cấu hình nghỉ phép",
+      "saveError": "Không thể lưu cấu hình"
+    }
+  },
+  "toast": {
+    "created": "Đã gửi đơn nghỉ phép",
+    "createError": "Không gửi được đơn",
+    "approved": "Đã duyệt đơn",
+    "approveError": "Không duyệt được đơn",
+    "rejected": "Đã từ chối đơn",
+    "rejectError": "Không trả được đơn về",
+    "returned": "Đã trả đơn về để sửa",
+    "resubmitted": "Đã gửi lại đơn",
+    "resubmitError": "Không gửi lại được đơn",
+    "cancelled": "Đã hủy đơn",
+    "cancelError": "Không hủy được đơn",
+    "flowSaved": "Đã lưu luồng duyệt",
+    "flowSaveError": "Không lưu được luồng duyệt",
+    "flowDeleted": "Đã xóa luồng duyệt",
+    "flowDeleteError": "Không xóa được luồng duyệt",
+    "typeSaved": "Đã lưu loại nghỉ phép",
+    "typeSaveError": "Không lưu được loại nghỉ phép",
+    "typeDeleted": "Đã xóa loại nghỉ phép",
+    "typeDeleteError": "Không xóa được loại nghỉ phép",
+    "tryAgain": "Vui lòng thử lại sau",
+    "createErrors": {
+      "LEAVE_OVERLAP": "Bạn đã có đơn nghỉ phép trùng với khoảng thời gian này",
+      "LEAVE_INSUFFICIENT_BALANCE": "Số ngày phép còn lại không đủ cho yêu cầu này",
+      "LEAVE_TYPE_INACTIVE": "Loại nghỉ phép này đã ngừng áp dụng",
+      "LEAVE_ATTACHMENT_REQUIRED": "Loại nghỉ phép này yêu cầu đính kèm tệp",
+      "LEAVE_NO_WORKING_DAYS": "Khoảng thời gian đã chọn không có ngày làm việc nào",
+      "LEAVE_TYPE_NOT_FOUND": "Không tìm thấy loại nghỉ phép"
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "trigger": "Import from Excel",
+  "title": "Bulk import employees",
+  "description": "Download the template, fill in your data, then upload to validate before importing.",
+  "steps": {
+    "upload": "Upload",
+    "review": "Review",
+    "importing": "Importing",
+    "done": "Done"
+  },
+  "template": {
+    "title": "Step 1 — Download template",
+    "hint": "Use the official template so columns and formats match the system.",
+    "downloadXlsx": "Download Excel template (.xlsx)",
+    "downloadCsv": "Download CSV template",
+    "downloaded": "Template downloaded",
+    "downloadError": "Could not download the template, please try again."
+  },
+  "upload": {
+    "title": "Step 2 — Upload file",
+    "choose": "Choose file",
+    "change": "Change file",
+    "empty": "No file selected",
+    "formats": "Supports .xlsx and .csv, up to 5,000 rows.",
+    "optionsTitle": "Options",
+    "autoCreate": "Auto-create missing Departments / Positions",
+    "autoCreateHint": "If off, rows referencing a non-existent department/position will leave that link empty.",
+    "duplicate": "Existing email",
+    "duplicateSkip": "Skip duplicate rows",
+    "validate": "Validate file",
+    "validating": "Validating..."
+  },
+  "review": {
+    "title": "Step 3 — Validation results",
+    "valid": "Valid",
+    "errors": "Errors",
+    "totalRows": "Total rows",
+    "newDepartments": "New departments to be created",
+    "newPositions": "New positions to be created",
+    "noErrors": "All rows are valid.",
+    "errorsTitle": "Error list",
+    "colRow": "Row",
+    "colColumn": "Column",
+    "colMessage": "Description",
+    "noValidRows": "No valid rows to import. Fix the file and try again.",
+    "willImport": "Will import {{count}} valid row(s). Rows with errors will be skipped.",
+    "back": "Upload another file",
+    "confirm": "Import {{count}} employees",
+    "confirming": "Submitting..."
+  },
+  "progress": {
+    "title": "Importing data",
+    "processing": "Processing {{done}} / {{total}} rows...",
+    "waiting": "Waiting in queue...",
+    "hint": "You can close this window; the import keeps running in the background."
+  },
+  "done": {
+    "title": "Import complete",
+    "created": "Created",
+    "skipped": "Skipped",
+    "failed": "Failed",
+    "successHint": "New employees were created as \"Invited\" and will receive an email to set their password.",
+    "withErrors": "Some rows were not imported. Download the error report for details.",
+    "downloadReport": "Download error report (.csv)",
+    "failedTitle": "Import failed",
+    "failedHint": "The import could not be completed. Please try again."
+  },
+  "errors": {
+    "fileRequired": "Please choose a file before validating.",
+    "validateFailed": "File validation failed, please try again.",
+    "startFailed": "Could not start the import, please try again."
+  },
+  "code": {
+    "IMPORT_FILE_TOO_LARGE": "File too large",
+    "IMPORT_TOO_MANY_ROWS": "Too many rows",
+    "IMPORT_EMPTY_FILE": "File has no data",
+    "IMPORT_UNREADABLE_FILE": "File could not be read",
+    "IMPORT_MISSING_COLUMNS": "Missing required column",
+    "IMPORT_MISSING_REQUIRED": "Missing required value",
+    "IMPORT_INVALID_EMAIL": "Invalid email",
+    "IMPORT_INVALID_DATE": "Invalid date",
+    "IMPORT_INVALID_ENUM": "Invalid value",
+    "IMPORT_INVALID_NUMBER": "Invalid number",
+    "IMPORT_EMAIL_DUPLICATE_IN_FILE": "Duplicate email in file",
+    "IMPORT_EMAIL_EXISTS": "Email already exists",
+    "IMPORT_IDNUMBER_DUPLICATE": "Duplicate ID number",
+    "IMPORT_MANAGER_NOT_FOUND": "Manager not found",
+    "IMPORT_MANAGER_CYCLE": "Manager cycle detected",
+    "IMPORT_STAGING_NOT_FOUND": "Import session expired",
+    "IMPORT_ROW_WRITE_FAILED": "Failed to write row"
+  }
+}

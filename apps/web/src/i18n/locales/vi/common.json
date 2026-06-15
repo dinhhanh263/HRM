@@ -1,0 +1,32 @@
+{
+  "actions": {
+    "save": "Lưu",
+    "saveChanges": "Lưu thay đổi",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "create": "Tạo mới",
+    "add": "Thêm",
+    "search": "Tìm kiếm",
+    "clearSearch": "Xóa tìm kiếm",
+    "moveUp": "Di chuyển lên",
+    "moveDown": "Di chuyển xuống",
+    "close": "Đóng",
+    "confirm": "Xác nhận",
+    "back": "Trở về",
+    "retry": "Thử lại",
+    "viewDetail": "Xem chi tiết",
+    "actions": "Hành động",
+    "more": "Thêm"
+  },
+  "states": {
+    "loading": "Đang tải...",
+    "saving": "Đang lưu...",
+    "deleting": "Đang xóa...",
+    "error": "Có lỗi xảy ra",
+    "noResults": "Không tìm thấy kết quả"
+  },
+  "validation": {
+    "required": "Trường này là bắt buộc"
+  }
+}

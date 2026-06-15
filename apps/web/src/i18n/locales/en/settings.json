@@ -1,0 +1,71 @@
+{
+  "title": "Settings",
+  "subtitle": "Company-wide system configuration",
+  "errorLoad": "Could not load settings. Please try again.",
+  "save": "Save changes",
+  "saving": "Saving...",
+  "toast": {
+    "saved": "Settings saved",
+    "error": "Save failed. Try again later."
+  },
+  "hub": {
+    "title": "Settings areas",
+    "roles": { "title": "Roles & permissions", "description": "Manage roles and access control" },
+    "timesheet": { "title": "Timesheet", "description": "Working hours, holidays, OT multipliers" },
+    "assets": { "title": "Asset categories", "description": "Company asset type catalog" },
+    "probation": { "title": "Probation", "description": "Evaluation criteria and guidelines" }
+  },
+  "company": {
+    "title": "Company profile",
+    "description": "Used on payslips and reports",
+    "name": "Company name",
+    "address": "Address",
+    "taxCode": "Tax code",
+    "contactEmail": "Contact email",
+    "phone": "Phone"
+  },
+  "notifications": {
+    "title": "Reminders & notifications",
+    "description": "When the system reminds about HR milestones",
+    "probationLeadDays": "Remind before probation ends (days)",
+    "probationLeadHint": "1–30 days. Affects the dashboard and reminder emails.",
+    "contractLeadDays": "Remind before contract expires (days)",
+    "contractLeadHint": "1–90 days."
+  },
+  "regional": {
+    "title": "Regional defaults",
+    "description": "Applied to every user in the company",
+    "defaultLanguage": "Default language",
+    "defaultLanguageHint": "Applied to users who never picked a language.",
+    "weekStart": "Week starts on",
+    "monday": "Monday",
+    "sunday": "Sunday"
+  },
+  "security": {
+    "title": "Security policy",
+    "description": "Enforced server-side for every account",
+    "passwordMinLength": "Minimum password length",
+    "forceSso": "Require SSO sign-in (Google)",
+    "forceSsoHint": "When on, password login is rejected — except Super Admin (prevents lockout)."
+  },
+  "plan": {
+    "title": "Plan & seats",
+    "description": "Your company's service plan",
+    "planName": "Current plan",
+    "seats": "Active users",
+    "seatLimit": "Limit",
+    "unlimited": "Unlimited"
+  },
+  "audit": {
+    "title": "Change log",
+    "description": "Last 50 settings changes",
+    "empty": "No changes yet",
+    "columns": { "time": "Time", "user": "Changed by", "section": "Section", "changes": "Changes" },
+    "sections": {
+      "company": "Company profile",
+      "notifications": "Reminders",
+      "regional": "Regional",
+      "security": "Security"
+    }
+  }
+}

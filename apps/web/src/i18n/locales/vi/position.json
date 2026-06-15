@@ -1,0 +1,63 @@
+{
+  "list": {
+    "title": "Chức vụ",
+    "subtitle": "Quản lý các chức vụ trong công ty",
+    "searchPlaceholder": "Tìm chức vụ...",
+    "count": "chức vụ",
+    "loadError": "Không thể tải danh sách chức vụ"
+  },
+  "table": {
+    "name": "Chức vụ",
+    "department": "Phòng ban",
+    "level": "Cấp bậc",
+    "employeeCountHeader": "Số nhân viên",
+    "noDepartment": "—",
+    "employeeCount": "{{count}} nhân viên"
+  },
+  "level": {
+    "junior": "Junior",
+    "mid": "Middle",
+    "senior": "Senior",
+    "lead": "Lead",
+    "manager": "Quản lý",
+    "unknown": "Cấp {{level}}"
+  },
+  "form": {
+    "createTitle": "Thêm chức vụ",
+    "editTitle": "Chỉnh sửa chức vụ",
+    "createDescription": "Tạo chức vụ mới để gán vị trí cho nhân viên.",
+    "editDescription": "Cập nhật thông tin chức vụ.",
+    "nameLabel": "Tên chức vụ",
+    "namePlaceholder": "Ví dụ: Kỹ sư phần mềm",
+    "departmentLabel": "Phòng ban",
+    "departmentPlaceholder": "Chọn phòng ban",
+    "noDepartmentOption": "Không thuộc phòng ban",
+    "levelLabel": "Cấp bậc",
+    "levelPlaceholder": "Chọn cấp bậc",
+    "submitCreate": "Tạo chức vụ"
+  },
+  "validation": {
+    "nameRequired": "Vui lòng nhập tên chức vụ",
+    "nameMax": "Tối đa 100 ký tự"
+  },
+  "empty": {
+    "title": "Chưa có chức vụ nào",
+    "subtitle": "Thêm chức vụ đầu tiên để gán vị trí cho nhân viên"
+  },
+  "delete": {
+    "title": "Xóa chức vụ?",
+    "description": "Hành động này không thể hoàn tác. Chức vụ \"{{name}}\" sẽ bị xóa vĩnh viễn.",
+    "descriptionHasEmployees": "Chức vụ \"{{name}}\" đang được gán cho {{count}} nhân viên. Vui lòng chuyển nhân viên sang chức vụ khác trước khi xóa."
+  },
+  "toast": {
+    "created": "Đã thêm chức vụ",
+    "updated": "Đã cập nhật chức vụ",
+    "deleted": "Đã xóa chức vụ",
+    "createError": "Không thể thêm chức vụ",
+    "createErrorDescription": "Tên chức vụ có thể đã tồn tại.",
+    "updateError": "Không thể cập nhật chức vụ",
+    "updateErrorDescription": "Vui lòng thử lại.",
+    "deleteError": "Không thể xóa chức vụ",
+    "deleteErrorDescription": "Vui lòng thử lại."
+  }
+}

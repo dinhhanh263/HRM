@@ -1,0 +1,69 @@
+{
+  "title": "My account",
+  "subtitle": "Personal info and account security",
+  "errorLoad": "Could not load your account. Please try again.",
+  "save": "Save changes",
+  "tabs": { "profile": "Profile", "security": "Security", "notifications": "Notifications" },
+  "toast": {
+    "profileSaved": "Profile updated",
+    "passwordChanged": "Password changed. Other devices were signed out.",
+    "passwordError": "Could not change the password",
+    "wrongCurrent": "Current password is incorrect",
+    "sessionsRevoked": "Signed out {{count}} other device(s)",
+    "prefsSaved": "Notification preferences saved",
+    "error": "Something went wrong. Try again later."
+  },
+  "profile": {
+    "title": "Personal information",
+    "managedByHr": "Managed by HR — contact HR to change these.",
+    "fullName": "Full name",
+    "email": "Email",
+    "role": "Role",
+    "employeeCode": "Employee code",
+    "department": "Department",
+    "position": "Position",
+    "joinDate": "Join date",
+    "noEmployee": "This account has no linked employee profile.",
+    "editable": "Things you can update yourself",
+    "phone": "Phone",
+    "avatar": "Avatar (URL)",
+    "avatarHint": "Paste an image link; leave empty to use initials."
+  },
+  "password": {
+    "title": "Change password",
+    "description": "After changing, every other device is signed out.",
+    "current": "Current password",
+    "new": "New password",
+    "confirm": "Confirm new password",
+    "mismatch": "Passwords do not match",
+    "submit": "Change password",
+    "ssoOnly": "Your company requires SSO (Google) sign-in — this account does not use a password."
+  },
+  "sessions": {
+    "title": "Sessions",
+    "description": "Devices currently signed in to your account",
+    "device": "Device",
+    "unknownDevice": "Unknown device",
+    "createdAt": "Signed in",
+    "lastUsedAt": "Last active",
+    "current": "This session",
+    "revokeOthers": "Sign out other devices",
+    "revokeConfirmTitle": "Sign out other devices?",
+    "revokeConfirmBody": "Every session except the current one will be revoked immediately.",
+    "confirm": "Sign out",
+    "cancel": "Cancel"
+  },
+  "google": {
+    "title": "Google sign-in",
+    "linked": "Linked — first Google sign-in: {{date}}",
+    "notLinked": "Not linked yet. Sign in with Google once to link your account."
+  },
+  "notifications": {
+    "title": "Email notifications",
+    "description": "Email only — in-app notifications keep showing as usual.",
+    "probation_ending": "Probation ending",
+    "probation_endingHint": "Reminder emails when someone in your scope is about to finish probation.",
+    "contract_expiring": "Contract expiring",
+    "contract_expiringHint": "Reminder emails when a contract approaches its end date."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Thông báo",
+  "ariaLabel": "Thông báo",
+  "markAllRead": "Đánh dấu tất cả đã đọc",
+  "empty": "Bạn đã xem hết thông báo",
+  "loadError": "Không thể tải thông báo",
+  "viewAll": "Xem tất cả",
+  "unreadCount_one": "{{count}} chưa đọc",
+  "unreadCount_other": "{{count}} chưa đọc",
+  "kinds": {
+    "probation_ending": "Sắp hết thử việc",
+    "contract_expiring": "Hợp đồng sắp hết hạn",
+    "probation_self_requested": "Tự đánh giá thử việc"
+  }
+}

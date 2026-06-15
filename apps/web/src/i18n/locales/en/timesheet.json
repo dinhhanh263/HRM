@@ -1,0 +1,354 @@
+{
+  "title": "Timesheet",
+  "subtitle": "Track working hours, overtime and attendance for employees",
+  "toast": {
+    "tryAgain": "Please try again later."
+  },
+  "prevMonth": "Previous month",
+  "nextMonth": "Next month",
+  "view": {
+    "calendar": "Calendar",
+    "list": "List"
+  },
+  "checkIn": {
+    "title": "Today's attendance",
+    "subtitle": "Record your check-in and check-out times",
+    "checkInAt": "Check-in",
+    "checkOutAt": "Check-out",
+    "note": "Note",
+    "notePlaceholder": "e.g. Working from office",
+    "checkIn": "Check in",
+    "checkOut": "Check out",
+    "done": "You're all checked out for today",
+    "workedHours": "{{hours}}h worked",
+    "toast": {
+      "checkedIn": "Checked in",
+      "checkedOut": "Checked out",
+      "error": "Unable to record attendance"
+    }
+  },
+  "summary": {
+    "title": "{{month}} overview",
+    "workingDays": "Working days",
+    "presentDays": "Present days",
+    "daysAbsent": "Absent days",
+    "paidLeave": "Paid leave",
+    "unpaidLeave": "Unpaid leave",
+    "holidays": "Holidays",
+    "workedHours": "Worked hours",
+    "overtimeTitle": "Approved overtime",
+    "noOvertime": "No approved overtime this month"
+  },
+  "calendar": {
+    "legend": {
+      "present": "Present",
+      "absent": "Absent",
+      "holiday": "Holiday",
+      "weekend": "Weekend"
+    }
+  },
+  "list": {
+    "col": {
+      "date": "Date",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "hours": "Hours",
+      "note": "Note"
+    },
+    "adjusted": "Adjusted",
+    "empty": {
+      "title": "No attendance yet",
+      "desc": "Your check-ins for this month will appear here."
+    }
+  },
+  "team": {
+    "title": "Team attendance",
+    "subtitle": "Review and correct your team's attendance",
+    "scope": {
+      "team": "My team",
+      "all": "Whole company"
+    },
+    "col": {
+      "employee": "Employee",
+      "date": "Date",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "hours": "Hours",
+      "source": "Source"
+    },
+    "source": {
+      "self": "Self",
+      "adjust": "Adjusted"
+    },
+    "adjustAction": "Adjust",
+    "tab": "Team",
+    "tabMine": "Mine",
+    "empty": {
+      "title": "No attendance yet",
+      "desc": "Your team's attendance for this month will appear here."
+    }
+  },
+  "adjust": {
+    "title": "Adjust attendance",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "note": "Note",
+    "notePlaceholder": "Reason for adjustment",
+    "hint": "Leave check-in/out blank to clear the timestamp. Times are in UTC.",
+    "invalidRange": "Check-out must be after check-in.",
+    "toast": {
+      "saved": "Adjustment saved",
+      "error": "Could not save adjustment"
+    }
+  },
+  "overtime": {
+    "night": "Night",
+    "mineTitle": "My overtime",
+    "mineSubtitle": "Submit and track your overtime for the month",
+    "teamTitle": "Team overtime",
+    "teamSubtitle": "Review your team's overtime requests",
+    "submitAction": "Submit overtime",
+    "col": {
+      "employee": "Employee",
+      "date": "Date",
+      "hours": "Hours",
+      "category": "Category",
+      "reason": "Reason",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "category": {
+      "OT_WEEKDAY": "Weekday",
+      "OT_WEEKEND": "Weekend",
+      "OT_HOLIDAY": "Holiday"
+    },
+    "review": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "cancel": "Cancel",
+      "approved": "Overtime approved",
+      "rejected": "Overtime rejected",
+      "cancelled": "Overtime request withdrawn",
+      "actionError": "Could not update the overtime request",
+      "capTitle": "Approved — over the legal limit",
+      "cap": {
+        "month": "Monthly OT now {{total}}h, over the {{limit}}h cap",
+        "year": "Yearly OT now {{total}}h, over the {{limit}}h cap"
+      },
+      "rejectTitle": "Reject overtime",
+      "rejectDesc": "Let the employee know why this request was rejected.",
+      "rejectNote": "Reason",
+      "rejectPlaceholder": "e.g. Outside the approved project window",
+      "rejectConfirm": "Reject request",
+      "cancelTitle": "Withdraw overtime request?",
+      "cancelDesc": "This pending overtime request will be cancelled. This action cannot be undone.",
+      "cancelConfirm": "Withdraw",
+      "timeline": "Timeline",
+      "timelineTitle": "Approval Progress",
+      "timelineDesc": "Approval step history for this overtime request",
+      "return": "Return",
+      "returnTitle": "Return overtime request",
+      "returnDesc": "Provide a reason so the employee can edit and resubmit",
+      "returnConfirm": "Return",
+      "returned": "Request returned",
+      "resubmit": "Resubmit"
+    },
+    "status": {
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "CANCELLED": "Cancelled",
+      "RETURNED": "Returned"
+    },
+    "empty": {
+      "title": "No overtime yet",
+      "desc": "Your overtime requests for this month will appear here."
+    },
+    "form": {
+      "title": "Submit overtime",
+      "desc": "The overtime category is derived by the system from the work date and holiday calendar.",
+      "workDate": "Work date",
+      "hours": "Overtime hours",
+      "hoursHint": "Between 0.5 and {{max}} hours per request.",
+      "night": "Night shift",
+      "nightLabel": "Worked overtime at night",
+      "reason": "Reason",
+      "reasonPlaceholder": "e.g. Finishing the release",
+      "categoryHint": "The overtime multiplier is snapshotted when a manager approves.",
+      "submit": "Submit",
+      "resubmitTitle": "Resubmit overtime request",
+      "resubmitDesc": "Edit the details and resubmit for approval from the start",
+      "resubmit": "Resubmit"
+    },
+    "toast": {
+      "submitted": "Overtime request submitted",
+      "submitError": "Could not submit overtime",
+      "resubmitted": "Overtime request resubmitted"
+    },
+    "restDay": {
+      "subtitle": "Today is a day off — no need to clock in",
+      "holiday": {
+        "title": "Public holiday — {{name}}",
+        "desc": "This is a paid day off. If you work today, file a holiday overtime request (≥300%) so it can be approved and paid."
+      },
+      "weekend": {
+        "title": "Weekly rest day",
+        "desc": "This is your weekly rest day. If you work today, file a weekend overtime request (≥200%) so it can be approved and paid."
+      },
+      "cta": "File an overtime request",
+      "hasOt": "An overtime request already exists for today"
+    }
+  },
+  "policy": {
+    "title": "Attendance Policy",
+    "subtitle": "Configure workdays, night shift and overtime multipliers per labor law",
+    "workdays": "Workdays of the week",
+    "dayShort": {
+      "0": "Sun",
+      "1": "Mon",
+      "2": "Tue",
+      "3": "Wed",
+      "4": "Thu",
+      "5": "Fri",
+      "6": "Sat"
+    },
+    "standardHoursPerDay": "Standard hours / day",
+    "nightStart": "Night shift start",
+    "nightEnd": "Night shift end",
+    "multipliers": "Overtime multipliers",
+    "multipliersHint": "Per Article 98 Labor Code 2019: weekday ≥150%, weekend ≥200%, holiday ≥300%, night +30%, night OT +20%.",
+    "fields": {
+      "otWeekday": "Weekday",
+      "otWeekend": "Weekend",
+      "otHoliday": "Holiday",
+      "nightExtra": "Night premium",
+      "nightOtExtra": "Night OT"
+    },
+    "toast": {
+      "saved": "Attendance policy saved",
+      "saveError": "Could not save attendance policy"
+    }
+  },
+  "holiday": {
+    "title": "Public Holidays",
+    "subtitle": "Yearly holiday calendar — used to classify holiday overtime",
+    "add": "Add holiday",
+    "prevYear": "Previous year",
+    "nextYear": "Next year",
+    "recurring": "Yearly",
+    "editAction": "Edit holiday",
+    "deleteAction": "Delete holiday",
+    "empty": {
+      "title": "No holidays yet",
+      "desc": "Add public holidays for this year so overtime is classified correctly."
+    },
+    "form": {
+      "addTitle": "Add holiday",
+      "editTitle": "Edit holiday",
+      "desc": "A holiday overrides weekday/weekend classification when calculating overtime.",
+      "date": "Date",
+      "name": "Holiday name",
+      "namePlaceholder": "e.g. National Day",
+      "recurring": "Repeats yearly",
+      "recurringHint": "Enable for fixed solar-calendar holidays (Apr 30, May 1, Sep 2). Disable for lunar dates (Lunar New Year, Hung Kings)."
+    },
+    "delete": {
+      "title": "Delete holiday?",
+      "desc": "The holiday \"{{name}}\" will be removed. This action cannot be undone."
+    },
+    "toast": {
+      "created": "Holiday added",
+      "updated": "Holiday updated",
+      "deleted": "Holiday deleted",
+      "saveError": "Could not save holiday",
+      "deleteError": "Could not delete holiday",
+      "conflict": "A holiday already exists on this date"
+    },
+    "seed": {
+      "button": "Load VN holidays for {{year}}",
+      "dialogTitle": "Load standard holidays for {{year}}?",
+      "dialogDesc": "This adds the Vietnamese statutory holidays and Tết for {{year}}. Existing entries on the same dates will have their name and recurring flag overwritten. Safe to re-run.",
+      "confirm": "Load holidays",
+      "toast": {
+        "success": "Loaded {{count}} holidays for {{year}}",
+        "noLunar": "No Tết data for {{year}} yet",
+        "noLunarDesc": "Only {{count}} solar holidays were loaded. Tết and Giỗ Tổ are missing — add them manually or update the system.",
+        "error": "Could not load holidays"
+      }
+    }
+  },
+  "settings": {
+    "title": "Timesheet settings",
+    "subtitle": "Configure attendance policy and your company's holiday calendar"
+  },
+  "timeline": {
+    "title": "Approval Progress",
+    "empty": "This request has no approval steps yet",
+    "step": "Step {{n}}",
+    "round": "Submission {{n}}",
+    "current": "Current",
+    "decidedBy": "{{name}} · {{date}}",
+    "state": {
+      "approved": "Approved",
+      "returned": "Returned",
+      "auto-skipped": "Auto-skipped",
+      "pending": "Pending",
+      "upcoming": "Upcoming"
+    },
+    "skipReason": {
+      "NO_APPROVER": "No approver found for this step",
+      "SELF_APPROVAL": "Skipped — you cannot approve your own request",
+      "DUPLICATE_APPROVER": "Skipped — same approver as a previous step"
+    }
+  },
+  "flows": {
+    "title": "Overtime Approval Flows",
+    "subtitle": "Configure overtime approval steps per department or company-wide default",
+    "add": "Add flow",
+    "empty": "No overtime approval flows yet",
+    "emptyHint": "Create your first flow to set up the overtime approval process",
+    "default": "Default (company-wide)",
+    "active": "Active",
+    "inactive": "Inactive",
+    "columns": {
+      "name": "Flow name",
+      "department": "Department",
+      "steps": "Steps",
+      "status": "Status"
+    },
+    "form": {
+      "createTitle": "Add Overtime Approval Flow",
+      "editTitle": "Edit Overtime Approval Flow",
+      "description": "Define the order of approval steps for overtime requests",
+      "name": "Flow name",
+      "namePlaceholder": "e.g. Engineering OT approval process",
+      "department": "Applies to department",
+      "departmentDefault": "Default (company-wide)",
+      "departmentHint": "Department cannot be changed after creation",
+      "steps": "Approval steps",
+      "addStep": "Add step",
+      "rolePlaceholder": "Select a role",
+      "userPlaceholder": "Select an employee",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "removeStep": "Remove step"
+    },
+    "deleteDialog": {
+      "title": "Delete this flow?",
+      "description": "This action cannot be undone.",
+      "confirm": "Delete"
+    },
+    "toast": {
+      "saved": "Flow saved",
+      "saveError": "Failed to save flow",
+      "deleted": "Flow deleted",
+      "deleteError": "Failed to delete flow"
+    }
+  },
+  "approverType": {
+    "MANAGER": "Direct manager",
+    "DEPARTMENT_HEAD": "Department head",
+    "ROLE": "By role",
+    "SPECIFIC_USER": "Specific person"
+  }
+}

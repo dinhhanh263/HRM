@@ -1,0 +1,92 @@
+{
+  "trigger": "Nhập từ Excel",
+  "title": "Nhập nhân viên hàng loạt",
+  "description": "Tải mẫu, điền dữ liệu rồi tải lên để kiểm tra trước khi nhập.",
+  "steps": {
+    "upload": "Tải lên",
+    "review": "Kiểm tra",
+    "importing": "Đang nhập",
+    "done": "Hoàn tất"
+  },
+  "template": {
+    "title": "Bước 1 — Tải mẫu",
+    "hint": "Dùng đúng mẫu để cột và định dạng khớp với hệ thống.",
+    "downloadXlsx": "Tải mẫu Excel (.xlsx)",
+    "downloadCsv": "Tải mẫu CSV",
+    "downloaded": "Đã tải mẫu xuống",
+    "downloadError": "Không tải được mẫu, vui lòng thử lại."
+  },
+  "upload": {
+    "title": "Bước 2 — Tải tệp lên",
+    "choose": "Chọn tệp",
+    "change": "Đổi tệp",
+    "empty": "Chưa chọn tệp nào",
+    "formats": "Hỗ trợ .xlsx và .csv, tối đa 5.000 dòng.",
+    "optionsTitle": "Tuỳ chọn",
+    "autoCreate": "Tự động tạo Phòng ban / Vị trí chưa có",
+    "autoCreateHint": "Nếu tắt, các dòng tham chiếu phòng ban/vị trí chưa tồn tại sẽ bỏ trống liên kết.",
+    "duplicate": "Email đã tồn tại",
+    "duplicateSkip": "Bỏ qua dòng trùng",
+    "validate": "Kiểm tra tệp",
+    "validating": "Đang kiểm tra..."
+  },
+  "review": {
+    "title": "Bước 3 — Kết quả kiểm tra",
+    "valid": "Hợp lệ",
+    "errors": "Lỗi",
+    "totalRows": "Tổng số dòng",
+    "newDepartments": "Phòng ban mới sẽ được tạo",
+    "newPositions": "Vị trí mới sẽ được tạo",
+    "noErrors": "Tất cả các dòng đều hợp lệ.",
+    "errorsTitle": "Danh sách lỗi",
+    "colRow": "Dòng",
+    "colColumn": "Cột",
+    "colMessage": "Mô tả",
+    "noValidRows": "Không có dòng hợp lệ nào để nhập. Hãy sửa tệp và thử lại.",
+    "willImport": "Sẽ nhập {{count}} dòng hợp lệ. Các dòng lỗi sẽ bị bỏ qua.",
+    "back": "Tải tệp khác",
+    "confirm": "Nhập {{count}} nhân viên",
+    "confirming": "Đang gửi..."
+  },
+  "progress": {
+    "title": "Đang nhập dữ liệu",
+    "processing": "Đang xử lý {{done}} / {{total}} dòng...",
+    "waiting": "Đang chờ trong hàng đợi...",
+    "hint": "Bạn có thể đóng cửa sổ này; quá trình nhập vẫn chạy nền."
+  },
+  "done": {
+    "title": "Hoàn tất nhập dữ liệu",
+    "created": "Đã tạo",
+    "skipped": "Bỏ qua",
+    "failed": "Thất bại",
+    "successHint": "Nhân viên mới đã được tạo ở trạng thái \"Đã mời\" và sẽ nhận email mời đặt mật khẩu.",
+    "withErrors": "Một số dòng không được nhập. Tải báo cáo lỗi để xem chi tiết.",
+    "downloadReport": "Tải báo cáo lỗi (.csv)",
+    "failedTitle": "Nhập thất bại",
+    "failedHint": "Không thể hoàn tất nhập. Vui lòng thử lại."
+  },
+  "errors": {
+    "fileRequired": "Vui lòng chọn tệp trước khi kiểm tra.",
+    "validateFailed": "Kiểm tra tệp thất bại, vui lòng thử lại.",
+    "startFailed": "Không bắt đầu được quá trình nhập, vui lòng thử lại."
+  },
+  "code": {
+    "IMPORT_FILE_TOO_LARGE": "Tệp quá lớn",
+    "IMPORT_TOO_MANY_ROWS": "Vượt quá số dòng cho phép",
+    "IMPORT_EMPTY_FILE": "Tệp không có dữ liệu",
+    "IMPORT_UNREADABLE_FILE": "Không đọc được tệp",
+    "IMPORT_MISSING_COLUMNS": "Thiếu cột bắt buộc",
+    "IMPORT_MISSING_REQUIRED": "Thiếu thông tin bắt buộc",
+    "IMPORT_INVALID_EMAIL": "Email không hợp lệ",
+    "IMPORT_INVALID_DATE": "Ngày không hợp lệ",
+    "IMPORT_INVALID_ENUM": "Giá trị không hợp lệ",
+    "IMPORT_INVALID_NUMBER": "Số không hợp lệ",
+    "IMPORT_EMAIL_DUPLICATE_IN_FILE": "Email trùng trong tệp",
+    "IMPORT_EMAIL_EXISTS": "Email đã tồn tại",
+    "IMPORT_IDNUMBER_DUPLICATE": "Số CCCD/CMND trùng",
+    "IMPORT_MANAGER_NOT_FOUND": "Không tìm thấy quản lý",
+    "IMPORT_MANAGER_CYCLE": "Quản lý bị lặp vòng",
+    "IMPORT_STAGING_NOT_FOUND": "Phiên nhập đã hết hạn",
+    "IMPORT_ROW_WRITE_FAILED": "Ghi dữ liệu thất bại"
+  }
+}

@@ -1,0 +1,263 @@
+{
+  "title": "Đánh giá thử việc",
+  "subtitle": "Đánh giá nhân viên thử việc theo bộ tiêu chí và ra quyết định",
+  "tabs": {
+    "reviews": "Đánh giá",
+    "criteria": "Tiêu chí",
+    "guidelines": "Hướng dẫn"
+  },
+  "guidelines": {
+    "yearFilter": "Lọc theo năm",
+    "add": "Thêm hướng dẫn",
+    "meta": "Năm {{year}} · Cập nhật {{date}}",
+    "empty": {
+      "title": "Chưa có hướng dẫn cho năm {{year}}",
+      "description": "HR chưa đăng bài hướng dẫn đánh giá nào cho năm này."
+    },
+    "error": {
+      "title": "Không tải được danh sách hướng dẫn",
+      "description": "Có lỗi khi tải dữ liệu. Vui lòng thử lại.",
+      "retry": "Thử lại"
+    },
+    "form": {
+      "createTitle": "Thêm hướng dẫn",
+      "editTitle": "Chỉnh sửa hướng dẫn",
+      "description": "Bài hướng dẫn giúp manager nắm cách đánh giá thử việc của năm áp dụng.",
+      "title": "Tiêu đề",
+      "titleRequired": "Tiêu đề là bắt buộc (tối đa 200 ký tự)",
+      "year": "Năm áp dụng",
+      "yearInvalid": "Năm phải trong khoảng 2000–2100",
+      "order": "Thứ tự hiển thị",
+      "orderInvalid": "Thứ tự phải là số nguyên không âm",
+      "language": "Ngôn ngữ nội dung",
+      "languages": {
+        "vi": "Tiếng Việt",
+        "en": "English"
+      },
+      "content": "Nội dung",
+      "contentPlaceholder": "Soạn nội dung hướng dẫn… Xuống dòng được giữ nguyên. Để tạo bảng, viết ≥2 dòng liên tiếp dạng: Cột A | Cột B | Cột C",
+      "contentRequired": "Nội dung là bắt buộc (tối đa 20.000 ký tự)"
+    },
+    "deleteDialog": {
+      "title": "Xóa hướng dẫn này?",
+      "description": "Bài hướng dẫn sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.",
+      "confirm": "Xóa"
+    },
+    "toast": {
+      "saved": "Đã lưu hướng dẫn",
+      "saveError": "Không thể lưu hướng dẫn",
+      "deleted": "Đã xóa hướng dẫn",
+      "deleteError": "Không thể xóa hướng dẫn"
+    }
+  },
+  "toast": {
+    "tryAgain": "Vui lòng thử lại sau."
+  },
+  "status": {
+    "DRAFT": "Nháp",
+    "PENDING_HR": "Chờ HR duyệt",
+    "DECIDED": "Đã quyết định",
+    "CANCELLED": "Đã huỷ"
+  },
+  "outcome": {
+    "CONFIRM": "Đạt — ký chính thức",
+    "EXTEND": "Gia hạn thử việc",
+    "FAIL": "Không đạt"
+  },
+  "reviews": {
+    "title": "Danh sách đánh giá",
+    "subtitle": "Đánh giá thử việc của nhân viên (manager đề xuất, HR quyết định).",
+    "create": "Tạo đánh giá",
+    "noReviewer": "—",
+    "noRecommendation": "—",
+    "columns": {
+      "employee": "Nhân viên",
+      "probationEnd": "Hết thử việc",
+      "reviewer": "Người đánh giá",
+      "recommendation": "Đề xuất",
+      "status": "Trạng thái",
+      "created": "Ngày tạo"
+    },
+    "filter": {
+      "all": "Tất cả trạng thái"
+    },
+    "empty": {
+      "title": "Chưa có đánh giá",
+      "description": "Tạo đánh giá đầu tiên cho một nhân viên đang thử việc."
+    },
+    "createDialog": {
+      "title": "Tạo đánh giá thử việc",
+      "employee": "Nhân viên thử việc",
+      "employeePlaceholder": "Chọn nhân viên",
+      "noCandidates": "Không có nhân viên thử việc nào.",
+      "confirm": "Tạo"
+    },
+    "toast": {
+      "created": "Đã tạo đánh giá",
+      "createError": "Không thể tạo đánh giá",
+      "openExists": "Nhân viên này đã có một đánh giá đang mở.",
+      "notOnProbation": "Nhân viên không ở trạng thái thử việc."
+    }
+  },
+  "scorecard": {
+    "scores": "Điểm đánh giá (1–5)",
+    "groups": {
+      "PERFORMANCE": "Hiệu suất (What)",
+      "VALUES": "Giá trị & Văn hóa (How)"
+    },
+    "subScore": "Trung bình",
+    "rubricGuide": "Hướng dẫn chấm điểm: {{name}}",
+    "deliverables": {
+      "title": "Bằng chứng công việc",
+      "add": "Thêm bằng chứng",
+      "empty": "Chưa có bằng chứng nào. Ghi lại các đầu việc đã giao để củng cố đánh giá.",
+      "titlePlaceholder": "Tên đầu việc, ví dụ: Tích hợp SSO Google",
+      "linkPlaceholder": "https://… (ClickUp, Jira, PR…)",
+      "outcomePlaceholder": "Kết quả",
+      "notePlaceholder": "Ghi chú ngắn (tùy chọn)",
+      "remove": "Xóa bằng chứng {{index}}",
+      "outcomes": {
+        "MET": "Đạt",
+        "EXCEEDED": "Vượt kỳ vọng",
+        "NOT_MET": "Chưa đạt"
+      },
+      "toast": {
+        "titleRequired": "Mỗi bằng chứng cần có tên đầu việc.",
+        "invalidLink": "Liên kết bằng chứng phải là URL hợp lệ (http/https)."
+      }
+    },
+    "strengths": "Điểm mạnh",
+    "weaknesses": "Cần cải thiện",
+    "comment": "Nhận xét",
+    "recommendation": "Đề xuất",
+    "recommendationPlaceholder": "Chọn kết quả đề xuất",
+    "newProbationEndDate": "Ngày hết thử việc mới (đề xuất)",
+    "noCriteria": "Chưa có tiêu chí nào đang dùng. Hãy đề nghị HR cấu hình tiêu chí đánh giá trước.",
+    "saveDraft": "Lưu nháp",
+    "submit": "Nộp",
+    "toast": {
+      "draftSaved": "Đã lưu nháp",
+      "saveError": "Không thể lưu nháp",
+      "submitted": "Đã nộp đánh giá cho HR",
+      "submitError": "Không thể nộp đánh giá",
+      "incomplete": "Vui lòng chấm điểm tất cả tiêu chí trước khi nộp.",
+      "extendDate": "Gia hạn thử việc cần một ngày kết thúc trong tương lai."
+    },
+    "selfSubScore": "NV tự chấm",
+    "selfBadge": "NV: {{score}}",
+    "selfComment": "Nhân viên tự nhận xét",
+    "selfNotSubmitted": "Nhân viên chưa tự đánh giá — bạn vẫn có thể chấm và nộp."
+  },
+  "decide": {
+    "title": "Quyết định của HR",
+    "subtitle": "Chọn kết quả cuối cùng. Hệ quả được áp dụng ngay và không thể hoàn tác.",
+    "managerRecommends": "Đề xuất của quản lý",
+    "decision": "Kết quả",
+    "decisionPlaceholder": "Chọn kết quả",
+    "note": "Ghi chú quyết định",
+    "notePlaceholder": "Lý do / ghi chú (bắt buộc khi Không đạt)",
+    "newDate": "Ngày hết thử việc mới",
+    "confirm": "Ra quyết định",
+    "cancelReview": "Huỷ đánh giá",
+    "failWarning": {
+      "title": "Xác nhận Không đạt?",
+      "description": "Nhân viên sẽ bị chấm dứt hợp đồng ngay khi xác nhận. Hành động này không thể hoàn tác.",
+      "confirm": "Xác nhận Không đạt"
+    },
+    "cancelDialog": {
+      "title": "Huỷ đánh giá này?",
+      "description": "Đánh giá sẽ chuyển sang trạng thái Đã huỷ và không thể tiếp tục.",
+      "confirm": "Huỷ đánh giá"
+    },
+    "toast": {
+      "decided": "Đã ra quyết định",
+      "decideError": "Không thể ra quyết định",
+      "cancelled": "Đã huỷ đánh giá",
+      "cancelError": "Không thể huỷ đánh giá",
+      "failReason": "Kết quả Không đạt cần có ghi chú lý do.",
+      "extendDate": "Gia hạn cần một ngày kết thúc trong tương lai.",
+      "notDecidable": "Đánh giá này không ở trạng thái chờ HR.",
+      "notCancellable": "Đánh giá này không thể huỷ."
+    }
+  },
+  "criteria": {
+    "title": "Tiêu chí đánh giá",
+    "subtitle": "Bộ tiêu chí dùng để chấm điểm thử việc (thang 1–5).",
+    "add": "Thêm tiêu chí",
+    "active": "Đang dùng",
+    "inactive": "Đã tắt",
+    "columns": {
+      "order": "Thứ tự",
+      "name": "Tên tiêu chí",
+      "group": "Nhóm",
+      "status": "Trạng thái"
+    },
+    "groups": {
+      "PERFORMANCE": "Hiệu suất",
+      "VALUES": "Giá trị"
+    },
+    "empty": {
+      "title": "Chưa có tiêu chí",
+      "description": "Thêm tiêu chí đầu tiên để bắt đầu chấm điểm thử việc."
+    },
+    "form": {
+      "createTitle": "Thêm tiêu chí",
+      "editTitle": "Chỉnh sửa tiêu chí",
+      "name": "Tên tiêu chí",
+      "order": "Thứ tự hiển thị",
+      "isActive": "Đang sử dụng",
+      "group": "Nhóm đánh giá",
+      "rubric": "Rubric hướng dẫn (5 mức)",
+      "rubricHint": "Để trống toàn bộ nếu không cần hướng dẫn. Nếu dùng, mỗi mức bắt buộc có nhãn.",
+      "levelPlaceholder": "Nhãn mức {{score}} (vd. Đạt kỳ vọng)",
+      "definitionPlaceholder": "Định nghĩa ngắn",
+      "observablePlaceholder": "Biểu hiện quan sát được",
+      "levelRequired": "Mức này cần có nhãn"
+    },
+    "deleteDialog": {
+      "title": "Xóa tiêu chí?",
+      "description": "Tiêu chí sẽ bị xóa vĩnh viễn. Nếu đã dùng trong đánh giá, hãy tắt thay vì xóa.",
+      "confirm": "Xóa"
+    },
+    "toast": {
+      "saved": "Đã lưu tiêu chí",
+      "saveError": "Không thể lưu tiêu chí",
+      "deleted": "Đã xóa tiêu chí",
+      "deleteError": "Không thể xóa tiêu chí",
+      "inUse": "Tiêu chí đã được dùng trong một đánh giá. Hãy tắt thay vì xóa."
+    }
+  },
+  "steps": {
+    "ariaLabel": "Tiến trình đánh giá",
+    "self": "Tự đánh giá",
+    "manager": "Quản lý",
+    "final": "Quyết định"
+  },
+  "self": {
+    "title": "Tự đánh giá thử việc",
+    "subtitle": "Bước 1 trong quy trình đánh giá: tự chấm điểm theo bộ tiêu chí trước khi quản lý đánh giá.",
+    "instruction": "Chấm 1–5 cho từng tiêu chí (bấm ⓘ để xem hướng dẫn mức điểm). Nộp xong sẽ không sửa được.",
+    "submittedNotice": "Bạn đã nộp tự đánh giá. Quản lý và HR sẽ tham khảo khi đánh giá.",
+    "comment": "Nhận xét của bạn",
+    "commentPlaceholder": "Điều bạn làm tốt, khó khăn gặp phải, hỗ trợ bạn cần… (tùy chọn)",
+    "saveDraft": "Lưu nháp",
+    "submit": "Nộp tự đánh giá",
+    "empty": {
+      "title": "Chưa có kỳ tự đánh giá nào đang mở",
+      "description": "Khi quản lý mở kỳ đánh giá thử việc của bạn, bạn sẽ nhận thông báo và điền tại đây."
+    },
+    "confirmDialog": {
+      "title": "Nộp tự đánh giá?",
+      "description": "Sau khi nộp bạn sẽ không thể chỉnh sửa. Quản lý và HR sẽ thấy điểm tự chấm của bạn.",
+      "confirm": "Nộp"
+    },
+    "toast": {
+      "draftSaved": "Đã lưu nháp",
+      "saveError": "Không thể lưu nháp",
+      "submitted": "Đã nộp tự đánh giá",
+      "submitError": "Không thể nộp",
+      "incomplete": "Vui lòng chấm đủ tất cả tiêu chí trước khi nộp.",
+      "notEditable": "Tự đánh giá đã khóa (đã nộp hoặc quản lý đã chấm xong)."
+    }
+  }
+}

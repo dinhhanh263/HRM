@@ -1,0 +1,40 @@
+import { Router, type Router as RouterType } from 'express';
+import { healthRoutes } from './v1/health.routes.js';
+import { authRoutes } from './v1/auth.routes.js';
+import { departmentRoutes } from './v1/department.routes.js';
+import { positionRoutes } from './v1/position.routes.js';
+import { employeeRoutes } from './v1/employee.routes.js';
+import { roleRoutes } from './v1/role.routes.js';
+import { permissionRoutes } from './v1/permission.routes.js';
+import { leaveRoutes } from './v1/leave.routes.js';
+import { timesheetRoutes } from './v1/timesheet.routes.js';
+import { payrollRoutes } from './v1/payroll.routes.js';
+import { dashboardRoutes } from './v1/dashboard.routes.js';
+import { notificationRoutes } from './v1/notification.routes.js';
+import { assetRoutes } from './v1/asset.routes.js';
+import { recruitmentRoutes } from './v1/recruitment.routes.js';
+import { probationRoutes } from './v1/probation.routes.js';
+import { settingsRoutes } from './v1/settings.routes.js';
+import { accountRoutes } from './v1/account.routes.js';
+
+const router: RouterType = Router();
+
+router.use('/health', healthRoutes);
+router.use('/auth', authRoutes);
+router.use('/departments', departmentRoutes);
+router.use('/positions', positionRoutes);
+router.use('/employees', employeeRoutes);
+router.use('/roles', roleRoutes);
+router.use('/permissions', permissionRoutes);
+router.use('/leave', leaveRoutes);
+router.use('/timesheet', timesheetRoutes);
+router.use('/payroll', payrollRoutes);
+router.use('/dashboard', dashboardRoutes);
+router.use('/notifications', notificationRoutes);
+router.use('/assets', assetRoutes);
+router.use('/recruitment', recruitmentRoutes);
+router.use('/probation', probationRoutes);
+router.use('/settings', settingsRoutes);
+router.use('/account', accountRoutes);
+
+export { router as routes };

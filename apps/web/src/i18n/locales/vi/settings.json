@@ -1,0 +1,71 @@
+{
+  "title": "Cài đặt",
+  "subtitle": "Cấu hình hệ thống cho toàn công ty",
+  "errorLoad": "Không thể tải cài đặt. Vui lòng thử lại.",
+  "save": "Lưu thay đổi",
+  "saving": "Đang lưu...",
+  "toast": {
+    "saved": "Đã lưu cài đặt",
+    "error": "Lưu thất bại. Thử lại sau."
+  },
+  "hub": {
+    "title": "Khu cài đặt",
+    "roles": { "title": "Vai trò & quyền", "description": "Quản lý vai trò và phân quyền truy cập" },
+    "timesheet": { "title": "Chấm công", "description": "Giờ làm việc, ngày lễ, hệ số OT" },
+    "assets": { "title": "Loại tài sản", "description": "Danh mục loại tài sản công ty" },
+    "probation": { "title": "Thử việc", "description": "Tiêu chí và hướng dẫn đánh giá thử việc" }
+  },
+  "company": {
+    "title": "Hồ sơ công ty",
+    "description": "Thông tin dùng trên phiếu lương và báo cáo",
+    "name": "Tên công ty",
+    "address": "Địa chỉ",
+    "taxCode": "Mã số thuế",
+    "contactEmail": "Email liên hệ",
+    "phone": "Số điện thoại"
+  },
+  "notifications": {
+    "title": "Nhắc việc & thông báo",
+    "description": "Thời điểm hệ thống nhắc các mốc nhân sự",
+    "probationLeadDays": "Nhắc trước khi hết thử việc (ngày)",
+    "probationLeadHint": "1–30 ngày. Ảnh hưởng Dashboard và email nhắc việc.",
+    "contractLeadDays": "Nhắc trước khi hết hạn hợp đồng (ngày)",
+    "contractLeadHint": "1–90 ngày."
+  },
+  "regional": {
+    "title": "Mặc định khu vực",
+    "description": "Áp dụng cho toàn bộ người dùng của công ty",
+    "defaultLanguage": "Ngôn ngữ mặc định",
+    "defaultLanguageHint": "Áp dụng cho người dùng chưa tự chọn ngôn ngữ.",
+    "weekStart": "Tuần bắt đầu từ",
+    "monday": "Thứ Hai",
+    "sunday": "Chủ nhật"
+  },
+  "security": {
+    "title": "Chính sách bảo mật",
+    "description": "Áp dụng server-side cho toàn bộ tài khoản",
+    "passwordMinLength": "Độ dài mật khẩu tối thiểu",
+    "forceSso": "Bắt buộc đăng nhập SSO (Google)",
+    "forceSsoHint": "Khi bật, đăng nhập bằng mật khẩu sẽ bị từ chối — trừ Super Admin (tránh tự khoá hệ thống)."
+  },
+  "plan": {
+    "title": "Gói & người dùng",
+    "description": "Thông tin gói dịch vụ của công ty",
+    "planName": "Gói hiện tại",
+    "seats": "Người dùng đang hoạt động",
+    "seatLimit": "Giới hạn",
+    "unlimited": "Không giới hạn"
+  },
+  "audit": {
+    "title": "Nhật ký thay đổi",
+    "description": "50 thay đổi cài đặt gần nhất",
+    "empty": "Chưa có thay đổi nào",
+    "columns": { "time": "Thời gian", "user": "Người đổi", "section": "Mục", "changes": "Thay đổi" },
+    "sections": {
+      "company": "Hồ sơ công ty",
+      "notifications": "Nhắc việc",
+      "regional": "Khu vực",
+      "security": "Bảo mật"
+    }
+  }
+}

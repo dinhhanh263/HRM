@@ -1,0 +1,63 @@
+{
+  "list": {
+    "title": "Positions",
+    "subtitle": "Manage job positions across the company",
+    "searchPlaceholder": "Search positions...",
+    "count": "positions",
+    "loadError": "Unable to load positions"
+  },
+  "table": {
+    "name": "Position",
+    "department": "Department",
+    "level": "Level",
+    "employeeCountHeader": "Employees",
+    "noDepartment": "—",
+    "employeeCount": "{{count}} employees"
+  },
+  "level": {
+    "junior": "Junior",
+    "mid": "Middle",
+    "senior": "Senior",
+    "lead": "Lead",
+    "manager": "Manager",
+    "unknown": "Level {{level}}"
+  },
+  "form": {
+    "createTitle": "Add position",
+    "editTitle": "Edit position",
+    "createDescription": "Create a new position to assign to employees.",
+    "editDescription": "Update the position details.",
+    "nameLabel": "Position name",
+    "namePlaceholder": "e.g. Software Engineer",
+    "departmentLabel": "Department",
+    "departmentPlaceholder": "Select a department",
+    "noDepartmentOption": "No department",
+    "levelLabel": "Level",
+    "levelPlaceholder": "Select a level",
+    "submitCreate": "Create position"
+  },
+  "validation": {
+    "nameRequired": "Please enter a position name",
+    "nameMax": "Maximum 100 characters"
+  },
+  "empty": {
+    "title": "No positions yet",
+    "subtitle": "Add your first position to assign roles to employees"
+  },
+  "delete": {
+    "title": "Delete position?",
+    "description": "This action cannot be undone. The position \"{{name}}\" will be permanently deleted.",
+    "descriptionHasEmployees": "The position \"{{name}}\" is assigned to {{count}} employees. Please move them to another position before deleting."
+  },
+  "toast": {
+    "created": "Position added",
+    "updated": "Position updated",
+    "deleted": "Position deleted",
+    "createError": "Unable to add position",
+    "createErrorDescription": "The position name may already exist.",
+    "updateError": "Unable to update position",
+    "updateErrorDescription": "Please try again.",
+    "deleteError": "Unable to delete position",
+    "deleteErrorDescription": "Please try again."
+  }
+}

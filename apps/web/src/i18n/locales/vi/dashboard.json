@@ -1,0 +1,62 @@
+{
+  "greeting": "Xin chào, {{name}}!",
+  "errorLoad": "Không thể tải dữ liệu bảng điều khiển. Vui lòng thử lại.",
+  "actions": {
+    "viewEmployees": "Xem nhân viên",
+    "addEmployee": "Thêm nhân viên"
+  },
+  "stats": {
+    "totalEmployees": "Tổng nhân viên",
+    "onLeaveToday": "Đang nghỉ phép hôm nay",
+    "pendingApprovals": "Đơn chờ duyệt",
+    "activeWorking": "{{count}} đang làm việc",
+    "needAction": "Cần xử lý ngay"
+  },
+  "deptDistribution": {
+    "empty": "Chưa có dữ liệu phòng ban"
+  },
+  "sections": {
+    "deptDistribution": "Phân bố nhân viên theo phòng ban",
+    "pendingLeave": "Đơn nghỉ phép chờ duyệt",
+    "upcomingEvents": "Sự kiện sắp tới",
+    "leaveBalance": "Số ngày phép của tôi"
+  },
+  "leaveBalance": {
+    "remaining": "Còn lại",
+    "usedOf": "Đã dùng {{used}}/{{allocated}} ngày"
+  },
+  "links": {
+    "detail": "Chi tiết",
+    "viewAll": "Xem tất cả",
+    "viewCalendar": "Xem lịch"
+  },
+  "leave": {
+    "days": "{{count}} ngày",
+    "nonePending": "Không có đơn nào chờ duyệt"
+  },
+  "footer": {
+    "newHires": "Nhân viên mới tháng này",
+    "terminated": "Nghỉ việc tháng này",
+    "departments": "Phòng ban",
+    "upcomingEvents": "Sự kiện sắp tới"
+  },
+  "events": {
+    "birthday": "Sinh nhật {{name}}",
+    "anniversary": "Kỷ niệm {{years}} năm - {{name}}",
+    "onboarding": "Onboarding {{name}}",
+    "probationEnding": "Sắp hết thử việc - {{name}}",
+    "contractExpiring": "Sắp hết hạn hợp đồng - {{name}}",
+    "none": "Không có sự kiện sắp tới"
+  },
+  "calendar": {
+    "title": "Lịch sự kiện",
+    "subtitle": "Sự kiện nhân sự và ngày lễ theo tháng",
+    "prevMonth": "Tháng trước",
+    "nextMonth": "Tháng sau",
+    "today": "Hôm nay",
+    "holiday": "Ngày lễ",
+    "more": "+{{count}} sự kiện khác",
+    "errorLoad": "Không thể tải lịch sự kiện. Vui lòng thử lại.",
+    "empty": "Tháng này không có sự kiện nào"
+  }
+}

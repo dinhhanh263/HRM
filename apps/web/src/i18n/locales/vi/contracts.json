@@ -1,0 +1,74 @@
+{
+  "tab": "Hợp đồng",
+  "title": "Hợp đồng lao động",
+  "subtitle": "Quản lý hợp đồng của nhân viên",
+  "addContract": "Thêm hợp đồng",
+  "editContract": "Chỉnh sửa hợp đồng",
+  "endContract": "Kết thúc hợp đồng",
+  "loadError": "Không thể tải danh sách hợp đồng",
+  "indefinite": "Không xác định thời hạn",
+  "columns": {
+    "type": "Loại hợp đồng",
+    "startDate": "Ngày bắt đầu",
+    "endDate": "Ngày kết thúc",
+    "status": "Trạng thái",
+    "signedAt": "Ngày ký",
+    "note": "Ghi chú"
+  },
+  "status": {
+    "ACTIVE": "Hiệu lực",
+    "EXPIRED": "Hết hạn",
+    "TERMINATED": "Đã chấm dứt"
+  },
+  "types": {
+    "FULL_TIME": "Toàn thời gian",
+    "PART_TIME": "Bán thời gian",
+    "CONTRACT": "Hợp đồng",
+    "PROBATION": "Thử việc",
+    "INTERN": "Thực tập"
+  },
+  "form": {
+    "type": "Loại hợp đồng",
+    "startDate": "Ngày bắt đầu",
+    "endDate": "Ngày kết thúc",
+    "endDateHint": "Để trống nếu hợp đồng không xác định thời hạn",
+    "signedAt": "Ngày ký",
+    "note": "Ghi chú",
+    "selectType": "Chọn loại hợp đồng",
+    "notePlaceholder": "Ghi chú thêm (tuỳ chọn)"
+  },
+  "empty": {
+    "title": "Chưa có hợp đồng",
+    "subtitle": "Thêm hợp đồng đầu tiên cho nhân viên này",
+    "cta": "Thêm hợp đồng"
+  },
+  "actions": {
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "edit": "Chỉnh sửa",
+    "end": "Kết thúc",
+    "delete": "Xóa",
+    "confirmEnd": "Xác nhận kết thúc"
+  },
+  "endDialog": {
+    "title": "Kết thúc hợp đồng?",
+    "description": "Chọn ngày kết thúc. Hợp đồng sẽ chuyển sang trạng thái Đã chấm dứt."
+  },
+  "deleteDialog": {
+    "title": "Xóa hợp đồng?",
+    "description": "Hành động này không thể hoàn tác.",
+    "confirm": "Xóa"
+  },
+  "toast": {
+    "created": "Đã thêm hợp đồng",
+    "updated": "Đã cập nhật hợp đồng",
+    "ended": "Đã kết thúc hợp đồng",
+    "deleted": "Đã xóa hợp đồng",
+    "error": "Có lỗi xảy ra. Vui lòng thử lại."
+  },
+  "validation": {
+    "typeRequired": "Vui lòng chọn loại hợp đồng",
+    "startRequired": "Vui lòng chọn ngày bắt đầu",
+    "endBeforeStart": "Ngày kết thúc không thể trước ngày bắt đầu"
+  }
+}

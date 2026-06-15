@@ -1,0 +1,1581 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  HR_MANAGER
+  PAYROLL_APPROVER
+  MANAGER
+  EMPLOYEE
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+  INVITED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum ContractType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERN
+  PROBATION
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  INACTIVE
+  TERMINATED
+}
+
+enum ContractStatus {
+  ACTIVE
+  EXPIRED
+  TERMINATED
+}
+
+enum ProbationReviewStatus {
+  DRAFT
+  PENDING_HR
+  DECIDED
+  CANCELLED
+}
+
+enum ProbationOutcome {
+  CONFIRM
+  EXTEND
+  FAIL
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  RETURNED
+}
+
+enum ApproverType {
+  MANAGER
+  DEPARTMENT_HEAD
+  ROLE
+  SPECIFIC_USER
+}
+
+enum ApprovalDecision {
+  APPROVED
+  RETURNED
+  AUTO_SKIPPED
+}
+
+enum OvertimeCategory {
+  OT_WEEKDAY
+  OT_WEEKEND
+  OT_HOLIDAY
+}
+
+enum OvertimeStatus {
+  PENDING
+  APPROVED
+  REJECTED // legacy: chỉ tồn tại cho dữ liệu cũ; flow mới dùng RETURNED thay cho reject
+  CANCELLED
+  RETURNED
+}
+
+// Phân biệt luồng duyệt theo nghiệp vụ. Cùng cấu trúc ApprovalFlow/ApprovalStep
+// nhưng OT cấu hình độc lập với Leave.
+enum ApprovalFlowType {
+  LEAVE
+  OVERTIME
+}
+
+enum AttendanceSource {
+  SELF
+  MANUAL_ADJUST
+}
+
+enum PayrollRunStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  PAID
+  CANCELLED
+}
+
+enum AssetStatus {
+  AVAILABLE
+  ASSIGNED
+  UNDER_MAINTENANCE
+  RETIRED // thanh lý
+  LOST // mất / hỏng không phục hồi
+}
+
+enum AssetAssignmentStatus {
+  ACTIVE
+  RETURNED
+}
+
+enum AssetCondition {
+  NEW
+  GOOD
+  FAIR
+  POOR
+}
+
+// Handover acknowledgement state of an assignment (biên bản bàn giao). An
+// assignment is created PENDING (assign-now/sign-later) and becomes SIGNED once
+// the recipient acknowledges — on-screen during in-person handover or remotely
+// from their own account.
+enum AssetAckStatus {
+  PENDING
+  SIGNED
+}
+
+enum AssetAckMethod {
+  ON_SCREEN // chữ ký vẽ tay trên màn hình lúc bàn giao trực tiếp
+  IN_APP // người nhận tự xác nhận từ xa qua tài khoản
+}
+
+// Which figure the employee-side insurance percentages apply to. Vietnamese
+// practice usually bases statutory insurance on a contractual base salary
+// (BASE_SALARY), but GROSS is offered for tenants that compute on total gross.
+enum InsuranceBase {
+  GROSS
+  BASE_SALARY
+}
+
+// ===== Recruitment / ATS (SPEC-024) =====
+
+enum JobStatus {
+  DRAFT
+  OPEN
+  ON_HOLD
+  CLOSED
+  CANCELLED
+}
+
+enum JobEmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERN
+}
+
+// Loại stage chuẩn hóa — tên stage tùy biến được nhưng `type` cố định để analytics
+// (conversion/velocity) gộp đúng nhóm dù mỗi job đặt tên khác nhau.
+enum StageType {
+  SOURCED
+  SCREEN
+  ASSESSMENT
+  INTERVIEW
+  OFFER
+  HIRED
+  REJECTED
+}
+
+enum CandidateSource {
+  CAREER_SITE
+  JOB_BOARD
+  REFERRAL
+  SOURCED
+  AGENCY
+  EVENT
+  DIRECT
+}
+
+// Disposition cố định của hồ sơ ứng tuyển — TÁCH biệt với stage (vị trí trong phễu).
+// Khi REJECTED vẫn giữ currentStageId để biết "rớt ở bước nào".
+enum ApplicationStatus {
+  ACTIVE
+  HIRED
+  REJECTED
+  WITHDRAWN
+  ON_HOLD
+}
+
+enum RejectionReason {
+  UNDERQUALIFIED
+  OVERQUALIFIED
+  FAILED_ASSESSMENT
+  CULTURE_FIT
+  COMP_MISMATCH
+  POSITION_FILLED
+  CANDIDATE_WITHDREW
+  NO_SHOW
+  OTHER
+}
+
+enum AttachmentKind {
+  CV
+  COVER_LETTER
+  OTHER
+}
+
+enum ParseStatus {
+  PENDING
+  PROCESSING
+  DONE
+  FAILED
+}
+
+// Bulk CV intake (SPEC-027) — staging-table import. Batch = 1 lần kéo-thả nhiều CV
+// vào 1 job; item = 1 CV. KHÔNG ghi nháp vào Candidate; chỉ tạo Candidate khi confirm.
+enum BulkImportStatus {
+  DRAFT
+  REVIEWING
+  CONFIRMED
+  CANCELLED
+}
+
+enum BulkImportItemStatus {
+  PARSING
+  PARSED
+  PARSE_FAILED
+  CONFIRMED
+  SKIPPED
+  FAILED
+}
+
+// Quyết định của HR cho mỗi item khi confirm: tạo mới, gắn vào candidate đã có, hoặc bỏ.
+enum BulkImportItemResolution {
+  NEW
+  LINK_EXISTING
+  SKIP
+}
+
+enum InterviewMode {
+  ONSITE
+  VIDEO
+  PHONE
+}
+
+enum InterviewStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum ScorecardOverall {
+  STRONG_NO
+  NO
+  YES
+  STRONG_YES
+}
+
+enum HiringTeamRole {
+  RECRUITER
+  HIRING_MANAGER
+  INTERVIEWER
+  COORDINATOR
+}
+
+model Tenant {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  customDomain String?  @map("custom_domain")
+  settings     Json     @default("{}")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  users          User[]
+  departments    Department[]
+  positions      Position[]
+  employees      Employee[]
+  roles          Role[]
+  leaveTypes     LeaveType[]
+  leaveRequests  LeaveRequest[]
+  leaveBalances  LeaveBalance[]
+  approvalFlows  ApprovalFlow[]
+  leaveApprovals LeaveApproval[]
+  domains        TenantDomain[]
+
+  timesheetPolicy   TimesheetPolicy?
+  holidays          Holiday[]
+  attendanceRecords AttendanceRecord[]
+  overtimeRequests  OvertimeRequest[]
+
+  payrollSettings  PayrollSettings?
+  employeeSalaries EmployeeSalary[]
+  payrollRuns      PayrollRun[]
+  payslips         Payslip[]
+
+  contracts     Contract[]
+  notifications Notification[]
+
+  assetCategories   AssetCategory[]
+  assets            Asset[]
+  assetAssignments  AssetAssignment[]
+  assetMaintenances AssetMaintenance[]
+  OvertimeApproval  OvertimeApproval[]
+
+  pipelineTemplates PipelineTemplate[]
+  jobs              Job[]
+  candidates        Candidate[]
+  applications      Application[]
+  interviews        Interview[]
+
+  probationCriteria   ProbationCriteria[]
+  probationReviews    ProbationReview[]
+  probationGuidelines ProbationGuideline[]
+  settingsAuditLogs   SettingsAuditLog[]
+
+  @@map("tenants")
+}
+
+// SPEC-036: ai đổi cấu hình tenant nào, khi nào — ghi mỗi lần PATCH /settings/*.
+model SettingsAuditLog {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  userId    String   @map("user_id")
+  section   String
+  // { fieldName: { from, to } } — chỉ các field thực sự thay đổi.
+  changes   Json
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, createdAt])
+  @@map("settings_audit_logs")
+}
+
+// Email domains owned by a tenant. Used to resolve which tenant a Google
+// Workspace SSO login belongs to: the domain of the verified Google email
+// (e.g. "codecrush.asia") maps to exactly one tenant. `domain` is globally
+// unique so two tenants can never claim the same domain (cross-tenant takeover).
+model TenantDomain {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  domain    String   @unique // lowercased, no "@" — e.g. "codecrush.asia"
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@map("tenant_domains")
+}
+
+model User {
+  id                   String     @id @default(cuid())
+  tenantId             String     @map("tenant_id")
+  email                String
+  passwordHash         String     @map("password_hash")
+  fullName             String     @map("full_name")
+  role                 UserRole   @default(EMPLOYEE)
+  roleId               String?    @map("role_id")
+  status               UserStatus @default(PENDING)
+  emailVerifiedAt      DateTime?  @map("email_verified_at")
+  lastLoginAt          DateTime?  @map("last_login_at")
+  // SPEC-037: lần đầu đăng nhập Google thành công — hiển thị "đã liên kết SSO".
+  googleLinkedAt       DateTime?  @map("google_linked_at")
+  // SPEC-037: { [reminderKind]: boolean } — thiếu key = nhận email. Chỉ áp cho
+  // email nhắc việc; in-app notification không bị tắt.
+  notificationPrefs    Json?      @map("notification_prefs")
+  // Invite/set-password flow: users created via bulk import have no usable
+  // password until they set one via an emailed token. inviteToken stores a
+  // sha256 HASH of the raw token (never the plaintext), single-use.
+  inviteToken          String?    @map("invite_token")
+  inviteTokenExpiresAt DateTime?  @map("invite_token_expires_at")
+  passwordSetAt        DateTime?  @map("password_set_at")
+  createdAt            DateTime   @default(now()) @map("created_at")
+  updatedAt            DateTime   @updatedAt @map("updated_at")
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  roleRef       Role?          @relation(fields: [roleId], references: [id])
+  refreshTokens RefreshToken[]
+  employee      Employee?
+  notifications Notification[]
+  settingsAuditLogs SettingsAuditLog[]
+
+  @@unique([tenantId, email])
+  @@index([email])
+  @@index([roleId])
+  @@index([inviteToken])
+  @@map("users")
+}
+
+model RefreshToken {
+  id         String    @id @default(cuid())
+  userId     String    @map("user_id")
+  tokenHash  String    @map("token_hash")
+  expiresAt  DateTime  @map("expires_at")
+  revokedAt  DateTime? @map("revoked_at")
+  // Whether the login was "remember me": a persistent cookie (true) vs a
+  // browser-session cookie (false). Stored so token rotation on /auth/refresh
+  // can re-issue the same cookie type — a session cookie sends no expiry back.
+  persistent Boolean   @default(true) @map("persistent")
+  // SPEC-037: hiển thị "phiên đăng nhập" trong /account.
+  userAgent  String?   @map("user_agent")
+  lastUsedAt DateTime? @map("last_used_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tokenHash])
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Department {
+  id          String   @id @default(cuid())
+  tenantId    String   @map("tenant_id")
+  name        String
+  description String?
+  managerId   String?  @map("manager_id") // trưởng phòng ban (department head)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  positions     Position[]
+  employees     Employee[]     @relation("DepartmentMembers")
+  manager       Employee?      @relation("DepartmentHead", fields: [managerId], references: [id])
+  approvalFlows ApprovalFlow[]
+  jobs          Job[]
+
+  @@unique([tenantId, name])
+  @@index([managerId])
+  @@map("departments")
+}
+
+model Position {
+  id           String   @id @default(cuid())
+  tenantId     String   @map("tenant_id")
+  departmentId String?  @map("department_id")
+  name         String
+  level        Int      @default(1)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department Department? @relation(fields: [departmentId], references: [id])
+  employees  Employee[]
+  jobs       Job[]
+
+  @@unique([tenantId, name])
+  @@index([departmentId])
+  @@map("positions")
+}
+
+model Employee {
+  id                String         @id @default(cuid())
+  tenantId          String         @map("tenant_id")
+  userId            String         @unique @map("user_id")
+  employeeCode      String         @map("employee_code")
+  departmentId      String?        @map("department_id")
+  positionId        String?        @map("position_id")
+  managerId         String?        @map("manager_id") // quản lý trực tiếp (direct manager)
+  fullName          String         @map("full_name")
+  dateOfBirth       DateTime?      @map("date_of_birth")
+  gender            Gender?
+  idNumber          String?        @map("id_number")
+  phone             String?
+  address           String?
+  avatar            String?
+  joinDate          DateTime       @map("join_date")
+  probationEndDate  DateTime?      @map("probation_end_date") // ngày hết thử việc (HR nhập tay; null nếu không áp dụng)
+  contractType      ContractType   @map("contract_type")
+  dependentsCount   Int            @default(0) @map("dependents_count") // người phụ thuộc — giảm trừ thuế TNCN
+  status            EmployeeStatus @default(ACTIVE)
+  terminatedAt      DateTime?      @map("terminated_at")
+  terminationReason String?        @map("termination_reason")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department Department? @relation("DepartmentMembers", fields: [departmentId], references: [id])
+  position   Position?   @relation(fields: [positionId], references: [id])
+
+  manager           Employee?    @relation("EmployeeManager", fields: [managerId], references: [id])
+  reports           Employee[]   @relation("EmployeeManager")
+  headedDepartments Department[] @relation("DepartmentHead")
+
+  leaveRequests    LeaveRequest[] @relation("EmployeeLeaveRequests")
+  reviewedRequests LeaveRequest[] @relation("ReviewerLeaveRequests")
+  leaveBalances    LeaveBalance[]
+
+  stepApprovals         ApprovalStep[]  @relation("StepSpecificApprover")
+  leaveApprovalsDecided LeaveApproval[] @relation("LeaveApprovalDecider")
+
+  attendanceRecords        AttendanceRecord[] @relation("EmployeeAttendance")
+  adjustedAttendance       AttendanceRecord[] @relation("AttendanceAdjuster")
+  overtimeRequests         OvertimeRequest[]  @relation("EmployeeOvertime")
+  reviewedOvertime         OvertimeRequest[]  @relation("OvertimeReviewer")
+  overtimeApprovalsDecided OvertimeApproval[] @relation("OvertimeApprovalDecider")
+
+  salaries        EmployeeSalary[] @relation("EmployeeSalaries")
+  salariesCreated EmployeeSalary[] @relation("SalaryCreator")
+  payslips        Payslip[]        @relation("EmployeePayslips")
+
+  contracts Contract[] @relation("EmployeeContracts")
+
+  assetsHeld        AssetAssignment[]  @relation("AssetHolder")
+  assetsAssigned    AssetAssignment[]  @relation("AssetAssigner")
+  assetsReturned    AssetAssignment[]  @relation("AssetReturner")
+  assetMaintenances AssetMaintenance[] @relation("MaintenanceCreator")
+
+  jobsCreated          Job[]                     @relation("JobCreator")
+  hiringTeamMemberships JobHiringTeam[]          @relation("HiringTeamMember")
+  stageChanges         ApplicationStageHistory[] @relation("StageChanger")
+  interviewsCreated    Interview[]               @relation("InterviewCreator")
+  interviewAssignments InterviewInterviewer[]    @relation("InterviewerAssignment")
+  scorecards           Scorecard[]               @relation("ScorecardInterviewer")
+  applicationActivities ApplicationActivity[]    @relation("ActivityAuthor")
+
+  probationReviews        ProbationReview[] @relation("EmployeeProbationReviews")
+  probationReviewsGiven   ProbationReview[] @relation("ProbationReviewer")
+  probationReviewsDecided ProbationReview[] @relation("ProbationDecider")
+
+  @@unique([tenantId, employeeCode])
+  @@index([tenantId, status])
+  @@index([departmentId])
+  @@index([positionId])
+  @@index([managerId])
+  @@map("employees")
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  tenantId    String   @map("tenant_id")
+  key         String
+  name        String
+  description String?
+  isSystem    Boolean  @default(false) @map("is_system")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tenant      Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  users       User[]
+  permissions RolePermission[]
+
+  @@unique([tenantId, key])
+  @@index([tenantId])
+  @@map("roles")
+}
+
+model Permission {
+  id       String @id @default(cuid())
+  key      String @unique
+  resource String
+  action   String
+
+  roles RolePermission[]
+
+  @@index([resource])
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String @map("role_id")
+  permissionId String @map("permission_id")
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+  @@map("role_permissions")
+}
+
+model LeaveType {
+  id                 String   @id @default(cuid())
+  tenantId           String   @map("tenant_id")
+  name               String
+  code               String
+  colorHex           String?  @map("color_hex")
+  defaultDays        Float    @default(0) @map("default_days")
+  paid               Boolean  @default(true)
+  requiresAttachment Boolean  @default(false) @map("requires_attachment")
+  active             Boolean  @default(true)
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  tenant   Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  requests LeaveRequest[]
+  balances LeaveBalance[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@map("leave_types")
+}
+
+model LeaveRequest {
+  id            String      @id @default(cuid())
+  tenantId      String      @map("tenant_id")
+  employeeId    String      @map("employee_id")
+  leaveTypeId   String      @map("leave_type_id")
+  startDate     DateTime    @map("start_date")
+  endDate       DateTime    @map("end_date")
+  halfDay       Boolean     @default(false) @map("half_day")
+  totalDays     Float       @map("total_days")
+  reason        String?
+  attachmentUrl String?     @map("attachment_url")
+  status        LeaveStatus @default(PENDING)
+  flowId        String?     @map("flow_id")
+  currentStep   Int         @default(0) @map("current_step")
+  reviewedById  String?     @map("reviewed_by_id")
+  reviewedAt    DateTime?   @map("reviewed_at")
+  reviewNote    String?     @map("review_note")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  tenant     Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee   Employee        @relation("EmployeeLeaveRequests", fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewedBy Employee?       @relation("ReviewerLeaveRequests", fields: [reviewedById], references: [id])
+  leaveType  LeaveType       @relation(fields: [leaveTypeId], references: [id])
+  flow       ApprovalFlow?   @relation(fields: [flowId], references: [id])
+  approvals  LeaveApproval[]
+
+  @@index([tenantId, status])
+  @@index([employeeId])
+  @@index([leaveTypeId])
+  @@index([flowId])
+  @@map("leave_requests")
+}
+
+model LeaveBalance {
+  id          String   @id @default(cuid())
+  tenantId    String   @map("tenant_id")
+  employeeId  String   @map("employee_id")
+  leaveTypeId String   @map("leave_type_id")
+  year        Int
+  allocated   Float    @default(0)
+  used        Float    @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee  Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  leaveType LeaveType @relation(fields: [leaveTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, employeeId, leaveTypeId, year])
+  @@index([employeeId, year])
+  @@map("leave_balances")
+}
+
+model ApprovalFlow {
+  id           String           @id @default(cuid())
+  tenantId     String           @map("tenant_id")
+  departmentId String?          @map("department_id") // null = luồng mặc định của tenant (tenant default)
+  flowType     ApprovalFlowType @default(LEAVE) @map("flow_type")
+  name         String
+  active       Boolean          @default(true)
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  tenant     Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department Department?       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  steps      ApprovalStep[]
+  requests   LeaveRequest[]
+  otRequests OvertimeRequest[]
+
+  // NOTE: Postgres coi mỗi NULL là khác nhau nên unique này KHÔNG ép một
+  // default duy nhất/tenant/flowType — ràng buộc single-default enforce ở service layer.
+  @@unique([tenantId, departmentId, flowType])
+  @@index([tenantId])
+  @@map("approval_flows")
+}
+
+model ApprovalStep {
+  id           String       @id @default(cuid())
+  flowId       String       @map("flow_id")
+  stepOrder    Int          @map("step_order")
+  approverType ApproverType @map("approver_type")
+  roleKey      String?      @map("role_key") // khi approverType = ROLE
+  approverId   String?      @map("approver_id") // khi approverType = SPECIFIC_USER
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  flow     ApprovalFlow @relation(fields: [flowId], references: [id], onDelete: Cascade)
+  approver Employee?    @relation("StepSpecificApprover", fields: [approverId], references: [id])
+
+  @@unique([flowId, stepOrder])
+  @@index([flowId])
+  @@map("approval_steps")
+}
+
+model LeaveApproval {
+  id           String            @id @default(cuid())
+  tenantId     String            @map("tenant_id")
+  requestId    String            @map("request_id")
+  round        Int               @default(1) // tăng mỗi lần đơn bị trả về rồi nộp lại
+  stepOrder    Int               @map("step_order")
+  approverType ApproverType      @map("approver_type")
+  roleKey      String?           @map("role_key")
+  approverId   String?           @map("approver_id") // người duyệt kỳ vọng (resolved); null nếu không xác định được
+  decision     ApprovalDecision? // null = đang chờ (pending)
+  decidedById  String?           @map("decided_by_id")
+  decidedAt    DateTime?         @map("decided_at")
+  note         String?
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  tenant    Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  request   LeaveRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  decidedBy Employee?    @relation("LeaveApprovalDecider", fields: [decidedById], references: [id])
+
+  @@unique([requestId, round, stepOrder])
+  @@index([requestId])
+  @@index([tenantId])
+  @@map("leave_approvals")
+}
+
+// Timeline lịch sử duyệt cho mỗi OvertimeRequest. Snapshot từ ApprovalStep tại
+// thời điểm nộp; mỗi lần đơn bị trả về rồi nộp lại sinh round mới. Cấu trúc song
+// song với LeaveApproval (OT có bảng riêng để cấu hình flow độc lập với Leave).
+model OvertimeApproval {
+  id                String            @id @default(cuid())
+  tenantId          String            @map("tenant_id")
+  overtimeRequestId String            @map("overtime_request_id")
+  round             Int               @default(1) // tăng mỗi lần đơn bị trả về rồi nộp lại
+  stepOrder         Int               @map("step_order")
+  approverType      ApproverType      @map("approver_type")
+  roleKey           String?           @map("role_key")
+  approverId        String?           @map("approver_id") // người duyệt kỳ vọng (resolved); null nếu không xác định được
+  decision          ApprovalDecision? // null = đang chờ (pending)
+  decidedById       String?           @map("decided_by_id")
+  decidedAt         DateTime?         @map("decided_at")
+  note              String?
+  createdAt         DateTime          @default(now()) @map("created_at")
+
+  tenant    Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  request   OvertimeRequest @relation(fields: [overtimeRequestId], references: [id], onDelete: Cascade)
+  decidedBy Employee?       @relation("OvertimeApprovalDecider", fields: [decidedById], references: [id])
+
+  @@unique([overtimeRequestId, round, stepOrder])
+  @@index([overtimeRequestId])
+  @@index([tenantId])
+  @@map("overtime_approvals")
+}
+
+// Per-tenant timesheet/overtime policy. Defines what "a working day" and
+// "overtime" mean for the tenant. Auto-seeded with VN defaults on first read.
+// Multipliers are snapshotted onto each OvertimeRequest at approval, so editing
+// this policy never retro-changes already-approved (locked) overtime pay.
+model TimesheetPolicy {
+  id                  String   @id @default(cuid())
+  tenantId            String   @unique @map("tenant_id")
+  // 0=Sunday .. 6=Saturday (JS getDay convention). Default Mon–Fri.
+  workdays            Int[]    @default([1, 2, 3, 4, 5])
+  standardHoursPerDay Float    @default(8) @map("standard_hours_per_day")
+  nightStart          String   @default("22:00") @map("night_start") // HH:mm, per BLLĐ
+  nightEnd            String   @default("06:00") @map("night_end")
+  otWeekday           Float    @default(1.5) @map("ot_weekday")
+  otWeekend           Float    @default(2.0) @map("ot_weekend")
+  otHoliday           Float    @default(3.0) @map("ot_holiday")
+  nightExtra          Float    @default(0.3) @map("night_extra")
+  nightOtExtra        Float    @default(0.2) @map("night_ot_extra")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("timesheet_policies")
+}
+
+// Per-tenant holiday calendar. A holiday date overrides weekday/weekend
+// classification when deriving the overtime category. `recurring` marks
+// fixed-date annual holidays (e.g. 30/4, 1/5, 2/9); lunar dates are seeded as
+// concrete dates for the current year and edited manually.
+model Holiday {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  date      DateTime @db.Date
+  name      String
+  recurring Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, date])
+  @@index([tenantId])
+  @@map("holidays")
+}
+
+// One attendance record per employee per work date. Check-in creates the
+// record; check-out updates the same one. `workedHours` is computed server-side
+// from check-in/out. Reviewer corrections set source=MANUAL_ADJUST + adjustedById.
+model AttendanceRecord {
+  id           String           @id @default(cuid())
+  tenantId     String           @map("tenant_id")
+  employeeId   String           @map("employee_id")
+  workDate     DateTime         @map("work_date") @db.Date
+  checkInAt    DateTime?        @map("check_in_at")
+  checkOutAt   DateTime?        @map("check_out_at")
+  note         String?
+  workedHours  Float?           @map("worked_hours")
+  source       AttendanceSource @default(SELF)
+  adjustedById String?          @map("adjusted_by_id")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  tenant     Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee   Employee  @relation("EmployeeAttendance", fields: [employeeId], references: [id], onDelete: Cascade)
+  adjustedBy Employee? @relation("AttendanceAdjuster", fields: [adjustedById], references: [id])
+
+  @@unique([tenantId, employeeId, workDate])
+  @@index([tenantId, employeeId])
+  @@index([adjustedById])
+  @@map("attendance_records")
+}
+
+// Overtime request. `category` is derived server-side from the work date vs
+// policy workdays + holiday calendar. `multiplier` is null until approval, when
+// the effective rate is snapshotted (immutable for payroll).
+model OvertimeRequest {
+  id           String           @id @default(cuid())
+  tenantId     String           @map("tenant_id")
+  employeeId   String           @map("employee_id")
+  workDate     DateTime         @map("work_date") @db.Date
+  hours        Float
+  night        Boolean          @default(false)
+  category     OvertimeCategory
+  reason       String?
+  status       OvertimeStatus   @default(PENDING)
+  flowId       String?          @map("flow_id")
+  currentStep  Int              @default(0) @map("current_step") // 1-based step đang chờ; 0 = legacy/đã kết thúc
+  multiplier   Float? // snapshotted effective multiplier at approval
+  reviewedById String?          @map("reviewed_by_id")
+  reviewedAt   DateTime?        @map("reviewed_at")
+  reviewNote   String?          @map("review_note")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee   Employee           @relation("EmployeeOvertime", fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewedBy Employee?          @relation("OvertimeReviewer", fields: [reviewedById], references: [id])
+  flow       ApprovalFlow?      @relation(fields: [flowId], references: [id])
+  approvals  OvertimeApproval[]
+
+  @@index([tenantId, status])
+  @@index([tenantId, employeeId])
+  @@index([reviewedById])
+  @@index([flowId])
+  @@map("overtime_requests")
+}
+
+// Per-tenant payroll configuration. One row per tenant, auto-seeded with VN
+// defaults on first access. Every statutory value is a config field (never
+// hardcoded). The settings used by a run are snapshotted onto the run, so
+// editing this row never retro-changes an already-approved period.
+model PayrollSettings {
+  id                        String        @id @default(cuid())
+  tenantId                  String        @unique @map("tenant_id")
+  currency                  String        @default("VND")
+  payDay                    Int           @default(5) @map("pay_day") // day-of-month, informational
+  socialInsuranceRate       Float         @default(0.08) @map("social_insurance_rate") // BHXH (employee-side)
+  healthInsuranceRate       Float         @default(0.015) @map("health_insurance_rate") // BHYT
+  unemploymentInsuranceRate Float         @default(0.01) @map("unemployment_insurance_rate") // BHTN
+  // Phí công đoàn (đoàn phí) — employee-side fraction on the same insurance base.
+  // Post-tax: reduces net pay but is NOT deducted from taxable income. Default 0
+  // so existing tenants are unaffected until they opt in via settings.
+  unionFeeRate              Float         @default(0) @map("union_fee_rate")
+  insuranceBase             InsuranceBase @default(BASE_SALARY) @map("insurance_base")
+  insuranceCap              Decimal?      @map("insurance_cap") @db.Decimal(15, 2)
+  personalDeduction         Decimal       @default(11000000) @map("personal_deduction") @db.Decimal(15, 2)
+  dependentDeduction        Decimal       @default(4400000) @map("dependent_deduction") @db.Decimal(15, 2)
+  // Ordered progressive PIT table: [{ upTo: number|null, rate: number }];
+  // null upTo = top bracket. Default = the 7-step VN table (seeded in code).
+  taxBrackets               Json          @map("tax_brackets")
+  createdAt                 DateTime      @default(now()) @map("created_at")
+  updatedAt                 DateTime      @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("payroll_settings")
+}
+
+// Effective-dated salary history. Setting a new salary closes the previous
+// record (effectiveTo); only one record is in force per employee per date. A
+// pay run for month M resolves the salary in force on M. Records are never
+// hard-overwritten — raises stay auditable.
+model EmployeeSalary {
+  id            String    @id @default(cuid())
+  tenantId      String    @map("tenant_id")
+  employeeId    String    @map("employee_id")
+  baseSalary    Decimal   @map("base_salary") @db.Decimal(15, 2)
+  // Named allowances: [{ name: string, amount: number, taxable: boolean }].
+  allowances    Json      @default("[]")
+  effectiveFrom DateTime  @map("effective_from") @db.Date
+  effectiveTo   DateTime? @map("effective_to") @db.Date // null = currently in force
+  note          String?
+  createdById   String?   @map("created_by_id")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee  Employee  @relation("EmployeeSalaries", fields: [employeeId], references: [id], onDelete: Cascade)
+  createdBy Employee? @relation("SalaryCreator", fields: [createdById], references: [id])
+
+  @@index([tenantId, employeeId, effectiveFrom])
+  @@index([employeeId])
+  @@map("employee_salaries")
+}
+
+// A per-tenant, per-month batch. HR computes (DRAFT), reviews, approves
+// (locks + snapshots), and marks paid. `settingsSnapshot` freezes the payroll
+// settings used so an approved/paid period is fully reproducible. Totals are
+// the sum of its payslip lines.
+model PayrollRun {
+  id               String           @id @default(cuid())
+  tenantId         String           @map("tenant_id")
+  period           String // "YYYY-MM"
+  status           PayrollRunStatus @default(DRAFT)
+  settingsSnapshot Json?            @map("settings_snapshot") // frozen at approval
+  headcount        Int              @default(0)
+  totalGross       Decimal          @default(0) @map("total_gross") @db.Decimal(15, 2)
+  totalDeductions  Decimal          @default(0) @map("total_deductions") @db.Decimal(15, 2)
+  totalNet         Decimal          @default(0) @map("total_net") @db.Decimal(15, 2)
+  runById          String?          @map("run_by_id")
+  submittedById    String?          @map("submitted_by_id")
+  submittedAt      DateTime?        @map("submitted_at")
+  approvedById     String?          @map("approved_by_id")
+  approvedAt       DateTime?        @map("approved_at")
+  paidAt           DateTime?        @map("paid_at")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  payslips Payslip[]
+
+  @@unique([tenantId, period])
+  @@index([tenantId, status])
+  @@map("payroll_runs")
+}
+
+// One payslip line per employee per run. Snapshots all inputs (salary,
+// timesheet summary figures, dependents) AND every computed intermediate
+// figure, so the breakdown is transparent and an approved line is immutable
+// regardless of later upstream changes. Money is Decimal(15,2), whole VND.
+model Payslip {
+  id           String @id @default(cuid())
+  tenantId     String @map("tenant_id")
+  payrollRunId String @map("payroll_run_id")
+  employeeId   String @map("employee_id")
+
+  // ── snapshotted inputs ──
+  baseSalary      Decimal @map("base_salary") @db.Decimal(15, 2)
+  allowances      Json    @default("[]")
+  dependents      Int     @default(0)
+  workingDays     Int     @map("working_days")
+  daysPresent     Int     @map("days_present")
+  paidLeaveDays   Float   @default(0) @map("paid_leave_days")
+  unpaidLeaveDays Float   @default(0) @map("unpaid_leave_days")
+  daysAbsent      Float   @default(0) @map("days_absent")
+  holidayCount    Int     @default(0) @map("holiday_count")
+  // [{ category, night, hours, multiplier, amount }]
+  overtime        Json    @default("[]")
+
+  // ── computed breakdown ──
+  proratedBase          Decimal @map("prorated_base") @db.Decimal(15, 2)
+  allowanceTotal        Decimal @map("allowance_total") @db.Decimal(15, 2)
+  otPay                 Decimal @map("ot_pay") @db.Decimal(15, 2)
+  grossPay              Decimal @map("gross_pay") @db.Decimal(15, 2)
+  socialInsurance       Decimal @map("social_insurance") @db.Decimal(15, 2)
+  healthInsurance       Decimal @map("health_insurance") @db.Decimal(15, 2)
+  unemploymentInsurance Decimal @map("unemployment_insurance") @db.Decimal(15, 2)
+  insuranceTotal        Decimal @map("insurance_total") @db.Decimal(15, 2)
+  taxableIncome         Decimal @map("taxable_income") @db.Decimal(15, 2)
+  personalIncomeTax     Decimal @map("personal_income_tax") @db.Decimal(15, 2)
+  unionFee              Decimal @default(0) @map("union_fee") @db.Decimal(15, 2)
+  otherDeductions       Decimal @default(0) @map("other_deductions") @db.Decimal(15, 2)
+  netPay                Decimal @map("net_pay") @db.Decimal(15, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant     Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  payrollRun PayrollRun @relation(fields: [payrollRunId], references: [id], onDelete: Cascade)
+  employee   Employee   @relation("EmployeePayslips", fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([payrollRunId, employeeId])
+  @@index([tenantId, employeeId])
+  @@map("payslips")
+}
+
+// Employment contract history. An employee may have several contracts over
+// time, but at most ONE with status ACTIVE (enforced transactionally in the
+// service). `endDate = null` means an indefinite-term contract, which never
+// produces an expiry reminder. The [tenantId, status, endDate] index backs the
+// daily reminder scan (find ACTIVE contracts expiring within the window).
+model Contract {
+  id         String         @id @default(cuid())
+  tenantId   String         @map("tenant_id")
+  employeeId String         @map("employee_id")
+  type       ContractType
+  startDate  DateTime       @map("start_date")
+  endDate    DateTime?      @map("end_date") // null = không xác định thời hạn
+  status     ContractStatus @default(ACTIVE)
+  signedAt   DateTime?      @map("signed_at")
+  note       String?
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee Employee @relation("EmployeeContracts", fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, status, endDate])
+  @@map("contracts")
+}
+
+// Bộ tiêu chí đánh giá thử việc, cấu hình theo tenant (SPEC-030). Tiêu chí đã được
+// review tham chiếu không xóa cứng được — chỉ deactivate (isActive=false) để giữ
+// nguyện dữ liệu lịch sử mà ratings JSON trên ProbationReview trỏ tới theo id.
+model ProbationCriteria {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  name      String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true) @map("is_active")
+  // SPEC-031: tách What/How — 'PERFORMANCE' | 'VALUES' (String + default để dễ mở rộng).
+  group     String   @default("PERFORMANCE")
+  // SPEC-031: rubric BARS [{ score:1..5, level, definition?, observable? }]; null = không hướng dẫn.
+  rubric    Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, isActive])
+  @@map("probation_criteria")
+}
+
+// Đánh giá thử việc (SPEC-030). Luồng 2 bên cố định: MANAGER đánh giá scorecard +
+// đề xuất (DRAFT→PENDING_HR), HR ra quyết định cuối (→DECIDED) với hệ quả tự động.
+// `ratings` là JSON { [criteriaId]: 1..5 }. Tối đa 1 review mở (DRAFT|PENDING_HR)
+// mỗi nhân viên (enforce ở service).
+model ProbationReview {
+  id     String                @id @default(cuid())
+  tenantId   String            @map("tenant_id")
+  employeeId String            @map("employee_id")
+  status     ProbationReviewStatus @default(DRAFT)
+
+  // SPEC-033: Step 1 — nhân viên tự đánh giá (song song khi DRAFT, khóa sau khi nộp
+  // hoặc khi review rời DRAFT). selfSubmittedAt null = chưa nộp.
+  selfRatings     Json?     @map("self_ratings") // { [criteriaId]: 1..5 }
+  selfComment     String?   @map("self_comment") @db.Text
+  selfSubmittedAt DateTime? @map("self_submitted_at")
+
+  // Manager đánh giá (scorecard)
+  reviewerId     String?           @map("reviewer_id")
+  ratings        Json? // { [criteriaId]: 1..5 }
+  // SPEC-031: nhật ký bằng chứng deliverable [{ title, link?, outcome?, note? }]; null = chưa nhập.
+  deliverables   Json?
+  strengths      String?
+  weaknesses     String?
+  comment        String?
+  recommendation ProbationOutcome?
+  submittedAt    DateTime?         @map("submitted_at")
+
+  // HR quyết định
+  decidedById         String?          @map("decided_by_id")
+  decision            ProbationOutcome?
+  decisionNote        String?          @map("decision_note")
+  decidedAt           DateTime?        @map("decided_at")
+  newProbationEndDate DateTime?        @map("new_probation_end_date") // chỉ khi EXTEND
+
+  // snapshot ngày hết TV tại lúc tạo (hiển thị/audit)
+  probationEndDateAtCreate DateTime? @map("probation_end_date_at_create")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee  Employee  @relation("EmployeeProbationReviews", fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewer  Employee? @relation("ProbationReviewer", fields: [reviewerId], references: [id])
+  decidedBy Employee? @relation("ProbationDecider", fields: [decidedById], references: [id])
+
+  @@index([tenantId, status])
+  @@index([employeeId])
+  @@map("probation_reviews")
+}
+
+// SPEC-032: bài hướng dẫn đánh giá thử việc cho manager, HR soạn theo năm áp dụng.
+// Một năm có thể có nhiều bài; xem cần probation:view, ghi cần probation:configure.
+model ProbationGuideline {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  year      Int
+  // 'vi' | 'en' — tab Hướng dẫn lọc theo ngôn ngữ UI đang chọn (SPEC-032 §2c).
+  language  String   @default("vi")
+  title     String
+  content   String   @db.Text
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, year])
+  @@map("probation_guidelines")
+}
+
+// Loại tài sản, cấu hình theo từng tenant (Laptop, Chuột, Bàn ghế…).
+model AssetCategory {
+  id          String   @id @default(cuid())
+  tenantId    String   @map("tenant_id")
+  name        String
+  code        String // mã ngắn, ví dụ "LAPTOP"
+  description String?
+  icon        String? // tên Lucide icon (tùy chọn)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  assets Asset[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@map("asset_categories")
+}
+
+model Asset {
+  id               String          @id @default(cuid())
+  tenantId         String          @map("tenant_id")
+  categoryId       String          @map("category_id")
+  assetCode        String          @map("asset_code")
+  name             String
+  serialNumber     String?         @map("serial_number")
+  brand            String?
+  model            String?
+  status           AssetStatus     @default(AVAILABLE)
+  condition        AssetCondition?
+  purchaseDate     DateTime?       @map("purchase_date")
+  purchaseCost     Decimal?        @map("purchase_cost") @db.Decimal(14, 2) // tham chiếu (VND)
+  warrantyEndDate  DateTime?       @map("warranty_end_date")
+  vendor           String?
+  location         String?
+  note             String?
+  retiredAt        DateTime?       @map("retired_at")
+  retirementReason String?         @map("retirement_reason")
+  retiredById      String?         @map("retired_by_id")
+  createdAt        DateTime        @default(now()) @map("created_at")
+  updatedAt        DateTime        @updatedAt @map("updated_at")
+
+  tenant       Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  category     AssetCategory      @relation(fields: [categoryId], references: [id])
+  assignments  AssetAssignment[]
+  maintenances AssetMaintenance[]
+
+  @@unique([tenantId, assetCode])
+  @@index([tenantId, status])
+  @@index([categoryId])
+  @@map("assets")
+}
+
+model AssetAssignment {
+  id                   String                @id @default(cuid())
+  tenantId             String                @map("tenant_id")
+  assetId              String                @map("asset_id")
+  employeeId           String                @map("employee_id")
+  status               AssetAssignmentStatus @default(ACTIVE)
+  assignedAt           DateTime              @map("assigned_at")
+  assignedById         String                @map("assigned_by_id")
+  conditionOut         AssetCondition?       @map("condition_out")
+  returnedAt           DateTime?             @map("returned_at")
+  returnedById         String?               @map("returned_by_id")
+  conditionIn          AssetCondition?       @map("condition_in")
+  note                 String?
+  // Handover acknowledgement (biên bản bàn giao). signatureImage is a PNG data
+  // URL — personal data, never logged and never returned in list endpoints.
+  ackStatus            AssetAckStatus        @default(PENDING) @map("ack_status")
+  ackMethod            AssetAckMethod?       @map("ack_method")
+  acknowledgedAt       DateTime?             @map("acknowledged_at")
+  acknowledgedByUserId String?               @map("acknowledged_by_user_id")
+  signatureImage       String?               @map("signature_image") @db.Text
+  createdAt            DateTime              @default(now()) @map("created_at")
+  updatedAt            DateTime              @updatedAt @map("updated_at")
+
+  tenant     Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  asset      Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  employee   Employee  @relation("AssetHolder", fields: [employeeId], references: [id])
+  assignedBy Employee  @relation("AssetAssigner", fields: [assignedById], references: [id])
+  returnedBy Employee? @relation("AssetReturner", fields: [returnedById], references: [id])
+
+  @@index([tenantId, assetId])
+  @@index([tenantId, employeeId, status])
+  @@index([tenantId, ackStatus])
+  @@map("asset_assignments")
+}
+
+model AssetMaintenance {
+  id          String    @id @default(cuid())
+  tenantId    String    @map("tenant_id")
+  assetId     String    @map("asset_id")
+  startedAt   DateTime  @map("started_at")
+  completedAt DateTime? @map("completed_at")
+  cost        Decimal?  @db.Decimal(14, 2)
+  vendor      String?
+  description String
+  createdById String    @map("created_by_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  asset     Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  createdBy Employee @relation("MaintenanceCreator", fields: [createdById], references: [id])
+
+  @@index([tenantId, assetId])
+  @@map("asset_maintenances")
+}
+
+// In-app notification addressed to a single recipient (userId). The daily
+// reminder scan is idempotent via @@unique([userId, dedupeKey]): re-running the
+// scan on the same day cannot create a duplicate row. `dedupeKey` embeds the due
+// date (e.g. 'probation_ending:{empId}:{YYYY-MM-DD}') so moving a date produces
+// a fresh reminder for the new milestone without resending the old one.
+model Notification {
+  id         String    @id @default(cuid())
+  tenantId   String    @map("tenant_id")
+  userId     String    @map("user_id")
+  kind       String
+  title      String
+  body       String
+  entityType String?   @map("entity_type")
+  entityId   String?   @map("entity_id")
+  dedupeKey  String    @map("dedupe_key")
+  readAt     DateTime? @map("read_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dedupeKey])
+  @@index([tenantId, userId, readAt])
+  @@map("notifications")
+}
+
+// ===== Recruitment / ATS (SPEC-024) =====
+
+// Pipeline template (cấp tenant) — nguồn để clone JobStage khi tạo Job.
+model PipelineTemplate {
+  id        String  @id @default(cuid())
+  tenantId  String  @map("tenant_id")
+  name      String
+  isDefault Boolean @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  stages PipelineTemplateStage[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@map("pipeline_templates")
+}
+
+model PipelineTemplateStage {
+  id         String    @id @default(cuid())
+  templateId String    @map("template_id")
+  name       String
+  order      Int
+  type       StageType
+
+  template PipelineTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, order])
+  @@map("pipeline_template_stages")
+}
+
+// Job (requisition + posting gộp cho MVP).
+model Job {
+  id             String            @id @default(cuid())
+  tenantId       String            @map("tenant_id")
+  departmentId   String?           @map("department_id")
+  positionId     String?           @map("position_id")
+  title          String
+  description    String?
+  employmentType JobEmploymentType @default(FULL_TIME) @map("employment_type")
+  location       String?
+  headcount      Int               @default(1)
+  status         JobStatus         @default(DRAFT)
+  createdById    String            @map("created_by_id")
+  openedAt       DateTime?         @map("opened_at")
+  closedAt       DateTime?         @map("closed_at")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department Department? @relation(fields: [departmentId], references: [id])
+  position   Position?   @relation(fields: [positionId], references: [id])
+  createdBy  Employee    @relation("JobCreator", fields: [createdById], references: [id])
+
+  stages           JobStage[]
+  applications     Application[]
+  hiringTeam       JobHiringTeam[]
+  bulkImportBatches BulkImportBatch[]
+
+  @@index([tenantId, status])
+  @@index([departmentId])
+  @@index([positionId])
+  @@map("jobs")
+}
+
+// Stage thuộc 1 Job (clone từ template khi tạo Job).
+model JobStage {
+  id    String    @id @default(cuid())
+  jobId String    @map("job_id")
+  name  String
+  order Int
+  type  StageType
+
+  job          Job                       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  applications Application[]
+  fromHistory  ApplicationStageHistory[] @relation("FromStage")
+  toHistory    ApplicationStageHistory[] @relation("ToStage")
+
+  @@unique([jobId, order])
+  @@index([jobId])
+  @@map("job_stages")
+}
+
+model JobHiringTeam {
+  id         String         @id @default(cuid())
+  jobId      String         @map("job_id")
+  employeeId String         @map("employee_id")
+  teamRole   HiringTeamRole @map("team_role")
+
+  job      Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  employee Employee @relation("HiringTeamMember", fields: [employeeId], references: [id])
+
+  @@unique([jobId, employeeId])
+  @@index([employeeId])
+  @@map("job_hiring_team")
+}
+
+// Candidate (con người, chống trùng, PDPL).
+model Candidate {
+  id            String          @id @default(cuid())
+  tenantId      String          @map("tenant_id")
+  fullName      String          @map("full_name")
+  email         String?
+  phone         String? // chuẩn hóa E.164 để dedupe
+  location      String?
+  currentTitle  String?         @map("current_title")
+  totalYearsExp Float?          @map("total_years_exp")
+  source        CandidateSource @default(DIRECT)
+  links         Json? // {linkedin, github, portfolio}
+  avatar        String?
+  dateOfBirth   DateTime?       @map("date_of_birth")
+  gender        Gender?
+  skills        String[] // denormalize để filter nhanh
+  rawCvText     String?         @map("raw_cv_text") // full-text search
+  // PDPL
+  consentGivenAt DateTime?      @map("consent_given_at")
+  consentSource  String?        @map("consent_source")
+  retentionUntil DateTime?      @map("retention_until")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  tenant       Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  attachments  CandidateAttachment[]
+  applications Application[]
+
+  // email nullable — dedupe (email→phone→fuzzy) enforce ở service layer.
+  @@unique([tenantId, email])
+  @@index([tenantId, phone])
+  @@map("candidates")
+}
+
+model CandidateAttachment {
+  id             String         @id @default(cuid())
+  candidateId    String         @map("candidate_id")
+  kind           AttachmentKind @default(CV)
+  fileUrl        String         @map("file_url")
+  fileName       String         @map("file_name")
+  parseStatus    ParseStatus    @default(PENDING) @map("parse_status")
+  parserProvider String?        @map("parser_provider")
+  parsedData     Json?          @map("parsed_data")
+  parsedAt       DateTime?      @map("parsed_at")
+  createdAt      DateTime       @default(now()) @map("created_at")
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId])
+  @@map("candidate_attachments")
+}
+
+// Application (junction Candidate × Job).
+model Application {
+  id              String            @id @default(cuid())
+  tenantId        String            @map("tenant_id")
+  candidateId     String            @map("candidate_id")
+  jobId           String            @map("job_id")
+  currentStageId  String            @map("current_stage_id")
+  status          ApplicationStatus @default(ACTIVE)
+  source          CandidateSource   @default(DIRECT)
+  rejectionReason RejectionReason?  @map("rejection_reason")
+  appliedAt       DateTime          @default(now()) @map("applied_at")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+
+  tenant       Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  candidate    Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job          Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  currentStage JobStage  @relation(fields: [currentStageId], references: [id])
+
+  stageHistory ApplicationStageHistory[]
+  interviews   Interview[]
+  activities   ApplicationActivity[]
+
+  // 1 active application / (candidate, job) — enforce ở service layer.
+  @@index([tenantId, jobId, currentStageId])
+  @@index([candidateId])
+  @@map("applications")
+}
+
+// ⭐ Lịch sử chuyển stage — nền tảng analytics velocity/conversion (build NGAY).
+model ApplicationStageHistory {
+  id            String   @id @default(cuid())
+  applicationId String   @map("application_id")
+  fromStageId   String?  @map("from_stage_id")
+  toStageId     String   @map("to_stage_id")
+  changedById   String   @map("changed_by_id")
+  note          String?
+  changedAt     DateTime @default(now()) @map("changed_at")
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  fromStage   JobStage?   @relation("FromStage", fields: [fromStageId], references: [id])
+  toStage     JobStage    @relation("ToStage", fields: [toStageId], references: [id])
+  changedBy   Employee    @relation("StageChanger", fields: [changedById], references: [id])
+
+  @@index([applicationId])
+  @@map("application_stage_history")
+}
+
+// Interview & Scorecard.
+model Interview {
+  id            String          @id @default(cuid())
+  tenantId      String          @map("tenant_id")
+  applicationId String          @map("application_id")
+  stageId       String?         @map("stage_id")
+  scheduledAt   DateTime        @map("scheduled_at")
+  durationMin   Int             @default(60) @map("duration_min")
+  mode          InterviewMode   @default(ONSITE)
+  location      String?
+  meetingUrl    String?         @map("meeting_url")
+  status        InterviewStatus @default(SCHEDULED)
+  createdById   String          @map("created_by_id")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  tenant      Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  createdBy   Employee    @relation("InterviewCreator", fields: [createdById], references: [id])
+
+  interviewers InterviewInterviewer[]
+  scorecards   Scorecard[]
+
+  @@index([tenantId, scheduledAt])
+  @@index([applicationId])
+  @@map("interviews")
+}
+
+model InterviewInterviewer {
+  interviewId String @map("interview_id")
+  employeeId  String @map("employee_id")
+
+  interview Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  employee  Employee  @relation("InterviewerAssignment", fields: [employeeId], references: [id])
+
+  @@id([interviewId, employeeId])
+  @@index([employeeId])
+  @@map("interview_interviewers")
+}
+
+model Scorecard {
+  id            String           @id @default(cuid())
+  interviewId   String           @map("interview_id")
+  interviewerId String           @map("interviewer_id")
+  overall       ScorecardOverall
+  ratings       Json? // {criterion: 1..4}
+  notes         String?
+  submittedAt   DateTime?        @map("submitted_at")
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  interviewer Employee  @relation("ScorecardInterviewer", fields: [interviewerId], references: [id])
+
+  @@unique([interviewId, interviewerId])
+  @@index([interviewerId])
+  @@map("scorecards")
+}
+
+// Notes / activity feed.
+model ApplicationActivity {
+  id            String   @id @default(cuid())
+  applicationId String   @map("application_id")
+  authorId      String?  @map("author_id") // null = hệ thống
+  type          String // "NOTE" | "STAGE_CHANGED" | "INTERVIEW_SCHEDULED" ...
+  body          String?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  author      Employee?   @relation("ActivityAuthor", fields: [authorId], references: [id])
+
+  @@index([applicationId])
+  @@map("application_activities")
+}
+
+// Bulk CV intake (SPEC-027) — bảng staging. 1 batch = 1 lần upload nhiều CV vào 1 job.
+model BulkImportBatch {
+  id          String           @id @default(cuid())
+  tenantId    String           @map("tenant_id")
+  jobId       String           @map("job_id")
+  createdById String           @map("created_by_id")
+  status      BulkImportStatus @default(DRAFT)
+  totalItems  Int              @default(0) @map("total_items")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  confirmedAt DateTime?        @map("confirmed_at")
+
+  job   Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  items BulkImportItem[]
+
+  @@index([tenantId, jobId])
+  @@map("bulk_import_batches")
+}
+
+// 1 item = 1 CV trong batch. parsedData = output parser; reviewedData = sau khi HR sửa.
+model BulkImportItem {
+  id                     String                   @id @default(cuid())
+  batchId                String                   @map("batch_id")
+  status                 BulkImportItemStatus     @default(PARSING)
+  resolution             BulkImportItemResolution @default(NEW)
+  fileUrl                String                   @map("file_url")
+  fileName               String                   @map("file_name")
+  mimeType               String                   @map("mime_type")
+  rawCvText              String?                  @map("raw_cv_text") @db.Text
+  parseStatus            ParseStatus              @default(PENDING) @map("parse_status")
+  parserProvider         String?                  @map("parser_provider")
+  parsedData             Json?                    @map("parsed_data")
+  reviewedData           Json?                    @map("reviewed_data")
+  duplicateOfCandidateId String?                  @map("duplicate_of_candidate_id")
+  duplicateReason        String?                  @map("duplicate_reason")
+  candidateId            String?                  @map("candidate_id")
+  applicationId          String?                  @map("application_id")
+  failureReason          String?                  @map("failure_reason")
+  createdAt              DateTime                 @default(now()) @map("created_at")
+
+  batch BulkImportBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([batchId])
+  @@map("bulk_import_items")
+}

@@ -1,0 +1,57 @@
+{
+  "list": {
+    "title": "Departments",
+    "subtitle": "Manage the departments in your company",
+    "searchPlaceholder": "Search departments...",
+    "count": "departments"
+  },
+  "table": {
+    "name": "Department name",
+    "description": "Description",
+    "employeeColumn": "Employees",
+    "noDescription": "—"
+  },
+  "form": {
+    "create": "Add department",
+    "edit": "Edit department",
+    "createDescription": "Create a new department to organize employees.",
+    "editDescription": "Update the department information.",
+    "nameLabel": "Department name",
+    "namePlaceholder": "e.g. Human Resources",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Short description of the department's role (optional)",
+    "managerLabel": "Department head",
+    "managerPlaceholder": "Select department head",
+    "noManager": "None",
+    "submitCreate": "Create department"
+  },
+  "validation": {
+    "nameRequired": "Please enter a department name",
+    "nameMax": "Maximum 100 characters",
+    "descriptionMax": "Maximum 500 characters"
+  },
+  "delete": {
+    "title": "Delete department?",
+    "description": "This action cannot be undone. The department \"{{name}}\" will be permanently deleted.",
+    "hasEmployees": "The department \"{{name}}\" currently has {{count}} employees. Please move the employees to another department before deleting."
+  },
+  "empty": {
+    "title": "No departments yet",
+    "description": "Add your first department to start organizing employees"
+  },
+  "errorState": {
+    "title": "Something went wrong",
+    "description": "Unable to load the department list"
+  },
+  "toast": {
+    "created": "Department added",
+    "updated": "Department updated",
+    "deleted": "Department deleted",
+    "createError": "Unable to add department",
+    "createErrorDescription": "The department name may already exist.",
+    "updateError": "Unable to update department",
+    "updateErrorDescription": "Please try again.",
+    "deleteError": "Unable to delete department",
+    "deleteErrorDescription": "Please try again."
+  }
+}

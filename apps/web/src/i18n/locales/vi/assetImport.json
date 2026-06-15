@@ -1,0 +1,90 @@
+{
+  "trigger": "Nhập từ Excel",
+  "title": "Nhập tài sản hàng loạt",
+  "description": "Tải mẫu, điền dữ liệu rồi tải lên để kiểm tra trước khi nhập.",
+  "steps": {
+    "upload": "Tải lên",
+    "review": "Kiểm tra",
+    "done": "Hoàn tất"
+  },
+  "template": {
+    "title": "Bước 1 — Tải mẫu",
+    "hint": "Dùng đúng mẫu để cột và định dạng khớp với hệ thống.",
+    "downloadXlsx": "Tải mẫu Excel (.xlsx)",
+    "downloadCsv": "Tải mẫu CSV",
+    "downloaded": "Đã tải mẫu xuống",
+    "downloadError": "Không tải được mẫu, vui lòng thử lại."
+  },
+  "upload": {
+    "title": "Bước 2 — Tải tệp lên",
+    "choose": "Chọn tệp",
+    "change": "Đổi tệp",
+    "empty": "Chưa chọn tệp nào",
+    "formats": "Hỗ trợ .xlsx và .csv, tối đa 2.000 dòng.",
+    "atomicHint": "Nhập theo nguyên tắc tất-cả-hoặc-không: chỉ khi mọi dòng hợp lệ thì toàn bộ tài sản mới được tạo.",
+    "validate": "Kiểm tra tệp",
+    "validating": "Đang kiểm tra..."
+  },
+  "review": {
+    "title": "Bước 3 — Kết quả kiểm tra",
+    "valid": "Hợp lệ",
+    "errors": "Lỗi",
+    "totalRows": "Tổng số dòng",
+    "errorsTitle": "Danh sách lỗi",
+    "colRow": "Dòng",
+    "colColumn": "Cột",
+    "colMessage": "Mô tả",
+    "mustFix": "Tệp còn lỗi. Vì nhập theo nguyên tắc tất-cả-hoặc-không, hãy sửa hết lỗi rồi tải lại.",
+    "willImport": "Tất cả {{count}} dòng hợp lệ. Sẵn sàng nhập.",
+    "back": "Tải tệp khác",
+    "confirm": "Nhập {{count}} tài sản",
+    "confirming": "Đang nhập..."
+  },
+  "done": {
+    "title": "Hoàn tất nhập dữ liệu",
+    "created": "Tài sản đã tạo",
+    "assignmentsCreated": "Phiếu bàn giao đã tạo",
+    "successHint": "Các tài sản mới đã được tạo. Dòng có người sở hữu kèm phiếu bàn giao đang chờ xác nhận."
+  },
+  "errors": {
+    "fileRequired": "Vui lòng chọn tệp trước khi kiểm tra.",
+    "validateFailed": "Kiểm tra tệp thất bại, vui lòng thử lại.",
+    "confirmFailed": "Nhập thất bại. Có thể một mã tài sản vừa bị trùng — hãy kiểm tra lại."
+  },
+  "columns": {
+    "assetCode": "Mã tài sản",
+    "name": "Tên tài sản",
+    "category": "Mã loại",
+    "serialNumber": "Số serial",
+    "brand": "Hãng",
+    "model": "Model",
+    "condition": "Tình trạng",
+    "purchaseDate": "Ngày mua",
+    "purchaseCost": "Nguyên giá",
+    "warrantyEndDate": "Hết bảo hành",
+    "vendor": "Nhà cung cấp",
+    "location": "Vị trí",
+    "note": "Ghi chú",
+    "owner": "Người sở hữu",
+    "assignedAt": "Ngày cấp phát"
+  },
+  "code": {
+    "IMPORT_FILE_TOO_LARGE": "Tệp quá lớn",
+    "IMPORT_TOO_MANY_ROWS": "Vượt quá số dòng cho phép (tối đa 2.000)",
+    "IMPORT_EMPTY_FILE": "Tệp không có dữ liệu",
+    "IMPORT_UNREADABLE_FILE": "Không đọc được tệp",
+    "IMPORT_MISSING_COLUMNS": "Thiếu cột bắt buộc",
+    "IMPORT_MISSING_REQUIRED": "Thiếu thông tin bắt buộc",
+    "IMPORT_INVALID_ASSET_CODE": "Mã tài sản không hợp lệ",
+    "IMPORT_INVALID_DATE": "Ngày không hợp lệ",
+    "IMPORT_INVALID_ENUM": "Giá trị không hợp lệ",
+    "IMPORT_INVALID_COST": "Nguyên giá không hợp lệ",
+    "IMPORT_ASSET_CODE_DUPLICATE_IN_FILE": "Mã tài sản trùng trong tệp",
+    "IMPORT_OWNER_MISSING_ASSIGNED_DATE": "Có người sở hữu nhưng thiếu ngày cấp phát",
+    "IMPORT_ASSET_CODE_EXISTS": "Mã tài sản đã tồn tại",
+    "IMPORT_CATEGORY_NOT_FOUND": "Không tìm thấy loại tài sản",
+    "IMPORT_OWNER_NOT_FOUND": "Không tìm thấy người sở hữu",
+    "IMPORT_STAGING_NOT_FOUND": "Phiên nhập đã hết hạn, vui lòng kiểm tra lại tệp",
+    "IMPORT_MISSING_IMPORT_ID": "Thiếu mã phiên nhập, vui lòng kiểm tra lại tệp"
+  }
+}

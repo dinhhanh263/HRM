@@ -1,0 +1,88 @@
+{
+  "appName": "HRM System",
+  "groups": {
+    "overview": "Tổng quan",
+    "hr": "Quản lý nhân sự",
+    "operations": "Vận hành",
+    "system": "Hệ thống"
+  },
+  "items": {
+    "dashboard": "Dashboard",
+    "employees": "Nhân viên",
+    "departments": "Phòng ban",
+    "positions": "Chức vụ",
+    "recruitment": "Tuyển dụng",
+    "candidates": "Ứng viên",
+    "myInterviews": "PV của tôi",
+    "timesheet": "Chấm công",
+    "leave": "Nghỉ phép",
+    "leaveBalances": "Số dư phép",
+    "probation": "Thử việc",
+    "payroll": "Lương",
+    "assets": "Tài sản",
+    "roles": "Vai trò & quyền",
+    "timesheetSettings": "Cài đặt chấm công",
+    "assetSettings": "Loại tài sản",
+    "settings": "Cài đặt",
+    "probationSelf": "Tự đánh giá"
+  },
+  "titles": {
+    "dashboard": "Dashboard",
+    "employees": "Quản lý nhân viên",
+    "employeeNew": "Thêm nhân viên",
+    "departments": "Phòng ban",
+    "positions": "Chức vụ",
+    "recruitment": "Tuyển dụng",
+    "candidates": "Ứng viên",
+    "timesheet": "Chấm công",
+    "leave": "Nghỉ phép",
+    "leaveBalances": "Số dư phép toàn công ty",
+    "probation": "Đánh giá thử việc",
+    "payroll": "Lương",
+    "assets": "Tài sản",
+    "timesheetSettings": "Cài đặt chấm công",
+    "assetSettings": "Loại tài sản",
+    "settings": "Cài đặt"
+  },
+  "sidebar": {
+    "collapse": "Thu gọn",
+    "expandAria": "Mở rộng thanh bên",
+    "collapseAria": "Thu gọn thanh bên",
+    "closeMenu": "Đóng menu"
+  },
+  "header": {
+    "home": "Trang chủ",
+    "openMenu": "Mở menu",
+    "notifications": "Thông báo",
+    "preferences": "Tùy chọn hiển thị"
+  },
+  "userMenu": {
+    "profile": "Hồ sơ cá nhân",
+    "account": "Cài đặt tài khoản",
+    "logout": "Đăng xuất"
+  },
+  "preferences": {
+    "language": "Ngôn ngữ",
+    "themeColor": "Chủ đề màu",
+    "appearance": "Giao diện",
+    "light": "Sáng",
+    "dark": "Tối"
+  },
+  "comingSoon": "{{feature}} (Sắp ra mắt)",
+  "commandPalette": {
+    "title": "Bảng lệnh",
+    "placeholder": "Tìm trang hoặc hành động...",
+    "empty": "Không có kết quả",
+    "trigger": "Tìm kiếm nhanh",
+    "groups": {
+      "actions": "Hành động",
+      "navigation": "Điều hướng"
+    },
+    "actions": {
+      "createJob": "Tạo tin tuyển dụng",
+      "addCandidate": "Thêm ứng viên",
+      "findCandidates": "Tìm ứng viên",
+      "myInterviews": "PV của tôi"
+    }
+  }
+}

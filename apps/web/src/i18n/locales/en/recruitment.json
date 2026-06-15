@@ -1,0 +1,678 @@
+{
+  "page": {
+    "title": "Recruitment",
+    "subtitle": "Manage jobs, candidates and the hiring pipeline"
+  },
+  "status": {
+    "checking": "Checking module connection...",
+    "ok": "Recruitment module is ready",
+    "error": "Could not reach the recruitment module"
+  },
+  "empty": {
+    "title": "Feature under construction",
+    "description": "Screens for jobs, candidates, pipeline and interviews will appear here soon."
+  },
+  "pipeline": {
+    "board": {
+      "moveStage": "Move stage",
+      "actionsMenu": "Application actions",
+      "disposition": "Close application",
+      "moveToast": "Moved {{name}} to {{stage}}",
+      "moveError": "Could not move stage, please try again",
+      "loadError": "Could not load candidates",
+      "emptyStage": "No candidates",
+      "actions": {
+        "hire": "Hire candidate",
+        "reject": "Reject",
+        "withdraw": "Withdraw"
+      },
+      "rejectToast": "Rejected {{name}}",
+      "hireToast": "Hired {{name}}",
+      "withdrawToast": "Withdrew {{name}}'s application",
+      "dispositionError": "Action failed, please try again",
+      "offerGateTooltip": "Requires at least 1 completed interview and 1 submitted scorecard before moving to Offer",
+      "offerForceTooltip": "Gate not met — forced move requires a reason",
+      "dragHandle": "Drag to move {{name}}'s application",
+      "dropBlocked": "Can't move this candidate to this column"
+    },
+    "forceMoveDialog": {
+      "title": "Move past the gate?",
+      "description": "Move {{name}} to \"{{stage}}\" even though the gate is not met (a completed interview and a submitted scorecard are required).",
+      "warning": "This overrides the policy. Your reason is recorded in the application history for audit.",
+      "reasonLabel": "Override reason",
+      "reasonPlaceholder": "Enter the reason for moving before the gate is met",
+      "confirm": "Move anyway"
+    },
+    "rejectDialog": {
+      "title": "Reject candidate?",
+      "description": "Reject {{name}}'s application. It will be closed and stay at its current stage.",
+      "reasonLabel": "Rejection reason",
+      "reasonPlaceholder": "Select a reason",
+      "noteLabel": "Note",
+      "notePlaceholder": "Add a note (optional)",
+      "confirm": "Reject"
+    },
+    "hireDialog": {
+      "title": "Hire this candidate?",
+      "description": "Confirm hiring {{name}}. The application moves to the \"Hired\" stage and is closed.",
+      "confirm": "Hire"
+    },
+    "withdrawDialog": {
+      "title": "Withdraw application?",
+      "description": "Mark {{name}} as withdrawn from the process. The application will be closed and stay at its current stage.",
+      "confirm": "Withdraw"
+    },
+    "sectionTitle": "Hiring pipelines",
+    "sectionSubtitle": "Reusable pipeline templates for your jobs. Each job copies the stages from a template when it is created.",
+    "create": "New pipeline",
+    "defaultBadge": "Default",
+    "stagesCount": "{{count}} stages",
+    "setDefault": "Set as default",
+    "edit": "Edit",
+    "delete": "Delete",
+    "empty": {
+      "title": "No pipelines yet",
+      "description": "Create your first hiring pipeline to start defining stages."
+    },
+    "loadError": "Could not load pipelines",
+    "toast": {
+      "created": "Pipeline created",
+      "updated": "Pipeline updated",
+      "deleted": "Pipeline deleted",
+      "defaultSet": "Default pipeline updated",
+      "error": "Something went wrong, please try again"
+    },
+    "deleteDialog": {
+      "title": "Delete this pipeline?",
+      "description": "This action cannot be undone. The pipeline template will be permanently removed."
+    },
+    "form": {
+      "createTitle": "Create hiring pipeline",
+      "editTitle": "Edit pipeline",
+      "createDescription": "Define the stages in this hiring pipeline.",
+      "editDescription": "Update the name and stages of this pipeline.",
+      "nameLabel": "Pipeline name",
+      "namePlaceholder": "e.g. Engineering pipeline",
+      "isDefaultLabel": "Set as default pipeline",
+      "stagesLabel": "Stages",
+      "stageNamePlaceholder": "Stage name",
+      "addStage": "Add stage",
+      "removeStage": "Remove stage",
+      "submitCreate": "Create pipeline",
+      "hint": "A pipeline must include at least the \"Hired\" (HIRED) and \"Rejected\" (REJECTED) stages."
+    },
+    "defaultStages": {
+      "sourced": "New applicants",
+      "screen": "Resume screen",
+      "interview": "Interview",
+      "hired": "Hired",
+      "rejected": "Rejected"
+    },
+    "stageType": {
+      "SOURCED": "Sourced",
+      "SCREEN": "Screening",
+      "ASSESSMENT": "Assessment",
+      "INTERVIEW": "Interview",
+      "OFFER": "Offer",
+      "HIRED": "Hired",
+      "REJECTED": "Rejected"
+    },
+    "validation": {
+      "nameRequired": "Please enter a pipeline name",
+      "nameMax": "Pipeline name must be at most 100 characters",
+      "stageNameRequired": "Please enter a stage name",
+      "minStages": "At least 2 stages are required",
+      "needHired": "Pipeline must include a \"Hired\" (HIRED) stage",
+      "needRejected": "Pipeline must include a \"Rejected\" (REJECTED) stage"
+    }
+  },
+  "activity": {
+    "title": "Activity",
+    "empty": "No activity yet",
+    "loadError": "Failed to load activity history",
+    "system": "System",
+    "openDetail": "View {{name}}'s application",
+    "event": {
+      "APPLIED": "added the candidate to the job",
+      "STAGE_CHANGED": "moved the stage",
+      "NOTE": "added a note",
+      "INTERVIEW_SCHEDULED": "scheduled an interview",
+      "REJECTED": "rejected the application",
+      "HIRED": "hired the candidate",
+      "WITHDRAWN": "withdrew the application"
+    },
+    "note": {
+      "label": "Note content",
+      "placeholder": "Add an internal note about this candidate...",
+      "submit": "Post note",
+      "error": "Failed to post the note, please try again"
+    }
+  },
+  "interview": {
+    "title": "Interviews",
+    "schedule": "Schedule",
+    "empty": "No interviews scheduled yet",
+    "loadError": "Failed to load interviews",
+    "changeStatus": "Change interview status",
+    "joinLink": "Join meeting",
+    "interviewersLabel": "Interviewers",
+    "mode": {
+      "ONSITE": "On-site",
+      "VIDEO": "Video",
+      "PHONE": "Phone"
+    },
+    "status": {
+      "SCHEDULED": "Scheduled",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled",
+      "NO_SHOW": "No show"
+    },
+    "setStatus": {
+      "COMPLETED": "Mark as completed",
+      "CANCELLED": "Cancel interview",
+      "NO_SHOW": "Mark as no-show"
+    },
+    "form": {
+      "scheduledAt": "Date & time",
+      "durationMin": "Duration (min)",
+      "mode": "Mode",
+      "location": "Location",
+      "locationPlaceholder": "e.g. Meeting room 3, HN office",
+      "meetingUrl": "Meeting link",
+      "meetingUrlPlaceholder": "https://meet.google.com/...",
+      "interviewers": "Interviewers",
+      "interviewerSearch": "Search employees by name...",
+      "removeInterviewer": "Remove {{name}}",
+      "submit": "Schedule"
+    },
+    "toast": {
+      "scheduled": "Interview scheduled",
+      "statusUpdated": "Interview status updated",
+      "error": "Something went wrong, please try again"
+    },
+    "mine": {
+      "title": "My interviews",
+      "subtitle": "Interviews you have been assigned to conduct",
+      "empty": "You have not been assigned to any interviews",
+      "loadError": "Failed to load interviews",
+      "viewCandidate": "View candidate profile",
+      "tabs": {
+        "upcoming": "Upcoming",
+        "pending": "Awaiting evaluation",
+        "reviewed": "Evaluated"
+      },
+      "upcomingEmpty": "No upcoming interviews",
+      "pendingEmpty": "No interviews awaiting evaluation",
+      "reviewedEmpty": "You haven't evaluated any interviews yet",
+      "scored": "Evaluated",
+      "enterScorecard": "Enter evaluation",
+      "editScorecard": "Edit evaluation",
+      "closeScorecard": "Close"
+    }
+  },
+  "scorecard": {
+    "title": "Interview scorecard",
+    "loadError": "Failed to load scorecards",
+    "progress": "{{submitted}}/{{total}} scored",
+    "overall": {
+      "label": "Hire recommendation",
+      "STRONG_NO": "Strong no",
+      "NO": "No",
+      "YES": "Yes",
+      "STRONG_YES": "Strong yes"
+    },
+    "criteria": {
+      "label": "Evaluation criteria",
+      "TECHNICAL": "Technical",
+      "COMMUNICATION": "Communication",
+      "PROBLEM_SOLVING": "Problem solving",
+      "CULTURE_FIT": "Culture fit"
+    },
+    "ratingScale": "1 = Poor · 4 = Excellent",
+    "notes": {
+      "label": "Notes",
+      "placeholder": "Additional notes about the candidate (optional)"
+    },
+    "submit": "Submit scorecard",
+    "resubmit": "Update scorecard",
+    "edit": "Edit my scorecard",
+    "mineTitle": "My scorecard",
+    "othersTitle": "Other panelists' scorecards",
+    "notSubmitted": "Not scored yet",
+    "noPeek": "You must submit your own scorecard before viewing others' (bias prevention).",
+    "emptyForViewer": "No scorecards submitted yet.",
+    "averageLabel": "Average score",
+    "submittedAt": "Submitted {{when}}",
+    "toast": {
+      "submitted": "Scorecard submitted",
+      "error": "Something went wrong, please try again"
+    }
+  },
+  "job": {
+    "status": {
+      "DRAFT": "Draft",
+      "OPEN": "Open",
+      "ON_HOLD": "On hold",
+      "CLOSED": "Closed",
+      "CANCELLED": "Cancelled"
+    },
+    "employmentType": {
+      "FULL_TIME": "Full-time",
+      "PART_TIME": "Part-time",
+      "CONTRACT": "Contract",
+      "INTERN": "Intern"
+    },
+    "list": {
+      "title": "Job postings",
+      "subtitle": "Manage open roles and their application pipelines",
+      "searchPlaceholder": "Search by job title...",
+      "count": "job postings",
+      "loadError": "Could not load job postings",
+      "managePipelines": "Manage pipelines",
+      "create": "New job",
+      "stageCount": "{{count}} stages",
+      "headcount": "{{count}} openings",
+      "activeApplications": "{{count}} applications",
+      "noDepartment": "No department"
+    },
+    "filters": {
+      "allStatuses": "All statuses",
+      "allDepartments": "All departments"
+    },
+    "empty": {
+      "title": "No job postings yet",
+      "description": "Create your first job posting to start managing applications.",
+      "noResultTitle": "No matching jobs",
+      "noResultDescription": "Try changing your search or filters."
+    },
+    "actions": {
+      "edit": "Edit",
+      "open": "Open role",
+      "hold": "Put on hold",
+      "close": "Close",
+      "reopen": "Reopen",
+      "cancel": "Cancel"
+    },
+    "toast": {
+      "created": "Job posting created",
+      "updated": "Job posting updated",
+      "statusChanged": "Job status updated",
+      "error": "Something went wrong, please try again"
+    },
+    "form": {
+      "createTitle": "Create job posting",
+      "editTitle": "Edit job posting",
+      "createDescription": "Enter the role details and choose an application pipeline.",
+      "editDescription": "Update the job posting details.",
+      "titleLabel": "Job title",
+      "titlePlaceholder": "e.g. Senior Backend Engineer",
+      "departmentLabel": "Department",
+      "departmentPlaceholder": "Select a department",
+      "positionLabel": "Position",
+      "positionPlaceholder": "Select a position",
+      "noneOption": "None",
+      "employmentTypeLabel": "Employment type",
+      "headcountLabel": "Openings",
+      "locationLabel": "Location",
+      "locationPlaceholder": "e.g. Hanoi / Remote",
+      "descriptionLabel": "Job description",
+      "descriptionPlaceholder": "Describe responsibilities, requirements and benefits...",
+      "pipelineLabel": "Hiring pipeline",
+      "pipelinePlaceholder": "Select a pipeline",
+      "pipelineHint": "The pipeline stages are copied into the job when it is created and stay unchanged when the template is later edited.",
+      "statusLabel": "Initial status",
+      "submitCreate": "Create job"
+    },
+    "validation": {
+      "titleRequired": "Please enter a job title",
+      "titleMax": "Job title must be at most 150 characters",
+      "headcountMin": "Openings must be at least 1",
+      "pipelineRequired": "Please select a hiring pipeline"
+    },
+    "detail": {
+      "backToList": "Job postings",
+      "loadError": "Could not load the job posting",
+      "notFound": "Job posting not found",
+      "createdAt": "Created {{date}}",
+      "openings": "{{count}} openings",
+      "applications": "{{count}} active applications",
+      "tabs": {
+        "pipeline": "Pipeline",
+        "config": "Configuration"
+      }
+    },
+    "stageEditor": {
+      "title": "Application pipeline",
+      "subtitle": "Reorder, rename or add stages for this job only. Changes do not affect the original template.",
+      "edit": "Edit",
+      "save": "Save changes",
+      "cancel": "Cancel",
+      "addStage": "Add stage",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "remove": "Remove stage",
+      "terminalHint": "The \"Hired\" and \"Rejected\" stages are always kept.",
+      "saved": "Pipeline updated",
+      "errorHasApplications": "Cannot remove a stage that has applications",
+      "error": "Something went wrong, please try again",
+      "validation": {
+        "minStages": "At least 2 stages are required",
+        "needHired": "Pipeline must include a \"Hired\" (HIRED) stage",
+        "needRejected": "Pipeline must include a \"Rejected\" (REJECTED) stage",
+        "stageNameRequired": "Please enter a stage name"
+      }
+    },
+    "hiringTeam": {
+      "title": "Hiring team",
+      "subtitle": "People involved in hiring for this role.",
+      "add": "Add member",
+      "empty": "No one on the hiring team yet.",
+      "remove": "Remove from team",
+      "noDepartment": "No department",
+      "toast": {
+        "added": "Member added",
+        "updated": "Role updated",
+        "removed": "Member removed",
+        "error": "Something went wrong, please try again",
+        "duplicate": "This member is already on the hiring team"
+      },
+      "removeDialog": {
+        "title": "Remove this member?",
+        "description": "The member will be removed from this job's hiring team."
+      },
+      "form": {
+        "title": "Add member",
+        "description": "Pick an employee and their role on the hiring team.",
+        "employeeLabel": "Employee",
+        "employeePlaceholder": "Search and select an employee",
+        "roleLabel": "Role",
+        "submit": "Add to team"
+      },
+      "role": {
+        "RECRUITER": "Recruiter",
+        "HIRING_MANAGER": "Hiring manager",
+        "INTERVIEWER": "Interviewer",
+        "COORDINATOR": "Coordinator"
+      }
+    }
+  },
+  "candidate": {
+    "source": {
+      "CAREER_SITE": "Career site",
+      "JOB_BOARD": "Job board",
+      "REFERRAL": "Referral",
+      "SOURCED": "Sourced",
+      "AGENCY": "Agency",
+      "EVENT": "Event",
+      "DIRECT": "Direct"
+    },
+    "gender": {
+      "MALE": "Male",
+      "FEMALE": "Female",
+      "OTHER": "Other"
+    },
+    "list": {
+      "title": "Candidates",
+      "subtitle": "A shared talent pool across all your job postings",
+      "searchPlaceholder": "Search by name, email, phone...",
+      "create": "Add candidate",
+      "count": "candidates",
+      "loadError": "Could not load candidates",
+      "pagination": {
+        "showing": "Showing",
+        "of": "of",
+        "suffix": "candidates",
+        "prev": "Prev",
+        "next": "Next"
+      }
+    },
+    "filters": {
+      "allSources": "All sources",
+      "skillsPlaceholder": "Filter by skill…",
+      "anyExp": "Any experience",
+      "minExp": "{{count}}+ years exp"
+    },
+    "table": {
+      "name": "Candidate",
+      "currentTitle": "Current title",
+      "source": "Source",
+      "exp": "Experience",
+      "noContact": "No contact",
+      "years": "{{count}} yrs"
+    },
+    "empty": {
+      "title": "No candidates yet",
+      "description": "Add your first candidate to start building your talent pool.",
+      "noResultTitle": "No matching candidates",
+      "noResultDescription": "Try changing your search or filters."
+    },
+    "toast": {
+      "created": "Candidate added",
+      "updated": "Candidate updated",
+      "error": "Something went wrong, please try again"
+    },
+    "form": {
+      "createTitle": "Add candidate",
+      "editTitle": "Edit candidate",
+      "createDescription": "Add a candidate to your talent pool.",
+      "editDescription": "Update the candidate's details.",
+      "nameLabel": "Full name",
+      "namePlaceholder": "e.g. John Smith",
+      "emailLabel": "Email",
+      "phoneLabel": "Phone",
+      "currentTitleLabel": "Current title",
+      "currentTitlePlaceholder": "e.g. Backend Engineer",
+      "expLabel": "Years of experience",
+      "sourceLabel": "Source",
+      "skillsLabel": "Skills",
+      "skillsPlaceholder": "e.g. Node.js, React, PostgreSQL",
+      "skillsHint": "Separate skills with commas.",
+      "advancedToggle": "Additional details",
+      "locationLabel": "Location",
+      "locationPlaceholder": "e.g. Hanoi",
+      "dobLabel": "Date of birth",
+      "genderLabel": "Gender",
+      "genderNone": "None",
+      "linkedinLabel": "LinkedIn",
+      "githubLabel": "GitHub",
+      "portfolioLabel": "Portfolio",
+      "consentTitle": "Data processing consent (PDPL)",
+      "consentHint": "Record the lawful basis for storing the candidate's personal data.",
+      "consentGivenAtLabel": "Consent date",
+      "retentionUntilLabel": "Retain until",
+      "consentSourceLabel": "Consent source",
+      "consentSourcePlaceholder": "e.g. Applied via email",
+      "submitCreate": "Add candidate"
+    },
+    "validation": {
+      "nameRequired": "Please enter the full name",
+      "nameMax": "Full name must be at most 150 characters",
+      "emailInvalid": "Invalid email address",
+      "urlInvalid": "Invalid URL"
+    },
+    "duplicate": {
+      "title": "Possible duplicate candidate",
+      "description": "We found candidates with a similar name. Please review before creating a new one.",
+      "forceCreate": "Create anyway"
+    },
+    "detail": {
+      "backToList": "Candidates",
+      "loadError": "Could not load the candidate",
+      "notFound": "Candidate not found",
+      "edit": "Edit",
+      "profileTitle": "Candidate profile",
+      "consentTitle": "Consent & data retention",
+      "tabs": {
+        "profile": "Profile",
+        "applications": "Applications",
+        "documents": "Documents"
+      }
+    },
+    "documents": {
+      "title": "CV & documents",
+      "subtitle": "Upload the candidate's CV (PDF or DOCX). Each upload is kept as a separate version.",
+      "upload": "Upload CV",
+      "download": "Download",
+      "noText": "No text extracted",
+      "reparse": "Re-scan",
+      "parseStatus": {
+        "PENDING": "Queued for scan",
+        "PROCESSING": "Scanning...",
+        "DONE": "Scanned",
+        "FAILED": "Scan failed"
+      },
+      "suggest": {
+        "title": "Suggestions from CV",
+        "subtitle": "The scanner extracted these fields. Review and apply them to the candidate — nothing is overwritten until you confirm.",
+        "apply": "Apply suggestions",
+        "empty": "No fields could be extracted from this CV.",
+        "applied": "Suggestions applied to the candidate",
+        "applyError": "Could not apply the suggestions, please try again",
+        "fields": {
+          "fullName": "Full name",
+          "email": "Email",
+          "phone": "Phone",
+          "currentTitle": "Current title",
+          "totalYearsExp": "Years of experience",
+          "skills": "Skills",
+          "linkedin": "LinkedIn",
+          "github": "GitHub",
+          "portfolio": "Portfolio"
+        }
+      },
+      "empty": {
+        "title": "No documents yet",
+        "description": "Upload a CV to extract its text and build the candidate's profile."
+      },
+      "toast": {
+        "uploaded": "CV uploaded",
+        "uploadedNoText": "CV uploaded, but no text could be extracted (likely a scanned image)",
+        "unsupported": "Only PDF or DOCX files are accepted",
+        "tooLarge": "File exceeds the maximum allowed size",
+        "error": "Could not upload the file, please try again",
+        "downloadError": "Could not download the file",
+        "reparseStarted": "Re-scanning the CV...",
+        "reparseError": "Could not start the scan, please try again"
+      }
+    }
+  },
+  "application": {
+    "status": {
+      "ACTIVE": "Active",
+      "HIRED": "Hired",
+      "REJECTED": "Rejected",
+      "WITHDRAWN": "Withdrawn",
+      "ON_HOLD": "On hold"
+    },
+    "rejectionReason": {
+      "UNDERQUALIFIED": "Underqualified",
+      "OVERQUALIFIED": "Overqualified",
+      "FAILED_ASSESSMENT": "Failed assessment",
+      "CULTURE_FIT": "Culture fit",
+      "COMP_MISMATCH": "Compensation mismatch",
+      "POSITION_FILLED": "Position filled",
+      "CANDIDATE_WITHDREW": "Candidate withdrew",
+      "NO_SHOW": "No show",
+      "OTHER": "Other"
+    },
+    "addToJob": {
+      "trigger": "Add to job",
+      "title": "Add candidate to a job",
+      "description": "Bring this candidate into the hiring pipeline of an open job.",
+      "jobLabel": "Job",
+      "jobPlaceholder": "Select an open job",
+      "noOpenJobs": "No open jobs yet. Open a job posting first.",
+      "sourceLabel": "Application source",
+      "sourceHint": "Defaults to the candidate's source.",
+      "submit": "Add to job",
+      "toastSuccess": "Candidate added to the job",
+      "errors": {
+        "DUPLICATE": "This candidate already has an active application for this job.",
+        "JOB_CLOSED": "The job is cancelled and cannot accept candidates.",
+        "GENERIC": "Could not add to the job, please try again."
+      }
+    },
+    "tab": {
+      "loadError": "Could not load applications",
+      "empty": {
+        "title": "No applications yet",
+        "description": "Add the candidate to an open job to start the pipeline."
+      },
+      "appliedOn": "Applied on {{date}}",
+      "stageLabel": "Current stage"
+    },
+    "detail": {
+      "backToBoard": "Back to pipeline",
+      "openFullPage": "Open full page",
+      "loadError": "Could not load this application",
+      "notFound": "Application not found",
+      "sourceLabel": "Source",
+      "appliedOn": "Applied {{date}}",
+      "viewJob": "View job",
+      "stage": {
+        "title": "Pipeline stage",
+        "current": "Current stage"
+      },
+      "interviews": {
+        "title": "Interviews"
+      },
+      "scorecards": {
+        "title": "Scorecard summary",
+        "empty": "No interviews to score yet.",
+        "progress": "{{submitted}}/{{total}} scored",
+        "averageLabel": "Avg",
+        "noScore": "No scores yet",
+        "redacted": "Submit your own scorecard before you can see others' verdicts"
+      },
+      "activity": {
+        "title": "Activity"
+      }
+    }
+  },
+  "bulkImport": {
+    "trigger": "Bulk import CVs",
+    "title": "Bulk import CVs",
+    "description": "Drag-drop multiple CVs and let the system parse them into candidates for this job.",
+    "upload": {
+      "dropHint": "Drag-drop CVs here or click to select",
+      "accept": "PDF, DOCX supported · Up to {{max}} files · 10MB each",
+      "selectedCount": "{{count}} file(s) selected",
+      "clear": "Clear all",
+      "removeFile": "Remove file",
+      "start": "Upload & parse"
+    },
+    "review": {
+      "parsing": "Parsing {{done}}/{{total}} CVs...",
+      "fullName": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "noName": "No name — the file name will be used on create",
+      "noText": "No text extracted",
+      "parseFailed": "Could not parse this CV",
+      "duplicate": "May match an existing candidate",
+      "resolution": {
+        "NEW": "Create new",
+        "LINK_EXISTING": "Link to existing",
+        "SKIP": "Skip"
+      },
+      "cancel": "Cancel & discard",
+      "confirm": "Confirm & create candidates"
+    },
+    "done": {
+      "title": "Import complete",
+      "created": "Created",
+      "linked": "Linked",
+      "skipped": "Skipped",
+      "failed": "Failed",
+      "close": "Close"
+    },
+    "toast": {
+      "uploadError": "Upload failed, please try again",
+      "tooManyFiles": "At most {{max}} files per upload",
+      "unsupported": "Only PDF or DOCX files are accepted",
+      "tooLarge": "A file exceeds the allowed size",
+      "confirmError": "Confirmation failed, please try again",
+      "confirmSuccess": "Created {{created}} new candidate(s)"
+    }
+  }
+}

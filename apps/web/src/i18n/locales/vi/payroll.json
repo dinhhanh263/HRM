@@ -1,0 +1,240 @@
+{
+  "title": "Bảng lương",
+  "subtitle": "Tính lương hằng tháng, bảo hiểm và thuế thu nhập cá nhân",
+  "comingSoon": "Phiếu lương của bạn sẽ xuất hiện ở đây.",
+  "tabs": {
+    "runs": "Kỳ lương",
+    "salaries": "Bảng lương",
+    "settings": "Cấu hình"
+  },
+  "runs": {
+    "hint": "Mỗi kỳ lương tổng hợp lương, bảo hiểm và thuế của toàn bộ nhân viên được trả.",
+    "period": "Kỳ lương",
+    "create": "Tạo kỳ lương",
+    "status": {
+      "DRAFT": "Nháp",
+      "PENDING_APPROVAL": "Chờ duyệt",
+      "APPROVED": "Đã duyệt",
+      "PAID": "Đã trả",
+      "CANCELLED": "Đã hủy"
+    },
+    "columns": {
+      "period": "Kỳ lương",
+      "status": "Trạng thái",
+      "headcount": "Số NV",
+      "totalGross": "Tổng thu nhập",
+      "totalNet": "Thực nhận"
+    },
+    "actions": {
+      "menu": "Thao tác kỳ lương",
+      "recompute": "Tính lại",
+      "submit": "Gửi duyệt",
+      "approve": "Duyệt",
+      "reject": "Trả về",
+      "mark-paid": "Đánh dấu đã trả",
+      "cancel": "Hủy kỳ lương"
+    },
+    "empty": {
+      "title": "Chưa có kỳ lương nào",
+      "body": "Chọn tháng và tạo kỳ lương đầu tiên để bắt đầu tính lương."
+    },
+    "confirm": {
+      "cancelButton": "Đóng",
+      "recompute": {
+        "title": "Tính lại kỳ lương {{period}}?",
+        "body": "Các dòng lương sẽ được tính lại từ lương, chấm công và cấu hình hiện tại. Chỉ áp dụng cho kỳ lương nháp.",
+        "confirmButton": "Tính lại"
+      },
+      "submit": {
+        "title": "Gửi duyệt kỳ lương {{period}}?",
+        "body": "Kỳ lương sẽ chuyển sang Chờ duyệt và gửi tới người có quyền phê duyệt. Bạn sẽ không thể tính lại cho đến khi được duyệt hoặc trả về.",
+        "confirmButton": "Gửi duyệt"
+      },
+      "approve": {
+        "title": "Duyệt kỳ lương {{period}}?",
+        "body": "Cấu hình lương hiện tại sẽ được đóng băng vào kỳ lương và kỳ lương bị khóa. Không thể chỉnh sửa sau khi duyệt.",
+        "confirmButton": "Duyệt"
+      },
+      "reject": {
+        "title": "Trả về kỳ lương {{period}}?",
+        "body": "Kỳ lương sẽ chuyển về Nháp để bộ phận nhân sự chỉnh sửa và gửi duyệt lại.",
+        "confirmButton": "Trả về"
+      },
+      "mark-paid": {
+        "title": "Đánh dấu đã trả kỳ lương {{period}}?",
+        "body": "Xác nhận đã chi trả kỳ lương này. Trạng thái sẽ chuyển sang Đã trả.",
+        "confirmButton": "Đánh dấu đã trả"
+      },
+      "cancel": {
+        "title": "Hủy kỳ lương {{period}}?",
+        "body": "Kỳ lương sẽ chuyển sang Đã hủy. Bạn có thể tạo lại kỳ lương cho cùng tháng sau đó.",
+        "confirmButton": "Hủy kỳ lương"
+      }
+    },
+    "toast": {
+      "created": "Đã tạo kỳ lương",
+      "createError": "Không thể tạo kỳ lương",
+      "createErrorBody": "Có thể đã tồn tại kỳ lương đã duyệt hoặc đã trả cho tháng này.",
+      "recompute": { "success": "Đã tính lại kỳ lương", "error": "Không thể tính lại kỳ lương" },
+      "submit": { "success": "Đã gửi duyệt kỳ lương", "error": "Không thể gửi duyệt kỳ lương" },
+      "approve": { "success": "Đã duyệt kỳ lương", "error": "Không thể duyệt kỳ lương" },
+      "reject": { "success": "Đã trả về kỳ lương", "error": "Không thể trả về kỳ lương" },
+      "mark-paid": { "success": "Đã đánh dấu đã trả", "error": "Không thể đánh dấu đã trả" },
+      "cancel": { "success": "Đã hủy kỳ lương", "error": "Không thể hủy kỳ lương" }
+    }
+  },
+  "salary": {
+    "searchPlaceholder": "Tìm theo tên hoặc mã NV…",
+    "allDepartments": "Tất cả phòng ban",
+    "notSet": "Chưa thiết lập",
+    "columns": {
+      "employee": "Nhân viên",
+      "department": "Phòng ban",
+      "baseSalary": "Lương cơ bản",
+      "effectiveFrom": "Hiệu lực từ"
+    },
+    "actions": {
+      "setSalary": "Thiết lập lương mới",
+      "history": "Lịch sử lương"
+    },
+    "empty": {
+      "title": "Không tìm thấy nhân viên",
+      "body": "Điều chỉnh tìm kiếm hoặc bộ lọc phòng ban để xem nhân viên."
+    },
+    "form": {
+      "title": "Thiết lập lương",
+      "subtitle": "Mức lương hiệu lực mới cho {{name}} · {{code}}",
+      "baseSalary": "Lương cơ bản (VND)",
+      "effectiveFrom": "Hiệu lực từ",
+      "allowances": "Phụ cấp",
+      "addAllowance": "Thêm phụ cấp",
+      "noAllowances": "Chưa có phụ cấp.",
+      "allowanceName": "Tên phụ cấp",
+      "taxable": "Chịu thuế",
+      "nonTaxable": "Miễn thuế",
+      "removeAllowance": "Xóa phụ cấp",
+      "note": "Ghi chú",
+      "notePlaceholder": "Ghi chú tùy chọn về thay đổi này…",
+      "submit": "Lưu mức lương",
+      "errors": {
+        "baseSalary": "Lương cơ bản phải là số không âm.",
+        "effectiveFrom": "Ngày hiệu lực không hợp lệ.",
+        "allowanceName": "Vui lòng nhập tên phụ cấp.",
+        "allowanceAmount": "Số tiền phụ cấp phải không âm."
+      },
+      "toast": {
+        "saved": "Đã lưu mức lương",
+        "error": "Lưu mức lương thất bại",
+        "tryAgain": "Vui lòng kiểm tra ngày hiệu lực và thử lại."
+      }
+    },
+    "history": {
+      "title": "Lịch sử lương",
+      "subtitle": "Lịch sử lương theo hiệu lực của {{name}} · {{code}}",
+      "current": "Hiện hành",
+      "ongoing": "đang áp dụng",
+      "allowanceTotal": "Phụ cấp",
+      "empty": "Chưa có bản ghi lương nào.",
+      "remove": "Xóa",
+      "confirmTitle": "Xóa bản ghi lương mới nhất?",
+      "confirmBody": "Thao tác này sẽ mở lại bản ghi trước đó. Chỉ có thể xóa bản ghi gần nhất.",
+      "toast": {
+        "removed": "Đã xóa bản ghi lương",
+        "error": "Không thể xóa bản ghi",
+        "headOnly": "Chỉ có thể xóa bản ghi lương gần nhất."
+      }
+    }
+  },
+  "settings": {
+    "title": "Cấu hình lương",
+    "subtitle": "Tỷ lệ bảo hiểm, giảm trừ và biểu thuế áp dụng khi tính lương",
+    "insuranceRates": "Tỷ lệ bảo hiểm (phần người lao động)",
+    "taxBrackets": "Biểu thuế lũy tiến (TNCN)",
+    "taxBracketsHint": "Mỗi bậc tính trên thu nhập tính thuế. Bậc cuối để trống ngưỡng (áp dụng cho phần vượt).",
+    "addBracket": "Thêm bậc",
+    "removeBracket": "Xóa bậc",
+    "uncapped": "Không trần",
+    "insuranceBaseOption": {
+      "BASE_SALARY": "Lương cơ bản",
+      "GROSS": "Tổng thu nhập"
+    },
+    "fields": {
+      "socialInsuranceRate": "BHXH",
+      "healthInsuranceRate": "BHYT",
+      "unemploymentInsuranceRate": "BHTN",
+      "unionFeeRate": "Phí công đoàn",
+      "insuranceBase": "Căn cứ tính bảo hiểm",
+      "insuranceCap": "Trần đóng bảo hiểm (VND)",
+      "payDay": "Ngày trả lương",
+      "personalDeduction": "Giảm trừ bản thân (VND)",
+      "dependentDeduction": "Giảm trừ người phụ thuộc (VND)"
+    },
+    "bracket": {
+      "upTo": "Đến (VND)",
+      "rate": "Thuế suất",
+      "andAbove": "Phần vượt"
+    },
+    "toast": {
+      "saved": "Đã lưu cấu hình lương",
+      "saveError": "Lưu cấu hình thất bại",
+      "tryAgain": "Vui lòng thử lại sau."
+    }
+  },
+  "payslip": {
+    "title": "Phiếu lương",
+    "subtitle": "{{period}} · {{name}}",
+    "netPay": "Thực nhận",
+    "download": "Tải PDF",
+    "downloadError": "Không thể tải phiếu lương",
+    "otNight": "ban đêm",
+    "sections": {
+      "attendance": "Chấm công",
+      "earnings": "Thu nhập",
+      "deductions": "Khấu trừ"
+    },
+    "attendance": {
+      "workingDays": "Ngày công chuẩn",
+      "daysPresent": "Ngày có mặt",
+      "paidLeaveDays": "Nghỉ có lương",
+      "unpaidLeaveDays": "Nghỉ không lương",
+      "daysAbsent": "Ngày vắng",
+      "holidayCount": "Ngày lễ"
+    },
+    "earnings": {
+      "proratedBase": "Lương cơ bản (theo công)",
+      "allowanceTotal": "Phụ cấp",
+      "otPay": "Lương tăng ca",
+      "grossPay": "Tổng thu nhập"
+    },
+    "deductions": {
+      "socialInsurance": "Bảo hiểm xã hội (BHXH)",
+      "healthInsurance": "Bảo hiểm y tế (BHYT)",
+      "unemploymentInsurance": "Bảo hiểm thất nghiệp (BHTN)",
+      "personalIncomeTax": "Thuế thu nhập cá nhân",
+      "unionFee": "Phí công đoàn",
+      "otherDeductions": "Khấu trừ khác",
+      "taxableIncome": "Thu nhập tính thuế"
+    },
+    "otCategory": {
+      "OT_WEEKDAY": "Tăng ca ngày thường",
+      "OT_WEEKEND": "Tăng ca cuối tuần",
+      "OT_HOLIDAY": "Tăng ca ngày lễ"
+    },
+    "mine": {
+      "subtitle": "Phiếu lương hằng tháng của bạn",
+      "hint": "Chạm vào một phiếu lương để xem chi tiết lương, bảo hiểm và thuế.",
+      "netLabel": "Thực nhận",
+      "empty": {
+        "title": "Chưa có phiếu lương",
+        "body": "Phiếu lương sẽ xuất hiện ở đây sau khi kỳ lương được duyệt."
+      }
+    }
+  },
+  "runDetail": {
+    "title": "Kỳ lương {{period}}",
+    "subtitle": "Chạm vào nhân viên để xem chi tiết phiếu lương.",
+    "empty": "Kỳ lương này chưa có dòng phiếu lương nào.",
+    "export": "Xuất PDF",
+    "exportError": "Không thể xuất kỳ lương"
+  }
+}

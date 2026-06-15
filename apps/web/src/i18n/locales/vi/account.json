@@ -1,0 +1,69 @@
+{
+  "title": "Tài khoản của tôi",
+  "subtitle": "Thông tin cá nhân và bảo mật tài khoản",
+  "errorLoad": "Không thể tải thông tin tài khoản. Vui lòng thử lại.",
+  "save": "Lưu thay đổi",
+  "tabs": { "profile": "Hồ sơ", "security": "Bảo mật", "notifications": "Thông báo" },
+  "toast": {
+    "profileSaved": "Đã cập nhật hồ sơ",
+    "passwordChanged": "Đã đổi mật khẩu. Các thiết bị khác đã bị đăng xuất.",
+    "passwordError": "Đổi mật khẩu thất bại",
+    "wrongCurrent": "Mật khẩu hiện tại không đúng",
+    "sessionsRevoked": "Đã đăng xuất {{count}} thiết bị khác",
+    "prefsSaved": "Đã lưu tuỳ chọn thông báo",
+    "error": "Có lỗi xảy ra. Thử lại sau."
+  },
+  "profile": {
+    "title": "Thông tin cá nhân",
+    "managedByHr": "Thông tin do HR quản lý — liên hệ HR nếu cần thay đổi.",
+    "fullName": "Họ và tên",
+    "email": "Email",
+    "role": "Vai trò",
+    "employeeCode": "Mã nhân viên",
+    "department": "Phòng ban",
+    "position": "Chức vụ",
+    "joinDate": "Ngày vào làm",
+    "noEmployee": "Tài khoản này chưa gắn với hồ sơ nhân viên.",
+    "editable": "Thông tin bạn tự cập nhật được",
+    "phone": "Số điện thoại",
+    "avatar": "Ảnh đại diện (URL)",
+    "avatarHint": "Dán link ảnh; để trống để dùng chữ cái viết tắt."
+  },
+  "password": {
+    "title": "Đổi mật khẩu",
+    "description": "Sau khi đổi, mọi thiết bị khác sẽ bị đăng xuất.",
+    "current": "Mật khẩu hiện tại",
+    "new": "Mật khẩu mới",
+    "confirm": "Nhập lại mật khẩu mới",
+    "mismatch": "Mật khẩu nhập lại không khớp",
+    "submit": "Đổi mật khẩu",
+    "ssoOnly": "Công ty đang bắt buộc đăng nhập SSO (Google) — tài khoản này không dùng mật khẩu."
+  },
+  "sessions": {
+    "title": "Phiên đăng nhập",
+    "description": "Các thiết bị đang đăng nhập vào tài khoản của bạn",
+    "device": "Thiết bị",
+    "unknownDevice": "Thiết bị không xác định",
+    "createdAt": "Đăng nhập lúc",
+    "lastUsedAt": "Hoạt động gần nhất",
+    "current": "Phiên này",
+    "revokeOthers": "Đăng xuất các thiết bị khác",
+    "revokeConfirmTitle": "Đăng xuất các thiết bị khác?",
+    "revokeConfirmBody": "Mọi phiên đăng nhập trừ phiên hiện tại sẽ bị thu hồi ngay lập tức.",
+    "confirm": "Đăng xuất",
+    "cancel": "Hủy"
+  },
+  "google": {
+    "title": "Đăng nhập Google",
+    "linked": "Đã liên kết — lần đầu đăng nhập Google: {{date}}",
+    "notLinked": "Chưa liên kết. Đăng nhập bằng Google một lần để liên kết tài khoản."
+  },
+  "notifications": {
+    "title": "Email thông báo",
+    "description": "Chỉ áp dụng cho email — thông báo trong ứng dụng vẫn hiển thị bình thường.",
+    "probation_ending": "Sắp hết hạn thử việc",
+    "probation_endingHint": "Email nhắc khi nhân viên trong phạm vi của bạn sắp hết thử việc.",
+    "contract_expiring": "Sắp hết hạn hợp đồng",
+    "contract_expiringHint": "Email nhắc khi hợp đồng sắp đến ngày hết hạn."
+  }
+}

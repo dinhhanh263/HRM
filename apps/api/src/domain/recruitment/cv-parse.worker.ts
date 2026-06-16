@@ -1,11 +1,10 @@
 import { Worker, type Job } from 'bullmq';
 import { Prisma } from '@prisma/client';
 import { extname } from 'node:path';
-import { readFile } from 'node:fs/promises';
 import { createQueueConnection } from '../../infrastructure/queue/connection.js';
 import { CV_PARSE_QUEUE_NAME } from '../../shared/configs/cv-parse.config.js';
 import { logger } from '../../shared/utils/logger.js';
-import { resolveCvDiskPath } from '../../infrastructure/storage/cv-storage.js';
+import { readCvFile } from '../../infrastructure/storage/cv-storage.js';
 import { candidateAttachmentRepository } from '../repositories/candidate-attachment.repository.js';
 import { bulkImportService } from '../services/bulk-import.service.js';
 import { extractCvText } from './cv-text-extract.js';
@@ -51,10 +50,7 @@ async function handleAttachmentJob(
   await candidateAttachmentRepository.markParsing(attachmentId);
 
   try {
-    const diskPath = resolveCvDiskPath(attachment.fileUrl);
-    if (!diskPath) throw new Error('CV file path could not be resolved');
-
-    const buffer = await readFile(diskPath);
+    const buffer = await readCvFile(attachment.fileUrl);
     const { text, hasText } = await extractCvText(
       buffer,
       mimeFromFileUrl(attachment.fileUrl)

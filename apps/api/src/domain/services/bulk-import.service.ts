@@ -7,7 +7,6 @@ import type {
   ParsedResume,
 } from '@hrm/shared';
 import { extname, basename } from 'node:path';
-import { readFile } from 'node:fs/promises';
 import { AppError, NotFoundError, BadRequestError } from '../../shared/errors/AppError.js';
 import type { UpdateBulkItemInput } from '../../app/validators/recruitment.validator.js';
 import { logger } from '../../shared/utils/logger.js';
@@ -24,7 +23,7 @@ import { candidateAttachmentRepository } from '../repositories/candidate-attachm
 import { normalizePhone } from '../recruitment/candidate-normalize.js';
 import {
   storeCvFile,
-  resolveCvDiskPath,
+  readCvFile,
   deleteCvFile,
 } from '../../infrastructure/storage/cv-storage.js';
 
@@ -221,10 +220,7 @@ export const bulkImportService = {
     await bulkImportRepository.markItemParsing(itemId);
 
     try {
-      const diskPath = resolveCvDiskPath(item.fileUrl);
-      if (!diskPath) throw new Error('CV file path could not be resolved');
-
-      const buffer = await readFile(diskPath);
+      const buffer = await readCvFile(item.fileUrl);
       const { text, hasText } = await extractCvText(buffer, item.mimeType);
 
       let parsed: ParsedResume;

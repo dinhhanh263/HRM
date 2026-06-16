@@ -6,7 +6,7 @@ import { candidateRepository } from '../repositories/candidate.repository.js';
 import { candidateAttachmentRepository } from '../repositories/candidate-attachment.repository.js';
 import { extractCvText } from '../recruitment/cv-text-extract.js';
 import { enqueueCvParse } from '../recruitment/cv-parse.queue.js';
-import { storeCvFile, resolveCvDiskPath } from '../../infrastructure/storage/cv-storage.js';
+import { storeCvFile, createCvReadStream } from '../../infrastructure/storage/cv-storage.js';
 
 interface UploadedCv {
   buffer: Buffer;
@@ -115,7 +115,7 @@ export const candidateAttachmentService = {
     }
   },
 
-  /** Resolve an attachment to a downloadable disk path, tenant-scoped. */
+  /** Open a download stream for an attachment, tenant-scoped. */
   async getDownload(id: string, candidateId: string, tenantId: string) {
     const attachment = await candidateAttachmentRepository.findByIdScoped(
       id,
@@ -123,8 +123,7 @@ export const candidateAttachmentService = {
       tenantId
     );
     if (!attachment) throw new NotFoundError('Attachment not found');
-    const diskPath = resolveCvDiskPath(attachment.fileUrl);
-    if (!diskPath) throw new NotFoundError('Attachment file not found');
-    return { diskPath, fileName: attachment.fileName };
+    const { stream, contentType } = await createCvReadStream(attachment.fileUrl);
+    return { stream, contentType, fileName: attachment.fileName };
   },
 };

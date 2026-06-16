@@ -4,6 +4,7 @@ import { candidateService } from '../../domain/services/candidate.service.js';
 import { candidateAttachmentService } from '../../domain/services/candidate-attachment.service.js';
 import type { CandidateListFilters } from '../../domain/repositories/candidate.repository.js';
 import { BadRequestError } from '../../shared/errors/index.js';
+import { logger } from '../../shared/utils/logger.js';
 
 const CANDIDATE_SOURCES: CandidateSource[] = [
   'CAREER_SITE',
@@ -95,12 +96,29 @@ export const candidateController = {
   },
 
   async downloadAttachment(req: Request, res: Response) {
-    const { diskPath, fileName } = await candidateAttachmentService.getDownload(
+    const { stream, contentType, fileName } = await candidateAttachmentService.getDownload(
       req.params.attachmentId,
       req.params.id,
       req.user!.tenantId
     );
-    res.download(diskPath, fileName);
+    // RFC 6266: ASCII fallback + UTF-8 filename* so Vietnamese names survive.
+    const asciiName = fileName.replace(/[^\x20-\x7E]/g, '_').replace(/"/g, "'");
+    res.setHeader('Content-Type', contentType);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${asciiName}"; filename*=UTF-8''${encodeURIComponent(fileName)}`
+    );
+    // The stream is opened lazily; a backend read error (e.g. object missing)
+    // surfaces here, after the promise resolved, so asyncHandler can't catch it.
+    stream.on('error', (err) => {
+      logger.error(
+        { err, attachmentId: req.params.attachmentId },
+        'CV download stream failed'
+      );
+      if (!res.headersSent) res.status(404).end();
+      else res.destroy();
+    });
+    stream.pipe(res);
   },
 
   async reparseAttachment(req: Request, res: Response) {

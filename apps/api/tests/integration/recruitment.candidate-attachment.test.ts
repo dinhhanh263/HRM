@@ -29,6 +29,15 @@ function makePdf(text: string): Promise<Buffer> {
   });
 }
 
+// supertest parses bodies as text by default; for the binary download we need
+// the raw bytes back to assert the stream returns exactly what was uploaded.
+function binaryParser(res: any, cb: (err: Error | null, body: Buffer) => void) {
+  const chunks: Buffer[] = [];
+  res.on('data', (chunk: Buffer) => chunks.push(Buffer.from(chunk)));
+  res.on('end', () => cb(null, Buffer.concat(chunks)));
+  res.on('error', (err: Error) => cb(err, Buffer.alloc(0)));
+}
+
 async function cleanup(tenantId: string) {
   await db.candidateAttachment.deleteMany({ where: { candidate: { tenantId } } });
   await db.candidate.deleteMany({ where: { tenantId } });
@@ -162,6 +171,28 @@ describe('Recruitment API — candidate CV attachments', () => {
 
     expect(res.status).toBe(200);
     expect(res.headers['content-disposition']).toContain('cv-tuyen-v2.pdf');
+  });
+
+  it('streams back the exact uploaded bytes with the pdf content type', async () => {
+    const original = await makePdf('Round-trip byte-equality check — distinct content.');
+
+    const upload = await request(app)
+      .post(`/api/v1/recruitment/candidates/${candidateId}/attachments`)
+      .set(auth(hrToken))
+      .attach('file', original, 'cv-roundtrip.pdf');
+    expect(upload.status).toBe(201);
+    const attachmentId = upload.body.data.id;
+
+    const res = await request(app)
+      .get(`/api/v1/recruitment/candidates/${candidateId}/attachments/${attachmentId}/download`)
+      .set(auth(hrToken))
+      .buffer(true)
+      .parse(binaryParser);
+
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toContain('application/pdf');
+    // The streamed body must be byte-identical to what was stored.
+    expect(Buffer.compare(res.body, original)).toBe(0);
   });
 
   it('rejects an unsupported file type with 400 CV_UNSUPPORTED_TYPE', async () => {

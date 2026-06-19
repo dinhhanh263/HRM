@@ -3,7 +3,6 @@ import request from 'supertest';
 import ExcelJS from 'exceljs';
 import { app } from '../../src/app.js';
 import { db } from '../../src/infrastructure/database/client.js';
-import { redis } from '../../src/infrastructure/cache/redis.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import {
   seedPermissionCatalog,
@@ -76,7 +75,6 @@ describe('Employee Import API — GET /employees/import/template', () => {
     await db.refreshToken.deleteMany({ where: { user: { tenantId } } });
     await db.user.deleteMany({ where: { tenantId } });
     await db.tenant.deleteMany({ where: { slug: TENANT_SLUG } });
-    await redis.quit();
   });
 
   it('returns 401 without authentication', async () => {

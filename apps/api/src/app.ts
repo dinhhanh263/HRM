@@ -7,6 +7,14 @@ import { errorHandler } from './app/middlewares/error.middleware.js';
 
 const app: Express = express();
 
+// Behind Cloud Run / a load balancer the real client IP is in X-Forwarded-For.
+// express-rate-limit (SPEC-038) keys on req.ip, so without this every request
+// would share the proxy's IP (and the limiter throws on a permissive setting).
+// TRUST_PROXY = number of proxy hops to trust (1 for Cloud Run). Unset locally.
+if (process.env.TRUST_PROXY) {
+  app.set('trust proxy', Number(process.env.TRUST_PROXY) || 1);
+}
+
 // Security middleware
 app.use(helmet());
 app.use(

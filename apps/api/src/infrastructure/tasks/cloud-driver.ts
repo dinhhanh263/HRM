@@ -28,9 +28,13 @@ export function makeCloudDriver(config: CloudDriverConfig): TaskDriver {
             httpMethod: 'POST',
             url: `${config.serviceUrl}${path}`,
             headers: { 'Content-Type': 'application/json', 'X-Tasks-Secret': config.secret },
+            // protobufjs decodes a base64 string into the `bytes` body field.
             body: Buffer.from(JSON.stringify(payload)).toString('base64'),
           },
         },
+        // Cast: the generated protobuf types model httpMethod as a numeric enum
+        // and body as Uint8Array, but the client accepts the string/base64 forms
+        // above at runtime. The cast is on the request shape only.
       } as any);
     },
   };

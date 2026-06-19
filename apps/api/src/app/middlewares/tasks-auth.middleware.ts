@@ -1,12 +1,22 @@
 import { timingSafeEqual } from 'node:crypto';
 import type { Request, Response, NextFunction } from 'express';
 
-/** Constant-time string compare that never throws on length mismatch. */
+/**
+ * Constant-time string compare. Both inputs are padded to the same length before
+ * `timingSafeEqual` so the comparison time does not leak the expected secret's
+ * length (an early length-mismatch return would be a length oracle).
+ */
 function safeEqual(a: string, b: string): boolean {
   const ab = Buffer.from(a);
   const bb = Buffer.from(b);
-  if (ab.length !== bb.length) return false;
-  return timingSafeEqual(ab, bb);
+  const len = Math.max(ab.length, bb.length);
+  const padA = Buffer.alloc(len);
+  const padB = Buffer.alloc(len);
+  ab.copy(padA);
+  bb.copy(padB);
+  // Combine the constant-time content compare with the length check so neither
+  // a content nor a length mismatch can pass.
+  return timingSafeEqual(padA, padB) && ab.length === bb.length;
 }
 
 /**

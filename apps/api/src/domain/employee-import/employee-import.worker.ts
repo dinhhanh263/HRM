@@ -14,9 +14,12 @@ import { logger } from '../../shared/utils/logger.js';
  */
 export async function employeeImportHandler(payload: unknown): Promise<void> {
   const { jobId, importId, tenantId } = payload as ImportJobData;
-  await importJobRepository.markActive(jobId);
 
   try {
+    // Inside the try so a transient failure here still records `failed` rather
+    // than stranding the job in `waiting` (the queue does not retry imports).
+    await importJobRepository.markActive(jobId);
+
     const staged = await getStagedImport(importId, tenantId);
     if (!staged) {
       await importJobRepository.markCompleted(jobId, { total: 0, created: 0, skipped: 0, failed: 0, errors: [] });
@@ -25,7 +28,10 @@ export async function employeeImportHandler(payload: unknown): Promise<void> {
 
     const onProgress = (done: number, total: number): void => {
       if (done === total || done % IMPORT_WORKER_CHUNK_SIZE === 0) {
-        void importJobRepository.setProgress(jobId, { done, total });
+        // Best-effort progress write; never let it crash the import.
+        void importJobRepository.setProgress(jobId, { done, total }).catch((err) => {
+          logger.warn({ err, jobId }, 'failed to persist import progress');
+        });
       }
     };
 

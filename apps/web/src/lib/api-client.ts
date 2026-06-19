@@ -2,8 +2,11 @@ import axios, { type AxiosError } from 'axios';
 import type { ApiError } from '@hrm/shared';
 import { clearSessionMarkers } from './session-persistence';
 
+// Same-origin '/api/v1' by default (proxied to the API in dev, and via the
+// Firebase Hosting rewrite in prod — no CORS). Override with VITE_API_URL at
+// build time for a cross-origin API host.
 export const apiClient = axios.create({
-  baseURL: '/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || '/api/v1',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

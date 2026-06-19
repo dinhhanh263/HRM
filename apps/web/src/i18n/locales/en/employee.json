@@ -54,7 +54,15 @@
       "personal": "Personal Information",
       "personalDescription": "Full name, date of birth, gender and contact details",
       "work": "Work Information",
-      "workDescription": "Department, position and contract type"
+      "workDescription": "Department, position and contract type",
+      "emergency": "Emergency Contact",
+      "emergencyDescription": "Who to contact in an emergency",
+      "banking": "Bank Account",
+      "bankingDescription": "Payroll account details",
+      "taxInsurance": "Tax & Insurance",
+      "taxInsuranceDescription": "Tax code, social insurance and healthcare facility",
+      "other": "Other Information",
+      "otherDescription": "Vehicle registration and additional details"
     },
     "email": "Email",
     "password": "Password",
@@ -64,7 +72,6 @@
     "dateOfBirth": "Date of Birth",
     "gender": "Gender",
     "idNumber": "ID/Citizen Number",
-    "address": "Address",
     "department": "Department",
     "position": "Position",
     "manager": "Direct Manager",
@@ -73,19 +80,39 @@
     "probationEndDate": "Probation End Date",
     "contractType": "Contract Type",
     "dependentsCount": "Dependents",
+    "placeOfBirth": "Place of Birth",
+    "idIssueDate": "ID Issue Date",
+    "idIssuePlace": "ID Issue Place",
+    "personalEmail": "Personal Email",
+    "education": "Education (Major)",
+    "maritalStatus": "Marital Status",
+    "permanentAddress": "Permanent Address",
+    "currentAddress": "Current Address",
+    "emergencyContactName": "Emergency Contact Name",
+    "emergencyContactRelationship": "Relationship",
+    "emergencyContactPhone": "Emergency Phone",
+    "bankAccountNumber": "Account Number",
+    "bankName": "Bank Name",
+    "bankBranch": "Branch",
+    "taxCode": "Tax Code",
+    "socialInsuranceNumber": "Social Insurance No.",
+    "healthcareFacility": "Healthcare Facility",
+    "motorbikeRegistration": "Motorbike Registration",
     "placeholders": {
       "email": "email@company.com",
       "password": "At least 8 characters",
       "fullName": "John Doe",
       "phone": "0901234567",
       "idNumber": "001012345678",
-      "address": "123 ABC Street, XYZ District",
       "selectRole": "Select role",
       "selectGender": "Select gender",
       "selectDepartment": "Select department",
       "selectPosition": "Select position",
       "selectManager": "Select direct manager",
-      "selectContractType": "Select contract type"
+      "selectContractType": "Select contract type",
+      "selectMaritalStatus": "Select status",
+      "personalEmail": "personal@email.com",
+      "motorbikeRegistration": "Honda Wave - Red - 59X1-12345"
     },
     "avatar": {
       "title": "Profile Photo",
@@ -105,6 +132,13 @@
     "genders": {
       "MALE": "Male",
       "FEMALE": "Female",
+      "OTHER": "Other"
+    },
+    "maritalStatuses": {
+      "SINGLE": "Single",
+      "MARRIED": "Married",
+      "DIVORCED": "Divorced",
+      "WIDOWED": "Widowed",
       "OTHER": "Other"
     },
     "contractTypes": {
@@ -148,7 +182,11 @@
     "title": "Employee Details",
     "sections": {
       "personal": "Personal Information",
-      "work": "Work Information"
+      "work": "Work Information",
+      "emergency": "Emergency Contact",
+      "banking": "Bank Account",
+      "taxInsurance": "Tax & Insurance",
+      "other": "Other Information"
     },
     "tabs": {
       "overview": "Overview"
@@ -169,6 +207,24 @@
       "probationEndDate": "Probation End Date",
       "contractType": "Contract Type",
       "dependentsCount": "Dependents",
+      "placeOfBirth": "Place of Birth",
+      "idIssueDate": "ID Issue Date",
+      "idIssuePlace": "ID Issue Place",
+      "personalEmail": "Personal Email",
+      "education": "Education",
+      "maritalStatus": "Marital Status",
+      "permanentAddress": "Permanent Address",
+      "currentAddress": "Current Address",
+      "emergencyContactName": "Contact Name",
+      "emergencyContactRelationship": "Relationship",
+      "emergencyContactPhone": "Emergency Phone",
+      "bankAccountNumber": "Account Number",
+      "bankName": "Bank Name",
+      "bankBranch": "Branch",
+      "taxCode": "Tax Code",
+      "socialInsuranceNumber": "Social Insurance No.",
+      "healthcareFacility": "Healthcare Facility",
+      "motorbikeRegistration": "Motorbike Registration",
       "terminatedAt": "Termination Date",
       "terminationReason": "Termination Reason"
     },

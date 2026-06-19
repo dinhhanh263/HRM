@@ -16,7 +16,55 @@ const avatarInput = z
   );
 
 const genderEnum = z.enum(['MALE', 'FEMALE', 'OTHER']);
+const maritalStatusEnum = z.enum(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED', 'OTHER']);
 const contractTypeEnum = z.enum(['FULL_TIME', 'PART_TIME', 'CONTRACT', 'INTERN', 'PROBATION']);
+
+// Extended profile fields (SPEC-040) — all optional free-text, bounded to keep
+// the request body sane. Shared between create and update; on update they also
+// accept null to clear a value.
+const extendedCreateFields = {
+  placeOfBirth: z.string().max(120).optional(),
+  idIssueDate: dateInput.optional(),
+  idIssuePlace: z.string().max(120).optional(),
+  personalEmail: z.string().email('Invalid email address').max(255).optional(),
+  education: z.string().max(200).optional(),
+  maritalStatus: maritalStatusEnum.optional(),
+  permanentAddress: z.string().max(255).optional(),
+  currentAddress: z.string().max(255).optional(),
+  emergencyContactName: z.string().max(120).optional(),
+  emergencyContactRelationship: z.string().max(60).optional(),
+  emergencyContactPhone: z.string().max(20).optional(),
+  bankAccountNumber: z.string().max(40).optional(),
+  bankName: z.string().max(120).optional(),
+  bankBranch: z.string().max(120).optional(),
+  taxCode: z.string().max(20).optional(),
+  socialInsuranceNumber: z.string().max(20).optional(),
+  healthcareFacility: z.string().max(200).optional(),
+  motorbikeRegistration: z.string().max(120).optional(),
+} as const;
+
+// Update variant: every extended field may also be null (clears the column) and
+// the personal email may be an empty string when the user wipes the input.
+const extendedUpdateFields = {
+  placeOfBirth: z.string().max(120).optional().nullable(),
+  idIssueDate: dateInput.optional().nullable(),
+  idIssuePlace: z.string().max(120).optional().nullable(),
+  personalEmail: z.union([z.string().email().max(255), z.literal('')]).optional().nullable(),
+  education: z.string().max(200).optional().nullable(),
+  maritalStatus: maritalStatusEnum.optional().nullable(),
+  permanentAddress: z.string().max(255).optional().nullable(),
+  currentAddress: z.string().max(255).optional().nullable(),
+  emergencyContactName: z.string().max(120).optional().nullable(),
+  emergencyContactRelationship: z.string().max(60).optional().nullable(),
+  emergencyContactPhone: z.string().max(20).optional().nullable(),
+  bankAccountNumber: z.string().max(40).optional().nullable(),
+  bankName: z.string().max(120).optional().nullable(),
+  bankBranch: z.string().max(120).optional().nullable(),
+  taxCode: z.string().max(20).optional().nullable(),
+  socialInsuranceNumber: z.string().max(20).optional().nullable(),
+  healthcareFacility: z.string().max(200).optional().nullable(),
+  motorbikeRegistration: z.string().max(120).optional().nullable(),
+} as const;
 const roleEnum = z.enum(['EMPLOYEE', 'MANAGER', 'HR_MANAGER', 'PAYROLL_APPROVER']);
 const statusEnum = z.enum(['ACTIVE', 'INACTIVE', 'ON_LEAVE', 'TERMINATED']);
 
@@ -38,6 +86,7 @@ export const createEmployeeSchema = z.object({
   role: roleEnum.optional(),
   roleId: z.string().cuid().optional(),
   password: z.string().min(8, 'Password must be at least 8 characters'),
+  ...extendedCreateFields,
 });
 
 export const updateEmployeeSchema = z.object({
@@ -56,6 +105,7 @@ export const updateEmployeeSchema = z.object({
   avatarUrl: avatarInput.optional().nullable(),
   role: roleEnum.optional(),
   roleId: z.string().cuid().optional(),
+  ...extendedUpdateFields,
 });
 
 export const employeeQuerySchema = z.object({

@@ -19,6 +19,24 @@ function makeRow(rowNumber: number, overrides: Partial<ParsedImportRow> = {}): P
     contractType: '',
     dependentsCount: '',
     role: '',
+    placeOfBirth: '',
+    idIssueDate: '',
+    idIssuePlace: '',
+    personalEmail: '',
+    education: '',
+    maritalStatus: '',
+    permanentAddress: '',
+    currentAddress: '',
+    emergencyContactName: '',
+    emergencyContactRelationship: '',
+    emergencyContactPhone: '',
+    bankAccountNumber: '',
+    bankName: '',
+    bankBranch: '',
+    taxCode: '',
+    socialInsuranceNumber: '',
+    healthcareFacility: '',
+    motorbikeRegistration: '',
     ...overrides,
   };
 }
@@ -146,6 +164,48 @@ describe('employee-import validator — per-row codes', () => {
     it('flags IMPORT_INVALID_NUMBER for a non-integer value', () => {
       const { errors } = validateRows([makeRow(1, { dependentsCount: '2.5' })]);
       expect(codesForRow(errors, 1)).toContain(IMPORT_ERROR_CODES.INVALID_NUMBER);
+    });
+  });
+
+  // SPEC-040 extended profile fields.
+  describe('extended profile fields', () => {
+    it('normalizes a clean row with extended fields (enum uppercased, blanks → null)', () => {
+      const { valid, errors } = validateRows([
+        makeRow(1, {
+          placeOfBirth: 'Hà Nội',
+          idIssueDate: '2018-05-20',
+          personalEmail: 'Personal@Email.com',
+          maritalStatus: 'married',
+          bankName: 'Vietcombank',
+        }),
+      ]);
+      expect(errors).toHaveLength(0);
+      expect(valid[0]).toMatchObject({
+        placeOfBirth: 'Hà Nội',
+        idIssueDate: '2018-05-20',
+        personalEmail: 'personal@email.com', // lowercased
+        maritalStatus: 'MARRIED', // uppercased enum
+        bankName: 'Vietcombank',
+        currentAddress: null, // blank → null
+      });
+    });
+
+    it('flags IMPORT_INVALID_ENUM for an unknown maritalStatus', () => {
+      const { valid, errors } = validateRows([makeRow(1, { maritalStatus: 'COMPLICATED' })]);
+      expect(valid).toHaveLength(0);
+      expect(codesForRow(errors, 1)).toContain(IMPORT_ERROR_CODES.INVALID_ENUM);
+    });
+
+    it('flags IMPORT_INVALID_EMAIL for a malformed personal email', () => {
+      const { valid, errors } = validateRows([makeRow(1, { personalEmail: 'not-an-email' })]);
+      expect(valid).toHaveLength(0);
+      expect(codesForRow(errors, 1)).toContain(IMPORT_ERROR_CODES.INVALID_EMAIL);
+    });
+
+    it('flags IMPORT_INVALID_DATE for a malformed idIssueDate', () => {
+      const { valid, errors } = validateRows([makeRow(1, { idIssueDate: '20-05-2018' })]);
+      expect(valid).toHaveLength(0);
+      expect(codesForRow(errors, 1)).toContain(IMPORT_ERROR_CODES.INVALID_DATE);
     });
   });
 });

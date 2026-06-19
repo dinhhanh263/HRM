@@ -2,7 +2,7 @@
 // worker) and the web import wizard. Error codes are stable machine strings;
 // the web client maps each code to an i18n message (vi/en).
 
-import type { ContractType, Gender } from './employee.js';
+import type { ContractType, Gender, MaritalStatus } from './employee.js';
 
 /** Stable, machine-readable validation/processing error codes. */
 export const IMPORT_ERROR_CODES = {
@@ -46,6 +46,25 @@ export const IMPORT_COLUMNS = [
   'contractType',
   'dependentsCount',
   'role',
+  // Extended profile fields (SPEC-040) — all optional.
+  'placeOfBirth',
+  'idIssueDate',
+  'idIssuePlace',
+  'personalEmail',
+  'education',
+  'maritalStatus',
+  'permanentAddress',
+  'currentAddress',
+  'emergencyContactName',
+  'emergencyContactRelationship',
+  'emergencyContactPhone',
+  'bankAccountNumber',
+  'bankName',
+  'bankBranch',
+  'taxCode',
+  'socialInsuranceNumber',
+  'healthcareFacility',
+  'motorbikeRegistration',
 ] as const;
 
 export type ImportColumn = (typeof IMPORT_COLUMNS)[number];
@@ -75,6 +94,24 @@ export const IMPORT_COLUMN_LABELS: Record<ImportColumn, Record<ImportLang, strin
   contractType: { vi: 'Loại hợp đồng', en: 'Contract type' },
   dependentsCount: { vi: 'Số người phụ thuộc', en: 'Dependents' },
   role: { vi: 'Vai trò', en: 'Role' },
+  placeOfBirth: { vi: 'Nơi sinh', en: 'Place of birth' },
+  idIssueDate: { vi: 'Ngày cấp CCCD', en: 'ID issue date' },
+  idIssuePlace: { vi: 'Nơi cấp CCCD', en: 'ID issue place' },
+  personalEmail: { vi: 'Email cá nhân', en: 'Personal email' },
+  education: { vi: 'Trình độ học vấn', en: 'Education' },
+  maritalStatus: { vi: 'Tình trạng hôn nhân', en: 'Marital status' },
+  permanentAddress: { vi: 'Địa chỉ thường trú', en: 'Permanent address' },
+  currentAddress: { vi: 'Địa chỉ tạm trú', en: 'Current address' },
+  emergencyContactName: { vi: 'Người liên hệ khẩn cấp', en: 'Emergency contact name' },
+  emergencyContactRelationship: { vi: 'Mối quan hệ (khẩn cấp)', en: 'Emergency relationship' },
+  emergencyContactPhone: { vi: 'SĐT khẩn cấp', en: 'Emergency phone' },
+  bankAccountNumber: { vi: 'Số tài khoản', en: 'Bank account number' },
+  bankName: { vi: 'Tên ngân hàng', en: 'Bank name' },
+  bankBranch: { vi: 'Chi nhánh ngân hàng', en: 'Bank branch' },
+  taxCode: { vi: 'Mã số thuế', en: 'Tax code' },
+  socialInsuranceNumber: { vi: 'Mã số BHXH', en: 'Social insurance number' },
+  healthcareFacility: { vi: 'Nơi đăng ký KCB', en: 'Healthcare facility' },
+  motorbikeRegistration: { vi: 'Đăng ký xe máy', en: 'Motorbike registration' },
 };
 
 /** Allowed values for the dropdown (enum) columns in the template. */
@@ -82,6 +119,7 @@ export const IMPORT_ENUM_OPTIONS = {
   gender: ['MALE', 'FEMALE', 'OTHER'],
   contractType: ['FULL_TIME', 'PART_TIME', 'CONTRACT', 'INTERN', 'PROBATION'],
   role: ['EMPLOYEE', 'MANAGER', 'HR_MANAGER'],
+  maritalStatus: ['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED', 'OTHER'],
 } as const satisfies Partial<Record<ImportColumn, readonly string[]>>;
 
 /** A single parsed row, normalized (trimmed; email lowercased). `rowNumber`
@@ -101,6 +139,25 @@ export interface ParsedImportRow {
   contractType: string;
   dependentsCount: string;
   role: string;
+  // Extended profile fields (SPEC-040) — raw cell text, normalized in validation.
+  placeOfBirth: string;
+  idIssueDate: string;
+  idIssuePlace: string;
+  personalEmail: string;
+  education: string;
+  maritalStatus: string;
+  permanentAddress: string;
+  currentAddress: string;
+  emergencyContactName: string;
+  emergencyContactRelationship: string;
+  emergencyContactPhone: string;
+  bankAccountNumber: string;
+  bankName: string;
+  bankBranch: string;
+  taxCode: string;
+  socialInsuranceNumber: string;
+  healthcareFacility: string;
+  motorbikeRegistration: string;
 }
 
 /** A normalized row that has passed per-row validation (typed enums applied). */
@@ -119,6 +176,25 @@ export interface ValidatedImportRow {
   contractType: ContractType;
   dependentsCount: number;
   role: 'EMPLOYEE' | 'MANAGER' | 'HR_MANAGER';
+  // Extended profile fields (SPEC-040) — blanks normalized to null.
+  placeOfBirth: string | null;
+  idIssueDate: string | null;
+  idIssuePlace: string | null;
+  personalEmail: string | null;
+  education: string | null;
+  maritalStatus: MaritalStatus | null;
+  permanentAddress: string | null;
+  currentAddress: string | null;
+  emergencyContactName: string | null;
+  emergencyContactRelationship: string | null;
+  emergencyContactPhone: string | null;
+  bankAccountNumber: string | null;
+  bankName: string | null;
+  bankBranch: string | null;
+  taxCode: string | null;
+  socialInsuranceNumber: string | null;
+  healthcareFacility: string | null;
+  motorbikeRegistration: string | null;
 }
 
 /** One validation problem tied to a row (and optionally a column). */

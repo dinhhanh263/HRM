@@ -64,7 +64,66 @@ export interface Requester {
 // scoping is correct even if it is ever called directly.
 const FULL_DIRECTORY_ROLES = new Set(['SUPER_ADMIN', 'HR_MANAGER']);
 
-export interface CreateEmployeeInput {
+type MaritalStatus = 'SINGLE' | 'MARRIED' | 'DIVORCED' | 'WIDOWED' | 'OTHER';
+
+/**
+ * Extended employee profile fields (SPEC-040). All optional; on update a `null`
+ * (or empty string for free text) clears the stored value.
+ */
+export interface ExtendedEmployeeFields {
+  placeOfBirth?: string | null;
+  idIssueDate?: string | null;
+  idIssuePlace?: string | null;
+  personalEmail?: string | null;
+  education?: string | null;
+  maritalStatus?: MaritalStatus | null;
+  permanentAddress?: string | null;
+  currentAddress?: string | null;
+  emergencyContactName?: string | null;
+  emergencyContactRelationship?: string | null;
+  emergencyContactPhone?: string | null;
+  bankAccountNumber?: string | null;
+  bankName?: string | null;
+  bankBranch?: string | null;
+  taxCode?: string | null;
+  socialInsuranceNumber?: string | null;
+  healthcareFacility?: string | null;
+  motorbikeRegistration?: string | null;
+}
+
+/**
+ * Build the Prisma data slice for the extended profile fields. In `create` mode
+ * blanks become `undefined` (column left at its default); in `update` mode an
+ * empty string or null clears the column while `undefined` leaves it untouched.
+ * The id-issue date is normalised string→Date in both modes.
+ */
+function buildExtendedData(input: ExtendedEmployeeFields, mode: 'create' | 'update') {
+  const text = (v: string | null | undefined) =>
+    mode === 'create' ? v || undefined : v === undefined ? undefined : v === '' ? null : v;
+  return {
+    placeOfBirth: text(input.placeOfBirth),
+    idIssueDate:
+      input.idIssueDate === undefined ? undefined : input.idIssueDate ? new Date(input.idIssueDate) : null,
+    idIssuePlace: text(input.idIssuePlace),
+    personalEmail: text(input.personalEmail),
+    education: text(input.education),
+    maritalStatus: input.maritalStatus === undefined ? undefined : input.maritalStatus || null,
+    permanentAddress: text(input.permanentAddress),
+    currentAddress: text(input.currentAddress),
+    emergencyContactName: text(input.emergencyContactName),
+    emergencyContactRelationship: text(input.emergencyContactRelationship),
+    emergencyContactPhone: text(input.emergencyContactPhone),
+    bankAccountNumber: text(input.bankAccountNumber),
+    bankName: text(input.bankName),
+    bankBranch: text(input.bankBranch),
+    taxCode: text(input.taxCode),
+    socialInsuranceNumber: text(input.socialInsuranceNumber),
+    healthcareFacility: text(input.healthcareFacility),
+    motorbikeRegistration: text(input.motorbikeRegistration),
+  };
+}
+
+export interface CreateEmployeeInput extends ExtendedEmployeeFields {
   fullName: string;
   dateOfBirth?: string;
   gender?: 'MALE' | 'FEMALE' | 'OTHER';
@@ -84,7 +143,7 @@ export interface CreateEmployeeInput {
   password: string;
 }
 
-export interface UpdateEmployeeInput {
+export interface UpdateEmployeeInput extends ExtendedEmployeeFields {
   fullName?: string;
   dateOfBirth?: string;
   gender?: 'MALE' | 'FEMALE' | 'OTHER';
@@ -280,6 +339,7 @@ export const employeeService = {
           departmentId: input.departmentId,
           positionId: input.positionId,
           managerId: input.managerId,
+          ...buildExtendedData(input, 'create'),
         },
         include: {
           department: { select: { id: true, name: true } },
@@ -401,6 +461,7 @@ export const employeeService = {
           departmentId: input.departmentId === null ? null : input.departmentId,
           positionId: input.positionId === null ? null : input.positionId,
           managerId: input.managerId === null ? null : input.managerId,
+          ...buildExtendedData(input, 'update'),
         },
         include: {
           department: { select: { id: true, name: true } },

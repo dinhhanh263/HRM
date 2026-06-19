@@ -124,7 +124,9 @@ describe('CreateEmployeePage', () => {
       expect(screen.getByPlaceholderText('Nguyễn Văn A')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('0901234567')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('001012345678')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('123 Đường ABC, Quận XYZ')).toBeInTheDocument();
+      // SPEC-040 replaced the single "address" field with permanent/current address
+      // plus extended personal fields; assert one of the new fields renders.
+      expect(screen.getByPlaceholderText('ca.nhan@email.com')).toBeInTheDocument();
     });
 
     it('should render the dependents field (parity with Edit form)', () => {

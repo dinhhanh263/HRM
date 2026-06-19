@@ -1,6 +1,7 @@
 import {
   ContractType,
   Gender,
+  MaritalStatus,
   IMPORT_ERROR_CODES,
   type ImportRowError,
   type ParsedImportRow,
@@ -16,6 +17,7 @@ const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 const GENDER_VALUES = new Set<string>(Object.values(Gender));
 const CONTRACT_VALUES = new Set<string>(Object.values(ContractType));
+const MARITAL_VALUES = new Set<string>(Object.values(MaritalStatus));
 const ROLE_VALUES = new Set<string>(['EMPLOYEE', 'MANAGER', 'HR_MANAGER']);
 
 const DEFAULT_CONTRACT: ContractType = ContractType.FULL_TIME;
@@ -151,6 +153,39 @@ export function validateRows(rows: ParsedImportRow[]): ValidationResult {
       }
     }
 
+    // --- Extended profile fields (SPEC-040) ---
+    // Optional id-issue date: same strict YYYY-MM-DD rule as the other dates.
+    const idIssueDate = row.idIssueDate.trim();
+    if (idIssueDate && !isValidIsoDate(idIssueDate)) {
+      rowErrors.push({
+        row: row.rowNumber,
+        column: 'idIssueDate',
+        code: IMPORT_ERROR_CODES.INVALID_DATE,
+        message: `Invalid date (expected YYYY-MM-DD): ${idIssueDate}`,
+      });
+    }
+    // Optional personal email: validated only when present (it is not the login
+    // email, so it need not be unique).
+    const personalEmail = row.personalEmail.trim().toLowerCase();
+    if (personalEmail && !EMAIL_REGEX.test(personalEmail)) {
+      rowErrors.push({
+        row: row.rowNumber,
+        column: 'personalEmail',
+        code: IMPORT_ERROR_CODES.INVALID_EMAIL,
+        message: `Invalid personal email format: ${personalEmail}`,
+      });
+    }
+    // Optional marital-status enum.
+    const maritalStatus = row.maritalStatus.trim().toUpperCase();
+    if (maritalStatus && !MARITAL_VALUES.has(maritalStatus)) {
+      rowErrors.push({
+        row: row.rowNumber,
+        column: 'maritalStatus',
+        code: IMPORT_ERROR_CODES.INVALID_ENUM,
+        message: `Invalid maritalStatus: ${row.maritalStatus}`,
+      });
+    }
+
     // --- Cross-row: duplicate email within the file ---
     if (email && EMAIL_REGEX.test(email)) {
       const firstRow = emailFirstSeenRow.get(email);
@@ -187,6 +222,24 @@ export function validateRows(rows: ParsedImportRow[]): ValidationResult {
       contractType: contractType ? (contractType as ContractType) : DEFAULT_CONTRACT,
       dependentsCount,
       role: role ? (role as ValidatedImportRow['role']) : DEFAULT_ROLE,
+      placeOfBirth: row.placeOfBirth.trim() || null,
+      idIssueDate: idIssueDate || null,
+      idIssuePlace: row.idIssuePlace.trim() || null,
+      personalEmail: personalEmail || null,
+      education: row.education.trim() || null,
+      maritalStatus: maritalStatus ? (maritalStatus as MaritalStatus) : null,
+      permanentAddress: row.permanentAddress.trim() || null,
+      currentAddress: row.currentAddress.trim() || null,
+      emergencyContactName: row.emergencyContactName.trim() || null,
+      emergencyContactRelationship: row.emergencyContactRelationship.trim() || null,
+      emergencyContactPhone: row.emergencyContactPhone.trim() || null,
+      bankAccountNumber: row.bankAccountNumber.trim() || null,
+      bankName: row.bankName.trim() || null,
+      bankBranch: row.bankBranch.trim() || null,
+      taxCode: row.taxCode.trim() || null,
+      socialInsuranceNumber: row.socialInsuranceNumber.trim() || null,
+      healthcareFacility: row.healthcareFacility.trim() || null,
+      motorbikeRegistration: row.motorbikeRegistration.trim() || null,
     });
   }
 

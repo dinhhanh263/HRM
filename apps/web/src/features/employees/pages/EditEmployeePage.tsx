@@ -79,6 +79,26 @@ export function EditEmployeePage() {
             roleId: data.roleId || undefined,
             // Empty string means the avatar was removed → null clears it.
             avatarUrl: data.avatarUrl || null,
+            // Extended profile fields (SPEC-040). Empty string → null clears the
+            // column; an empty date string would otherwise fail the API validator.
+            placeOfBirth: data.placeOfBirth || null,
+            idIssueDate: data.idIssueDate || null,
+            idIssuePlace: data.idIssuePlace || null,
+            personalEmail: data.personalEmail || null,
+            education: data.education || null,
+            maritalStatus: data.maritalStatus || null,
+            permanentAddress: data.permanentAddress || null,
+            currentAddress: data.currentAddress || null,
+            emergencyContactName: data.emergencyContactName || null,
+            emergencyContactRelationship: data.emergencyContactRelationship || null,
+            emergencyContactPhone: data.emergencyContactPhone || null,
+            bankAccountNumber: data.bankAccountNumber || null,
+            bankName: data.bankName || null,
+            bankBranch: data.bankBranch || null,
+            taxCode: data.taxCode || null,
+            socialInsuranceNumber: data.socialInsuranceNumber || null,
+            healthcareFacility: data.healthcareFacility || null,
+            motorbikeRegistration: data.motorbikeRegistration || null,
           };
           updateMutation.mutate(request, {
             onSuccess: () => {

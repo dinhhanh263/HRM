@@ -164,6 +164,64 @@ describe('Employee API', () => {
       expect(res.body.data.position.name).toBe('Test Position');
     });
 
+    // SPEC-040: extended profile fields must persist on create and round-trip on
+    // update (not silently stripped by the validator).
+    it('persists extended profile fields on create and round-trips them on update', async () => {
+      const createRes = await request(app)
+        .post('/api/v1/employees')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          email: 'extended-fields@test.com',
+          password: 'Employee@123',
+          fullName: 'Extended Fields',
+          contractType: 'FULL_TIME',
+          placeOfBirth: 'Hà Nội',
+          idIssueDate: '2020-01-15',
+          idIssuePlace: 'Cục CSQLHC',
+          personalEmail: 'personal@gmail.com',
+          education: 'Đại học Bách Khoa - CNTT',
+          maritalStatus: 'MARRIED',
+          permanentAddress: '123 Đường A',
+          currentAddress: '456 Đường B',
+          emergencyContactName: 'Nguyễn Thị C',
+          emergencyContactRelationship: 'Vợ',
+          emergencyContactPhone: '0909123456',
+          bankAccountNumber: '0123456789',
+          bankName: 'Vietcombank',
+          bankBranch: 'CN Hà Nội',
+          taxCode: '8765432109',
+          socialInsuranceNumber: 'SI-0001',
+          healthcareFacility: 'BV Bạch Mai',
+          motorbikeRegistration: 'Honda Wave - Đỏ - 29X1-12345',
+        });
+
+      expect(createRes.status).toBe(201);
+      const created = createRes.body.data;
+      expect(created.placeOfBirth).toBe('Hà Nội');
+      expect(created.idIssueDate).toContain('2020-01-15');
+      expect(created.personalEmail).toBe('personal@gmail.com');
+      expect(created.maritalStatus).toBe('MARRIED');
+      expect(created.permanentAddress).toBe('123 Đường A');
+      expect(created.emergencyContactName).toBe('Nguyễn Thị C');
+      expect(created.bankAccountNumber).toBe('0123456789');
+      expect(created.taxCode).toBe('8765432109');
+      expect(created.socialInsuranceNumber).toBe('SI-0001');
+      expect(created.motorbikeRegistration).toBe('Honda Wave - Đỏ - 29X1-12345');
+
+      const updateRes = await request(app)
+        .patch(`/api/v1/employees/${created.id}`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ maritalStatus: 'DIVORCED', bankName: 'Techcombank', personalEmail: null });
+
+      expect(updateRes.status).toBe(200);
+      expect(updateRes.body.data.maritalStatus).toBe('DIVORCED');
+      expect(updateRes.body.data.bankName).toBe('Techcombank');
+      // null clears the column.
+      expect(updateRes.body.data.personalEmail).toBeNull();
+      // Untouched fields are preserved.
+      expect(updateRes.body.data.bankAccountNumber).toBe('0123456789');
+    });
+
     it('should return 409 with EMAIL_EXISTS code if email already exists', async () => {
       const res = await request(app)
         .post('/api/v1/employees')

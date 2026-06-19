@@ -54,7 +54,15 @@
       "personal": "Thông tin cá nhân",
       "personalDescription": "Họ tên, ngày sinh, giới tính và thông tin liên hệ",
       "work": "Thông tin công việc",
-      "workDescription": "Phòng ban, chức vụ và loại hợp đồng"
+      "workDescription": "Phòng ban, chức vụ và loại hợp đồng",
+      "emergency": "Liên hệ khẩn cấp",
+      "emergencyDescription": "Người liên hệ khi khẩn cấp",
+      "banking": "Tài khoản ngân hàng",
+      "bankingDescription": "Thông tin tài khoản nhận lương",
+      "taxInsurance": "Thuế & bảo hiểm",
+      "taxInsuranceDescription": "Mã số thuế, BHXH và nơi khám chữa bệnh",
+      "other": "Thông tin khác",
+      "otherDescription": "Đăng ký xe và thông tin bổ sung"
     },
     "email": "Email",
     "password": "Mật khẩu",
@@ -64,7 +72,6 @@
     "dateOfBirth": "Ngày sinh",
     "gender": "Giới tính",
     "idNumber": "Số CCCD/CMND",
-    "address": "Địa chỉ",
     "department": "Phòng ban",
     "position": "Chức vụ",
     "manager": "Quản lý trực tiếp",
@@ -73,19 +80,39 @@
     "probationEndDate": "Ngày hết thử việc",
     "contractType": "Loại hợp đồng",
     "dependentsCount": "Số người phụ thuộc",
+    "placeOfBirth": "Nơi sinh",
+    "idIssueDate": "Ngày cấp CCCD",
+    "idIssuePlace": "Nơi cấp CCCD",
+    "personalEmail": "Email cá nhân",
+    "education": "Trình độ học vấn (Chuyên ngành)",
+    "maritalStatus": "Tình trạng hôn nhân",
+    "permanentAddress": "Địa chỉ thường trú",
+    "currentAddress": "Địa chỉ tạm trú",
+    "emergencyContactName": "Người liên hệ khẩn cấp",
+    "emergencyContactRelationship": "Mối quan hệ",
+    "emergencyContactPhone": "SĐT khẩn cấp",
+    "bankAccountNumber": "Số tài khoản",
+    "bankName": "Tên ngân hàng",
+    "bankBranch": "Chi nhánh",
+    "taxCode": "Mã số thuế",
+    "socialInsuranceNumber": "Mã số BHXH",
+    "healthcareFacility": "Nơi đăng ký KCB",
+    "motorbikeRegistration": "Đăng ký xe máy",
     "placeholders": {
       "email": "email@company.com",
       "password": "Tối thiểu 8 ký tự",
       "fullName": "Nguyễn Văn A",
       "phone": "0901234567",
       "idNumber": "001012345678",
-      "address": "123 Đường ABC, Quận XYZ",
       "selectRole": "Chọn vai trò",
       "selectGender": "Chọn giới tính",
       "selectDepartment": "Chọn phòng ban",
       "selectPosition": "Chọn chức vụ",
       "selectManager": "Chọn quản lý trực tiếp",
-      "selectContractType": "Chọn loại HĐ"
+      "selectContractType": "Chọn loại HĐ",
+      "selectMaritalStatus": "Chọn tình trạng",
+      "personalEmail": "ca.nhan@email.com",
+      "motorbikeRegistration": "Honda Wave - Đỏ - 59X1-12345"
     },
     "avatar": {
       "title": "Ảnh đại diện",
@@ -105,6 +132,13 @@
     "genders": {
       "MALE": "Nam",
       "FEMALE": "Nữ",
+      "OTHER": "Khác"
+    },
+    "maritalStatuses": {
+      "SINGLE": "Độc thân",
+      "MARRIED": "Đã kết hôn",
+      "DIVORCED": "Ly hôn",
+      "WIDOWED": "Góa",
       "OTHER": "Khác"
     },
     "contractTypes": {
@@ -148,7 +182,11 @@
     "title": "Chi tiết nhân viên",
     "sections": {
       "personal": "Thông tin cá nhân",
-      "work": "Thông tin công việc"
+      "work": "Thông tin công việc",
+      "emergency": "Liên hệ khẩn cấp",
+      "banking": "Tài khoản ngân hàng",
+      "taxInsurance": "Thuế & bảo hiểm",
+      "other": "Thông tin khác"
     },
     "tabs": {
       "overview": "Tổng quan"
@@ -169,6 +207,24 @@
       "probationEndDate": "Ngày hết thử việc",
       "contractType": "Loại hợp đồng",
       "dependentsCount": "Số người phụ thuộc",
+      "placeOfBirth": "Nơi sinh",
+      "idIssueDate": "Ngày cấp CCCD",
+      "idIssuePlace": "Nơi cấp CCCD",
+      "personalEmail": "Email cá nhân",
+      "education": "Trình độ học vấn",
+      "maritalStatus": "Tình trạng hôn nhân",
+      "permanentAddress": "Địa chỉ thường trú",
+      "currentAddress": "Địa chỉ tạm trú",
+      "emergencyContactName": "Người liên hệ",
+      "emergencyContactRelationship": "Mối quan hệ",
+      "emergencyContactPhone": "SĐT khẩn cấp",
+      "bankAccountNumber": "Số tài khoản",
+      "bankName": "Tên ngân hàng",
+      "bankBranch": "Chi nhánh",
+      "taxCode": "Mã số thuế",
+      "socialInsuranceNumber": "Mã số BHXH",
+      "healthcareFacility": "Nơi đăng ký KCB",
+      "motorbikeRegistration": "Đăng ký xe máy",
       "terminatedAt": "Ngày nghỉ việc",
       "terminationReason": "Lý do nghỉ"
     },

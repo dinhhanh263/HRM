@@ -76,7 +76,14 @@ async function loadWorksheet(
 ): Promise<ExcelJS.Worksheet | undefined> {
   const workbook = new ExcelJS.Workbook();
   if (format === 'csv') {
-    return workbook.csv.read(Readable.from(buffer));
+    // Keep every CSV cell as its raw string. ExcelJS's default CSV parser coerces
+    // date-like text into a Date in the server's LOCAL timezone; cellToString then
+    // renders it back via toISOString() (UTC), which rolls the calendar day back in
+    // positive-offset zones (UTC+7: "2024-01-06" -> "2024-01-05"). The validator
+    // already accepts strict YYYY-MM-DD strings, so skipping date coercion entirely
+    // keeps dates timezone-stable. (XLSX is unaffected: ExcelJS stores those cells
+    // as UTC-midnight Dates, which toISOString renders correctly.)
+    return workbook.csv.read(Readable.from(buffer), { map: (datum) => datum });
   }
   await workbook.xlsx.load(buffer as unknown as ArrayBuffer);
   return workbook.worksheets[0];
@@ -169,6 +176,24 @@ export async function parseEmployeeFile(
       contractType: '',
       dependentsCount: '',
       role: '',
+      placeOfBirth: '',
+      idIssueDate: '',
+      idIssuePlace: '',
+      personalEmail: '',
+      education: '',
+      maritalStatus: '',
+      permanentAddress: '',
+      currentAddress: '',
+      emergencyContactName: '',
+      emergencyContactRelationship: '',
+      emergencyContactPhone: '',
+      bankAccountNumber: '',
+      bankName: '',
+      bankBranch: '',
+      taxCode: '',
+      socialInsuranceNumber: '',
+      healthcareFacility: '',
+      motorbikeRegistration: '',
     };
     let hasAnyValue = false;
     for (const [colIndex, key] of columnByIndex) {

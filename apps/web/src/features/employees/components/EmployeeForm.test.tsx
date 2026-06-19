@@ -46,7 +46,7 @@ describe('EmployeeForm', () => {
   it('submits a complete new-employee payload', async () => {
     const onSubmit = vi.fn();
     render(<EmployeeForm onSubmit={onSubmit} onCancel={vi.fn()} />);
-    await userEvent.type(screen.getByLabelText(/Email/i), 'new@company.com');
+    await userEvent.type(screen.getByLabelText(/Email \*/i), 'new@company.com');
     await userEvent.type(screen.getByLabelText(/Mật khẩu/i), 'Abcd1234');
     await userEvent.type(screen.getByLabelText(/Họ và tên/i), 'Nguyen Van A');
     await userEvent.click(screen.getByRole('button', { name: 'Tạo nhân viên' }));
@@ -83,7 +83,7 @@ describe('EmployeeForm', () => {
   it('submits the entered dependentsCount as a number', async () => {
     const onSubmit = vi.fn();
     render(<EmployeeForm onSubmit={onSubmit} onCancel={vi.fn()} />);
-    await userEvent.type(screen.getByLabelText(/Email/i), 'dep@company.com');
+    await userEvent.type(screen.getByLabelText(/Email \*/i), 'dep@company.com');
     await userEvent.type(screen.getByLabelText(/Mật khẩu/i), 'Abcd1234');
     await userEvent.type(screen.getByLabelText(/Họ và tên/i), 'Nguyen Van A');
     const depInput = screen.getByLabelText(/Số người phụ thuộc/i);

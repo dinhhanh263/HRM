@@ -1,14 +1,10 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
-import type { Worker } from 'bullmq';
 import PDFDocument from 'pdfkit';
 import { app } from '../../src/app.js';
 import { db } from '../../src/infrastructure/database/client.js';
-import { redis } from '../../src/infrastructure/cache/redis.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import { seedPermissionCatalog, syncSystemRolesForTenant } from '../../src/domain/rbac/catalog.js';
-import { getCvParseQueue } from '../../src/domain/recruitment/cv-parse.queue.js';
-import { createCvParseWorker } from '../../src/domain/recruitment/cv-parse.worker.js';
 
 const TENANT_SLUG = 'recruitment-cvparse-tenant';
 const HR_EMAIL = 'hr@recruitment-cvparse.com';
@@ -50,7 +46,6 @@ describe('Recruitment API — CV parse worker (hrm.recruitment.cv_parse)', () =>
   let tenantId: string;
   let hrToken: string;
   let candidateId: string;
-  let worker: Worker;
 
   beforeAll(async () => {
     const tenant = await db.tenant.upsert({
@@ -85,17 +80,11 @@ describe('Recruitment API — CV parse worker (hrm.recruitment.cv_parse)', () =>
       data: { tenantId, fullName: 'Trần Thị Bích', source: 'DIRECT' },
     });
     candidateId = candidate.id;
-
-    await getCvParseQueue().obliterate({ force: true });
-    worker = createCvParseWorker();
   });
 
   afterAll(async () => {
-    await worker.close();
-    await getCvParseQueue().close();
     await cleanup(tenantId);
     await db.tenant.delete({ where: { id: tenantId } });
-    await redis.quit();
   });
 
   const auth = (token: string) => ({ Authorization: `Bearer ${token}` });

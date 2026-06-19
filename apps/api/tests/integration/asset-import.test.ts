@@ -2,7 +2,6 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 import { app } from '../../src/app.js';
 import { db } from '../../src/infrastructure/database/client.js';
-import { redis } from '../../src/infrastructure/cache/redis.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import {
   seedPermissionCatalog,
@@ -159,7 +158,6 @@ describe('Asset Import API', () => {
     await cleanup(tenantId);
     await cleanup(otherTenantId);
     await db.tenant.deleteMany({ where: { slug: { in: [TENANT_SLUG, OTHER_SLUG] } } });
-    await redis.quit();
   });
 
   // ── RBAC ────────────────────────────────────────────────────────────────

@@ -3,10 +3,8 @@ import request from 'supertest';
 import PDFDocument from 'pdfkit';
 import { app } from '../../src/app.js';
 import { db } from '../../src/infrastructure/database/client.js';
-import { redis } from '../../src/infrastructure/cache/redis.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import { seedPermissionCatalog, syncSystemRolesForTenant } from '../../src/domain/rbac/catalog.js';
-import { getCvParseQueue } from '../../src/domain/recruitment/cv-parse.queue.js';
 
 const TENANT_SLUG = 'recruitment-cv-tenant';
 const HR_EMAIL = 'hr@recruitment-cv.com';
@@ -108,12 +106,8 @@ describe('Recruitment API — candidate CV attachments', () => {
   });
 
   afterAll(async () => {
-    // Uploads enqueue a CV-parse job; close the lazily-opened queue + Redis so
-    // the test process exits cleanly. No worker runs here, so jobs stay queued.
-    await getCvParseQueue().close();
     await cleanup(tenantId);
     await db.tenant.delete({ where: { id: tenantId } });
-    await redis.quit();
   });
 
   const auth = (token: string) => ({ Authorization: `Bearer ${token}` });

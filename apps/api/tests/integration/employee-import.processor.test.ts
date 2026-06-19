@@ -3,7 +3,6 @@ import request from 'supertest';
 import type { ImportOptions, ValidatedImportRow } from '@hrm/shared';
 import { app } from '../../src/app.js';
 import { db } from '../../src/infrastructure/database/client.js';
-import { redis } from '../../src/infrastructure/cache/redis.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import { permissionService } from '../../src/domain/services/permission.service.js';
 import { processImport } from '../../src/domain/employee-import/employee-import.processor.js';
@@ -91,7 +90,6 @@ describe('processImport — bulk employee import service', () => {
     await db.position.deleteMany({ where: { tenantId } });
     await db.department.deleteMany({ where: { tenantId } });
     await db.tenant.deleteMany({ where: { slug: TENANT_SLUG } });
-    await redis.quit();
   });
 
   it('should create INVITED users + employees and auto-create org units', async () => {

@@ -1,43 +1,38 @@
-import { randomUUID } from 'node:crypto';
 import type { StagedImport } from '@hrm/shared';
-import { redis } from '../../infrastructure/cache/redis.js';
-import {
-  IMPORT_STAGING_TTL_SECONDS,
-  importStagingKey,
-} from '../../shared/configs/import.config.js';
+import type { Prisma } from '@prisma/client';
+import { db } from '../../infrastructure/database/client.js';
+import { IMPORT_STAGING_TTL_SECONDS } from '../../shared/configs/import.config.js';
 
-/**
- * Stage validated rows in Redis between `/validate` and `/import` so a 5,000-row
- * confirmation doesn't have to re-upload the file. Returns the generated import
- * id used as the staging key. Entries expire after IMPORT_STAGING_TTL_SECONDS.
- */
+/** Stage validated rows in Postgres between /validate and /import. */
 export async function stageImport(payload: StagedImport): Promise<string> {
-  const importId = randomUUID();
-  await redis.set(
-    importStagingKey(importId),
-    JSON.stringify(payload),
-    'EX',
-    IMPORT_STAGING_TTL_SECONDS,
-  );
-  return importId;
+  const expiresAt = new Date(Date.now() + IMPORT_STAGING_TTL_SECONDS * 1000);
+  const row = await db.importStaging.create({
+    data: {
+      tenantId: payload.tenantId,
+      kind: 'employee',
+      payload: payload as unknown as Prisma.InputJsonValue,
+      expiresAt,
+    },
+  });
+  return row.id;
 }
 
-/**
- * Fetch a staged import by id. Returns null if it expired or never existed, or
- * if it belongs to a different tenant (defensive cross-tenant guard).
- */
-export async function getStagedImport(
-  importId: string,
-  tenantId: string,
-): Promise<StagedImport | null> {
-  const raw = await redis.get(importStagingKey(importId));
-  if (!raw) return null;
-  const parsed = JSON.parse(raw) as StagedImport;
+/** Fetch a staged import; null if missing, expired (lazy), or cross-tenant. */
+export async function getStagedImport(importId: string, tenantId: string): Promise<StagedImport | null> {
+  const row = await db.importStaging.findUnique({ where: { id: importId } });
+  if (!row || row.kind !== 'employee' || row.expiresAt < new Date()) return null;
+  const parsed = row.payload as unknown as StagedImport;
   if (parsed.tenantId !== tenantId) return null;
   return parsed;
 }
 
-/** Remove a staged import (after a successful enqueue). */
+/** Remove a staged import after a successful enqueue. */
 export async function discardStagedImport(importId: string): Promise<void> {
-  await redis.del(importStagingKey(importId));
+  await db.importStaging.deleteMany({ where: { id: importId } });
+}
+
+/** Delete all expired staging rows (employee + asset). Called by the daily scan. */
+export async function purgeExpiredStaging(): Promise<number> {
+  const { count } = await db.importStaging.deleteMany({ where: { expiresAt: { lt: new Date() } } });
+  return count;
 }

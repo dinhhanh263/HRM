@@ -1,43 +1,20 @@
-import { redis } from '../../infrastructure/cache/redis.js';
 import { permissionRepository } from '../repositories/permission.repository.js';
+import { TtlCache } from '../../infrastructure/cache/permission-cache.js';
 
-const CACHE_TTL_SECONDS = 60 * 60; // 1h
-
-function cacheKey(roleId: string): string {
-  return `hrm:v1:role:${roleId}:perms`;
-}
+const CACHE_TTL_MS = 60_000; // 60s; bounds cross-instance staleness
+const cache = new TtlCache<string[]>(CACHE_TTL_MS);
 
 export const permissionService = {
-  /**
-   * Resolve a role's permission keys as a Set. Cache-aside on Redis; on any
-   * cache error we fall back to the database so authz never hard-fails on Redis.
-   */
+  /** Resolve a role's permission keys; in-process TTL cache over the DB. */
   async getPermissionsForRole(roleId: string): Promise<Set<string>> {
-    try {
-      const cached = await redis.get(cacheKey(roleId));
-      if (cached) {
-        return new Set(JSON.parse(cached) as string[]);
-      }
-    } catch {
-      // Redis unavailable — fall through to DB.
-    }
-
+    const cached = cache.get(roleId);
+    if (cached) return new Set(cached);
     const keys = await permissionRepository.findKeysByRoleId(roleId);
-
-    try {
-      await redis.setex(cacheKey(roleId), CACHE_TTL_SECONDS, JSON.stringify(keys));
-    } catch {
-      // Best-effort cache write.
-    }
-
+    cache.set(roleId, keys);
     return new Set(keys);
   },
 
-  async invalidateRolePermissions(roleId: string): Promise<void> {
-    try {
-      await redis.del(cacheKey(roleId));
-    } catch {
-      // Best-effort invalidation.
-    }
+  invalidateRolePermissions(roleId: string): void {
+    cache.delete(roleId);
   },
 };

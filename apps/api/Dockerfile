@@ -30,10 +30,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-cert
 WORKDIR /app
 ENV NODE_ENV=production
 # Cloud Run injects PORT (8080); app.ts/server.ts already honour it.
+# pnpm is needed by the migrate Cloud Run job (`pnpm --filter @hrm/api exec prisma
+# migrate deploy`), which also requires the workspace manifest below.
+RUN corepack enable && corepack prepare pnpm@9.1.0 --activate
 
 # Copy the built workspace (node_modules incl. generated Prisma client + dist).
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
 COPY --from=builder /app/packages/shared/package.json ./packages/shared/package.json
 COPY --from=builder /app/packages/shared/node_modules ./packages/shared/node_modules
@@ -44,6 +48,5 @@ COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
 COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 
 EXPOSE 8080
-# Default command = HTTP API. The worker service overrides this with
-# `node apps/api/dist/worker.js` at deploy time.
+# HTTP API + Cloud Tasks job handlers (POST /internal/tasks/*) in one service.
 CMD ["node", "apps/api/dist/server.js"]

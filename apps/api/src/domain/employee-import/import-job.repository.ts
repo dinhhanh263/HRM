@@ -1,4 +1,5 @@
 import type { ImportJobProgress, ImportJobResult, ImportJobStatus } from '@hrm/shared';
+import { Prisma } from '@prisma/client';
 import { db } from '../../infrastructure/database/client.js';
 
 /** Postgres-backed import job status (replaces BullMQ job state in Redis). */
@@ -13,11 +14,11 @@ export const importJobRepository = {
   },
 
   async setProgress(id: string, progress: ImportJobProgress): Promise<void> {
-    await db.importJob.update({ where: { id }, data: { progress } });
+    await db.importJob.update({ where: { id }, data: { progress: progress as unknown as Prisma.InputJsonValue } });
   },
 
   async markCompleted(id: string, result: ImportJobResult): Promise<void> {
-    await db.importJob.update({ where: { id }, data: { state: 'completed', result } });
+    await db.importJob.update({ where: { id }, data: { state: 'completed', result: result as unknown as Prisma.InputJsonValue } });
   },
 
   async markFailed(id: string, error: string): Promise<void> {

@@ -1,10 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import type { Worker } from 'bullmq';
 import PDFDocument from 'pdfkit';
 import { db } from '../../src/infrastructure/database/client.js';
-import { redis } from '../../src/infrastructure/cache/redis.js';
-import { getCvParseQueue } from '../../src/domain/recruitment/cv-parse.queue.js';
-import { createCvParseWorker } from '../../src/domain/recruitment/cv-parse.worker.js';
+import { registerAllHandlers } from '../../src/infrastructure/tasks/register-handlers.js';
 import { bulkImportService } from '../../src/domain/services/bulk-import.service.js';
 
 const TENANT_SLUG = 'recruitment-bulkparse-tenant';
@@ -47,9 +44,12 @@ describe('Recruitment API — bulk CV intake (parse worker)', () => {
   let tenantId: string;
   let jobId: string;
   let userId: string;
-  let worker: Worker;
 
   beforeAll(async () => {
+    // Background jobs run via the inline driver in tests; register the handlers
+    // (normally done by app.ts) since this suite doesn't import the app.
+    registerAllHandlers();
+
     const tenant = await db.tenant.upsert({
       where: { slug: TENANT_SLUG },
       update: {},
@@ -91,17 +91,11 @@ describe('Recruitment API — bulk CV intake (parse worker)', () => {
       },
     });
     jobId = job.id;
-
-    await getCvParseQueue().obliterate({ force: true });
-    worker = createCvParseWorker();
   });
 
   afterAll(async () => {
-    await worker.close();
-    await getCvParseQueue().close();
     await cleanup(tenantId);
     await db.tenant.delete({ where: { id: tenantId } });
-    await redis.quit();
   });
 
   async function waitForItem(itemId: string) {

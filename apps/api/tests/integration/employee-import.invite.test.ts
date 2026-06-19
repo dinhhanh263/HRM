@@ -1,21 +1,19 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import type { Worker } from 'bullmq';
 import { db } from '../../src/infrastructure/database/client.js';
-import { redis } from '../../src/infrastructure/cache/redis.js';
-import {
-  getInviteQueue,
-  enqueueInvites,
-} from '../../src/domain/employee-import/employee-import.invite.queue.js';
-import { createInviteWorker } from '../../src/domain/employee-import/employee-import.invite.worker.js';
+import { registerAllHandlers } from '../../src/infrastructure/tasks/register-handlers.js';
+import { enqueueInvites } from '../../src/domain/employee-import/employee-import.invite.queue.js';
 
 const TENANT_SLUG = 'invite-queue-tenant';
 
 describe('Invite email queue + worker (hrm.employee.invite)', () => {
   let tenantId: string;
   let userId: string;
-  let worker: Worker;
 
   beforeAll(async () => {
+    // Inline task driver runs handlers in-process; register them (app.ts does
+    // this in production) since this suite doesn't import the app.
+    registerAllHandlers();
+
     const tenant = await db.tenant.upsert({
       where: { slug: TENANT_SLUG },
       update: {},
@@ -35,17 +33,11 @@ describe('Invite email queue + worker (hrm.employee.invite)', () => {
       },
     });
     userId = user.id;
-
-    await getInviteQueue().obliterate({ force: true });
-    worker = createInviteWorker();
   });
 
   afterAll(async () => {
-    await worker.close();
-    await getInviteQueue().close();
     await db.user.deleteMany({ where: { tenantId } });
     await db.tenant.deleteMany({ where: { slug: TENANT_SLUG } });
-    await redis.quit();
   });
 
   it('drains an enqueued invite job and issues a one-time invite token for the user', async () => {

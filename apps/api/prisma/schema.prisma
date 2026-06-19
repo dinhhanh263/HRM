@@ -42,6 +42,14 @@ enum EmployeeStatus {
   TERMINATED
 }
 
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+  OTHER
+}
+
 enum ContractStatus {
   ACTIVE
   EXPIRED
@@ -484,13 +492,39 @@ model Employee {
   dateOfBirth       DateTime?      @map("date_of_birth")
   gender            Gender?
   idNumber          String?        @map("id_number")
+  idIssueDate       DateTime?      @map("id_issue_date") // ngày cấp CCCD/Passport
+  idIssuePlace      String?        @map("id_issue_place") // nơi cấp CCCD/Passport
   phone             String?
-  address           String?
+  personalEmail     String?        @map("personal_email") // email cá nhân (khác email đăng nhập)
+  placeOfBirth      String?        @map("place_of_birth")
+  maritalStatus     MaritalStatus? @map("marital_status")
+  education         String?        // trình độ học vấn / chuyên ngành
+  permanentAddress  String?        @map("permanent_address")
+  currentAddress    String?        @map("current_address")
   avatar            String?
   joinDate          DateTime       @map("join_date")
   probationEndDate  DateTime?      @map("probation_end_date") // ngày hết thử việc (HR nhập tay; null nếu không áp dụng)
   contractType      ContractType   @map("contract_type")
   dependentsCount   Int            @default(0) @map("dependents_count") // người phụ thuộc — giảm trừ thuế TNCN
+
+  // Liên hệ khẩn cấp
+  emergencyContactName         String? @map("emergency_contact_name")
+  emergencyContactRelationship String? @map("emergency_contact_relationship")
+  emergencyContactPhone        String? @map("emergency_contact_phone")
+
+  // Ngân hàng
+  bankAccountNumber String? @map("bank_account_number")
+  bankName          String? @map("bank_name")
+  bankBranch        String? @map("bank_branch")
+
+  // Thuế & bảo hiểm
+  taxCode               String? @map("tax_code")
+  socialInsuranceNumber String? @map("social_insurance_number")
+  healthcareFacility    String? @map("healthcare_facility") // nơi đăng ký khám chữa bệnh
+
+  // Khác
+  motorbikeRegistration String? @map("motorbike_registration") // loại xe - màu - biển số
+
   status            EmployeeStatus @default(ACTIVE)
   terminatedAt      DateTime?      @map("terminated_at")
   terminationReason String?        @map("termination_reason")

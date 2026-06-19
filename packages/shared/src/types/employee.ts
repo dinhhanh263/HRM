@@ -27,6 +27,41 @@ export const EmployeeStatus = {
 
 export type EmployeeStatus = (typeof EmployeeStatus)[keyof typeof EmployeeStatus];
 
+export const MaritalStatus = {
+  SINGLE: 'SINGLE',
+  MARRIED: 'MARRIED',
+  DIVORCED: 'DIVORCED',
+  WIDOWED: 'WIDOWED',
+  OTHER: 'OTHER',
+} as const;
+
+export type MaritalStatus = (typeof MaritalStatus)[keyof typeof MaritalStatus];
+
+/**
+ * Extended employee profile fields (SPEC-040). All optional; present on the DTO,
+ * create and update payloads alike.
+ */
+export interface ExtendedEmployeeFields {
+  placeOfBirth?: string | null;
+  idIssueDate?: string | null;
+  idIssuePlace?: string | null;
+  personalEmail?: string | null;
+  education?: string | null;
+  maritalStatus?: MaritalStatus | null;
+  permanentAddress?: string | null;
+  currentAddress?: string | null;
+  emergencyContactName?: string | null;
+  emergencyContactRelationship?: string | null;
+  emergencyContactPhone?: string | null;
+  bankAccountNumber?: string | null;
+  bankName?: string | null;
+  bankBranch?: string | null;
+  taxCode?: string | null;
+  socialInsuranceNumber?: string | null;
+  healthcareFacility?: string | null;
+  motorbikeRegistration?: string | null;
+}
+
 /** Roles assignable to an employee via the UI. SUPER_ADMIN is intentionally
  * excluded — it is not granted through the employee form. */
 export type AssignableEmployeeRole = 'EMPLOYEE' | 'MANAGER' | 'HR_MANAGER' | 'PAYROLL_APPROVER';
@@ -61,7 +96,6 @@ export interface EmployeeDto {
   gender: Gender | null;
   idNumber: string | null;
   phone: string | null;
-  address: string | null;
   avatar: string | null;
   joinDate: string;
   /** Probation end date (HR-entered); null when not applicable. */
@@ -69,6 +103,25 @@ export interface EmployeeDto {
   contractType: ContractType;
   /** Number of registered tax dependents — drives the PIT dependent deduction in payroll. */
   dependentsCount: number;
+  // Extended profile fields (SPEC-040) — always present on the DTO, null when unset.
+  placeOfBirth: string | null;
+  idIssueDate: string | null;
+  idIssuePlace: string | null;
+  personalEmail: string | null;
+  education: string | null;
+  maritalStatus: MaritalStatus | null;
+  permanentAddress: string | null;
+  currentAddress: string | null;
+  emergencyContactName: string | null;
+  emergencyContactRelationship: string | null;
+  emergencyContactPhone: string | null;
+  bankAccountNumber: string | null;
+  bankName: string | null;
+  bankBranch: string | null;
+  taxCode: string | null;
+  socialInsuranceNumber: string | null;
+  healthcareFacility: string | null;
+  motorbikeRegistration: string | null;
   status: EmployeeStatus;
   terminatedAt: string | null;
   terminationReason: string | null;
@@ -80,7 +133,7 @@ export interface EmployeeDto {
   user?: EmployeeUserDto | null;
 }
 
-export interface CreateEmployeeRequest {
+export interface CreateEmployeeRequest extends ExtendedEmployeeFields {
   email: string;
   password: string;
   fullName: string;
@@ -91,7 +144,6 @@ export interface CreateEmployeeRequest {
   gender?: Gender;
   idNumber?: string;
   phone?: string;
-  address?: string;
   joinDate?: string;
   probationEndDate?: string | null;
   contractType?: ContractType;
@@ -101,7 +153,7 @@ export interface CreateEmployeeRequest {
   avatarUrl?: string;
 }
 
-export interface UpdateEmployeeRequest {
+export interface UpdateEmployeeRequest extends ExtendedEmployeeFields {
   fullName?: string;
   departmentId?: string | null;
   positionId?: string | null;
@@ -110,7 +162,6 @@ export interface UpdateEmployeeRequest {
   gender?: Gender | null;
   idNumber?: string | null;
   phone?: string | null;
-  address?: string | null;
   probationEndDate?: string | null;
   contractType?: ContractType;
   dependentsCount?: number;

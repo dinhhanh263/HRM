@@ -29,6 +29,24 @@ function vrow(overrides: Partial<ValidatedImportRow> & { email: string; fullName
     contractType: 'FULL_TIME',
     dependentsCount: 0,
     role: 'EMPLOYEE',
+    placeOfBirth: null,
+    idIssueDate: null,
+    idIssuePlace: null,
+    personalEmail: null,
+    education: null,
+    maritalStatus: null,
+    permanentAddress: null,
+    currentAddress: null,
+    emergencyContactName: null,
+    emergencyContactRelationship: null,
+    emergencyContactPhone: null,
+    bankAccountNumber: null,
+    bankName: null,
+    bankBranch: null,
+    taxCode: null,
+    socialInsuranceNumber: null,
+    healthcareFacility: null,
+    motorbikeRegistration: null,
     ...overrides,
   };
 }
@@ -117,6 +135,48 @@ describe('processImport — bulk employee import service', () => {
     const zero = await db.employee.findFirst({ where: { tenantId, user: { email: 'dep0@proc.com' } } });
     expect(three?.dependentsCount).toBe(3);
     expect(zero?.dependentsCount).toBe(0);
+  });
+
+  // SPEC-040: import must persist the extended profile fields too.
+  it('persists extended profile fields on imported employees', async () => {
+    const rows = [
+      vrow({
+        fullName: 'Ext Fields',
+        email: 'ext@proc.com',
+        placeOfBirth: 'Hà Nội',
+        idIssueDate: '2018-05-20',
+        idIssuePlace: 'Cục CSQLHC',
+        personalEmail: 'ext.personal@gmail.com',
+        education: 'ĐH Bách Khoa',
+        maritalStatus: 'MARRIED',
+        permanentAddress: '12 Trần Hưng Đạo',
+        currentAddress: '45 Cầu Giấy',
+        emergencyContactName: 'Người Thân',
+        emergencyContactRelationship: 'Vợ',
+        emergencyContactPhone: '0912345678',
+        bankAccountNumber: '0123456789',
+        bankName: 'Vietcombank',
+        bankBranch: 'CN Hà Nội',
+        taxCode: '8123456789',
+        socialInsuranceNumber: 'SI-777',
+        healthcareFacility: 'BV Bạch Mai',
+        motorbikeRegistration: 'Honda Wave - Đỏ - 29X1-12345',
+      }),
+    ];
+
+    const result = await processImport(tenantId, rows, OPTIONS);
+    expect(result).toMatchObject({ total: 1, created: 1, failed: 0 });
+
+    const emp = await db.employee.findFirst({ where: { tenantId, user: { email: 'ext@proc.com' } } });
+    expect(emp?.placeOfBirth).toBe('Hà Nội');
+    expect(emp?.idIssueDate?.toISOString().slice(0, 10)).toBe('2018-05-20');
+    expect(emp?.personalEmail).toBe('ext.personal@gmail.com');
+    expect(emp?.maritalStatus).toBe('MARRIED');
+    expect(emp?.permanentAddress).toBe('12 Trần Hưng Đạo');
+    expect(emp?.bankName).toBe('Vietcombank');
+    expect(emp?.taxCode).toBe('8123456789');
+    expect(emp?.socialInsuranceNumber).toBe('SI-777');
+    expect(emp?.motorbikeRegistration).toBe('Honda Wave - Đỏ - 29X1-12345');
   });
 
   it('sets user.roleId to the tenant Role row matching each imported role (RBAC authority)', async () => {

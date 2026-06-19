@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import ExcelJS from 'exceljs';
 import { IMPORT_ERROR_CODES } from '@hrm/shared';
 import { parseEmployeeFile } from '../../src/domain/employee-import/employee-import.parser.js';
@@ -116,5 +116,43 @@ describe('employee-import parser — csv', () => {
     const csv = ['fullName,phone', 'No Email,0900000000'].join('\n');
     const { errors } = await parseEmployeeFile(Buffer.from(csv, 'utf-8'), 'csv');
     expect(errors[0].code).toBe(IMPORT_ERROR_CODES.MISSING_COLUMNS);
+  });
+});
+
+// Regression for the CSV date-shift bug: ExcelJS auto-parses date-like CSV cells
+// into a Date in the server's LOCAL timezone, so rendering them back as UTC rolled
+// the calendar day back in positive-offset zones (UTC+7: "2024-01-06" -> "2024-01-05").
+// These tests pin a non-UTC TZ at runtime; Node re-reads process.env.TZ on each
+// Date construction, so flipping it here exercises the real-world failure path.
+describe('employee-import parser — csv date columns (timezone-stable)', () => {
+  const originalTz = process.env.TZ;
+
+  beforeAll(() => {
+    process.env.TZ = 'Asia/Bangkok'; // UTC+7 — the zone where the bug reproduces
+  });
+  afterAll(() => {
+    process.env.TZ = originalTz;
+  });
+
+  it('runs under a positive-offset timezone so the assertions are meaningful', () => {
+    // getTimezoneOffset() is negative for zones ahead of UTC (UTC+7 -> -420).
+    expect(new Date('2024-01-06').getTimezoneOffset()).toBeLessThan(0);
+  });
+
+  it('preserves the exact entered day for dateOfBirth, joinDate and idIssueDate', async () => {
+    const csv = [
+      'fullName,email,dateOfBirth,joinDate,idIssueDate',
+      'Nguyen Van A,a@example.com,1990-05-20,2024-01-06,2018-03-15',
+    ].join('\n');
+
+    const { rows, errors } = await parseEmployeeFile(Buffer.from(csv, 'utf-8'), 'csv');
+
+    expect(errors).toHaveLength(0);
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({
+      dateOfBirth: '1990-05-20',
+      joinDate: '2024-01-06',
+      idIssueDate: '2018-03-15',
+    });
   });
 });

@@ -49,6 +49,25 @@ const employeeFormSchema = z.object({
     .max(20, 'form.validation.dependentsCountRange')
     .optional(),
   roleId: z.string().optional(),
+  // Extended profile fields (SPEC-040) — all optional free text.
+  placeOfBirth: z.string().optional(),
+  idIssueDate: z.string().optional(),
+  idIssuePlace: z.string().optional(),
+  personalEmail: z.union([z.string().email('form.validation.emailInvalid'), z.literal('')]).optional(),
+  education: z.string().optional(),
+  maritalStatus: z.enum(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED', 'OTHER']).optional(),
+  permanentAddress: z.string().optional(),
+  currentAddress: z.string().optional(),
+  emergencyContactName: z.string().optional(),
+  emergencyContactRelationship: z.string().optional(),
+  emergencyContactPhone: z.string().optional(),
+  bankAccountNumber: z.string().optional(),
+  bankName: z.string().optional(),
+  bankBranch: z.string().optional(),
+  taxCode: z.string().optional(),
+  socialInsuranceNumber: z.string().optional(),
+  healthcareFacility: z.string().optional(),
+  motorbikeRegistration: z.string().optional(),
 });
 
 type FormData = z.infer<typeof employeeFormSchema>;
@@ -117,6 +136,24 @@ export function EmployeeForm({
           dependentsCount: employee.dependentsCount,
           roleId: employee.user?.roleId || undefined,
           avatarUrl: employee.avatar || '',
+          placeOfBirth: employee.placeOfBirth || '',
+          idIssueDate: employee.idIssueDate?.split('T')[0] || '',
+          idIssuePlace: employee.idIssuePlace || '',
+          personalEmail: employee.personalEmail || '',
+          education: employee.education || '',
+          maritalStatus: employee.maritalStatus || undefined,
+          permanentAddress: employee.permanentAddress || '',
+          currentAddress: employee.currentAddress || '',
+          emergencyContactName: employee.emergencyContactName || '',
+          emergencyContactRelationship: employee.emergencyContactRelationship || '',
+          emergencyContactPhone: employee.emergencyContactPhone || '',
+          bankAccountNumber: employee.bankAccountNumber || '',
+          bankName: employee.bankName || '',
+          bankBranch: employee.bankBranch || '',
+          taxCode: employee.taxCode || '',
+          socialInsuranceNumber: employee.socialInsuranceNumber || '',
+          healthcareFacility: employee.healthcareFacility || '',
+          motorbikeRegistration: employee.motorbikeRegistration || '',
         }
       : {
           contractType: 'FULL_TIME',
@@ -347,6 +384,76 @@ export function EmployeeForm({
               )}
             </div>
           </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="placeOfBirth">{t('form.placeOfBirth')}</Label>
+              <Input id="placeOfBirth" {...register('placeOfBirth')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="maritalStatus">{t('form.maritalStatus')}</Label>
+              <Select
+                value={watch('maritalStatus') || ''}
+                onValueChange={(value) =>
+                  setValue(
+                    'maritalStatus',
+                    value as 'SINGLE' | 'MARRIED' | 'DIVORCED' | 'WIDOWED' | 'OTHER',
+                  )
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t('form.placeholders.selectMaritalStatus')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="SINGLE">{t('form.maritalStatuses.SINGLE')}</SelectItem>
+                  <SelectItem value="MARRIED">{t('form.maritalStatuses.MARRIED')}</SelectItem>
+                  <SelectItem value="DIVORCED">{t('form.maritalStatuses.DIVORCED')}</SelectItem>
+                  <SelectItem value="WIDOWED">{t('form.maritalStatuses.WIDOWED')}</SelectItem>
+                  <SelectItem value="OTHER">{t('form.maritalStatuses.OTHER')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="idIssueDate">{t('form.idIssueDate')}</Label>
+              <Input id="idIssueDate" type="date" {...register('idIssueDate')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="idIssuePlace">{t('form.idIssuePlace')}</Label>
+              <Input id="idIssuePlace" {...register('idIssuePlace')} />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="personalEmail">{t('form.personalEmail')}</Label>
+              <Input
+                id="personalEmail"
+                type="email"
+                {...register('personalEmail')}
+                error={!!errors.personalEmail}
+                placeholder={t('form.placeholders.personalEmail')}
+              />
+              {errors.personalEmail && (
+                <p className="text-sm text-danger">{t(errors.personalEmail.message!)}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="education">{t('form.education')}</Label>
+              <Input id="education" {...register('education')} />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="permanentAddress">{t('form.permanentAddress')}</Label>
+            <Input id="permanentAddress" {...register('permanentAddress')} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="currentAddress">{t('form.currentAddress')}</Label>
+            <Input id="currentAddress" {...register('currentAddress')} />
+          </div>
         </CardContent>
       </Card>
 
@@ -476,6 +583,93 @@ export function EmployeeForm({
               </Select>
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('form.sections.emergency')}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="emergencyContactName">{t('form.emergencyContactName')}</Label>
+              <Input id="emergencyContactName" {...register('emergencyContactName')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="emergencyContactRelationship">
+                {t('form.emergencyContactRelationship')}
+              </Label>
+              <Input
+                id="emergencyContactRelationship"
+                {...register('emergencyContactRelationship')}
+              />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="emergencyContactPhone">{t('form.emergencyContactPhone')}</Label>
+            <Input id="emergencyContactPhone" {...register('emergencyContactPhone')} />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('form.sections.banking')}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="bankAccountNumber">{t('form.bankAccountNumber')}</Label>
+              <Input id="bankAccountNumber" {...register('bankAccountNumber')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="bankName">{t('form.bankName')}</Label>
+              <Input id="bankName" {...register('bankName')} />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="bankBranch">{t('form.bankBranch')}</Label>
+            <Input id="bankBranch" {...register('bankBranch')} />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('form.sections.taxInsurance')}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="taxCode">{t('form.taxCode')}</Label>
+              <Input id="taxCode" {...register('taxCode')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="socialInsuranceNumber">{t('form.socialInsuranceNumber')}</Label>
+              <Input id="socialInsuranceNumber" {...register('socialInsuranceNumber')} />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="healthcareFacility">{t('form.healthcareFacility')}</Label>
+            <Input id="healthcareFacility" {...register('healthcareFacility')} />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('form.sections.other')}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="motorbikeRegistration">{t('form.motorbikeRegistration')}</Label>
+            <Input
+              id="motorbikeRegistration"
+              {...register('motorbikeRegistration')}
+              placeholder={t('form.placeholders.motorbikeRegistration')}
+            />
+          </div>
         </CardContent>
       </Card>
 

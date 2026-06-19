@@ -56,7 +56,6 @@ const createEmployeeSchema = z.object({
   idNumber: z.string().optional(),
   dateOfBirth: z.string().optional(),
   gender: z.enum(['MALE', 'FEMALE', 'OTHER']).optional(),
-  address: z.string().optional(),
   dependentsCount: z.coerce
     .number({ invalid_type_error: 'form.validation.dependentsCountRange' })
     .int('form.validation.dependentsCountRange')
@@ -70,6 +69,25 @@ const createEmployeeSchema = z.object({
   probationEndDate: z.string().optional(),
   contractType: z.enum(['FULL_TIME', 'PART_TIME', 'CONTRACT', 'INTERN', 'PROBATION']),
   roleId: z.string().optional(),
+  // Extended profile fields (SPEC-040) — all optional free text.
+  placeOfBirth: z.string().optional(),
+  idIssueDate: z.string().optional(),
+  idIssuePlace: z.string().optional(),
+  personalEmail: z.union([z.string().email('form.validation.emailInvalid'), z.literal('')]).optional(),
+  education: z.string().optional(),
+  maritalStatus: z.enum(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED', 'OTHER']).optional(),
+  permanentAddress: z.string().optional(),
+  currentAddress: z.string().optional(),
+  emergencyContactName: z.string().optional(),
+  emergencyContactRelationship: z.string().optional(),
+  emergencyContactPhone: z.string().optional(),
+  bankAccountNumber: z.string().optional(),
+  bankName: z.string().optional(),
+  bankBranch: z.string().optional(),
+  taxCode: z.string().optional(),
+  socialInsuranceNumber: z.string().optional(),
+  healthcareFacility: z.string().optional(),
+  motorbikeRegistration: z.string().optional(),
 });
 
 type FormData = z.infer<typeof createEmployeeSchema>;
@@ -177,7 +195,6 @@ export function CreateEmployeePage() {
       dateOfBirth: data.dateOfBirth || undefined,
       gender: data.gender || undefined,
       idNumber: data.idNumber || undefined,
-      address: data.address || undefined,
       joinDate: data.joinDate || undefined,
       probationEndDate: data.probationEndDate || undefined,
       contractType: data.contractType,
@@ -185,6 +202,26 @@ export function CreateEmployeePage() {
       roleId: data.roleId || undefined,
       // Avatar is stored inline as a base64 data URL (no object storage).
       avatarUrl: avatarPreview || undefined,
+      // Extended profile fields (SPEC-040). Blank optional fields → undefined so
+      // the API's date/email validators don't reject an empty string.
+      placeOfBirth: data.placeOfBirth || undefined,
+      idIssueDate: data.idIssueDate || undefined,
+      idIssuePlace: data.idIssuePlace || undefined,
+      personalEmail: data.personalEmail || undefined,
+      education: data.education || undefined,
+      maritalStatus: data.maritalStatus || undefined,
+      permanentAddress: data.permanentAddress || undefined,
+      currentAddress: data.currentAddress || undefined,
+      emergencyContactName: data.emergencyContactName || undefined,
+      emergencyContactRelationship: data.emergencyContactRelationship || undefined,
+      emergencyContactPhone: data.emergencyContactPhone || undefined,
+      bankAccountNumber: data.bankAccountNumber || undefined,
+      bankName: data.bankName || undefined,
+      bankBranch: data.bankBranch || undefined,
+      taxCode: data.taxCode || undefined,
+      socialInsuranceNumber: data.socialInsuranceNumber || undefined,
+      healthcareFacility: data.healthcareFacility || undefined,
+      motorbikeRegistration: data.motorbikeRegistration || undefined,
     };
 
     createMutation.mutate(request, {
@@ -493,17 +530,105 @@ export function CreateEmployeePage() {
                 )}
               </div>
 
-              {/* Address */}
+              {/* Place of Birth */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
                   <MapPin className="w-3.5 h-3.5" />
-                  {t('form.address')}
+                  {t('form.placeOfBirth')}
+                </label>
+                <Input {...register('placeOfBirth')} className="h-[42px]" />
+              </div>
+
+              {/* Marital Status */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <Users className="w-3.5 h-3.5" />
+                  {t('form.maritalStatus')}
+                </label>
+                <Controller
+                  name="maritalStatus"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value || ''} onValueChange={field.onChange}>
+                      <SelectTrigger className="h-[42px]">
+                        <SelectValue placeholder={t('form.placeholders.selectMaritalStatus')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="SINGLE">{t('form.maritalStatuses.SINGLE')}</SelectItem>
+                        <SelectItem value="MARRIED">{t('form.maritalStatuses.MARRIED')}</SelectItem>
+                        <SelectItem value="DIVORCED">{t('form.maritalStatuses.DIVORCED')}</SelectItem>
+                        <SelectItem value="WIDOWED">{t('form.maritalStatuses.WIDOWED')}</SelectItem>
+                        <SelectItem value="OTHER">{t('form.maritalStatuses.OTHER')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
+
+              {/* ID Issue Date */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {t('form.idIssueDate')}
+                </label>
+                <Input type="date" {...register('idIssueDate')} className="h-[42px]" />
+              </div>
+
+              {/* ID Issue Place */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5" />
+                  {t('form.idIssuePlace')}
+                </label>
+                <Input {...register('idIssuePlace')} className="h-[42px]" />
+              </div>
+
+              {/* Personal Email */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <Mail className="w-3.5 h-3.5" />
+                  {t('form.personalEmail')}
                 </label>
                 <Input
-                  placeholder={t('form.placeholders.address')}
-                  {...register('address')}
+                  type="email"
+                  placeholder={t('form.placeholders.personalEmail')}
+                  {...register('personalEmail')}
+                  error={!!errors.personalEmail}
                   className="h-[42px]"
                 />
+                {errors.personalEmail && (
+                  <span className="text-xs text-danger flex items-center gap-1 mt-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {t(errors.personalEmail.message!)}
+                  </span>
+                )}
+              </div>
+
+              {/* Education */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <FileText className="w-3.5 h-3.5" />
+                  {t('form.education')}
+                </label>
+                <Input {...register('education')} className="h-[42px]" />
+              </div>
+
+              {/* Permanent Address */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5" />
+                  {t('form.permanentAddress')}
+                </label>
+                <Input {...register('permanentAddress')} className="h-[42px]" />
+              </div>
+
+              {/* Current Address */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5" />
+                  {t('form.currentAddress')}
+                </label>
+                <Input {...register('currentAddress')} className="h-[42px]" />
               </div>
 
               {/* Dependents — drives PIT deduction in payroll; parity with Edit form */}
@@ -672,6 +797,164 @@ export function CreateEmployeePage() {
                       </SelectContent>
                     </Select>
                   )}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 4: Emergency Contact */}
+        <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-border bg-background flex items-center gap-3">
+            <div className="w-9 h-9 rounded-[10px] bg-danger-light flex items-center justify-center">
+              <Phone className="w-[18px] h-[18px] text-danger" />
+            </div>
+            <div>
+              <h2 className="text-[15px] font-semibold text-text-primary m-0">
+                {t('form.sections.emergency')}
+              </h2>
+              <p className="text-[13px] text-text-secondary mt-0.5">
+                {t('form.sections.emergencyDescription')}
+              </p>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <User className="w-3.5 h-3.5" />
+                  {t('form.emergencyContactName')}
+                </label>
+                <Input {...register('emergencyContactName')} className="h-[42px]" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <Users className="w-3.5 h-3.5" />
+                  {t('form.emergencyContactRelationship')}
+                </label>
+                <Input {...register('emergencyContactRelationship')} className="h-[42px]" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <Phone className="w-3.5 h-3.5" />
+                  {t('form.emergencyContactPhone')}
+                </label>
+                <Input {...register('emergencyContactPhone')} className="h-[42px]" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 5: Banking */}
+        <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-border bg-background flex items-center gap-3">
+            <div className="w-9 h-9 rounded-[10px] bg-info-light flex items-center justify-center">
+              <CreditCard className="w-[18px] h-[18px] text-info" />
+            </div>
+            <div>
+              <h2 className="text-[15px] font-semibold text-text-primary m-0">
+                {t('form.sections.banking')}
+              </h2>
+              <p className="text-[13px] text-text-secondary mt-0.5">
+                {t('form.sections.bankingDescription')}
+              </p>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <CreditCard className="w-3.5 h-3.5" />
+                  {t('form.bankAccountNumber')}
+                </label>
+                <Input {...register('bankAccountNumber')} className="h-[42px]" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <Building2 className="w-3.5 h-3.5" />
+                  {t('form.bankName')}
+                </label>
+                <Input {...register('bankName')} className="h-[42px]" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <Building2 className="w-3.5 h-3.5" />
+                  {t('form.bankBranch')}
+                </label>
+                <Input {...register('bankBranch')} className="h-[42px]" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 6: Tax & Insurance */}
+        <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-border bg-background flex items-center gap-3">
+            <div className="w-9 h-9 rounded-[10px] bg-warning-light flex items-center justify-center">
+              <FileText className="w-[18px] h-[18px] text-warning" />
+            </div>
+            <div>
+              <h2 className="text-[15px] font-semibold text-text-primary m-0">
+                {t('form.sections.taxInsurance')}
+              </h2>
+              <p className="text-[13px] text-text-secondary mt-0.5">
+                {t('form.sections.taxInsuranceDescription')}
+              </p>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <FileText className="w-3.5 h-3.5" />
+                  {t('form.taxCode')}
+                </label>
+                <Input {...register('taxCode')} className="h-[42px]" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <FileText className="w-3.5 h-3.5" />
+                  {t('form.socialInsuranceNumber')}
+                </label>
+                <Input {...register('socialInsuranceNumber')} className="h-[42px]" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <Building2 className="w-3.5 h-3.5" />
+                  {t('form.healthcareFacility')}
+                </label>
+                <Input {...register('healthcareFacility')} className="h-[42px]" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 7: Other */}
+        <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-border bg-background flex items-center gap-3">
+            <div className="w-9 h-9 rounded-[10px] bg-surface-alt flex items-center justify-center">
+              <Briefcase className="w-[18px] h-[18px] text-text-secondary" />
+            </div>
+            <div>
+              <h2 className="text-[15px] font-semibold text-text-primary m-0">
+                {t('form.sections.other')}
+              </h2>
+              <p className="text-[13px] text-text-secondary mt-0.5">
+                {t('form.sections.otherDescription')}
+              </p>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <Briefcase className="w-3.5 h-3.5" />
+                  {t('form.motorbikeRegistration')}
+                </label>
+                <Input
+                  placeholder={t('form.placeholders.motorbikeRegistration')}
+                  {...register('motorbikeRegistration')}
+                  className="h-[42px]"
                 />
               </div>
             </div>

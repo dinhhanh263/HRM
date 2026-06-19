@@ -257,6 +257,58 @@ export function EmployeeDetailPage() {
                     {employee.dependentsCount}
                   </dd>
                 </div>
+                <div>
+                  <dt className="text-sm text-text-muted">{t('detail.fields.placeOfBirth')}</dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.placeOfBirth || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">{t('detail.fields.maritalStatus')}</dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.maritalStatus
+                      ? t(`form.maritalStatuses.${employee.maritalStatus}`)
+                      : '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">{t('detail.fields.personalEmail')}</dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.personalEmail || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">{t('detail.fields.education')}</dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.education || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">{t('detail.fields.idIssueDate')}</dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {formatDate(employee.idIssueDate, locale)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">{t('detail.fields.idIssuePlace')}</dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.idIssuePlace || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">
+                    {t('detail.fields.permanentAddress')}
+                  </dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.permanentAddress || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">{t('detail.fields.currentAddress')}</dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.currentAddress || '-'}
+                  </dd>
+                </div>
               </dl>
             </CardContent>
           </Card>
@@ -339,6 +391,128 @@ export function EmployeeDetailPage() {
                     )}
                   </>
                 )}
+              </dl>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-text-primary">
+                {t('detail.sections.emergency')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <dl className="grid grid-cols-2 gap-4">
+                <div>
+                  <dt className="text-sm text-text-muted">
+                    {t('detail.fields.emergencyContactName')}
+                  </dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.emergencyContactName || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">
+                    {t('detail.fields.emergencyContactRelationship')}
+                  </dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.emergencyContactRelationship || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">
+                    {t('detail.fields.emergencyContactPhone')}
+                  </dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.emergencyContactPhone || '-'}
+                  </dd>
+                </div>
+              </dl>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-text-primary">
+                {t('detail.sections.banking')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <dl className="grid grid-cols-2 gap-4">
+                <div>
+                  <dt className="text-sm text-text-muted">
+                    {t('detail.fields.bankAccountNumber')}
+                  </dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1 tabular-nums">
+                    {employee.bankAccountNumber || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">{t('detail.fields.bankName')}</dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.bankName || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">{t('detail.fields.bankBranch')}</dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.bankBranch || '-'}
+                  </dd>
+                </div>
+              </dl>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-text-primary">
+                {t('detail.sections.taxInsurance')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <dl className="grid grid-cols-2 gap-4">
+                <div>
+                  <dt className="text-sm text-text-muted">{t('detail.fields.taxCode')}</dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1 tabular-nums">
+                    {employee.taxCode || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">
+                    {t('detail.fields.socialInsuranceNumber')}
+                  </dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1 tabular-nums">
+                    {employee.socialInsuranceNumber || '-'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-text-muted">
+                    {t('detail.fields.healthcareFacility')}
+                  </dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.healthcareFacility || '-'}
+                  </dd>
+                </div>
+              </dl>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-text-primary">
+                {t('detail.sections.other')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <dl className="grid grid-cols-2 gap-4">
+                <div>
+                  <dt className="text-sm text-text-muted">
+                    {t('detail.fields.motorbikeRegistration')}
+                  </dt>
+                  <dd className="text-sm font-medium text-text-primary mt-1">
+                    {employee.motorbikeRegistration || '-'}
+                  </dd>
+                </div>
               </dl>
             </CardContent>
           </Card>

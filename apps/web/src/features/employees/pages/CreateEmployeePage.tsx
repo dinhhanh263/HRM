@@ -41,6 +41,7 @@ import {
   Save,
   X,
   Trash2,
+  Hash,
 } from 'lucide-react';
 
 const createEmployeeSchema = z.object({
@@ -51,6 +52,7 @@ const createEmployeeSchema = z.object({
     .regex(/[A-Z]/, 'form.validation.passwordUppercase')
     .regex(/[a-z]/, 'form.validation.passwordLowercase')
     .regex(/[0-9]/, 'form.validation.passwordNumber'),
+  employeeCode: z.string().trim().min(1, 'form.validation.employeeCodeRequired').max(50),
   fullName: z.string().min(2, 'form.validation.fullNameMin'),
   phone: z.string().optional(),
   idNumber: z.string().optional(),
@@ -187,6 +189,7 @@ export function CreateEmployeePage() {
     const request: CreateEmployeeRequest = {
       email: data.email,
       password: data.password,
+      employeeCode: data.employeeCode.trim(),
       fullName: data.fullName,
       phone: data.phone || undefined,
       departmentId: data.departmentId || undefined,
@@ -342,6 +345,27 @@ export function CreateEmployeePage() {
                   <span className="text-xs text-danger flex items-center gap-1 mt-1">
                     <AlertCircle className="w-3 h-3" />
                     {t(errors.password.message!)}
+                  </span>
+                )}
+              </div>
+
+              {/* Employee Code — manually assigned by HR/admin, unique per tenant.
+                  Free-form to match the company's own numbering convention. */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-medium text-text-primary flex items-center gap-1">
+                  <Hash className="w-3.5 h-3.5" />
+                  {t('form.employeeCode')} <span className="text-danger">*</span>
+                </label>
+                <Input
+                  placeholder={t('form.placeholders.employeeCode')}
+                  {...register('employeeCode')}
+                  error={!!errors.employeeCode}
+                  className="pl-3 h-[42px]"
+                />
+                {errors.employeeCode && (
+                  <span className="text-xs text-danger flex items-center gap-1 mt-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {t(errors.employeeCode.message!)}
                   </span>
                 )}
               </div>

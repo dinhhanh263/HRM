@@ -163,6 +163,7 @@ export async function parseEmployeeFile(
   for (let r = 2; r <= lastRow; r++) {
     const row = worksheet.getRow(r);
     const values: Record<ImportColumn, string> = {
+      employeeCode: '',
       fullName: '',
       email: '',
       dateOfBirth: '',

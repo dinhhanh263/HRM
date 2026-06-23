@@ -247,6 +247,7 @@ describe('CreateEmployeePage', () => {
       // Fill required fields
       await user.type(screen.getByPlaceholderText('email@company.com'), 'newuser@example.com');
       await user.type(screen.getByPlaceholderText('Tối thiểu 8 ký tự'), 'Password123');
+      await user.type(screen.getByPlaceholderText('VD: NV001, CC-2026-01'), 'NV-001');
       await user.type(screen.getByPlaceholderText('Nguyễn Văn A'), 'Nguyễn Văn Test');
       await user.type(screen.getByPlaceholderText('0901234567'), '0909123456');
 
@@ -258,6 +259,7 @@ describe('CreateEmployeePage', () => {
         const callArgs = mockMutate.mock.calls[0][0];
         expect(callArgs.email).toBe('newuser@example.com');
         expect(callArgs.password).toBe('Password123');
+        expect(callArgs.employeeCode).toBe('NV-001');
         expect(callArgs.fullName).toBe('Nguyễn Văn Test');
         expect(callArgs.phone).toBe('0909123456');
         // Defaults to 0 when left untouched (matches server default).
@@ -271,6 +273,7 @@ describe('CreateEmployeePage', () => {
 
       await user.type(screen.getByPlaceholderText('email@company.com'), 'newuser@example.com');
       await user.type(screen.getByPlaceholderText('Tối thiểu 8 ký tự'), 'Password123');
+      await user.type(screen.getByPlaceholderText('VD: NV001, CC-2026-01'), 'NV-001');
       await user.type(screen.getByPlaceholderText('Nguyễn Văn A'), 'Nguyễn Văn Test');
 
       const dependentsInput = screen.getByRole('spinbutton');
@@ -283,6 +286,21 @@ describe('CreateEmployeePage', () => {
         expect(mockMutate).toHaveBeenCalled();
         expect(mockMutate.mock.calls[0][0].dependentsCount).toBe(3);
       });
+    });
+
+    it('should not submit when the employee code is missing', async () => {
+      const user = userEvent.setup();
+      render(<CreateEmployeePage />);
+
+      // Every required field except the employee code.
+      await user.type(screen.getByPlaceholderText('email@company.com'), 'newuser@example.com');
+      await user.type(screen.getByPlaceholderText('Tối thiểu 8 ký tự'), 'Password123');
+      await user.type(screen.getByPlaceholderText('Nguyễn Văn A'), 'Nguyễn Văn Test');
+
+      await user.click(screen.getByText('Tạo nhân viên'));
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(mockMutate).not.toHaveBeenCalled();
     });
 
     it('should not submit when form has validation errors', async () => {

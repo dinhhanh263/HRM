@@ -66,6 +66,7 @@
     },
     "email": "Email",
     "password": "Mật khẩu",
+    "employeeCode": "Mã nhân viên",
     "role": "Vai trò",
     "fullName": "Họ và tên",
     "phone": "Số điện thoại",
@@ -101,6 +102,7 @@
     "placeholders": {
       "email": "email@company.com",
       "password": "Tối thiểu 8 ký tự",
+      "employeeCode": "VD: NV001, CC-2026-01",
       "fullName": "Nguyễn Văn A",
       "phone": "0901234567",
       "idNumber": "001012345678",
@@ -158,7 +160,9 @@
       "fullNameRequired": "Vui lòng nhập họ tên",
       "dependentsCountRange": "Số người phụ thuộc phải là số nguyên 0–20",
       "emailExists": "Email này đã được sử dụng",
-      "idNumberExists": "Số CCCD/CMND này đã tồn tại"
+      "idNumberExists": "Số CCCD/CMND này đã tồn tại",
+      "employeeCodeRequired": "Vui lòng nhập mã nhân viên",
+      "employeeCodeExists": "Mã nhân viên này đã tồn tại"
     },
     "submitCreate": "Tạo nhân viên",
     "submitUpdate": "Cập nhật",

@@ -66,6 +66,7 @@
     },
     "email": "Email",
     "password": "Password",
+    "employeeCode": "Employee Code",
     "role": "Role",
     "fullName": "Full Name",
     "phone": "Phone Number",
@@ -101,6 +102,7 @@
     "placeholders": {
       "email": "email@company.com",
       "password": "At least 8 characters",
+      "employeeCode": "e.g. NV001, CC-2026-01",
       "fullName": "John Doe",
       "phone": "0901234567",
       "idNumber": "001012345678",
@@ -158,7 +160,9 @@
       "fullNameRequired": "Please enter a full name",
       "dependentsCountRange": "Dependents must be an integer between 0 and 20",
       "emailExists": "This email is already in use",
-      "idNumberExists": "This ID number already exists"
+      "idNumberExists": "This ID number already exists",
+      "employeeCodeRequired": "Employee code is required",
+      "employeeCodeExists": "This employee code already exists"
     },
     "submitCreate": "Create Employee",
     "submitUpdate": "Update",

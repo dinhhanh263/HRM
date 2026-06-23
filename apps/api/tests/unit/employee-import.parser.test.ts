@@ -14,6 +14,7 @@ async function makeXlsx(headers: string[], dataRows: (string | number)[][]): Pro
 }
 
 const CANONICAL_HEADERS = [
+  'employeeCode',
   'fullName',
   'email',
   'dateOfBirth',
@@ -31,8 +32,8 @@ const CANONICAL_HEADERS = [
 describe('employee-import parser — xlsx', () => {
   it('parses a clean xlsx into normalized rows (email lowercased, trimmed)', async () => {
     const buffer = await makeXlsx(CANONICAL_HEADERS, [
-      ['Nguyen Van A', '  ALICE@Example.com ', '', 'MALE', '', '', 'Engineering', 'Dev', '', '', 'FULL_TIME', 'EMPLOYEE'],
-      ['Tran Thi B', 'bob@example.com', '', '', '', '', '', '', '', '', '', ''],
+      ['NV-1', 'Nguyen Van A', '  ALICE@Example.com ', '', 'MALE', '', '', 'Engineering', 'Dev', '', '', 'FULL_TIME', 'EMPLOYEE'],
+      ['NV-2', 'Tran Thi B', 'bob@example.com', '', '', '', '', '', '', '', '', '', ''],
     ]);
 
     const { rows, errors } = await parseEmployeeFile(buffer, 'xlsx');
@@ -57,7 +58,7 @@ describe('employee-import parser — xlsx', () => {
     );
     // "E-Mail" does not normalize to "email" — only "email" does. So provide email properly.
     const { rows, errors } = await parseEmployeeFile(
-      await makeXlsx(['Full Name', 'Email', 'Join Date'], [['Le Van C', 'c@example.com', '2026-01-01']]),
+      await makeXlsx(['Employee code', 'Full Name', 'Email', 'Join Date'], [['NV-1', 'Le Van C', 'c@example.com', '2026-01-01']]),
       'xlsx',
     );
     expect(errors).toHaveLength(0);
@@ -68,9 +69,9 @@ describe('employee-import parser — xlsx', () => {
 
   it('skips fully-blank padding rows and renumbers data rows contiguously', async () => {
     const buffer = await makeXlsx(CANONICAL_HEADERS, [
-      ['A One', 'a1@example.com', '', '', '', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', '', '', '', '', ''], // blank
-      ['A Two', 'a2@example.com', '', '', '', '', '', '', '', '', '', ''],
+      ['NV-1', 'A One', 'a1@example.com', '', '', '', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '', '', '', '', '', ''], // blank
+      ['NV-2', 'A Two', 'a2@example.com', '', '', '', '', '', '', '', '', '', ''],
     ]);
     const { rows } = await parseEmployeeFile(buffer, 'xlsx');
     expect(rows.map((r) => r.rowNumber)).toEqual([1, 2]);
@@ -101,8 +102,8 @@ describe('employee-import parser — csv', () => {
   it('parses a clean csv into normalized rows', async () => {
     const csv = [
       CANONICAL_HEADERS.join(','),
-      'Nguyen Van A,alice@example.com,,MALE,,,Engineering,Dev,,,FULL_TIME,EMPLOYEE',
-      'Tran Thi B,BOB@Example.com,,,,,,,,,,',
+      'NV-1,Nguyen Van A,alice@example.com,,MALE,,,Engineering,Dev,,,FULL_TIME,EMPLOYEE',
+      'NV-2,Tran Thi B,BOB@Example.com,,,,,,,,,,',
     ].join('\n');
     const { rows, errors } = await parseEmployeeFile(Buffer.from(csv, 'utf-8'), 'csv');
 
@@ -141,8 +142,8 @@ describe('employee-import parser — csv date columns (timezone-stable)', () => 
 
   it('preserves the exact entered day for dateOfBirth, joinDate and idIssueDate', async () => {
     const csv = [
-      'fullName,email,dateOfBirth,joinDate,idIssueDate',
-      'Nguyen Van A,a@example.com,1990-05-20,2024-01-06,2018-03-15',
+      'employeeCode,fullName,email,dateOfBirth,joinDate,idIssueDate',
+      'NV-1,Nguyen Van A,a@example.com,1990-05-20,2024-01-06,2018-03-15',
     ].join('\n');
 
     const { rows, errors } = await parseEmployeeFile(Buffer.from(csv, 'utf-8'), 'csv');

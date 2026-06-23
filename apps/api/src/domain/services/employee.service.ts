@@ -124,6 +124,10 @@ function buildExtendedData(input: ExtendedEmployeeFields, mode: 'create' | 'upda
 }
 
 export interface CreateEmployeeInput extends ExtendedEmployeeFields {
+  // Manually assigned employee code. Optional at the type level so internal
+  // callers (bulk import, seeds) can omit it and fall back to auto-generation;
+  // the HTTP validator makes it required for the create-employee endpoint.
+  employeeCode?: string;
   fullName: string;
   dateOfBirth?: string;
   gender?: 'MALE' | 'FEMALE' | 'OTHER';
@@ -294,7 +298,22 @@ export const employeeService = {
       }
     }
 
-    const employeeCode = await generateEmployeeCode(tenantId);
+    // A manually supplied code must be unique within the tenant. When omitted
+    // (internal callers only — the HTTP layer requires it) fall back to the
+    // auto-generated EMP-NNN sequence.
+    let employeeCode: string;
+    if (input.employeeCode) {
+      const existingCode = await employeeRepository.findByEmployeeCode(input.employeeCode, tenantId);
+      if (existingCode) {
+        throw new ConflictError(
+          'An employee with this code already exists',
+          'EMPLOYEE_CODE_EXISTS',
+        );
+      }
+      employeeCode = input.employeeCode;
+    } else {
+      employeeCode = await generateEmployeeCode(tenantId);
+    }
     const hashedPassword = await bcrypt.hash(input.password, 12);
 
     // Precedence: explicit roleId (system or custom) → legacy role enum → EMPLOYEE.

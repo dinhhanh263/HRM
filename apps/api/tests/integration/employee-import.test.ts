@@ -19,6 +19,7 @@ const EMP_USER_PASSWORD = 'EmpTest@123';
 const OTHER_TENANT_EMAIL = 'someone@other-tenant.com';
 
 const CANONICAL_HEADERS = [
+  'employeeCode',
   'fullName',
   'email',
   'dateOfBirth',
@@ -39,9 +40,14 @@ function makeCsv(dataRows: string[][]): Buffer {
   return Buffer.from(lines.join('\n'), 'utf-8');
 }
 
-/** A full 12-column row with only the provided fields set. */
+/** A full row with only the provided fields set. Employee code is required, so
+ *  derive a unique one from the email local-part when not set explicitly. */
 function row(fields: Partial<Record<string, string>>): string[] {
-  return CANONICAL_HEADERS.map((h) => fields[h] ?? '');
+  const withCode: Partial<Record<string, string>> = {
+    ...fields,
+    employeeCode: fields.employeeCode ?? (fields.email ? `NV-${fields.email.split('@')[0]}` : ''),
+  };
+  return CANONICAL_HEADERS.map((h) => withCode[h] ?? '');
 }
 
 describe('Employee Import API — POST /employees/import/validate', () => {

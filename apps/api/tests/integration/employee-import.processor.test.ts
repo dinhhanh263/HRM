@@ -18,6 +18,7 @@ function vrow(overrides: Partial<ValidatedImportRow> & { email: string; fullName
   seq += 1;
   return {
     rowNumber: seq,
+    employeeCode: `NV-${seq}`,
     dateOfBirth: null,
     gender: null,
     idNumber: null,
@@ -118,7 +119,8 @@ describe('processImport — bulk employee import service', () => {
 
     const employees = await db.employee.findMany({ where: { tenantId } });
     expect(employees).toHaveLength(2);
-    expect(employees.every((e) => /^EMP-\d{3,}$/.test(e.employeeCode))).toBe(true);
+    // Codes come verbatim from the file rows (no longer auto-generated).
+    expect(employees.every((e) => /^NV-\d+$/.test(e.employeeCode))).toBe(true);
     expect(new Set(employees.map((e) => e.employeeCode)).size).toBe(2); // unique codes
   });
 

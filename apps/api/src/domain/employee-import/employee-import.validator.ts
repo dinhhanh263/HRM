@@ -51,16 +51,27 @@ export function validateRows(rows: ParsedImportRow[]): ValidationResult {
   const errors: ImportRowError[] = [];
   const valid: ValidatedImportRow[] = [];
 
-  // Track the first row each email appeared on, to flag later duplicates.
+  // Track the first row each email / employee code appeared on, to flag later
+  // duplicates within the same file.
   const emailFirstSeenRow = new Map<string, number>();
+  const employeeCodeFirstSeenRow = new Map<string, number>();
 
   for (const row of rows) {
     const rowErrors: ImportRowError[] = [];
 
+    const employeeCode = row.employeeCode.trim();
     const fullName = row.fullName.trim();
     const email = row.email.trim().toLowerCase();
 
     // --- Required fields ---
+    if (!employeeCode) {
+      rowErrors.push({
+        row: row.rowNumber,
+        column: 'employeeCode',
+        code: IMPORT_ERROR_CODES.MISSING_REQUIRED,
+        message: 'employeeCode is required',
+      });
+    }
     if (!fullName) {
       rowErrors.push({
         row: row.rowNumber,
@@ -186,6 +197,21 @@ export function validateRows(rows: ParsedImportRow[]): ValidationResult {
       });
     }
 
+    // --- Cross-row: duplicate employee code within the file ---
+    if (employeeCode) {
+      const firstRow = employeeCodeFirstSeenRow.get(employeeCode);
+      if (firstRow === undefined) {
+        employeeCodeFirstSeenRow.set(employeeCode, row.rowNumber);
+      } else {
+        rowErrors.push({
+          row: row.rowNumber,
+          column: 'employeeCode',
+          code: IMPORT_ERROR_CODES.EMPLOYEE_CODE_DUPLICATE_IN_FILE,
+          message: `Duplicate employee code in file (first seen at row ${firstRow}): ${employeeCode}`,
+        });
+      }
+    }
+
     // --- Cross-row: duplicate email within the file ---
     if (email && EMAIL_REGEX.test(email)) {
       const firstRow = emailFirstSeenRow.get(email);
@@ -209,6 +235,7 @@ export function validateRows(rows: ParsedImportRow[]): ValidationResult {
     // Row is clean — normalize into a typed, defaulted record.
     valid.push({
       rowNumber: row.rowNumber,
+      employeeCode,
       fullName,
       email,
       dateOfBirth: dateOfBirth || null,

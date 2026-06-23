@@ -69,6 +69,9 @@ const roleEnum = z.enum(['EMPLOYEE', 'MANAGER', 'HR_MANAGER', 'PAYROLL_APPROVER'
 const statusEnum = z.enum(['ACTIVE', 'INACTIVE', 'ON_LEAVE', 'TERMINATED']);
 
 export const createEmployeeSchema = z.object({
+  // Manually assigned by HR/admin; format is free-form per company convention,
+  // uniqueness within the tenant is enforced in the service layer.
+  employeeCode: z.string().trim().min(1, 'Employee code is required').max(50),
   fullName: z.string().min(1, 'Full name is required').max(100),
   dateOfBirth: dateInput.optional(),
   gender: genderEnum.optional(),

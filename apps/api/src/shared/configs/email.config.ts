@@ -1,30 +1,6 @@
-// Configuration for outbound email + the invite queue that fans out invite
-// emails after a bulk import. Values read from env so local dev without a
-// Resend key degrades gracefully (see email.provider.ts).
-
-/** BullMQ queue name for invite emails. See naming-conventions.md. */
-export const INVITE_QUEUE_NAME = 'hrm.employee.invite';
-
-/** The named job within the invite queue. */
-export const INVITE_JOB_NAME = 'send-invite';
-
-/** How long a finished invite job is retained before BullMQ removes it. */
-export const INVITE_JOB_RETENTION_SECONDS = 24 * 60 * 60;
-
-/** BullMQ queue that runs the daily lifecycle-reminder scan (probation/contract). */
-export const REMINDER_SCAN_QUEUE_NAME = 'hrm.reminders.scan';
-
-/** The repeatable job within the scan queue. */
-export const REMINDER_SCAN_JOB_NAME = 'daily-scan';
-
-/** BullMQ queue that fans out one reminder email per HR recipient. */
-export const REMINDER_EMAIL_QUEUE_NAME = 'hrm.reminders.email';
-
-/** The named job within the reminder-email queue. */
-export const REMINDER_EMAIL_JOB_NAME = 'send-reminder';
-
-/** Retention for finished reminder jobs before BullMQ removes them. */
-export const REMINDER_JOB_RETENTION_SECONDS = 24 * 60 * 60;
+// Configuration for outbound email. Values read from env so local dev without a
+// Resend key degrades gracefully (see email.provider.ts). The reminder-scan
+// cron/tz below are consumed by Cloud Scheduler provisioning (see deployment doc).
 
 /**
  * Cron for the daily scan. Evaluated in ICT (see tz below) so it fires at

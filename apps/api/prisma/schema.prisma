@@ -1613,3 +1613,33 @@ model BulkImportItem {
   @@index([batchId])
   @@map("bulk_import_items")
 }
+
+/// Staged bulk-import rows held between /validate and /import. Replaces Redis
+/// staging. Lazily expired on read; expired rows purged by the daily scan.
+model ImportStaging {
+  id        String   @id @default(uuid())
+  tenantId  String   @map("tenant_id")
+  kind      String   // 'employee' | 'asset'
+  payload   Json
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([expiresAt])
+  @@map("import_staging")
+}
+
+/// Background employee-import job status. Replaces BullMQ job state/progress/
+/// returnvalue (which lived in Redis) for the import wizard's polling endpoint.
+model ImportJob {
+  id        String   @id @default(uuid())
+  tenantId  String   @map("tenant_id")
+  state     String   @default("waiting") // waiting | active | completed | failed
+  progress  Json?    // { done: number, total: number }
+  result    Json?    // ImportJobResult
+  error     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([tenantId])
+  @@map("import_job")
+}

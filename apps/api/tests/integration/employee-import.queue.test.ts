@@ -1,16 +1,12 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
-import type { Worker } from 'bullmq';
 import { app } from '../../src/app.js';
 import { db } from '../../src/infrastructure/database/client.js';
-import { redis } from '../../src/infrastructure/cache/redis.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import {
   seedPermissionCatalog,
   syncSystemRolesForTenant,
 } from '../../src/domain/rbac/catalog.js';
-import { createImportWorker } from '../../src/domain/employee-import/employee-import.worker.js';
-import { getImportQueue } from '../../src/domain/employee-import/employee-import.queue.js';
 
 const TENANT_SLUG = 'import-queue-tenant';
 const HR_EMAIL = 'hr@import-queue.com';
@@ -64,7 +60,6 @@ describe('Employee Import API — POST /employees/import + GET /:jobId (queue + 
   let hrToken: string;
   let hrTokenB: string;
   let empToken: string;
-  let worker: Worker;
 
   beforeAll(async () => {
     const tenant = await db.tenant.upsert({
@@ -123,22 +118,15 @@ describe('Employee Import API — POST /employees/import + GET /:jobId (queue + 
       await request(app).post('/api/v1/auth/login')
         .send({ email: EMP_EMAIL, password: EMP_PASSWORD, tenantSlug: TENANT_SLUG })
     ).body.data.accessToken;
-
-    // Clean any stale jobs, then start the in-process worker.
-    await getImportQueue().obliterate({ force: true });
-    worker = createImportWorker();
   });
 
   afterAll(async () => {
-    await worker.close();
-    await getImportQueue().close();
     await db.employee.deleteMany({ where: { tenantId } });
     await db.user.deleteMany({ where: { tenantId } });
     await db.position.deleteMany({ where: { tenantId } });
     await db.department.deleteMany({ where: { tenantId } });
     await db.user.deleteMany({ where: { tenantId: tenantBId } });
     await db.tenant.deleteMany({ where: { slug: { in: [TENANT_SLUG, TENANT_B_SLUG] } } });
-    await redis.quit();
   });
 
   /** Validate a clean 2-row file and return its staging importId. */

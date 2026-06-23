@@ -37,7 +37,6 @@ ENV NODE_ENV=production
 # Copy the built workspace (node_modules incl. generated Prisma client + dist).
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-# Needed so `pnpm --filter @hrm/api ...` resolves the workspace at runtime.
 COPY --from=builder /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
 COPY --from=builder /app/packages/shared/package.json ./packages/shared/package.json
@@ -49,6 +48,5 @@ COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
 COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 
 EXPOSE 8080
-# Default command = HTTP API. The worker service overrides this with
-# `node apps/api/dist/worker.js` at deploy time.
+# HTTP API + Cloud Tasks job handlers (POST /internal/tasks/*) in one service.
 CMD ["node", "apps/api/dist/server.js"]

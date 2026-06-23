@@ -3,10 +3,8 @@ import request from 'supertest';
 import PDFDocument from 'pdfkit';
 import { app } from '../../src/app.js';
 import { db } from '../../src/infrastructure/database/client.js';
-import { redis } from '../../src/infrastructure/cache/redis.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import { seedPermissionCatalog, syncSystemRolesForTenant } from '../../src/domain/rbac/catalog.js';
-import { getCvParseQueue } from '../../src/domain/recruitment/cv-parse.queue.js';
 
 const TENANT_SLUG = 'recruitment-bulk-tenant';
 const HR_EMAIL = 'hr@recruitment-bulk.com';
@@ -125,12 +123,8 @@ describe('Recruitment API — bulk CV intake (upload)', () => {
   });
 
   afterAll(async () => {
-    // Upload enqueues per-item parse jobs; close the lazily-opened queue + Redis
-    // so the process exits. No worker runs here, so jobs stay queued.
-    await getCvParseQueue().close();
     await cleanup(tenantId);
     await db.tenant.delete({ where: { id: tenantId } });
-    await redis.quit();
   });
 
   it('creates a batch with one item per uploaded CV, each PARSING/PENDING', async () => {

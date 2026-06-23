@@ -1,8 +1,5 @@
-import { Worker, type Job } from 'bullmq';
 import { Prisma } from '@prisma/client';
 import { extname } from 'node:path';
-import { createQueueConnection } from '../../infrastructure/queue/connection.js';
-import { CV_PARSE_QUEUE_NAME } from '../../shared/configs/cv-parse.config.js';
 import { logger } from '../../shared/utils/logger.js';
 import { readCvFile } from '../../infrastructure/storage/cv-storage.js';
 import { candidateAttachmentRepository } from '../repositories/candidate-attachment.repository.js';
@@ -81,25 +78,11 @@ async function handleAttachmentJob(
  * `bulk_item` parses a staged CV in an import batch (its own error handling +
  * filename fallback live in the service). Both share this queue's retry policy.
  */
-async function handleCvParseJob(job: Job<CvParseJobData>): Promise<CvParseJobResult> {
-  if (job.data.kind === 'bulk_item') {
-    await bulkImportService.parseItem(job.data.itemId, job.data.tenantId);
-    return { status: 'DONE', provider: null };
+export async function cvParseHandler(payload: unknown): Promise<void> {
+  const job = payload as CvParseJobData;
+  if (job.kind === 'bulk_item') {
+    await bulkImportService.parseItem(job.itemId, job.tenantId);
+    return;
   }
-  return handleAttachmentJob(job.data);
-}
-
-/**
- * Start the CV-parse worker. Called once at server startup (and in tests). The
- * caller owns the returned Worker and must `close()` it on shutdown.
- */
-export function createCvParseWorker(): Worker<CvParseJobData, CvParseJobResult> {
-  return new Worker<CvParseJobData, CvParseJobResult>(
-    CV_PARSE_QUEUE_NAME,
-    handleCvParseJob,
-    {
-      connection: createQueueConnection(),
-      concurrency: 2,
-    }
-  );
+  await handleAttachmentJob(job);
 }

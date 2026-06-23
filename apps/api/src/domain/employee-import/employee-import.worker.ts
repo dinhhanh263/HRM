@@ -1,72 +1,53 @@
-import { Worker, type Job } from 'bullmq';
-import type { ImportJobResult } from '@hrm/shared';
-import { createQueueConnection } from '../../infrastructure/queue/connection.js';
-import {
-  IMPORT_QUEUE_NAME,
-  IMPORT_WORKER_CHUNK_SIZE,
-} from '../../shared/configs/import.config.js';
 import { getStagedImport, discardStagedImport } from './employee-import.staging.js';
 import { processImport, type CreatedUser } from './employee-import.processor.js';
+import { importJobRepository } from './import-job.repository.js';
+import { IMPORT_WORKER_CHUNK_SIZE } from '../../shared/configs/import.config.js';
 import type { ImportJobData } from './employee-import.queue.js';
 import { enqueueInvites, type InviteJobData } from './employee-import.invite.queue.js';
+import { logger } from '../../shared/utils/logger.js';
 
 /**
- * Process one import job: load the staged rows, run the two-pass import, report
- * progress, and discard the staging entry. The returned result becomes the job's
- * `returnvalue`, surfaced by `GET /employees/import/:jobId`.
+ * Process one import task: mark active, load staged rows, run the two-pass
+ * import while persisting progress, store the result, discard staging, then fan
+ * out invite emails. Failures are recorded as `failed` (no retry — import is
+ * not idempotent at the row level; BullMQ used attempts:1 for the same reason).
  */
-async function handleImportJob(job: Job<ImportJobData>): Promise<ImportJobResult> {
-  const { importId, tenantId } = job.data;
+export async function employeeImportHandler(payload: unknown): Promise<void> {
+  const { jobId, importId, tenantId } = payload as ImportJobData;
 
-  const staged = await getStagedImport(importId, tenantId);
-  if (!staged) {
-    // Expired or already consumed — treat as a no-op rather than a hard failure.
-    return { total: 0, created: 0, skipped: 0, failed: 0, errors: [] };
-  }
+  try {
+    // Inside the try so a transient failure here still records `failed` rather
+    // than stranding the job in `waiting` (the queue does not retry imports).
+    await importJobRepository.markActive(jobId);
 
-  // Throttle progress writes to one per chunk (and a final one) so a 5,000-row
-  // run doesn't hammer Redis with thousands of updateProgress calls.
-  const onProgress = (done: number, total: number): void => {
-    if (done === total || done % IMPORT_WORKER_CHUNK_SIZE === 0) {
-      void job.updateProgress({ done, total });
+    const staged = await getStagedImport(importId, tenantId);
+    if (!staged) {
+      await importJobRepository.markCompleted(jobId, { total: 0, created: 0, skipped: 0, failed: 0, errors: [] });
+      return;
     }
-  };
 
-  // Collect created users, then fan out invite emails as a separate queue after
-  // the import finishes — sending email is decoupled from employee creation.
-  const created: CreatedUser[] = [];
-  const onUserCreated = (user: CreatedUser): void => {
-    created.push(user);
-  };
+    const onProgress = (done: number, total: number): void => {
+      if (done === total || done % IMPORT_WORKER_CHUNK_SIZE === 0) {
+        // Best-effort progress write; never let it crash the import.
+        void importJobRepository.setProgress(jobId, { done, total }).catch((err) => {
+          logger.warn({ err, jobId }, 'failed to persist import progress');
+        });
+      }
+    };
 
-  const result = await processImport(
-    tenantId,
-    staged.rows,
-    staged.options,
-    onProgress,
-    onUserCreated,
-  );
+    const created: CreatedUser[] = [];
+    const onUserCreated = (user: CreatedUser): void => { created.push(user); };
 
-  await discardStagedImport(importId);
+    const result = await processImport(tenantId, staged.rows, staged.options, onProgress, onUserCreated);
+    await discardStagedImport(importId);
+    await importJobRepository.markCompleted(jobId, result);
 
-  const invites: InviteJobData[] = created.map((u) => ({
-    userId: u.userId,
-    tenantId,
-    email: u.email,
-    fullName: u.fullName,
-  }));
-  await enqueueInvites(invites);
-
-  return result;
-}
-
-/**
- * Start the import worker. Called once at server startup (and in tests). The
- * caller owns the returned Worker and must `close()` it on shutdown.
- */
-export function createImportWorker(): Worker<ImportJobData, ImportJobResult> {
-  return new Worker<ImportJobData, ImportJobResult>(IMPORT_QUEUE_NAME, handleImportJob, {
-    connection: createQueueConnection(),
-    concurrency: 1, // imports are write-heavy; serialize to keep code allocation safe
-  });
+    const invites: InviteJobData[] = created.map((u) => ({
+      userId: u.userId, tenantId, email: u.email, fullName: u.fullName,
+    }));
+    await enqueueInvites(invites);
+  } catch (err) {
+    logger.error({ err, jobId }, 'employee import failed');
+    await importJobRepository.markFailed(jobId, err instanceof Error ? err.message : 'import failed');
+  }
 }

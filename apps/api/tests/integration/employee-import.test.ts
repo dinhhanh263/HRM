@@ -2,7 +2,6 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 import { app } from '../../src/app.js';
 import { db } from '../../src/infrastructure/database/client.js';
-import { redis } from '../../src/infrastructure/cache/redis.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import {
   seedPermissionCatalog,
@@ -138,7 +137,6 @@ describe('Employee Import API — POST /employees/import/validate', () => {
     await db.position.deleteMany({ where: { tenantId: testTenantId } });
     await db.department.deleteMany({ where: { tenantId: testTenantId } });
     await db.tenant.deleteMany({ where: { slug: { in: [TEST_TENANT_SLUG, OTHER_TENANT_SLUG] } } });
-    await redis.quit();
   });
 
   it('returns 401 without authentication', async () => {

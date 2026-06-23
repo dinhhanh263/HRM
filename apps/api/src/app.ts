@@ -4,6 +4,8 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { routes } from './app/routes/index.js';
 import { errorHandler } from './app/middlewares/error.middleware.js';
+import { internalTasksRouter } from './app/routes/internal-tasks.router.js';
+import { registerAllHandlers } from './infrastructure/tasks/register-handlers.js';
 
 const app: Express = express();
 
@@ -29,6 +31,10 @@ app.use(
 app.use(express.json({ limit: '6mb' }));
 app.use(express.urlencoded({ extended: true, limit: '6mb' }));
 app.use(cookieParser());
+
+// Register Cloud Tasks handlers and mount the internal router
+registerAllHandlers();
+app.use(internalTasksRouter);
 
 // Routes
 app.use('/api/v1', routes);

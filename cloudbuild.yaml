@@ -33,8 +33,9 @@ options:
   machineType: E2_HIGHCPU_8
   logging: CLOUD_LOGGING_ONLY
 
+# Image is always tagged :latest. Each deploy resolves it to the new digest and
+# creates a fresh Cloud Run revision, so rollback (via revisions) still works.
 images:
-  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/api:$SHORT_SHA'
   - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/api:latest'
 
 steps:
@@ -45,8 +46,6 @@ steps:
       - build
       - -f
       - apps/api/Dockerfile
-      - -t
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/api:$SHORT_SHA'
       - -t
       - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/api:latest'
       - .
@@ -66,7 +65,7 @@ steps:
       - jobs
       - deploy
       - hrm-migrate
-      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/api:$SHORT_SHA
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/api:latest
       - --region=${_REGION}
       - --set-cloudsql-instances=$PROJECT_ID:${_REGION}:${_SQL_INSTANCE}
       - --set-secrets=DATABASE_URL=DATABASE_URL:latest
@@ -86,7 +85,7 @@ steps:
       - run
       - deploy
       - hrm-api
-      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/api:$SHORT_SHA
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/api:latest
       - --region=${_REGION}
       - --allow-unauthenticated
       - --timeout=900

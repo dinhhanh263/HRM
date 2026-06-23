@@ -136,6 +136,8 @@ export interface EmployeeDto {
 export interface CreateEmployeeRequest extends ExtendedEmployeeFields {
   email: string;
   password: string;
+  // Manually assigned by HR/admin at creation; unique within the tenant.
+  employeeCode: string;
   fullName: string;
   departmentId?: string;
   positionId?: string;

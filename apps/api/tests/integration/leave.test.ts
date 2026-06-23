@@ -207,6 +207,7 @@ describe('Leave API', () => {
         .send({
           email: 'prorata-on@leave-test.com',
           password: 'Employee@123',
+          employeeCode: 'PRORATA-ON',
           fullName: 'Pro Rata On',
           contractType: 'FULL_TIME',
           joinDate: '2026-11-15T00:00:00.000Z',
@@ -226,6 +227,7 @@ describe('Leave API', () => {
         .send({
           email: 'prorata-off@leave-test.com',
           password: 'Employee@123',
+          employeeCode: 'PRORATA-OFF',
           fullName: 'Pro Rata Off',
           contractType: 'FULL_TIME',
           joinDate: '2026-11-15T00:00:00.000Z',

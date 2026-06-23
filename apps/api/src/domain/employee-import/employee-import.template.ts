@@ -19,6 +19,7 @@ export interface TemplateFile {
  *  enums as the exact uppercase codes, manager referenced by email). */
 const EXAMPLE_ROWS: Record<ImportColumn, string>[] = [
   {
+    employeeCode: 'NV-001',
     fullName: 'Nguyễn Văn An',
     email: 'an.nguyen@example.com',
     dateOfBirth: '1992-03-15',
@@ -52,6 +53,7 @@ const EXAMPLE_ROWS: Record<ImportColumn, string>[] = [
     motorbikeRegistration: 'Honda Wave - Đỏ - 29X1-12345',
   },
   {
+    employeeCode: 'NV-002',
     fullName: 'Trần Thị Bình',
     email: 'binh.tran@example.com',
     dateOfBirth: '1990-07-22',

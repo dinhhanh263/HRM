@@ -142,13 +142,14 @@ describe('Employee API', () => {
   });
 
   describe('POST /api/v1/employees', () => {
-    it('should create a new employee with user account', async () => {
+    it('should create a new employee with the manually supplied employee code', async () => {
       const res = await request(app)
         .post('/api/v1/employees')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'newemployee@test.com',
           password: 'Employee@123',
+          employeeCode: 'NV-001',
           fullName: 'New Employee',
           departmentId: testDepartmentId,
           positionId: testPositionId,
@@ -158,10 +159,43 @@ describe('Employee API', () => {
       expect(res.status).toBe(201);
       expect(res.body.success).toBe(true);
       expect(res.body.data.fullName).toBe('New Employee');
-      expect(res.body.data.employeeCode).toMatch(/^EMP-\d{3}$/);
+      // The code is taken verbatim from the request, not auto-generated.
+      expect(res.body.data.employeeCode).toBe('NV-001');
       expect(res.body.data.user.email).toBe('newemployee@test.com');
       expect(res.body.data.department.name).toBe('Test Department');
       expect(res.body.data.position.name).toBe('Test Position');
+    });
+
+    it('should return 409 with EMPLOYEE_CODE_EXISTS code if the code is already used', async () => {
+      const res = await request(app)
+        .post('/api/v1/employees')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          email: 'code-dup@test.com',
+          password: 'Employee@123',
+          // 'NV-001' was taken by the test above.
+          employeeCode: 'NV-001',
+          fullName: 'Code Dup',
+          contractType: 'FULL_TIME',
+        });
+
+      expect(res.status).toBe(409);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error.code).toBe('EMPLOYEE_CODE_EXISTS');
+    });
+
+    it('should return 422 when employee code is missing', async () => {
+      const res = await request(app)
+        .post('/api/v1/employees')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          email: 'no-code@test.com',
+          password: 'Employee@123',
+          fullName: 'No Code',
+          contractType: 'FULL_TIME',
+        });
+
+      expect(res.status).toBe(422);
     });
 
     // SPEC-040: extended profile fields must persist on create and round-trip on
@@ -173,6 +207,7 @@ describe('Employee API', () => {
         .send({
           email: 'extended-fields@test.com',
           password: 'Employee@123',
+          employeeCode: 'NV-EXT',
           fullName: 'Extended Fields',
           contractType: 'FULL_TIME',
           placeOfBirth: 'Hà Nội',
@@ -229,6 +264,7 @@ describe('Employee API', () => {
         .send({
           email: 'newemployee@test.com',
           password: 'Employee@123',
+          employeeCode: 'NV-EMAILDUP',
           fullName: 'Duplicate Employee',
           contractType: 'FULL_TIME',
         });
@@ -246,6 +282,7 @@ describe('Employee API', () => {
         .send({
           email: 'idnumber-owner@test.com',
           password: 'Employee@123',
+          employeeCode: 'NV-IDN1',
           fullName: 'ID Number Owner',
           idNumber: '079123456789',
           contractType: 'FULL_TIME',
@@ -258,6 +295,7 @@ describe('Employee API', () => {
         .send({
           email: 'idnumber-dup@test.com',
           password: 'Employee@123',
+          employeeCode: 'NV-IDN2',
           fullName: 'ID Number Dup',
           idNumber: '079123456789',
           contractType: 'FULL_TIME',
@@ -587,6 +625,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
           email: 'new-hr@employee-test.com',
+          employeeCode: 'NV-NEWHR',
           password: 'NewHr@123',
           fullName: 'New HR',
           role: 'HR_MANAGER',
@@ -619,6 +658,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
           email: 'promote-me@employee-test.com',
+          employeeCode: 'NV-PROMOTEME',
           password: 'Promote@123',
           fullName: 'Promote Me',
           role: 'EMPLOYEE',
@@ -654,6 +694,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
           email: 'approver@employee-test.com',
+          employeeCode: 'NV-APPROVER',
           password: 'Approver@123',
           fullName: 'Backup Approver',
           role: 'PAYROLL_APPROVER',
@@ -688,6 +729,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'hr-tries-approver@employee-test.com',
+          employeeCode: 'NV-HRTRIESAPV',
           password: 'Sneaky@123',
           fullName: 'HR Tries Approver',
           role: 'PAYROLL_APPROVER',
@@ -711,6 +753,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
           email: 'stay-employee@employee-test.com',
+          employeeCode: 'NV-STAYEMP',
           password: 'StayEmp@123',
           fullName: 'Stay Employee',
           role: 'EMPLOYEE',
@@ -774,6 +817,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
           email: 'director@employee-test.com',
+          employeeCode: 'NV-DIRECTOR',
           password: 'Director@123',
           fullName: 'Custom Director',
           roleId: customRoleId,
@@ -806,6 +850,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
           email: 'hr-by-roleid@employee-test.com',
+          employeeCode: 'NV-HRBYROLEID',
           password: 'HrById@123',
           fullName: 'HR By RoleId',
           roleId: hrRole!.id,
@@ -826,6 +871,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
           email: 'promote-to-director@employee-test.com',
+          employeeCode: 'NV-PROMODIR',
           password: 'Promote@123',
           fullName: 'Promote To Director',
           contractType: 'FULL_TIME',
@@ -855,6 +901,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
           email: 'wannabe-admin@employee-test.com',
+          employeeCode: 'NV-WANNABE',
           password: 'Wannabe@123',
           fullName: 'Wannabe Admin',
           roleId: superRole!.id,
@@ -883,6 +930,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
           email: 'foreign-role@employee-test.com',
+          employeeCode: 'NV-FOREIGN',
           password: 'Foreign@123',
           fullName: 'Foreign Role User',
           roleId: otherRole.id,
@@ -901,6 +949,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'hr-tries-director@employee-test.com',
+          employeeCode: 'NV-HRTRIESDIR',
           password: 'Sneaky@123',
           fullName: 'HR Tries Director',
           roleId: customRoleId,
@@ -924,6 +973,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
           email: 'detail-roleid@employee-test.com',
+          employeeCode: 'NV-DETAILROLEID',
           password: 'Detail@123',
           fullName: 'Detail RoleId',
           roleId: customRoleId,
@@ -954,6 +1004,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'probation@employee-test.com',
+          employeeCode: 'NV-PROB',
           password: 'Probation@123',
           fullName: 'Probation Employee',
           contractType: 'PROBATION',
@@ -1001,6 +1052,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'probation-create@employee-test.com',
+          employeeCode: 'NV-PROBCREATE',
           password: 'Probation@123',
           fullName: 'Probation Create',
           contractType: 'PROBATION',
@@ -1019,6 +1071,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'probation-create-bad@employee-test.com',
+          employeeCode: 'NV-PROBBAD',
           password: 'Probation@123',
           fullName: 'Probation Create Bad',
           contractType: 'PROBATION',
@@ -1041,6 +1094,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'has-dependents@employee-test.com',
+          employeeCode: 'NV-HASDEP',
           password: 'Depend@123',
           fullName: 'Has Dependents',
           contractType: 'FULL_TIME',
@@ -1057,6 +1111,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'no-dependents@employee-test.com',
+          employeeCode: 'NV-NODEP',
           password: 'Depend@123',
           fullName: 'No Dependents',
           contractType: 'FULL_TIME',
@@ -1072,6 +1127,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'edit-dependents@employee-test.com',
+          employeeCode: 'NV-EDITDEP',
           password: 'Depend@123',
           fullName: 'Edit Dependents',
           contractType: 'FULL_TIME',
@@ -1095,6 +1151,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'bad-dependents@employee-test.com',
+          employeeCode: 'NV-BADDEP',
           password: 'Depend@123',
           fullName: 'Bad Dependents',
           contractType: 'FULL_TIME',
@@ -1126,6 +1183,7 @@ describe('Employee API', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           email: 'avatar-create@employee-test.com',
+          employeeCode: 'NV-AVATAR',
           password: 'Avatar@123',
           fullName: 'Avatar Create',
           contractType: 'FULL_TIME',

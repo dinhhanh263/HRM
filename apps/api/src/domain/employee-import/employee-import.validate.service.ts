@@ -62,14 +62,17 @@ export async function validateImportFile(
 
   // 4) DB-dependent checks — batched so cost is O(queries), not O(rows).
   const emails = valid.map((r) => r.email);
+  const employeeCodes = valid.map((r) => r.employeeCode);
   const idNumbers = valid.map((r) => r.idNumber).filter((v): v is string => v !== null);
   const managerRefs = valid.map((r) => r.manager).filter((v): v is string => v !== null);
 
-  const [existingEmails, existingIdNumbers, resolvableManagers] = await Promise.all([
-    employeeImportRepository.existingEmails(tenantId, emails),
-    employeeImportRepository.existingIdNumbers(tenantId, idNumbers),
-    employeeImportRepository.resolvableManagerRefs(tenantId, managerRefs),
-  ]);
+  const [existingEmails, existingEmployeeCodes, existingIdNumbers, resolvableManagers] =
+    await Promise.all([
+      employeeImportRepository.existingEmails(tenantId, emails),
+      employeeImportRepository.existingEmployeeCodes(tenantId, employeeCodes),
+      employeeImportRepository.existingIdNumbers(tenantId, idNumbers),
+      employeeImportRepository.resolvableManagerRefs(tenantId, managerRefs),
+    ]);
 
   // New rows can be managers of other new rows (forward reference resolved in
   // the worker's two-pass linking), so a manager is resolvable if it matches a
@@ -87,6 +90,15 @@ export async function validateImportFile(
         column: 'email',
         code: IMPORT_ERROR_CODES.EMAIL_EXISTS,
         message: `An account already exists for ${row.email}`,
+      });
+    }
+
+    if (existingEmployeeCodes.has(row.employeeCode)) {
+      extra.push({
+        row: row.rowNumber,
+        column: 'employeeCode',
+        code: IMPORT_ERROR_CODES.EMPLOYEE_CODE_EXISTS,
+        message: `An employee already exists with code ${row.employeeCode}`,
       });
     }
 

@@ -168,7 +168,9 @@ export function EmployeeForm({
   // Surface field-mappable server conflicts inline, focused on the field.
   const serverFieldError = getServerFieldError(serverError);
   useEffect(() => {
-    if (serverFieldError) {
+    // employeeCode is fixed after creation, so the edit form has no such field
+    // to map a conflict onto — narrow it out.
+    if (serverFieldError && serverFieldError.field !== 'employeeCode') {
       setError(
         serverFieldError.field,
         { type: 'server', message: serverFieldError.message },
@@ -310,6 +312,22 @@ export function EmployeeForm({
               </div>
             </div>
           </div>
+
+          {/* Employee code is assigned at creation and fixed afterwards — show it
+              read-only so HR can see it on the edit screen without being able to
+              change it (would break references in contracts, payroll, etc.). */}
+          {isEditing && employee && (
+            <div className="space-y-2">
+              <Label htmlFor="employeeCode">{t('form.employeeCode')}</Label>
+              <Input
+                id="employeeCode"
+                value={employee.employeeCode}
+                disabled
+                readOnly
+                className="font-mono"
+              />
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">

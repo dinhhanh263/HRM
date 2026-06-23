@@ -6,6 +6,7 @@ import { validateRows } from '../../src/domain/employee-import/employee-import.v
 function makeRow(rowNumber: number, overrides: Partial<ParsedImportRow> = {}): ParsedImportRow {
   return {
     rowNumber,
+    employeeCode: `NV-${rowNumber}`,
     fullName: 'Nguyen Van A',
     email: `user${rowNumber}@example.com`,
     dateOfBirth: '',
@@ -76,6 +77,29 @@ describe('employee-import validator — per-row codes', () => {
     expect(valid).toHaveLength(0);
     const codes = codesForRow(errors, 1);
     expect(codes.filter((c) => c === IMPORT_ERROR_CODES.MISSING_REQUIRED)).toHaveLength(2);
+  });
+
+  it('flags IMPORT_MISSING_REQUIRED for an empty employeeCode', () => {
+    const { valid, errors } = validateRows([makeRow(1, { employeeCode: '   ' })]);
+    expect(valid).toHaveLength(0);
+    const codeErr = errors.find(
+      (e) => e.row === 1 && e.column === 'employeeCode',
+    );
+    expect(codeErr?.code).toBe(IMPORT_ERROR_CODES.MISSING_REQUIRED);
+  });
+
+  it('flags IMPORT_EMPLOYEE_CODE_DUPLICATE_IN_FILE on the second occurrence only', () => {
+    const { valid, errors } = validateRows([
+      makeRow(1, { employeeCode: 'NV-DUP' }),
+      makeRow(2, { employeeCode: 'NV-DUP' }),
+    ]);
+    expect(valid).toHaveLength(1); // only the first survives
+    expect(codesForRow(errors, 1)).not.toContain(
+      IMPORT_ERROR_CODES.EMPLOYEE_CODE_DUPLICATE_IN_FILE,
+    );
+    expect(codesForRow(errors, 2)).toContain(
+      IMPORT_ERROR_CODES.EMPLOYEE_CODE_DUPLICATE_IN_FILE,
+    );
   });
 
   it('flags IMPORT_INVALID_EMAIL for a malformed email', () => {

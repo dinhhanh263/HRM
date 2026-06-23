@@ -27,12 +27,12 @@ RUN pnpm --filter @hrm/shared build \
 FROM node:20-slim AS runner
 RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates \
   && rm -rf /var/lib/apt/lists/*
+# pnpm is needed at runtime by the migrate Cloud Run job (`pnpm --filter @hrm/api
+# exec prisma migrate deploy`) and the seed job.
+RUN corepack enable && corepack prepare pnpm@9.1.0 --activate
 WORKDIR /app
 ENV NODE_ENV=production
 # Cloud Run injects PORT (8080); app.ts/server.ts already honour it.
-# pnpm is needed by the migrate Cloud Run job (`pnpm --filter @hrm/api exec prisma
-# migrate deploy`), which also requires the workspace manifest below.
-RUN corepack enable && corepack prepare pnpm@9.1.0 --activate
 
 # Copy the built workspace (node_modules incl. generated Prisma client + dist).
 COPY --from=builder /app/node_modules ./node_modules

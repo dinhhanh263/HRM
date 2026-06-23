@@ -16,6 +16,16 @@ export const employeeImportRepository = {
     return new Set(rows.map((r) => r.email.toLowerCase()));
   },
 
+  /** Employee codes already taken by an employee in this tenant. */
+  async existingEmployeeCodes(tenantId: string, codes: string[]): Promise<Set<string>> {
+    if (codes.length === 0) return new Set();
+    const rows = await db.employee.findMany({
+      where: { tenantId, employeeCode: { in: codes } },
+      select: { employeeCode: true },
+    });
+    return new Set(rows.map((r) => r.employeeCode));
+  },
+
   /** ID numbers that already belong to an employee in this tenant. */
   async existingIdNumbers(tenantId: string, idNumbers: string[]): Promise<Set<string>> {
     if (idNumbers.length === 0) return new Set();

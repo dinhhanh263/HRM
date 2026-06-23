@@ -205,6 +205,16 @@ export const employeeRepository = {
     });
   },
 
+  async findByEmployeeCode(employeeCode: string, tenantId: string, excludeId?: string) {
+    return db.employee.findFirst({
+      where: {
+        employeeCode,
+        tenantId,
+        ...(excludeId && { id: { not: excludeId } }),
+      },
+    });
+  },
+
   async create(data: Prisma.EmployeeCreateInput) {
     return db.employee.create({
       data,

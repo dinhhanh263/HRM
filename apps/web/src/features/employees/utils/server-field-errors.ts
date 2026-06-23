@@ -1,7 +1,7 @@
 import { getApiErrorCode } from '@/lib/api-error';
 
 export interface ServerFieldError {
-  field: 'email' | 'idNumber';
+  field: 'email' | 'idNumber' | 'employeeCode';
   // i18n key in the `employee` namespace — render via t(message).
   message: string;
 }
@@ -11,6 +11,7 @@ export interface ServerFieldError {
 const SERVER_FIELD_ERRORS: Record<string, ServerFieldError> = {
   EMAIL_EXISTS: { field: 'email', message: 'form.validation.emailExists' },
   ID_NUMBER_EXISTS: { field: 'idNumber', message: 'form.validation.idNumberExists' },
+  EMPLOYEE_CODE_EXISTS: { field: 'employeeCode', message: 'form.validation.employeeCodeExists' },
 };
 
 export function getServerFieldError(err: unknown): ServerFieldError | undefined {

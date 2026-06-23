@@ -10,7 +10,6 @@ import { employeeRepository } from '../repositories/employee.repository.js';
 import { employeeImportRepository } from '../repositories/employee-import.repository.js';
 import { roleRepository } from '../repositories/role.repository.js';
 import { roleKeyForUserRole } from '../rbac/catalog.js';
-import { allocateEmployeeCodeBlock } from '../../shared/helpers/employee-code.helper.js';
 import { wouldCreateManagerCycle } from '../../shared/helpers/manager-cycle.helper.js';
 import { leaveAllocationService } from '../services/leave-allocation.service.js';
 import { logger } from '../../shared/utils/logger.js';
@@ -94,8 +93,8 @@ async function resolveRoleIds(
  *
  *  1. Create one User(INVITED) + Employee per row. Emails that already exist in
  *     the tenant are skipped (duplicateMode='skip') so a re-run is idempotent —
- *     re-importing the same file creates 0 new records. Employee codes are
- *     allocated as one contiguous block. Each row is its own transaction so a
+ *     re-importing the same file creates 0 new records. Employee codes come from
+ *     the file (validated unique up front). Each row is its own transaction so a
  *     single bad row fails in isolation (partial success, never aborting).
  *  2. Link direct managers. A manager reference resolves against rows created in
  *     THIS run (forward references, by email) first, then against existing
@@ -144,9 +143,9 @@ export async function processImport(
   // to zero permissions — every requirePermission check would fail).
   const roleIdByRole = await resolveRoleIds(tenantId, toCreate);
 
-  // One contiguous code block for the rows we intend to create. A row that
-  // fails leaves a gap in the sequence — acceptable; codes need only be unique.
-  const codes = await allocateEmployeeCodeBlock(tenantId, toCreate.length);
+  // Employee codes are supplied per row (validated unique within the file and
+  // against the tenant by the dry-run). A residual unique-constraint violation
+  // (e.g. a concurrent create between validate and import) just fails that row.
 
   // emailLower → created employee id (drives pass-2 forward references).
   const createdByEmail = new Map<string, string>();
@@ -174,7 +173,7 @@ export async function processImport(
           data: {
             tenantId,
             userId: user.id,
-            employeeCode: codes[i],
+            employeeCode: row.employeeCode,
             fullName: row.fullName,
             dateOfBirth: row.dateOfBirth ? new Date(row.dateOfBirth) : undefined,
             gender: row.gender ?? undefined,

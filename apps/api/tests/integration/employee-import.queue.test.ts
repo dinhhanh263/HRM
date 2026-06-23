@@ -21,7 +21,7 @@ const HR_B_EMAIL = 'hr@import-queue-b.com';
 const HR_B_PASSWORD = 'HrQueueB@123';
 
 const CANONICAL_HEADERS = [
-  'fullName', 'email', 'dateOfBirth', 'gender', 'idNumber', 'phone',
+  'employeeCode', 'fullName', 'email', 'dateOfBirth', 'gender', 'idNumber', 'phone',
   'department', 'position', 'manager', 'joinDate', 'contractType', 'role',
 ];
 
@@ -30,7 +30,13 @@ function makeCsv(dataRows: string[][]): Buffer {
   return Buffer.from(lines.join('\n'), 'utf-8');
 }
 function row(fields: Partial<Record<string, string>>): string[] {
-  return CANONICAL_HEADERS.map((h) => fields[h] ?? '');
+  // Employee code is required; derive a unique one from the email local-part
+  // when a test doesn't set it explicitly.
+  const withCode: Partial<Record<string, string>> = {
+    ...fields,
+    employeeCode: fields.employeeCode ?? (fields.email ? `NV-${fields.email.split('@')[0]}` : ''),
+  };
+  return CANONICAL_HEADERS.map((h) => withCode[h] ?? '');
 }
 
 /** Poll the status endpoint until the job finishes (or a timeout elapses). */

@@ -19,8 +19,10 @@ export const IMPORT_ERROR_CODES = {
   INVALID_ENUM: 'IMPORT_INVALID_ENUM',
   INVALID_NUMBER: 'IMPORT_INVALID_NUMBER',
   EMAIL_DUPLICATE_IN_FILE: 'IMPORT_EMAIL_DUPLICATE_IN_FILE',
+  EMPLOYEE_CODE_DUPLICATE_IN_FILE: 'IMPORT_EMPLOYEE_CODE_DUPLICATE_IN_FILE',
   // DB-dependent (resolved later in validate/import service)
   EMAIL_EXISTS: 'IMPORT_EMAIL_EXISTS',
+  EMPLOYEE_CODE_EXISTS: 'IMPORT_EMPLOYEE_CODE_EXISTS',
   IDNUMBER_DUPLICATE: 'IMPORT_IDNUMBER_DUPLICATE',
   MANAGER_NOT_FOUND: 'IMPORT_MANAGER_NOT_FOUND',
   MANAGER_CYCLE: 'IMPORT_MANAGER_CYCLE',
@@ -33,6 +35,7 @@ export type ImportErrorCode = (typeof IMPORT_ERROR_CODES)[keyof typeof IMPORT_ER
 
 /** The canonical import column keys (also the template header keys). */
 export const IMPORT_COLUMNS = [
+  'employeeCode',
   'fullName',
   'email',
   'dateOfBirth',
@@ -70,7 +73,7 @@ export const IMPORT_COLUMNS = [
 export type ImportColumn = (typeof IMPORT_COLUMNS)[number];
 
 /** Columns that must be present (with a value) for a row to be importable. */
-export const REQUIRED_IMPORT_COLUMNS = ['fullName', 'email'] as const satisfies readonly ImportColumn[];
+export const REQUIRED_IMPORT_COLUMNS = ['employeeCode', 'fullName', 'email'] as const satisfies readonly ImportColumn[];
 
 /** Supported template/header languages. */
 export type ImportLang = 'vi' | 'en';
@@ -81,6 +84,7 @@ export type ImportLang = 'vi' | 'en';
  * aliases so a filled-in localized template re-imports cleanly (round-trip).
  */
 export const IMPORT_COLUMN_LABELS: Record<ImportColumn, Record<ImportLang, string>> = {
+  employeeCode: { vi: 'Mã nhân viên', en: 'Employee code' },
   fullName: { vi: 'Họ và tên', en: 'Full name' },
   email: { vi: 'Email', en: 'Email' },
   dateOfBirth: { vi: 'Ngày sinh', en: 'Date of birth' },
@@ -126,6 +130,7 @@ export const IMPORT_ENUM_OPTIONS = {
  * is the 1-based spreadsheet row (header excluded) for error reporting. */
 export interface ParsedImportRow {
   rowNumber: number;
+  employeeCode: string;
   fullName: string;
   email: string;
   dateOfBirth: string;
@@ -163,6 +168,7 @@ export interface ParsedImportRow {
 /** A normalized row that has passed per-row validation (typed enums applied). */
 export interface ValidatedImportRow {
   rowNumber: number;
+  employeeCode: string;
   fullName: string;
   email: string;
   dateOfBirth: string | null;

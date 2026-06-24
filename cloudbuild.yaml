@@ -75,6 +75,30 @@ steps:
       - --wait
     waitFor: ['push-api']
 
+  # 2b) Sync the RBAC catalog + system-role grants + default approval flows
+  #     (LEAVE/PAYMENT/PURCHASE) to match the code catalog. Idempotent — safe on
+  #     every deploy, and required whenever a new permission is added (otherwise
+  #     non-SUPER_ADMIN roles 403 on the new feature). Runs the COMPILED entry via
+  #     plain `node` (the image ships dist, not src). deploy-api waits on this, so
+  #     a failed sync fails the deploy closed (old revision keeps serving).
+  - id: seed-rbac
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - jobs
+      - deploy
+      - hrm-rbac-seed
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/api:latest
+      - --region=${_REGION}
+      - --set-cloudsql-instances=$PROJECT_ID:${_REGION}:${_SQL_INSTANCE}
+      - --set-secrets=DATABASE_URL=DATABASE_URL:latest
+      - --command=node
+      - --args=apps/api/dist/scripts/seed-rbac.js
+      - --execute-now
+      - --wait
+    waitFor: ['migrate']
+
   # 3) Deploy the HTTP API service. It serves the public API AND executes jobs via
   #    /internal/tasks/* (Cloud Tasks pushes to it). Scale-to-zero; no worker, no Redis.
   #    --timeout=900 gives long CV-parse jobs (Anthropic) headroom.
@@ -95,7 +119,7 @@ steps:
       # process.env with '' defaults and degrades gracefully. To enable: create
       # the secret and append it here.
       - --set-secrets=JWT_SECRET=JWT_SECRET:latest,DATABASE_URL=DATABASE_URL:latest,TASKS_SECRET=TASKS_SECRET:latest,RESEND_API_KEY=RESEND_API_KEY:latest,ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest
-    waitFor: ['migrate']
+    waitFor: ['migrate', 'seed-rbac']
 
   # 4) Build the web SPA. VITE_API_URL=/api/v1 → calls go same-origin through the
   #    Firebase Hosting rewrite to hrm-api (no CORS, no exposed API host).

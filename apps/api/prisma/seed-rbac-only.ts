@@ -1,19 +1,6 @@
-// One-off: re-sync RBAC catalog + system roles (idempotent) — dùng khi thêm permission mới.
-// SPEC-041: cũng đồng bộ flow duyệt thanh toán mặc định cho mọi tenant hiện có.
-import { PrismaClient } from '@prisma/client';
-import { seedPermissionCatalog, syncSystemRolesForTenant } from '../src/domain/rbac/catalog.js';
-import { seedDefaultPaymentFlowForTenant } from '../src/domain/payment-request/defaults.js';
-
-const prisma = new PrismaClient();
-
-async function main() {
-  await seedPermissionCatalog(prisma);
-  const tenants = await prisma.tenant.findMany({ select: { id: true, slug: true } });
-  for (const t of tenants) {
-    await syncSystemRolesForTenant(prisma, t.id);
-    await seedDefaultPaymentFlowForTenant(prisma, t.id);
-    console.log('synced roles + payment flow for tenant', t.slug);
-  }
-}
-
-main().finally(() => prisma.$disconnect());
+// Back-compat shim. The canonical, idempotent RBAC + approval-flow sync now
+// lives at src/scripts/seed-rbac.ts so it compiles into `dist` and can run in
+// the production image (which has no `src`). Importing it executes the sync.
+//   Local:      pnpm --filter @hrm/api db:seed:rbac   (or tsx this file)
+//   Production: node apps/api/dist/scripts/seed-rbac.js  (Cloud Run job)
+import '../src/scripts/seed-rbac.js';

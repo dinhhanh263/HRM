@@ -14,7 +14,7 @@ Các file hạ tầng trong repo:
 - [apps/api/Dockerfile](../apps/api/Dockerfile) — image cho `hrm-api`
 - [apps/api/src/infrastructure/tasks/](../apps/api/src/infrastructure/tasks/) — dispatcher + driver Cloud Tasks/inline
 - [firebase.json](../firebase.json) + [.firebaserc](../.firebaserc) — hosting web + rewrite API
-- [cloudbuild.yaml](../cloudbuild.yaml) — CI/CD: build → migrate → deploy api → build & deploy web
+- [cloudbuild.yaml](../cloudbuild.yaml) — CI/CD: build → migrate → seed-rbac → deploy api → build & deploy web
 
 > Chi phí ước tính ≈ **$43/tháng** (Cloud SQL `db-g1-small` + Cloud Run scale-to-zero + Cloud Tasks + Scheduler + Firebase Hosting + GCS + Secret Manager). Cloud Tasks: 1 triệu thao tác/tháng miễn phí (thừa cho ~100 nhân viên).
 
@@ -144,9 +144,11 @@ gcloud builds submit --config cloudbuild.yaml \
 
 > Trong pha 1, các lần enqueue job sẽ lỗi (chưa có `APP_INTERNAL_URL`) — chấp nhận được khi bring-up. Sau pha 2 mọi job chạy bình thường.
 
-Pipeline tự động: build image → `prisma migrate deploy` (Cloud Run job) → deploy `hrm-api` → build web (`VITE_API_URL=/api/v1`) → deploy Firebase Hosting.
+Pipeline tự động: build image → `prisma migrate deploy` (Cloud Run job) → **`seed-rbac`** (Cloud Run job `hrm-rbac-seed`: đồng bộ permission catalog + grant role + flow duyệt LEAVE/PAYMENT/PURCHASE — idempotent) → deploy `hrm-api` → build web (`VITE_API_URL=/api/v1`) → deploy Firebase Hosting.
 
-> **Seed lần đầu** (chỉ chạy 1 lần, KHÔNG đưa vào pipeline):
+> **RBAC + flow duyệt: tự động mỗi lần deploy** qua step `seed-rbac` (`node apps/api/dist/scripts/seed-rbac.js`). `deploy-api` chờ step này, nên nếu sync lỗi thì deploy fail-closed (revision cũ vẫn phục vụ). Thêm permission mới chỉ cần khai trong `PERMISSION_CATALOG` rồi deploy — không phải chạy tay. Chạy thủ công (qua proxy) khi cần: `pnpm --filter @hrm/api db:seed:rbac`.
+
+> **Seed dữ liệu nền lần đầu** (chỉ chạy 1 lần, KHÔNG đưa vào pipeline — seed cả data demo):
 > ```bash
 > gcloud run jobs deploy hrm-seed \
 >   --image=$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/api:latest --region=$REGION \

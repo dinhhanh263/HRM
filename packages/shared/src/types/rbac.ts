@@ -13,6 +13,11 @@ export const PERMISSION_CATALOG = {
   // duyệt xong (kế toán/Founder). Luồng duyệt cố định NV → Quản lý → Founder; scope
   // (mine/review/all) + "đúng người duyệt bước hiện tại" enforce ở service.
   payment_request: ['view', 'create', 'update', 'approve', 'reject', 'mark_paid', 'export'],
+  // Purchase request / đề xuất mua hàng (SPEC-042). `mark_ordered` = đánh dấu đã
+  // phát hành PO cho NCC sau khi duyệt xong (mua hàng/Founder). Luồng duyệt cố định
+  // NV → Quản lý → Founder; scope (mine/review/all) + "đúng người duyệt bước hiện
+  // tại" enforce ở service.
+  purchase_request: ['view', 'create', 'update', 'approve', 'reject', 'mark_ordered', 'export'],
   contracts: ['view', 'create', 'update', 'delete'],
   // Probation review (SPEC-030). `review` = manager scorecard/submit; `decide` =
   // HR final decision; `configure` = manage evaluation criteria; `self` = nhân viên

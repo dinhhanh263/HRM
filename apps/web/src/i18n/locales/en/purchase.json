@@ -1,0 +1,201 @@
+{
+  "title": "Purchase requests",
+  "subtitle": "Create and track purchase requisitions sent to vendors",
+  "newRequest": "New request",
+  "tabs": {
+    "mine": "My requests",
+    "review": "Awaiting my approval",
+    "all": "All",
+    "stats": "Statistics"
+  },
+  "stats": {
+    "year": "Year",
+    "grandTotal": "Total spend",
+    "orderedTotal": "Ordered",
+    "pendingTotal": "Pending",
+    "count": "Requests",
+    "monthlyTitle": "Total amount by month",
+    "byStatus": "By status",
+    "byDepartment": "By department",
+    "byVendor": "By vendor",
+    "noDepartment": "No department"
+  },
+  "status": {
+    "PENDING": "Pending",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "RETURNED": "Returned",
+    "CANCELLED": "Cancelled",
+    "ORDERED": "Ordered"
+  },
+  "table": {
+    "code": "Code",
+    "title": "Title",
+    "vendor": "Vendor",
+    "employee": "Requester",
+    "lineCount": "Lines",
+    "amount": "Total",
+    "status": "Status",
+    "createdAt": "Created",
+    "actions": "Actions",
+    "totalAmount": "Total amount",
+    "empty": "No purchase requests yet",
+    "emptyHint": "Create your first request to get started",
+    "loadError": "Failed to load. Please try again."
+  },
+  "filters": {
+    "status": "Status",
+    "vendor": "Vendor",
+    "all": "All",
+    "search": "Search title, code, requester...",
+    "dateFrom": "From date",
+    "dateTo": "To date"
+  },
+  "form": {
+    "createTitle": "New purchase request",
+    "createDescription": "Fill in the details and line items. Attach quotes/contracts after creating.",
+    "resubmitTitle": "Edit & resubmit",
+    "resubmitDescription": "Update the details and resubmit for approval.",
+    "title": "Title",
+    "titlePlaceholder": "e.g. Buy teak wood, July batch",
+    "vendorName": "Vendor",
+    "vendorPlaceholder": "Vendor name (addressee)",
+    "expectedDeliveryDate": "Expected delivery date",
+    "currency": "Currency",
+    "issuingEntity": "Issuing entity",
+    "issuingEntityPlaceholder": "Default",
+    "description": "Notes",
+    "descriptionPlaceholder": "Additional notes (optional)",
+    "attachmentsHint": "After creating, open the request to attach quotes/contracts.",
+    "items": {
+      "title": "Line items",
+      "addRow": "Add row",
+      "removeRow": "Remove row",
+      "sku": "SKU",
+      "productName": "Product name",
+      "productNamePlaceholder": "e.g. Sawn teak wood",
+      "unit": "Unit",
+      "quantity": "Quantity",
+      "unitPrice": "Unit price",
+      "taxRate": "VAT %",
+      "lineSubtotal": "Subtotal"
+    },
+    "totals": {
+      "subtotal": "Subtotal",
+      "vat": "VAT",
+      "total": "Total"
+    },
+    "validation": {
+      "titleRequired": "Title is required",
+      "vendorRequired": "Vendor name is required",
+      "itemsRequired": "At least 1 line item is required",
+      "productNameRequired": "Product name is required",
+      "quantityPositive": "Quantity must be greater than 0",
+      "unitPriceNonNegative": "Unit price cannot be negative",
+      "taxRateRange": "VAT must be between 0 and 100"
+    }
+  },
+  "detail": {
+    "title": "Request detail",
+    "items": "Line items",
+    "attachments": "Attachments",
+    "timeline": "Approval timeline",
+    "createdBy": "Requested by",
+    "department": "Department",
+    "noAttachments": "No attachments yet",
+    "orderedInfo": "Ordered on {{date}}",
+    "orderNote": "Order note"
+  },
+  "attachments": {
+    "add": "Add file",
+    "uploading": "Uploading...",
+    "remove": "Remove",
+    "download": "Download",
+    "dropHint": "Image (JPG/PNG/WEBP) or PDF, up to 10MB each",
+    "maxFiles": "Up to {{n}} files"
+  },
+  "actions": {
+    "submit": "Create request",
+    "submitting": "Saving...",
+    "resubmit": "Resubmit",
+    "cancel": "Cancel",
+    "approve": "Approve",
+    "return": "Return",
+    "reject": "Reject",
+    "markOrdered": "Mark ordered",
+    "cancelRequest": "Cancel request",
+    "edit": "Edit",
+    "view": "View",
+    "export": "Export Excel",
+    "exportPdf": "Export PDF"
+  },
+  "respond": {
+    "returnTitle": "Return for edits",
+    "returnDescription": "The request goes back to the requester to fix and resubmit. Please give a reason.",
+    "rejectTitle": "Reject request",
+    "rejectDescription": "The request will be rejected outright (cannot be resubmitted). Please give a reason.",
+    "noteLabel": "Reason",
+    "notePlaceholder": "Enter reason...",
+    "noteRequired": "A reason is required"
+  },
+  "markOrdered": {
+    "title": "Mark as ordered",
+    "description": "Confirm a PO has been issued to the vendor.",
+    "noteLabel": "Note (PO number, order date...)",
+    "notePlaceholder": "e.g. PO-2026-0123"
+  },
+  "cancelConfirm": {
+    "title": "Cancel purchase request?",
+    "description": "This cannot be undone. The request will be marked as cancelled."
+  },
+  "timeline": {
+    "empty": "No approval steps yet",
+    "round": "Round {{n}}",
+    "current": "current",
+    "step": "Step {{n}}",
+    "decidedBy": "{{name}} · {{date}}",
+    "state": {
+      "approved": "Approved",
+      "returned": "Returned",
+      "rejected": "Rejected",
+      "auto-skipped": "Auto-skipped",
+      "pending": "Pending",
+      "upcoming": "Upcoming"
+    },
+    "skipReason": {
+      "NO_APPROVER": "No matching approver",
+      "SELF_APPROVAL": "Approver is the requester",
+      "DUPLICATE_APPROVER": "Already approved an earlier step"
+    }
+  },
+  "approverType": {
+    "MANAGER": "Direct manager",
+    "DEPARTMENT_HEAD": "Department head",
+    "ROLE": "Role",
+    "SPECIFIC_USER": "Specific user"
+  },
+  "toast": {
+    "created": "Purchase request created",
+    "resubmitted": "Request resubmitted",
+    "approved": "Request approved",
+    "returned": "Request returned for edits",
+    "rejected": "Request rejected",
+    "cancelled": "Request cancelled",
+    "ordered": "Marked as ordered",
+    "exported": "Excel exported",
+    "uploaded": "Attachment uploaded",
+    "deleted": "Attachment removed",
+    "tryAgain": "Please try again.",
+    "errors": {
+      "PURCHASE_VENDOR_REQUIRED": "Vendor name is required",
+      "PURCHASE_ITEMS_REQUIRED": "At least 1 line item is required",
+      "PURCHASE_INVALID_QUANTITY": "Invalid quantity",
+      "PURCHASE_INVALID_UNIT_PRICE": "Invalid unit price",
+      "PURCHASE_NOT_CURRENT_APPROVER": "You are not the approver for the current step",
+      "PURCHASE_SELF_REVIEW": "You cannot review your own request",
+      "PURCHASE_TOO_MANY_FILES": "Too many files",
+      "PURCHASE_UNSUPPORTED_TYPE": "Unsupported file type",
+      "PURCHASE_FILE_TOO_LARGE": "File exceeds 10MB"
+    }
+  }
+}

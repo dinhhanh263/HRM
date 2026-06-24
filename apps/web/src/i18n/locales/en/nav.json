@@ -26,7 +26,8 @@
     "assetSettings": "Asset categories",
     "settings": "Settings",
     "probationSelf": "My evaluation",
-    "paymentRequests": "Payment requests"
+    "paymentRequests": "Payment requests",
+    "purchaseRequests": "Purchase requests"
   },
   "titles": {
     "dashboard": "Dashboard",
@@ -45,7 +46,8 @@
     "timesheetSettings": "Timesheet settings",
     "assetSettings": "Asset categories",
     "settings": "Settings",
-    "paymentRequests": "Payment requests"
+    "paymentRequests": "Payment requests",
+    "purchaseRequests": "Purchase Requests"
   },
   "sidebar": {
     "collapse": "Collapse",

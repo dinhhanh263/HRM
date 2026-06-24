@@ -35,6 +35,7 @@ export const ApprovalFlowType = {
   LEAVE: 'LEAVE',
   OVERTIME: 'OVERTIME',
   PAYMENT: 'PAYMENT', // SPEC-041
+  PURCHASE: 'PURCHASE', // SPEC-042
 } as const;
 
 export type ApprovalFlowType = (typeof ApprovalFlowType)[keyof typeof ApprovalFlowType];

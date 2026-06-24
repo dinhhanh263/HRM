@@ -56,6 +56,72 @@
     "seatLimit": "Giới hạn",
     "unlimited": "Không giới hạn"
   },
+  "issuingEntities": {
+    "title": "Đơn vị phát hành",
+    "description": "Pháp nhân đứng tên trên phiếu đặt mua hàng (PO). Mỗi pháp nhân in kèm logo và mã số thuế riêng.",
+    "add": "Thêm pháp nhân",
+    "defaultBadge": "Mặc định",
+    "hiddenBadge": "Đã ẩn",
+    "noTaxCode": "Chưa có mã số thuế",
+    "empty": {
+      "title": "Chưa có pháp nhân nào",
+      "description": "Thêm pháp nhân đầu tiên để chọn khi tạo phiếu đặt mua hàng."
+    },
+    "errorState": {
+      "title": "Không tải được danh sách",
+      "description": "Vui lòng thử lại sau."
+    },
+    "fields": {
+      "name": "Tên pháp nhân",
+      "namePlaceholder": "VD: CodeCrush Asia JSC",
+      "address": "Địa chỉ",
+      "taxCode": "Mã số thuế",
+      "phone": "Số điện thoại",
+      "isDefault": "Đặt làm pháp nhân mặc định",
+      "isDefaultHint": "Tự động chọn sẵn khi tạo phiếu mới. Mỗi công ty chỉ có một pháp nhân mặc định."
+    },
+    "validation": {
+      "nameRequired": "Vui lòng nhập tên pháp nhân"
+    },
+    "form": {
+      "createTitle": "Thêm pháp nhân",
+      "createDescription": "Khai báo thông tin pháp nhân đứng tên trên phiếu PO.",
+      "editTitle": "Sửa pháp nhân",
+      "editDescription": "Cập nhật thông tin và logo của pháp nhân.",
+      "create": "Thêm",
+      "save": "Lưu thay đổi",
+      "cancel": "Huỷ"
+    },
+    "logo": {
+      "label": "Logo",
+      "alt": "Logo của {{name}}",
+      "upload": "Tải logo lên",
+      "replace": "Đổi logo",
+      "remove": "Xoá logo",
+      "hint": "PNG hoặc JPEG, tối đa 2MB. Logo in trên header phiếu PO.",
+      "createHint": "Lưu pháp nhân trước, sau đó mở lại để tải logo lên.",
+      "errorType": "Chỉ chấp nhận ảnh PNG hoặc JPEG.",
+      "errorSize": "Ảnh vượt quá 2MB.",
+      "toastUploaded": "Đã tải logo lên",
+      "toastRemoved": "Đã xoá logo"
+    },
+    "actions": {
+      "edit": "Sửa {{name}}",
+      "hide": "Ẩn {{name}}"
+    },
+    "hide": {
+      "title": "Ẩn pháp nhân?",
+      "description": "Pháp nhân \"{{name}}\" sẽ không còn xuất hiện khi tạo phiếu mới. Các phiếu cũ đã dùng vẫn in đúng thông tin.",
+      "confirm": "Ẩn",
+      "hiding": "Đang ẩn..."
+    },
+    "toast": {
+      "created": "Đã thêm pháp nhân",
+      "updated": "Đã cập nhật pháp nhân",
+      "hidden": "Đã ẩn pháp nhân",
+      "error": "Có lỗi xảy ra. Thử lại sau."
+    }
+  },
   "audit": {
     "title": "Nhật ký thay đổi",
     "description": "50 thay đổi cài đặt gần nhất",

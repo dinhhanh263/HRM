@@ -111,6 +111,7 @@ enum ApprovalFlowType {
   LEAVE
   OVERTIME
   PAYMENT // SPEC-041: luồng duyệt yêu cầu thanh toán (cố định NV → Quản lý → Founder)
+  PURCHASE // SPEC-042: luồng duyệt đề xuất mua hàng (cố định NV → Quản lý → Founder)
 }
 
 // SPEC-041: loại yêu cầu thanh toán
@@ -354,6 +355,10 @@ model Tenant {
   paymentRequests         PaymentRequest[]
   paymentRequestApprovals PaymentRequestApproval[]
 
+  purchaseRequests         PurchaseRequest[]
+  purchaseRequestApprovals PurchaseRequestApproval[]
+  issuingEntities          IssuingEntity[]
+
   pipelineTemplates PipelineTemplate[]
   jobs              Job[]
   candidates        Candidate[]
@@ -580,6 +585,11 @@ model Employee {
   paymentRequestsPaid     PaymentRequest[]         @relation("PaymentRequestPayer")
   paymentApprovalsDecided PaymentRequestApproval[] @relation("PaymentApprovalDecider")
 
+  purchaseRequests         PurchaseRequest[]          @relation("EmployeePurchaseRequests")
+  purchaseReviewed         PurchaseRequest[]          @relation("PurchaseRequestReviewer")
+  purchaseOrdered          PurchaseRequest[]          @relation("PurchaseRequestOrderer")
+  purchaseApprovalDecided  PurchaseRequestApproval[]  @relation("PurchaseApprovalDecider")
+
   salaries        EmployeeSalary[] @relation("EmployeeSalaries")
   salariesCreated EmployeeSalary[] @relation("SalaryCreator")
   payslips        Payslip[]        @relation("EmployeePayslips")
@@ -742,10 +752,11 @@ model ApprovalFlow {
 
   tenant          Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   department      Department?       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
-  steps           ApprovalStep[]
-  requests        LeaveRequest[]
-  otRequests      OvertimeRequest[]
-  paymentRequests PaymentRequest[]
+  steps            ApprovalStep[]
+  requests         LeaveRequest[]
+  otRequests       OvertimeRequest[]
+  paymentRequests  PaymentRequest[]
+  purchaseRequests PurchaseRequest[]
 
   // NOTE: Postgres coi mỗi NULL là khác nhau nên unique này KHÔNG ép một
   // default duy nhất/tenant/flowType — ràng buộc single-default enforce ở service layer.
@@ -919,6 +930,167 @@ model PaymentRequestAttachment {
 
   @@index([requestId])
   @@map("payment_request_attachments")
+}
+
+// SPEC-042: phiếu đề xuất mua hàng (Purchase Requisition). Mirror PaymentRequest
+// nhưng có nhiều dòng hàng (PurchaseRequestItem), VAT theo dòng, mã phiếu tự sinh
+// (PR-YYYYMMDD-NNN). Tổng tiền denormalized (server tính lại mỗi create/update).
+enum PurchaseRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED // terminal — bị từ chối hẳn
+  RETURNED // trả về để sửa & gửi lại (không terminal)
+  CANCELLED
+  ORDERED // terminal — đã phát hành PO cho nhà cung cấp
+}
+
+model PurchaseRequest {
+  id                   String                @id @default(cuid())
+  tenantId             String                @map("tenant_id")
+  employeeId           String                @map("employee_id") // người tạo phiếu
+  code                 String                @map("code") // PR-YYYYMMDD-NNN (tự sinh, unique theo tenant)
+  title                String
+  description          String?
+  vendorName           String                @map("vendor_name") // nhà cung cấp (kính gửi)
+  expectedDeliveryDate DateTime?             @map("expected_delivery_date")
+  currency             String                @default("VND")
+  status               PurchaseRequestStatus @default(PENDING)
+
+  // tổng tiền (denormalized, server tính lại mỗi create/update)
+  subtotal    Decimal @default(0) @db.Decimal(14, 2)
+  taxAmount   Decimal @default(0) @map("tax_amount") @db.Decimal(14, 2)
+  totalAmount Decimal @default(0) @map("total_amount") @db.Decimal(14, 2)
+
+  // routing (tái dùng ApprovalFlow)
+  flowId       String?   @map("flow_id")
+  currentStep  Int       @default(0) @map("current_step") // 1-based step đang chờ; 0 = chưa vào flow
+  reviewedById String?   @map("reviewed_by_id")
+  reviewedAt   DateTime? @map("reviewed_at")
+  reviewNote   String?   @map("review_note")
+
+  // đặt hàng
+  orderedById String?   @map("ordered_by_id")
+  orderedAt   DateTime? @map("ordered_at")
+  orderNote   String?   @map("order_note") // số PO / ghi chú đặt hàng
+
+  // SPEC-043: pháp nhân phát hành (đơn vị đứng tên trên PO PDF). Snapshot trọn bộ
+  // lúc tạo/sửa để PDF phiếu cũ không sai khi entity bị sửa/ẩn sau này. Tất cả
+  // nullable → phiếu cũ / không chọn → PDF fallback settings.company.
+  issuingEntityId    String? @map("issuing_entity_id")
+  issuingCompanyName String? @map("issuing_company_name")
+  issuingAddress     String? @map("issuing_address")
+  issuingTaxCode     String? @map("issuing_tax_code")
+  issuingPhone       String? @map("issuing_phone")
+  issuingLogoUrl     String? @map("issuing_logo_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant        Tenant                      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee      Employee                    @relation("EmployeePurchaseRequests", fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewedBy    Employee?                   @relation("PurchaseRequestReviewer", fields: [reviewedById], references: [id])
+  orderedBy     Employee?                   @relation("PurchaseRequestOrderer", fields: [orderedById], references: [id])
+  flow          ApprovalFlow?               @relation(fields: [flowId], references: [id])
+  issuingEntity IssuingEntity?              @relation(fields: [issuingEntityId], references: [id])
+  items         PurchaseRequestItem[]
+  approvals     PurchaseRequestApproval[]
+  attachments   PurchaseRequestAttachment[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, status])
+  @@index([employeeId])
+  @@index([flowId])
+  @@index([issuingEntityId])
+  @@map("purchase_requests")
+}
+
+// SPEC-042: dòng hàng của phiếu. VAT tính theo từng dòng; các giá trị tiền
+// (lineSubtotal/lineTax/lineTotal) server tính lại & lưu để export/PDF nhanh.
+model PurchaseRequestItem {
+  id           String  @id @default(cuid())
+  requestId    String  @map("request_id")
+  lineNo       Int     @map("line_no") // 1-based, thứ tự hiển thị
+  sku          String? // mã SKU (tuỳ chọn)
+  productName  String  @map("product_name")
+  unit         String? // ĐVT: cái, bộ, kg...
+  quantity     Decimal @db.Decimal(14, 3) // hỗ trợ số lẻ (kg, m3...)
+  unitPrice    Decimal @map("unit_price") @db.Decimal(14, 2)
+  taxRate      Decimal @default(8) @map("tax_rate") @db.Decimal(5, 2) // % VAT của dòng
+  lineSubtotal Decimal @map("line_subtotal") @db.Decimal(14, 2) // quantity × unitPrice
+  lineTax      Decimal @map("line_tax") @db.Decimal(14, 2) // lineSubtotal × taxRate/100
+  lineTotal    Decimal @map("line_total") @db.Decimal(14, 2) // lineSubtotal + lineTax
+
+  request PurchaseRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+  @@map("purchase_request_items")
+}
+
+// SPEC-043: pháp nhân phát hành (đơn vị đứng tên trên PO PDF). Master data theo
+// tenant; phiếu PR chọn 1 entity và snapshot trọn bộ thông tin vào phiếu lúc
+// tạo/sửa. Xoá mềm bằng `active=false`; chỉ 1 `isDefault` mỗi tenant (enforced
+// trong service bằng transaction).
+model IssuingEntity {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  name      String
+  address   String?
+  taxCode   String?  @map("tax_code")
+  phone     String?
+  logoUrl   String?  @map("logo_url") // /uploads/entity-logo/<uuid>.<png|jpg>
+  isDefault Boolean  @default(false) @map("is_default")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  purchaseRequests PurchaseRequest[]
+
+  @@index([tenantId])
+  @@map("issuing_entities")
+}
+
+// SPEC-042: timeline lịch sử duyệt cho mỗi PurchaseRequest (song song với
+// PaymentRequestApproval). Snapshot bước tại thời điểm nộp; mỗi vòng = 1 round.
+model PurchaseRequestApproval {
+  id           String            @id @default(cuid())
+  tenantId     String            @map("tenant_id")
+  requestId    String            @map("request_id")
+  round        Int               @default(1) // tăng mỗi lần đơn bị trả về rồi nộp lại
+  stepOrder    Int               @map("step_order")
+  approverType ApproverType      @map("approver_type")
+  roleKey      String?           @map("role_key")
+  approverId   String?           @map("approver_id") // người duyệt kỳ vọng (resolved); null nếu không xác định được
+  decision     ApprovalDecision? // null = đang chờ (pending)
+  decidedById  String?           @map("decided_by_id")
+  decidedAt    DateTime?         @map("decided_at")
+  note         String?
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  tenant    Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  request   PurchaseRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  decidedBy Employee?       @relation("PurchaseApprovalDecider", fields: [decidedById], references: [id])
+
+  @@unique([requestId, round, stepOrder])
+  @@index([requestId])
+  @@index([tenantId])
+  @@map("purchase_request_approvals")
+}
+
+// SPEC-042: chứng từ đính kèm (báo giá / hợp đồng / hình mẫu). Nhiều file/phiếu.
+model PurchaseRequestAttachment {
+  id        String   @id @default(cuid())
+  requestId String   @map("request_id")
+  fileUrl   String   @map("file_url") // /uploads/purchase/<uuid>.<ext>
+  fileName  String   @map("file_name")
+  mimeType  String   @map("mime_type")
+  size      Int // bytes
+  createdAt DateTime @default(now()) @map("created_at")
+
+  request PurchaseRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+  @@map("purchase_request_attachments")
 }
 
 // Per-tenant timesheet/overtime policy. Defines what "a working day" and

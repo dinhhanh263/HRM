@@ -56,6 +56,72 @@
     "seatLimit": "Limit",
     "unlimited": "Unlimited"
   },
+  "issuingEntities": {
+    "title": "Issuing entities",
+    "description": "Legal entities named on purchase orders (PO). Each entity prints its own logo and tax code.",
+    "add": "Add entity",
+    "defaultBadge": "Default",
+    "hiddenBadge": "Hidden",
+    "noTaxCode": "No tax code",
+    "empty": {
+      "title": "No entities yet",
+      "description": "Add your first entity to pick it when creating a purchase request."
+    },
+    "errorState": {
+      "title": "Could not load the list",
+      "description": "Please try again later."
+    },
+    "fields": {
+      "name": "Entity name",
+      "namePlaceholder": "e.g. CodeCrush Asia JSC",
+      "address": "Address",
+      "taxCode": "Tax code",
+      "phone": "Phone",
+      "isDefault": "Set as default entity",
+      "isDefaultHint": "Pre-selected when creating a new request. Only one default per company."
+    },
+    "validation": {
+      "nameRequired": "Please enter the entity name"
+    },
+    "form": {
+      "createTitle": "Add entity",
+      "createDescription": "Declare the legal entity named on the PO.",
+      "editTitle": "Edit entity",
+      "editDescription": "Update the entity's details and logo.",
+      "create": "Add",
+      "save": "Save changes",
+      "cancel": "Cancel"
+    },
+    "logo": {
+      "label": "Logo",
+      "alt": "{{name}} logo",
+      "upload": "Upload logo",
+      "replace": "Replace logo",
+      "remove": "Remove logo",
+      "hint": "PNG or JPEG, up to 2MB. Printed on the PO header.",
+      "createHint": "Save the entity first, then reopen it to upload a logo.",
+      "errorType": "Only PNG or JPEG images are allowed.",
+      "errorSize": "Image exceeds 2MB.",
+      "toastUploaded": "Logo uploaded",
+      "toastRemoved": "Logo removed"
+    },
+    "actions": {
+      "edit": "Edit {{name}}",
+      "hide": "Hide {{name}}"
+    },
+    "hide": {
+      "title": "Hide entity?",
+      "description": "\"{{name}}\" will no longer appear when creating new requests. Past requests that used it still print correctly.",
+      "confirm": "Hide",
+      "hiding": "Hiding..."
+    },
+    "toast": {
+      "created": "Entity added",
+      "updated": "Entity updated",
+      "hidden": "Entity hidden",
+      "error": "Something went wrong. Try again later."
+    }
+  },
   "audit": {
     "title": "Change log",
     "description": "Last 50 settings changes",

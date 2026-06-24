@@ -41,6 +41,7 @@ import {
 } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePermission } from '@/hooks/usePermission';
+import { IssuingEntitiesSection } from '@/features/issuing-entities/components/IssuingEntitiesSection';
 import { useSettingsAudit, useTenantSettings, useUpdateSettings } from '../hooks/useSettings';
 
 // SPEC-036 — hub cards link to the existing domain settings areas; each card
@@ -488,6 +489,7 @@ export function SettingsPage() {
             />
             <PlanSection value={data.plan} />
           </div>
+          <IssuingEntitiesSection canEdit={canEdit} />
           <AuditSection entries={audit ?? []} />
         </>
       )}

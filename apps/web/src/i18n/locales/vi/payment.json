@@ -1,0 +1,186 @@
+{
+  "title": "Yêu cầu thanh toán",
+  "subtitle": "Tạo và theo dõi yêu cầu hoàn ứng, tạm ứng, thanh toán nhà cung cấp",
+  "newRequest": "Tạo yêu cầu",
+  "tabs": {
+    "mine": "Đơn của tôi",
+    "review": "Chờ tôi duyệt",
+    "all": "Tất cả",
+    "stats": "Thống kê"
+  },
+  "stats": {
+    "year": "Năm",
+    "grandTotal": "Tổng yêu cầu",
+    "paidTotal": "Đã thanh toán",
+    "pendingTotal": "Đang chờ duyệt",
+    "count": "Số đơn",
+    "monthlyTitle": "Tổng tiền theo tháng",
+    "byType": "Theo loại đơn",
+    "byStatus": "Theo trạng thái"
+  },
+  "type": {
+    "REIMBURSEMENT": "Hoàn ứng",
+    "ADVANCE": "Tạm ứng",
+    "VENDOR_PAYMENT": "Thanh toán NCC"
+  },
+  "typeDesc": {
+    "REIMBURSEMENT": "Đã chi, xin hoàn lại tiền (kèm hoá đơn/bill)",
+    "ADVANCE": "Xin tiền trước khi chi",
+    "VENDOR_PAYMENT": "Thanh toán nhà cung cấp theo hoá đơn đỏ"
+  },
+  "status": {
+    "PENDING": "Chờ duyệt",
+    "APPROVED": "Đã duyệt",
+    "REJECTED": "Từ chối",
+    "RETURNED": "Trả về sửa lại",
+    "CANCELLED": "Đã huỷ",
+    "PAID": "Đã thanh toán"
+  },
+  "table": {
+    "title": "Nội dung",
+    "type": "Loại",
+    "employee": "Người tạo",
+    "amount": "Số tiền",
+    "status": "Trạng thái",
+    "createdAt": "Ngày tạo",
+    "actions": "Thao tác",
+    "totalAmount": "Tổng số tiền",
+    "empty": "Chưa có yêu cầu thanh toán nào",
+    "emptyHint": "Tạo yêu cầu đầu tiên để bắt đầu",
+    "loadError": "Không tải được danh sách. Vui lòng thử lại."
+  },
+  "filters": {
+    "status": "Trạng thái",
+    "type": "Loại đơn",
+    "all": "Tất cả",
+    "search": "Tìm theo nội dung, NCC, người tạo..."
+  },
+  "form": {
+    "createTitle": "Tạo yêu cầu thanh toán",
+    "createDescription": "Điền thông tin khoản cần thanh toán. Đính kèm hoá đơn/bill sau khi tạo.",
+    "resubmitTitle": "Sửa & gửi lại",
+    "resubmitDescription": "Cập nhật thông tin rồi gửi lại để duyệt từ đầu.",
+    "type": "Loại đơn",
+    "title": "Tiêu đề",
+    "titlePlaceholder": "VD: Taxi đi gặp khách hàng",
+    "amount": "Số tiền",
+    "currency": "Tiền tệ",
+    "description": "Mô tả",
+    "descriptionPlaceholder": "Mô tả chi tiết khoản chi (tuỳ chọn)",
+    "expenseDate": "Ngày chi",
+    "category": "Phân loại",
+    "categoryPlaceholder": "VD: Đi lại, Ăn uống, Văn phòng phẩm",
+    "neededByDate": "Cần tiền trước ngày",
+    "vendorName": "Tên nhà cung cấp",
+    "invoiceNumber": "Số hoá đơn",
+    "dueDate": "Hạn thanh toán",
+    "attachmentsHint": "Sau khi tạo đơn, mở chi tiết để đính kèm ảnh hoá đơn/bill.",
+    "validation": {
+      "titleRequired": "Vui lòng nhập tiêu đề",
+      "amountPositive": "Số tiền phải lớn hơn 0",
+      "expenseDateRequired": "Ngày chi là bắt buộc cho đơn hoàn ứng",
+      "vendorRequired": "Tên nhà cung cấp là bắt buộc"
+    }
+  },
+  "detail": {
+    "title": "Chi tiết yêu cầu",
+    "info": "Thông tin",
+    "attachments": "Chứng từ đính kèm",
+    "timeline": "Tiến trình duyệt",
+    "createdBy": "Người tạo",
+    "noAttachments": "Chưa có chứng từ nào",
+    "noAttachmentsWarning": "Đơn này chưa có hoá đơn/bill đính kèm.",
+    "paidInfo": "Đã thanh toán {{date}}",
+    "paymentNote": "Ghi chú thanh toán"
+  },
+  "attachments": {
+    "add": "Thêm chứng từ",
+    "uploading": "Đang tải lên...",
+    "remove": "Xoá",
+    "download": "Tải xuống",
+    "dropHint": "Ảnh (JPG/PNG/WEBP) hoặc PDF, tối đa 10MB mỗi tệp",
+    "maxFiles": "Tối đa {{n}} tệp"
+  },
+  "actions": {
+    "submit": "Tạo yêu cầu",
+    "submitting": "Đang lưu...",
+    "resubmit": "Gửi lại",
+    "cancel": "Huỷ",
+    "approve": "Duyệt",
+    "return": "Trả về sửa",
+    "reject": "Từ chối",
+    "markPaid": "Đã thanh toán",
+    "cancelRequest": "Huỷ đơn",
+    "edit": "Sửa",
+    "view": "Xem",
+    "export": "Xuất Excel"
+  },
+  "respond": {
+    "returnTitle": "Trả về để sửa",
+    "returnDescription": "Đơn sẽ được trả về cho người tạo sửa và gửi lại. Vui lòng nêu lý do.",
+    "rejectTitle": "Từ chối đơn",
+    "rejectDescription": "Đơn sẽ bị từ chối hẳn (không gửi lại được). Vui lòng nêu lý do.",
+    "noteLabel": "Lý do",
+    "notePlaceholder": "Nhập lý do...",
+    "noteRequired": "Vui lòng nhập lý do"
+  },
+  "markPaid": {
+    "title": "Đánh dấu đã thanh toán",
+    "description": "Xác nhận khoản này đã được chi trả.",
+    "noteLabel": "Ghi chú (số tham chiếu, ngày chuyển khoản...)",
+    "notePlaceholder": "VD: CK Vietcombank 23/06"
+  },
+  "cancelConfirm": {
+    "title": "Huỷ yêu cầu thanh toán?",
+    "description": "Hành động này không thể hoàn tác. Đơn sẽ chuyển sang trạng thái đã huỷ."
+  },
+  "timeline": {
+    "empty": "Chưa có tiến trình duyệt",
+    "round": "Vòng {{n}}",
+    "current": "hiện tại",
+    "step": "Bước {{n}}",
+    "decidedBy": "{{name}} · {{date}}",
+    "state": {
+      "approved": "Đã duyệt",
+      "returned": "Trả về",
+      "rejected": "Từ chối",
+      "auto-skipped": "Tự bỏ qua",
+      "pending": "Đang chờ",
+      "upcoming": "Sắp tới"
+    },
+    "skipReason": {
+      "NO_APPROVER": "Không có người duyệt phù hợp",
+      "SELF_APPROVAL": "Người duyệt trùng người tạo",
+      "DUPLICATE_APPROVER": "Đã duyệt ở bước trước"
+    }
+  },
+  "approverType": {
+    "MANAGER": "Quản lý trực tiếp",
+    "DEPARTMENT_HEAD": "Trưởng phòng ban",
+    "ROLE": "Vai trò",
+    "SPECIFIC_USER": "Người chỉ định"
+  },
+  "toast": {
+    "created": "Đã tạo yêu cầu thanh toán",
+    "resubmitted": "Đã gửi lại yêu cầu",
+    "approved": "Đã duyệt yêu cầu",
+    "returned": "Đã trả về để sửa",
+    "rejected": "Đã từ chối yêu cầu",
+    "cancelled": "Đã huỷ yêu cầu",
+    "paid": "Đã đánh dấu thanh toán",
+    "exported": "Đã xuất Excel",
+    "uploaded": "Đã tải chứng từ lên",
+    "deleted": "Đã xoá chứng từ",
+    "tryAgain": "Vui lòng thử lại sau.",
+    "errors": {
+      "PAYMENT_EXPENSE_DATE_REQUIRED": "Ngày chi là bắt buộc cho đơn hoàn ứng",
+      "PAYMENT_VENDOR_REQUIRED": "Tên nhà cung cấp là bắt buộc",
+      "PAYMENT_INVALID_AMOUNT": "Số tiền không hợp lệ",
+      "PAYMENT_NOT_CURRENT_APPROVER": "Bạn không phải người duyệt ở bước hiện tại",
+      "PAYMENT_SELF_REVIEW": "Không thể duyệt đơn của chính mình",
+      "PAYMENT_TOO_MANY_FILES": "Vượt quá số tệp cho phép",
+      "PAYMENT_UNSUPPORTED_TYPE": "Loại tệp không được hỗ trợ",
+      "PAYMENT_FILE_TOO_LARGE": "Tệp vượt quá 10MB"
+    }
+  }
+}

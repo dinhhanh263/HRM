@@ -9,6 +9,10 @@ export const PERMISSION_CATALOG = {
   timesheet: ['view', 'create', 'update', 'approve', 'configure'],
   leave: ['view', 'create', 'update', 'approve', 'reject', 'configure'],
   payroll: ['view', 'process', 'approve', 'export'],
+  // Payment request / hoàn ứng (SPEC-041). `mark_paid` = đánh dấu đã chi trả sau khi
+  // duyệt xong (kế toán/Founder). Luồng duyệt cố định NV → Quản lý → Founder; scope
+  // (mine/review/all) + "đúng người duyệt bước hiện tại" enforce ở service.
+  payment_request: ['view', 'create', 'update', 'approve', 'reject', 'mark_paid', 'export'],
   contracts: ['view', 'create', 'update', 'delete'],
   // Probation review (SPEC-030). `review` = manager scorecard/submit; `decide` =
   // HR final decision; `configure` = manage evaluation criteria; `self` = nhân viên

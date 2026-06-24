@@ -11,6 +11,7 @@ import viPosition from './locales/vi/position.json';
 import viPermission from './locales/vi/permission.json';
 import viRole from './locales/vi/role.json';
 import viLeave from './locales/vi/leave.json';
+import viPayment from './locales/vi/payment.json';
 import viTimesheet from './locales/vi/timesheet.json';
 import viPayroll from './locales/vi/payroll.json';
 import viEmployeeImport from './locales/vi/employeeImport.json';
@@ -33,6 +34,7 @@ import enPosition from './locales/en/position.json';
 import enPermission from './locales/en/permission.json';
 import enRole from './locales/en/role.json';
 import enLeave from './locales/en/leave.json';
+import enPayment from './locales/en/payment.json';
 import enTimesheet from './locales/en/timesheet.json';
 import enPayroll from './locales/en/payroll.json';
 import enEmployeeImport from './locales/en/employeeImport.json';
@@ -59,6 +61,7 @@ export const resources = {
     permission: viPermission,
     role: viRole,
     leave: viLeave,
+    payment: viPayment,
     timesheet: viTimesheet,
     payroll: viPayroll,
     employeeImport: viEmployeeImport,
@@ -82,6 +85,7 @@ export const resources = {
     permission: enPermission,
     role: enRole,
     leave: enLeave,
+    payment: enPayment,
     timesheet: enTimesheet,
     payroll: enPayroll,
     employeeImport: enEmployeeImport,
@@ -116,7 +120,7 @@ i18n.use(initReactI18next).init({
   lng: initialLanguage,
   fallbackLng: 'vi',
   defaultNS,
-  ns: ['common', 'nav', 'dashboard', 'auth', 'employee', 'department', 'position', 'permission', 'role', 'leave', 'timesheet', 'payroll', 'employeeImport', 'contracts', 'notifications', 'asset', 'assetImport', 'recruitment', 'probation'],
+  ns: ['common', 'nav', 'dashboard', 'auth', 'employee', 'department', 'position', 'permission', 'role', 'leave', 'payment', 'timesheet', 'payroll', 'employeeImport', 'contracts', 'notifications', 'asset', 'assetImport', 'recruitment', 'probation'],
   interpolation: { escapeValue: false },
   returnNull: false,
 });

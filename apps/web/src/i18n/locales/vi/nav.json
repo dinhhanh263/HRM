@@ -4,6 +4,7 @@
     "overview": "Tổng quan",
     "hr": "Quản lý nhân sự",
     "operations": "Vận hành",
+    "finance": "Tài chính",
     "system": "Hệ thống"
   },
   "items": {
@@ -24,7 +25,8 @@
     "timesheetSettings": "Cài đặt chấm công",
     "assetSettings": "Loại tài sản",
     "settings": "Cài đặt",
-    "probationSelf": "Tự đánh giá"
+    "probationSelf": "Tự đánh giá",
+    "paymentRequests": "Yêu cầu thanh toán"
   },
   "titles": {
     "dashboard": "Dashboard",
@@ -42,7 +44,8 @@
     "assets": "Tài sản",
     "timesheetSettings": "Cài đặt chấm công",
     "assetSettings": "Loại tài sản",
-    "settings": "Cài đặt"
+    "settings": "Cài đặt",
+    "paymentRequests": "Yêu cầu thanh toán"
   },
   "sidebar": {
     "collapse": "Thu gọn",

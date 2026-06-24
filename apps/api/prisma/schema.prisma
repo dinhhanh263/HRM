@@ -88,6 +88,7 @@ enum ApprovalDecision {
   APPROVED
   RETURNED
   AUTO_SKIPPED
+  REJECTED // SPEC-041: từ chối terminal (chỉ Payment dùng; Leave/OT chỉ dùng RETURNED)
 }
 
 enum OvertimeCategory {
@@ -109,6 +110,24 @@ enum OvertimeStatus {
 enum ApprovalFlowType {
   LEAVE
   OVERTIME
+  PAYMENT // SPEC-041: luồng duyệt yêu cầu thanh toán (cố định NV → Quản lý → Founder)
+}
+
+// SPEC-041: loại yêu cầu thanh toán
+enum PaymentRequestType {
+  REIMBURSEMENT // hoàn ứng — đã chi, xin lại tiền (kèm hoá đơn/bill)
+  ADVANCE // tạm ứng — xin tiền trước khi chi
+  VENDOR_PAYMENT // thanh toán nhà cung cấp theo hoá đơn đỏ (VAT)
+}
+
+// SPEC-041: vòng đời đơn thanh toán
+enum PaymentRequestStatus {
+  PENDING // đang chờ duyệt ở bước hiện tại
+  APPROVED // đã duyệt hết các bước, chờ chi trả
+  REJECTED // bị từ chối hẳn (terminal)
+  RETURNED // bị trả về để sửa & gửi lại
+  CANCELLED // người tạo tự huỷ
+  PAID // đã thanh toán (terminal)
 }
 
 enum AttendanceSource {
@@ -332,6 +351,9 @@ model Tenant {
   assetMaintenances AssetMaintenance[]
   OvertimeApproval  OvertimeApproval[]
 
+  paymentRequests         PaymentRequest[]
+  paymentRequestApprovals PaymentRequestApproval[]
+
   pipelineTemplates PipelineTemplate[]
   jobs              Job[]
   candidates        Candidate[]
@@ -404,11 +426,11 @@ model User {
   createdAt            DateTime   @default(now()) @map("created_at")
   updatedAt            DateTime   @updatedAt @map("updated_at")
 
-  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  roleRef       Role?          @relation(fields: [roleId], references: [id])
-  refreshTokens RefreshToken[]
-  employee      Employee?
-  notifications Notification[]
+  tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  roleRef           Role?              @relation(fields: [roleId], references: [id])
+  refreshTokens     RefreshToken[]
+  employee          Employee?
+  notifications     Notification[]
   settingsAuditLogs SettingsAuditLog[]
 
   @@unique([tenantId, email])
@@ -481,31 +503,31 @@ model Position {
 }
 
 model Employee {
-  id                String         @id @default(cuid())
-  tenantId          String         @map("tenant_id")
-  userId            String         @unique @map("user_id")
-  employeeCode      String         @map("employee_code")
-  departmentId      String?        @map("department_id")
-  positionId        String?        @map("position_id")
-  managerId         String?        @map("manager_id") // quản lý trực tiếp (direct manager)
-  fullName          String         @map("full_name")
-  dateOfBirth       DateTime?      @map("date_of_birth")
-  gender            Gender?
-  idNumber          String?        @map("id_number")
-  idIssueDate       DateTime?      @map("id_issue_date") // ngày cấp CCCD/Passport
-  idIssuePlace      String?        @map("id_issue_place") // nơi cấp CCCD/Passport
-  phone             String?
-  personalEmail     String?        @map("personal_email") // email cá nhân (khác email đăng nhập)
-  placeOfBirth      String?        @map("place_of_birth")
-  maritalStatus     MaritalStatus? @map("marital_status")
-  education         String?        // trình độ học vấn / chuyên ngành
-  permanentAddress  String?        @map("permanent_address")
-  currentAddress    String?        @map("current_address")
-  avatar            String?
-  joinDate          DateTime       @map("join_date")
-  probationEndDate  DateTime?      @map("probation_end_date") // ngày hết thử việc (HR nhập tay; null nếu không áp dụng)
-  contractType      ContractType   @map("contract_type")
-  dependentsCount   Int            @default(0) @map("dependents_count") // người phụ thuộc — giảm trừ thuế TNCN
+  id               String         @id @default(cuid())
+  tenantId         String         @map("tenant_id")
+  userId           String         @unique @map("user_id")
+  employeeCode     String         @map("employee_code")
+  departmentId     String?        @map("department_id")
+  positionId       String?        @map("position_id")
+  managerId        String?        @map("manager_id") // quản lý trực tiếp (direct manager)
+  fullName         String         @map("full_name")
+  dateOfBirth      DateTime?      @map("date_of_birth")
+  gender           Gender?
+  idNumber         String?        @map("id_number")
+  idIssueDate      DateTime?      @map("id_issue_date") // ngày cấp CCCD/Passport
+  idIssuePlace     String?        @map("id_issue_place") // nơi cấp CCCD/Passport
+  phone            String?
+  personalEmail    String?        @map("personal_email") // email cá nhân (khác email đăng nhập)
+  placeOfBirth     String?        @map("place_of_birth")
+  maritalStatus    MaritalStatus? @map("marital_status")
+  education        String? // trình độ học vấn / chuyên ngành
+  permanentAddress String?        @map("permanent_address")
+  currentAddress   String?        @map("current_address")
+  avatar           String?
+  joinDate         DateTime       @map("join_date")
+  probationEndDate DateTime?      @map("probation_end_date") // ngày hết thử việc (HR nhập tay; null nếu không áp dụng)
+  contractType     ContractType   @map("contract_type")
+  dependentsCount  Int            @default(0) @map("dependents_count") // người phụ thuộc — giảm trừ thuế TNCN
 
   // Liên hệ khẩn cấp
   emergencyContactName         String? @map("emergency_contact_name")
@@ -553,6 +575,11 @@ model Employee {
   reviewedOvertime         OvertimeRequest[]  @relation("OvertimeReviewer")
   overtimeApprovalsDecided OvertimeApproval[] @relation("OvertimeApprovalDecider")
 
+  paymentRequests         PaymentRequest[]         @relation("EmployeePaymentRequests")
+  paymentRequestsReviewed PaymentRequest[]         @relation("PaymentRequestReviewer")
+  paymentRequestsPaid     PaymentRequest[]         @relation("PaymentRequestPayer")
+  paymentApprovalsDecided PaymentRequestApproval[] @relation("PaymentApprovalDecider")
+
   salaries        EmployeeSalary[] @relation("EmployeeSalaries")
   salariesCreated EmployeeSalary[] @relation("SalaryCreator")
   payslips        Payslip[]        @relation("EmployeePayslips")
@@ -564,13 +591,13 @@ model Employee {
   assetsReturned    AssetAssignment[]  @relation("AssetReturner")
   assetMaintenances AssetMaintenance[] @relation("MaintenanceCreator")
 
-  jobsCreated          Job[]                     @relation("JobCreator")
-  hiringTeamMemberships JobHiringTeam[]          @relation("HiringTeamMember")
-  stageChanges         ApplicationStageHistory[] @relation("StageChanger")
-  interviewsCreated    Interview[]               @relation("InterviewCreator")
-  interviewAssignments InterviewInterviewer[]    @relation("InterviewerAssignment")
-  scorecards           Scorecard[]               @relation("ScorecardInterviewer")
-  applicationActivities ApplicationActivity[]    @relation("ActivityAuthor")
+  jobsCreated           Job[]                     @relation("JobCreator")
+  hiringTeamMemberships JobHiringTeam[]           @relation("HiringTeamMember")
+  stageChanges          ApplicationStageHistory[] @relation("StageChanger")
+  interviewsCreated     Interview[]               @relation("InterviewCreator")
+  interviewAssignments  InterviewInterviewer[]    @relation("InterviewerAssignment")
+  scorecards            Scorecard[]               @relation("ScorecardInterviewer")
+  applicationActivities ApplicationActivity[]     @relation("ActivityAuthor")
 
   probationReviews        ProbationReview[] @relation("EmployeeProbationReviews")
   probationReviewsGiven   ProbationReview[] @relation("ProbationReviewer")
@@ -713,11 +740,12 @@ model ApprovalFlow {
   createdAt    DateTime         @default(now()) @map("created_at")
   updatedAt    DateTime         @updatedAt @map("updated_at")
 
-  tenant     Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  department Department?       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
-  steps      ApprovalStep[]
-  requests   LeaveRequest[]
-  otRequests OvertimeRequest[]
+  tenant          Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department      Department?       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  steps           ApprovalStep[]
+  requests        LeaveRequest[]
+  otRequests      OvertimeRequest[]
+  paymentRequests PaymentRequest[]
 
   // NOTE: Postgres coi mỗi NULL là khác nhau nên unique này KHÔNG ép một
   // default duy nhất/tenant/flowType — ràng buộc single-default enforce ở service layer.
@@ -795,6 +823,102 @@ model OvertimeApproval {
   @@index([overtimeRequestId])
   @@index([tenantId])
   @@map("overtime_approvals")
+}
+
+// SPEC-041: Yêu cầu thanh toán / hoàn ứng. NV tạo đơn kèm hoá đơn/bill, đi qua
+// chuỗi duyệt cố định (NV → Quản lý → Founder) rồi được đánh dấu đã thanh toán.
+// Tái dùng routing engine ApprovalFlow/ApprovalStep (flowType = PAYMENT).
+model PaymentRequest {
+  id          String               @id @default(cuid())
+  tenantId    String               @map("tenant_id")
+  employeeId  String               @map("employee_id") // người tạo đơn
+  type        PaymentRequestType
+  title       String
+  description String?
+  amount      Decimal              @db.Decimal(14, 2)
+  currency    String               @default("VND")
+  status      PaymentRequestStatus @default(PENDING)
+
+  // field tuỳ-loại (nullable)
+  expenseDate   DateTime? @map("expense_date") // REIMBURSEMENT: ngày đã chi
+  category      String? // REIMBURSEMENT: phân loại chi
+  neededByDate  DateTime? @map("needed_by_date") // ADVANCE: cần tiền trước ngày
+  vendorName    String?   @map("vendor_name") // VENDOR_PAYMENT
+  invoiceNumber String?   @map("invoice_number") // VENDOR_PAYMENT
+  dueDate       DateTime? @map("due_date") // VENDOR_PAYMENT: hạn thanh toán
+
+  // routing (tái dùng ApprovalFlow)
+  flowId       String?   @map("flow_id")
+  currentStep  Int       @default(0) @map("current_step") // 1-based step đang chờ; 0 = chưa vào flow
+  reviewedById String?   @map("reviewed_by_id") // người duyệt cuối (tiện tra cứu)
+  reviewedAt   DateTime? @map("reviewed_at")
+  reviewNote   String?   @map("review_note")
+
+  // thanh toán
+  paidById    String?   @map("paid_by_id")
+  paidAt      DateTime? @map("paid_at")
+  paymentNote String?   @map("payment_note") // số tham chiếu / ngày chuyển khoản
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant      Tenant                     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee    Employee                   @relation("EmployeePaymentRequests", fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewedBy  Employee?                  @relation("PaymentRequestReviewer", fields: [reviewedById], references: [id])
+  paidBy      Employee?                  @relation("PaymentRequestPayer", fields: [paidById], references: [id])
+  flow        ApprovalFlow?              @relation(fields: [flowId], references: [id])
+  approvals   PaymentRequestApproval[]
+  attachments PaymentRequestAttachment[]
+
+  @@index([tenantId, status])
+  @@index([employeeId])
+  @@index([flowId])
+  @@map("payment_requests")
+}
+
+// SPEC-041: timeline lịch sử duyệt cho mỗi PaymentRequest. Snapshot từ ApprovalStep
+// tại thời điểm nộp; mỗi lần đơn bị trả về rồi nộp lại sinh round mới. Song song với
+// LeaveApproval/OvertimeApproval.
+model PaymentRequestApproval {
+  id           String            @id @default(cuid())
+  tenantId     String            @map("tenant_id")
+  requestId    String            @map("request_id")
+  round        Int               @default(1) // tăng mỗi lần đơn bị trả về rồi nộp lại
+  stepOrder    Int               @map("step_order")
+  approverType ApproverType      @map("approver_type")
+  roleKey      String?           @map("role_key")
+  approverId   String?           @map("approver_id") // người duyệt kỳ vọng (resolved); null nếu không xác định được
+  decision     ApprovalDecision? // null = đang chờ (pending)
+  decidedById  String?           @map("decided_by_id")
+  decidedAt    DateTime?         @map("decided_at")
+  note         String?
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  tenant    Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  request   PaymentRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  decidedBy Employee?      @relation("PaymentApprovalDecider", fields: [decidedById], references: [id])
+
+  @@unique([requestId, round, stepOrder])
+  @@index([requestId])
+  @@index([tenantId])
+  @@map("payment_request_approvals")
+}
+
+// SPEC-041: chứng từ đính kèm (hoá đơn đỏ / bill). Nhiều file/đơn. Lưu qua storage
+// driver (local↔GCS), tải xuống qua API có kiểm soát quyền + tenant.
+model PaymentRequestAttachment {
+  id        String   @id @default(cuid())
+  requestId String   @map("request_id")
+  fileUrl   String   @map("file_url") // /uploads/payment/<uuid>.<ext>
+  fileName  String   @map("file_name")
+  mimeType  String   @map("mime_type")
+  size      Int // bytes
+  createdAt DateTime @default(now()) @map("created_at")
+
+  request PaymentRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+  @@map("payment_request_attachments")
 }
 
 // Per-tenant timesheet/overtime policy. Defines what "a working day" and
@@ -1096,9 +1220,9 @@ model ProbationCriteria {
 // `ratings` là JSON { [criteriaId]: 1..5 }. Tối đa 1 review mở (DRAFT|PENDING_HR)
 // mỗi nhân viên (enforce ở service).
 model ProbationReview {
-  id     String                @id @default(cuid())
-  tenantId   String            @map("tenant_id")
-  employeeId String            @map("employee_id")
+  id         String                @id @default(cuid())
+  tenantId   String                @map("tenant_id")
+  employeeId String                @map("employee_id")
   status     ProbationReviewStatus @default(DRAFT)
 
   // SPEC-033: Step 1 — nhân viên tự đánh giá (song song khi DRAFT, khóa sau khi nộp
@@ -1119,11 +1243,11 @@ model ProbationReview {
   submittedAt    DateTime?         @map("submitted_at")
 
   // HR quyết định
-  decidedById         String?          @map("decided_by_id")
+  decidedById         String?           @map("decided_by_id")
   decision            ProbationOutcome?
-  decisionNote        String?          @map("decision_note")
-  decidedAt           DateTime?        @map("decided_at")
-  newProbationEndDate DateTime?        @map("new_probation_end_date") // chỉ khi EXTEND
+  decisionNote        String?           @map("decision_note")
+  decidedAt           DateTime?         @map("decided_at")
+  newProbationEndDate DateTime?         @map("new_probation_end_date") // chỉ khi EXTEND
 
   // snapshot ngày hết TV tại lúc tạo (hiển thị/audit)
   probationEndDateAtCreate DateTime? @map("probation_end_date_at_create")
@@ -1300,10 +1424,10 @@ model Notification {
 
 // Pipeline template (cấp tenant) — nguồn để clone JobStage khi tạo Job.
 model PipelineTemplate {
-  id        String  @id @default(cuid())
-  tenantId  String  @map("tenant_id")
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
   name      String
-  isDefault Boolean @default(false) @map("is_default")
+  isDefault Boolean  @default(false) @map("is_default")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -1351,9 +1475,9 @@ model Job {
   position   Position?   @relation(fields: [positionId], references: [id])
   createdBy  Employee    @relation("JobCreator", fields: [createdById], references: [id])
 
-  stages           JobStage[]
-  applications     Application[]
-  hiringTeam       JobHiringTeam[]
+  stages            JobStage[]
+  applications      Application[]
+  hiringTeam        JobHiringTeam[]
   bulkImportBatches BulkImportBatch[]
 
   @@index([tenantId, status])
@@ -1396,27 +1520,27 @@ model JobHiringTeam {
 
 // Candidate (con người, chống trùng, PDPL).
 model Candidate {
-  id            String          @id @default(cuid())
-  tenantId      String          @map("tenant_id")
-  fullName      String          @map("full_name")
-  email         String?
-  phone         String? // chuẩn hóa E.164 để dedupe
-  location      String?
-  currentTitle  String?         @map("current_title")
-  totalYearsExp Float?          @map("total_years_exp")
-  source        CandidateSource @default(DIRECT)
-  links         Json? // {linkedin, github, portfolio}
-  avatar        String?
-  dateOfBirth   DateTime?       @map("date_of_birth")
-  gender        Gender?
-  skills        String[] // denormalize để filter nhanh
-  rawCvText     String?         @map("raw_cv_text") // full-text search
+  id             String          @id @default(cuid())
+  tenantId       String          @map("tenant_id")
+  fullName       String          @map("full_name")
+  email          String?
+  phone          String? // chuẩn hóa E.164 để dedupe
+  location       String?
+  currentTitle   String?         @map("current_title")
+  totalYearsExp  Float?          @map("total_years_exp")
+  source         CandidateSource @default(DIRECT)
+  links          Json? // {linkedin, github, portfolio}
+  avatar         String?
+  dateOfBirth    DateTime?       @map("date_of_birth")
+  gender         Gender?
+  skills         String[] // denormalize để filter nhanh
+  rawCvText      String?         @map("raw_cv_text") // full-text search
   // PDPL
-  consentGivenAt DateTime?      @map("consent_given_at")
-  consentSource  String?        @map("consent_source")
-  retentionUntil DateTime?      @map("retention_until")
-  createdAt      DateTime       @default(now()) @map("created_at")
-  updatedAt      DateTime       @updatedAt @map("updated_at")
+  consentGivenAt DateTime?       @map("consent_given_at")
+  consentSource  String?         @map("consent_source")
+  retentionUntil DateTime?       @map("retention_until")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
 
   tenant       Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   attachments  CandidateAttachment[]
@@ -1580,7 +1704,7 @@ model BulkImportBatch {
   createdAt   DateTime         @default(now()) @map("created_at")
   confirmedAt DateTime?        @map("confirmed_at")
 
-  job   Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  job   Job              @relation(fields: [jobId], references: [id], onDelete: Cascade)
   items BulkImportItem[]
 
   @@index([tenantId, jobId])
@@ -1619,7 +1743,7 @@ model BulkImportItem {
 model ImportStaging {
   id        String   @id @default(uuid())
   tenantId  String   @map("tenant_id")
-  kind      String   // 'employee' | 'asset'
+  kind      String // 'employee' | 'asset'
   payload   Json
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
@@ -1634,8 +1758,8 @@ model ImportJob {
   id        String   @id @default(uuid())
   tenantId  String   @map("tenant_id")
   state     String   @default("waiting") // waiting | active | completed | failed
-  progress  Json?    // { done: number, total: number }
-  result    Json?    // ImportJobResult
+  progress  Json? // { done: number, total: number }
+  result    Json? // ImportJobResult
   error     String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

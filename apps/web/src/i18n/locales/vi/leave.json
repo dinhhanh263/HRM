@@ -276,6 +276,9 @@
       "LEAVE_ATTACHMENT_REQUIRED": "Loại nghỉ phép này yêu cầu đính kèm tệp",
       "LEAVE_NO_WORKING_DAYS": "Khoảng thời gian đã chọn không có ngày làm việc nào",
       "LEAVE_TYPE_NOT_FOUND": "Không tìm thấy loại nghỉ phép"
+    },
+    "flowErrors": {
+      "LEAVE_FLOW_DUPLICATE": "Đã có luồng duyệt cho phạm vi này. Mỗi phòng ban (và mặc định toàn công ty) chỉ có một luồng — hãy chọn phòng ban khác hoặc sửa luồng hiện có."
     }
   }
 }

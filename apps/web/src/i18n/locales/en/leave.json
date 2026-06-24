@@ -269,6 +269,9 @@
       "LEAVE_ATTACHMENT_REQUIRED": "This leave type requires an attachment",
       "LEAVE_NO_WORKING_DAYS": "The selected range contains no working days",
       "LEAVE_TYPE_NOT_FOUND": "Leave type not found"
+    },
+    "flowErrors": {
+      "LEAVE_FLOW_DUPLICATE": "An approval flow already exists for this scope. Each department (and the company-wide default) can have only one — pick another department or edit the existing flow."
     }
   }
 }

@@ -1,0 +1,186 @@
+{
+  "title": "Payment requests",
+  "subtitle": "Create and track reimbursements, advances, and vendor payments",
+  "newRequest": "New request",
+  "tabs": {
+    "mine": "My requests",
+    "review": "Awaiting my approval",
+    "all": "All",
+    "stats": "Statistics"
+  },
+  "stats": {
+    "year": "Year",
+    "grandTotal": "Total requested",
+    "paidTotal": "Paid",
+    "pendingTotal": "Pending",
+    "count": "Requests",
+    "monthlyTitle": "Total amount by month",
+    "byType": "By type",
+    "byStatus": "By status"
+  },
+  "type": {
+    "REIMBURSEMENT": "Reimbursement",
+    "ADVANCE": "Advance",
+    "VENDOR_PAYMENT": "Vendor payment"
+  },
+  "typeDesc": {
+    "REIMBURSEMENT": "Already paid, claim it back (with receipts)",
+    "ADVANCE": "Request money before spending",
+    "VENDOR_PAYMENT": "Pay a vendor against a VAT invoice"
+  },
+  "status": {
+    "PENDING": "Pending",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "RETURNED": "Returned",
+    "CANCELLED": "Cancelled",
+    "PAID": "Paid"
+  },
+  "table": {
+    "title": "Subject",
+    "type": "Type",
+    "employee": "Requester",
+    "amount": "Amount",
+    "status": "Status",
+    "createdAt": "Created",
+    "actions": "Actions",
+    "totalAmount": "Total amount",
+    "empty": "No payment requests yet",
+    "emptyHint": "Create your first request to get started",
+    "loadError": "Failed to load. Please try again."
+  },
+  "filters": {
+    "status": "Status",
+    "type": "Type",
+    "all": "All",
+    "search": "Search subject, vendor, requester..."
+  },
+  "form": {
+    "createTitle": "New payment request",
+    "createDescription": "Fill in the payment details. Attach receipts after creating.",
+    "resubmitTitle": "Edit & resubmit",
+    "resubmitDescription": "Update the details and resubmit for approval.",
+    "type": "Type",
+    "title": "Subject",
+    "titlePlaceholder": "e.g. Taxi to client meeting",
+    "amount": "Amount",
+    "currency": "Currency",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe the expense (optional)",
+    "expenseDate": "Expense date",
+    "category": "Category",
+    "categoryPlaceholder": "e.g. Travel, Meals, Office supplies",
+    "neededByDate": "Needed by",
+    "vendorName": "Vendor name",
+    "invoiceNumber": "Invoice number",
+    "dueDate": "Due date",
+    "attachmentsHint": "After creating, open the request to attach invoices/bills.",
+    "validation": {
+      "titleRequired": "Subject is required",
+      "amountPositive": "Amount must be greater than 0",
+      "expenseDateRequired": "Expense date is required for reimbursement",
+      "vendorRequired": "Vendor name is required"
+    }
+  },
+  "detail": {
+    "title": "Request detail",
+    "info": "Information",
+    "attachments": "Attachments",
+    "timeline": "Approval timeline",
+    "createdBy": "Requested by",
+    "noAttachments": "No attachments yet",
+    "noAttachmentsWarning": "This request has no invoices/bills attached.",
+    "paidInfo": "Paid on {{date}}",
+    "paymentNote": "Payment note"
+  },
+  "attachments": {
+    "add": "Add file",
+    "uploading": "Uploading...",
+    "remove": "Remove",
+    "download": "Download",
+    "dropHint": "Image (JPG/PNG/WEBP) or PDF, up to 10MB each",
+    "maxFiles": "Up to {{n}} files"
+  },
+  "actions": {
+    "submit": "Create request",
+    "submitting": "Saving...",
+    "resubmit": "Resubmit",
+    "cancel": "Cancel",
+    "approve": "Approve",
+    "return": "Return",
+    "reject": "Reject",
+    "markPaid": "Mark paid",
+    "cancelRequest": "Cancel request",
+    "edit": "Edit",
+    "view": "View",
+    "export": "Export Excel"
+  },
+  "respond": {
+    "returnTitle": "Return for edits",
+    "returnDescription": "The request goes back to the requester to fix and resubmit. Please give a reason.",
+    "rejectTitle": "Reject request",
+    "rejectDescription": "The request will be rejected outright (cannot be resubmitted). Please give a reason.",
+    "noteLabel": "Reason",
+    "notePlaceholder": "Enter reason...",
+    "noteRequired": "A reason is required"
+  },
+  "markPaid": {
+    "title": "Mark as paid",
+    "description": "Confirm this amount has been paid out.",
+    "noteLabel": "Note (reference number, transfer date...)",
+    "notePlaceholder": "e.g. Bank transfer 23/06"
+  },
+  "cancelConfirm": {
+    "title": "Cancel payment request?",
+    "description": "This cannot be undone. The request will be marked as cancelled."
+  },
+  "timeline": {
+    "empty": "No approval steps yet",
+    "round": "Round {{n}}",
+    "current": "current",
+    "step": "Step {{n}}",
+    "decidedBy": "{{name}} · {{date}}",
+    "state": {
+      "approved": "Approved",
+      "returned": "Returned",
+      "rejected": "Rejected",
+      "auto-skipped": "Auto-skipped",
+      "pending": "Pending",
+      "upcoming": "Upcoming"
+    },
+    "skipReason": {
+      "NO_APPROVER": "No matching approver",
+      "SELF_APPROVAL": "Approver is the requester",
+      "DUPLICATE_APPROVER": "Already approved an earlier step"
+    }
+  },
+  "approverType": {
+    "MANAGER": "Direct manager",
+    "DEPARTMENT_HEAD": "Department head",
+    "ROLE": "Role",
+    "SPECIFIC_USER": "Specific user"
+  },
+  "toast": {
+    "created": "Payment request created",
+    "resubmitted": "Request resubmitted",
+    "approved": "Request approved",
+    "returned": "Request returned for edits",
+    "rejected": "Request rejected",
+    "cancelled": "Request cancelled",
+    "paid": "Marked as paid",
+    "exported": "Excel exported",
+    "uploaded": "Attachment uploaded",
+    "deleted": "Attachment removed",
+    "tryAgain": "Please try again.",
+    "errors": {
+      "PAYMENT_EXPENSE_DATE_REQUIRED": "Expense date is required for reimbursement",
+      "PAYMENT_VENDOR_REQUIRED": "Vendor name is required",
+      "PAYMENT_INVALID_AMOUNT": "Invalid amount",
+      "PAYMENT_NOT_CURRENT_APPROVER": "You are not the approver for the current step",
+      "PAYMENT_SELF_REVIEW": "You cannot review your own request",
+      "PAYMENT_TOO_MANY_FILES": "Too many files",
+      "PAYMENT_UNSUPPORTED_TYPE": "Unsupported file type",
+      "PAYMENT_FILE_TOO_LARGE": "File exceeds 10MB"
+    }
+  }
+}

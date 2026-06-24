@@ -4,6 +4,7 @@
     "overview": "Overview",
     "hr": "Human Resources",
     "operations": "Operations",
+    "finance": "Finance",
     "system": "System"
   },
   "items": {
@@ -24,7 +25,8 @@
     "timesheetSettings": "Timesheet settings",
     "assetSettings": "Asset categories",
     "settings": "Settings",
-    "probationSelf": "My evaluation"
+    "probationSelf": "My evaluation",
+    "paymentRequests": "Payment requests"
   },
   "titles": {
     "dashboard": "Dashboard",
@@ -42,7 +44,8 @@
     "assets": "Assets",
     "timesheetSettings": "Timesheet settings",
     "assetSettings": "Asset categories",
-    "settings": "Settings"
+    "settings": "Settings",
+    "paymentRequests": "Payment requests"
   },
   "sidebar": {
     "collapse": "Collapse",

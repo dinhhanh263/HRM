@@ -18,6 +18,7 @@ import {
   Package,
   UserCheck,
   UserSearch,
+  Receipt,
   ChevronLeft,
   ChevronRight,
   X,
@@ -78,6 +79,12 @@ const navGroups: NavGroup[] = [
       { icon: UserCheck, labelKey: 'items.probationSelf', href: '/probation/me', permission: 'probation:self', requiresProbationContract: true },
       { icon: Banknote, labelKey: 'items.payroll', href: '/payroll', permission: 'payroll:view' },
       { icon: Package, labelKey: 'items.assets', href: '/assets', permission: 'assets:view' },
+    ],
+  },
+  {
+    titleKey: 'groups.finance',
+    items: [
+      { icon: Receipt, labelKey: 'items.paymentRequests', href: '/payment-requests', permission: 'payment_request:view' },
     ],
   },
   {

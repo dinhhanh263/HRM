@@ -39,6 +39,9 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'timesheet:view', 'timesheet:update', 'timesheet:approve', 'timesheet:configure',
       'leave:view', 'leave:create', 'leave:update', 'leave:approve', 'leave:reject', 'leave:configure',
       'payroll:view', 'payroll:process', 'payroll:export',
+      // SPEC-041: HR thường kiêm kế toán → được duyệt + đánh dấu đã trả.
+      'payment_request:view', 'payment_request:create', 'payment_request:approve',
+      'payment_request:reject', 'payment_request:mark_paid', 'payment_request:export',
       'contracts:view', 'contracts:create', 'contracts:update', 'contracts:delete',
       'probation:view', 'probation:review', 'probation:decide', 'probation:configure',
       'probation:self',
@@ -86,6 +89,9 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'timesheet:view', 'timesheet:update', 'timesheet:approve',
       'leave:view', 'leave:create', 'leave:approve', 'leave:reject',
       'payroll:view',
+      // SPEC-041: duyệt/trả về/từ chối đơn của nhân viên cấp dưới (scope enforce ở service).
+      'payment_request:view', 'payment_request:create',
+      'payment_request:approve', 'payment_request:reject',
       'contracts:view',
       // MANAGER evaluates direct reports (scope enforced server-side) but cannot
       // make the final decision or configure criteria — those are HR-only.
@@ -112,6 +118,8 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'timesheet:view', 'timesheet:create',
       'leave:view', 'leave:create',
       'payroll:view',
+      // SPEC-041: nhân viên tạo & xem đơn thanh toán của chính mình (scope ở service).
+      'payment_request:view', 'payment_request:create',
       'contracts:view',
       'assets:view', 'assets:acknowledge',
       'notifications:view',

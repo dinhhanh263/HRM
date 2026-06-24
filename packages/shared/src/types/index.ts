@@ -8,6 +8,7 @@ export * from './employee.js';
 export * from './employee-import.js';
 export * from './leave.js';
 export * from './timesheet.js';
+export * from './payment-request.js';
 export * from './payroll.js';
 export * from './dashboard.js';
 export * from './contract.js';

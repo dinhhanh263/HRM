@@ -44,6 +44,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from '@/components/ui/toast';
+import { getApiErrorCode, getApiErrorMessage } from '@/lib/api-error';
 import { Can } from '@/components/auth/Can';
 import { Plus, Pencil, Trash2, ArrowUp, ArrowDown, X } from 'lucide-react';
 import {
@@ -72,6 +73,17 @@ const EMPTY_FORM: FlowFormState = {
 
 export function ApprovalFlowSettings() {
   const { t } = useTranslation('leave');
+
+  // Surface the API's specific reason (e.g. a duplicate default flow) instead of
+  // a generic "try again" — falls back to the server message, then the generic.
+  function describeFlowError(error: unknown): string {
+    const code = getApiErrorCode(error);
+    if (code) {
+      const translated = t(`toast.flowErrors.${code}`, { defaultValue: '' });
+      if (translated) return translated;
+    }
+    return getApiErrorMessage(error, t('toast.tryAgain'));
+  }
   const { data: flows, isLoading } = useApprovalFlows();
   const { data: departments } = useDepartments();
   const { data: roles } = useRoles();
@@ -155,7 +167,7 @@ export function ApprovalFlowSettings() {
             toast.success(t('toast.flowSaved'));
             setFormOpen(false);
           },
-          onError: () => toast.error(t('toast.flowSaveError'), { description: t('toast.tryAgain') }),
+          onError: (error) => toast.error(t('toast.flowSaveError'), { description: describeFlowError(error) }),
         }
       );
     } else {
@@ -169,7 +181,7 @@ export function ApprovalFlowSettings() {
           toast.success(t('toast.flowSaved'));
           setFormOpen(false);
         },
-        onError: () => toast.error(t('toast.flowSaveError'), { description: t('toast.tryAgain') }),
+        onError: (error) => toast.error(t('toast.flowSaveError'), { description: describeFlowError(error) }),
       });
     }
   }

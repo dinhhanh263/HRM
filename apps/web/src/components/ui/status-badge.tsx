@@ -10,7 +10,8 @@ export type BadgeStatus =
   | 'returned'
   | 'terminated'
   | 'on-leave'
-  | 'expired';
+  | 'expired'
+  | 'paid';
 
 interface StatusBadgeProps {
   status: BadgeStatus;
@@ -94,6 +95,14 @@ const statusConfig: Record<
     bg: '#E5E7EB',
     text: '#4B5563',
     border: '#9CA3AF',
+  },
+
+  // Paid - Teal (đã thanh toán; phân biệt với "đã duyệt" xanh lá)
+  paid: {
+    label: 'Đã thanh toán',
+    bg: '#CCFBF1',
+    text: '#0F766E',
+    border: '#5EEAD4',
   },
 };
 

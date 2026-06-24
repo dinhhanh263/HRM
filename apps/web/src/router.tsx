@@ -19,6 +19,7 @@ import { DepartmentListPage } from '@/features/departments';
 import { PositionListPage } from '@/features/positions';
 import { RolesPage } from '@/features/roles';
 import { LeavePage, LeaveBalanceRosterPage } from '@/features/leave';
+import { PaymentRequestPage } from '@/features/payment-request';
 import { TimesheetPage, TimesheetSettingsPage } from '@/features/timesheet';
 import { PayrollPage } from '@/features/payroll';
 import { ProbationPage, ProbationSelfPage } from '@/features/probation';
@@ -181,6 +182,14 @@ export const router = createBrowserRouter([
         element: (
           <RequirePermission anyOf={['leave:approve', 'leave:reject']}>
             <LeaveBalanceRosterPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'payment-requests',
+        element: (
+          <RequirePermission permission="payment_request:view">
+            <PaymentRequestPage />
           </RequirePermission>
         ),
       },

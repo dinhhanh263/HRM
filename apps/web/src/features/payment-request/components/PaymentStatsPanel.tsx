@@ -1,0 +1,149 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { PaymentRequestStatus, PaymentRequestType } from '@hrm/shared';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
+import { formatVnd, cn } from '@/lib/utils';
+import { AlertTriangle, Wallet, CheckCircle2, Clock, ListChecks } from 'lucide-react';
+import { PaymentStatusBadge } from './PaymentStatusBadge';
+import { usePaymentStats } from '../hooks/usePaymentRequests';
+
+const MONTH_KEYS = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+
+function KpiCard({ icon: Icon, label, value, tone }: {
+  icon: typeof Wallet;
+  label: string;
+  value: string;
+  tone: 'primary' | 'green' | 'amber' | 'muted';
+}) {
+  const toneCls = {
+    primary: 'bg-primary/10 text-primary',
+    green: 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400',
+    amber: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400',
+    muted: 'bg-surface-alt text-text-secondary',
+  }[tone];
+  return (
+    <div className="rounded-lg border border-border bg-surface p-4">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-medium text-text-muted uppercase tracking-wide">{label}</p>
+        <span className={cn('flex size-8 items-center justify-center rounded-lg', toneCls)}>
+          <Icon className="size-4" />
+        </span>
+      </div>
+      <p className="mt-2 text-2xl font-bold tabular-nums tracking-tight text-text-primary">{value}</p>
+    </div>
+  );
+}
+
+export function PaymentStatsPanel() {
+  const { t } = useTranslation('payment');
+  const currentYear = new Date().getUTCFullYear();
+  const [year, setYear] = useState(currentYear);
+  const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
+
+  const { data, isLoading, isError } = usePaymentStats(year);
+
+  const maxMonth = data ? Math.max(1, ...data.months.map((m) => Number(m.total))) : 1;
+
+  return (
+    <div className="space-y-6">
+      {/* Year selector */}
+      <div className="flex items-center gap-2">
+        <span className="text-sm text-text-secondary">{t('stats.year')}</span>
+        <Select value={String(year)} onValueChange={(v) => setYear(Number(v))}>
+          <SelectTrigger className="h-9 w-28 text-sm"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            {years.map((y) => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {isLoading ? (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-lg" />)}
+          </div>
+          <Skeleton className="h-56 rounded-lg" />
+        </div>
+      ) : isError || !data ? (
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <AlertTriangle className="size-8 text-danger mb-2" />
+          <p className="text-sm text-text-secondary">{t('table.loadError')}</p>
+        </div>
+      ) : (
+        <>
+          {/* KPI cards */}
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <KpiCard icon={Wallet} tone="primary" label={t('stats.grandTotal')} value={`${formatVnd(data.grandTotal)} ₫`} />
+            <KpiCard icon={CheckCircle2} tone="green" label={t('stats.paidTotal')} value={`${formatVnd(data.paidTotal)} ₫`} />
+            <KpiCard icon={Clock} tone="amber" label={t('stats.pendingTotal')} value={`${formatVnd(data.pendingTotal)} ₫`} />
+            <KpiCard icon={ListChecks} tone="muted" label={t('stats.count')} value={String(data.grandCount)} />
+          </div>
+
+          {/* Monthly bar chart */}
+          <div className="rounded-lg border border-border bg-surface p-5">
+            <p className="text-sm font-semibold text-text-primary mb-4">{t('stats.monthlyTitle')}</p>
+            <div className="flex gap-1.5 h-48" role="img" aria-label={t('stats.monthlyTitle')}>
+              {data.months.map((m) => {
+                const val = Number(m.total);
+                const pct = Math.max(val > 0 ? 2 : 0, Math.round((val / maxMonth) * 100));
+                return (
+                  <div key={m.month} className="flex-1 h-full flex flex-col items-center gap-1.5 group">
+                    <div className="relative w-full flex-1 flex items-end">
+                      <div
+                        className="w-full rounded-t bg-primary/80 hover:bg-primary transition-colors"
+                        style={{ height: `${pct}%` }}
+                        title={`${MONTH_KEYS[m.month - 1]}: ${formatVnd(m.total)} ₫ (${m.count})`}
+                      />
+                    </div>
+                    <span className="text-[10px] text-text-muted tabular-nums">{MONTH_KEYS[m.month - 1]}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Breakdown by type + by status */}
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="rounded-lg border border-border bg-surface p-5">
+              <p className="text-sm font-semibold text-text-primary mb-3">{t('stats.byType')}</p>
+              <ul className="space-y-2">
+                {data.byType.length === 0 && <li className="text-sm text-text-muted">—</li>}
+                {data.byType.map((g) => (
+                  <li key={g.key} className="flex items-center justify-between text-sm">
+                    <span className="text-text-secondary">
+                      {t(`type.${g.key as PaymentRequestType}`)}
+                      <span className="text-text-muted ml-1.5">({g.count})</span>
+                    </span>
+                    <span className="font-medium tabular-nums text-text-primary">{formatVnd(g.total)} ₫</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-lg border border-border bg-surface p-5">
+              <p className="text-sm font-semibold text-text-primary mb-3">{t('stats.byStatus')}</p>
+              <ul className="space-y-2">
+                {data.byStatus.length === 0 && <li className="text-sm text-text-muted">—</li>}
+                {data.byStatus.map((g) => (
+                  <li key={g.key} className="flex items-center justify-between text-sm gap-2">
+                    <span className="flex items-center gap-2">
+                      <PaymentStatusBadge status={g.key as PaymentRequestStatus} />
+                      <span className="text-text-muted">({g.count})</span>
+                    </span>
+                    <span className="font-medium tabular-nums text-text-primary">{formatVnd(g.total)} ₫</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

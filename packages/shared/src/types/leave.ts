@@ -24,6 +24,7 @@ export const ApprovalDecision = {
   APPROVED: 'APPROVED',
   RETURNED: 'RETURNED', // trả về NV sửa lại
   AUTO_SKIPPED: 'AUTO_SKIPPED', // bỏ qua tự động (không tìm được người duyệt / tự duyệt chính mình)
+  REJECTED: 'REJECTED', // SPEC-041: từ chối terminal (chỉ Payment dùng; Leave/OT chỉ dùng RETURNED)
 } as const;
 
 export type ApprovalDecision = (typeof ApprovalDecision)[keyof typeof ApprovalDecision];
@@ -33,6 +34,7 @@ export type ApprovalDecision = (typeof ApprovalDecision)[keyof typeof ApprovalDe
 export const ApprovalFlowType = {
   LEAVE: 'LEAVE',
   OVERTIME: 'OVERTIME',
+  PAYMENT: 'PAYMENT', // SPEC-041
 } as const;
 
 export type ApprovalFlowType = (typeof ApprovalFlowType)[keyof typeof ApprovalFlowType];

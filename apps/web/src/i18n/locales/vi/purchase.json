@@ -1,0 +1,201 @@
+{
+  "title": "Đề xuất mua hàng",
+  "subtitle": "Tạo và theo dõi phiếu đề xuất mua hàng gửi nhà cung cấp",
+  "newRequest": "Tạo phiếu",
+  "tabs": {
+    "mine": "Phiếu của tôi",
+    "review": "Chờ tôi duyệt",
+    "all": "Tất cả",
+    "stats": "Thống kê"
+  },
+  "stats": {
+    "year": "Năm",
+    "grandTotal": "Tổng chi phí",
+    "orderedTotal": "Đã đặt hàng",
+    "pendingTotal": "Đang chờ duyệt",
+    "count": "Số phiếu",
+    "monthlyTitle": "Tổng tiền theo tháng",
+    "byStatus": "Theo trạng thái",
+    "byDepartment": "Theo phòng ban",
+    "byVendor": "Theo nhà cung cấp",
+    "noDepartment": "Chưa có phòng ban"
+  },
+  "status": {
+    "PENDING": "Chờ duyệt",
+    "APPROVED": "Đã duyệt",
+    "REJECTED": "Từ chối",
+    "RETURNED": "Trả về sửa lại",
+    "CANCELLED": "Đã huỷ",
+    "ORDERED": "Đã đặt hàng"
+  },
+  "table": {
+    "code": "Mã phiếu",
+    "title": "Tiêu đề",
+    "vendor": "Nhà cung cấp",
+    "employee": "Người tạo",
+    "lineCount": "Số dòng",
+    "amount": "Tổng tiền",
+    "status": "Trạng thái",
+    "createdAt": "Ngày tạo",
+    "actions": "Thao tác",
+    "totalAmount": "Tổng số tiền",
+    "empty": "Chưa có phiếu đề xuất mua hàng nào",
+    "emptyHint": "Tạo phiếu đầu tiên để bắt đầu",
+    "loadError": "Không tải được danh sách. Vui lòng thử lại."
+  },
+  "filters": {
+    "status": "Trạng thái",
+    "vendor": "Nhà cung cấp",
+    "all": "Tất cả",
+    "search": "Tìm theo tiêu đề, mã, người tạo...",
+    "dateFrom": "Từ ngày",
+    "dateTo": "Đến ngày"
+  },
+  "form": {
+    "createTitle": "Tạo phiếu đề xuất mua hàng",
+    "createDescription": "Điền thông tin và các dòng hàng. Đính kèm báo giá/hợp đồng sau khi tạo.",
+    "resubmitTitle": "Sửa & gửi lại",
+    "resubmitDescription": "Cập nhật thông tin rồi gửi lại để duyệt từ đầu.",
+    "title": "Tiêu đề",
+    "titlePlaceholder": "VD: Mua gỗ teak lô tháng 7",
+    "vendorName": "Nhà cung cấp",
+    "vendorPlaceholder": "Tên nhà cung cấp (kính gửi)",
+    "expectedDeliveryDate": "Ngày giao dự kiến",
+    "currency": "Tiền tệ",
+    "issuingEntity": "Đơn vị phát hành",
+    "issuingEntityPlaceholder": "Mặc định",
+    "description": "Ghi chú",
+    "descriptionPlaceholder": "Ghi chú thêm (tuỳ chọn)",
+    "attachmentsHint": "Sau khi tạo phiếu, mở chi tiết để đính kèm báo giá/hợp đồng.",
+    "items": {
+      "title": "Dòng hàng",
+      "addRow": "Thêm dòng",
+      "removeRow": "Xoá dòng",
+      "sku": "Mã SKU",
+      "productName": "Tên sản phẩm",
+      "productNamePlaceholder": "VD: Gỗ teak xẻ",
+      "unit": "ĐVT",
+      "quantity": "Số lượng",
+      "unitPrice": "Đơn giá",
+      "taxRate": "VAT %",
+      "lineSubtotal": "Thành tiền"
+    },
+    "totals": {
+      "subtotal": "Tổng cộng",
+      "vat": "Thuế VAT",
+      "total": "Tổng thanh toán"
+    },
+    "validation": {
+      "titleRequired": "Vui lòng nhập tiêu đề",
+      "vendorRequired": "Vui lòng nhập nhà cung cấp",
+      "itemsRequired": "Cần ít nhất 1 dòng hàng",
+      "productNameRequired": "Vui lòng nhập tên sản phẩm",
+      "quantityPositive": "Số lượng phải lớn hơn 0",
+      "unitPriceNonNegative": "Đơn giá không được âm",
+      "taxRateRange": "VAT phải từ 0 đến 100"
+    }
+  },
+  "detail": {
+    "title": "Chi tiết phiếu",
+    "items": "Dòng hàng",
+    "attachments": "Chứng từ đính kèm",
+    "timeline": "Tiến trình duyệt",
+    "createdBy": "Người tạo",
+    "department": "Phòng ban",
+    "noAttachments": "Chưa có chứng từ nào",
+    "orderedInfo": "Đã đặt hàng {{date}}",
+    "orderNote": "Ghi chú đặt hàng"
+  },
+  "attachments": {
+    "add": "Thêm chứng từ",
+    "uploading": "Đang tải lên...",
+    "remove": "Xoá",
+    "download": "Tải xuống",
+    "dropHint": "Ảnh (JPG/PNG/WEBP) hoặc PDF, tối đa 10MB mỗi tệp",
+    "maxFiles": "Tối đa {{n}} tệp"
+  },
+  "actions": {
+    "submit": "Tạo phiếu",
+    "submitting": "Đang lưu...",
+    "resubmit": "Gửi lại",
+    "cancel": "Huỷ",
+    "approve": "Duyệt",
+    "return": "Trả về sửa",
+    "reject": "Từ chối",
+    "markOrdered": "Đã đặt hàng",
+    "cancelRequest": "Huỷ phiếu",
+    "edit": "Sửa",
+    "view": "Xem",
+    "export": "Xuất Excel",
+    "exportPdf": "Xuất PDF"
+  },
+  "respond": {
+    "returnTitle": "Trả về để sửa",
+    "returnDescription": "Phiếu sẽ được trả về cho người tạo sửa và gửi lại. Vui lòng nêu lý do.",
+    "rejectTitle": "Từ chối phiếu",
+    "rejectDescription": "Phiếu sẽ bị từ chối hẳn (không gửi lại được). Vui lòng nêu lý do.",
+    "noteLabel": "Lý do",
+    "notePlaceholder": "Nhập lý do...",
+    "noteRequired": "Vui lòng nhập lý do"
+  },
+  "markOrdered": {
+    "title": "Đánh dấu đã đặt hàng",
+    "description": "Xác nhận đã phát hành PO cho nhà cung cấp.",
+    "noteLabel": "Ghi chú (số PO, ngày đặt...)",
+    "notePlaceholder": "VD: PO-2026-0123"
+  },
+  "cancelConfirm": {
+    "title": "Huỷ phiếu đề xuất mua hàng?",
+    "description": "Hành động này không thể hoàn tác. Phiếu sẽ chuyển sang trạng thái đã huỷ."
+  },
+  "timeline": {
+    "empty": "Chưa có tiến trình duyệt",
+    "round": "Vòng {{n}}",
+    "current": "hiện tại",
+    "step": "Bước {{n}}",
+    "decidedBy": "{{name}} · {{date}}",
+    "state": {
+      "approved": "Đã duyệt",
+      "returned": "Trả về",
+      "rejected": "Từ chối",
+      "auto-skipped": "Tự bỏ qua",
+      "pending": "Đang chờ",
+      "upcoming": "Sắp tới"
+    },
+    "skipReason": {
+      "NO_APPROVER": "Không có người duyệt phù hợp",
+      "SELF_APPROVAL": "Người duyệt trùng người tạo",
+      "DUPLICATE_APPROVER": "Đã duyệt ở bước trước"
+    }
+  },
+  "approverType": {
+    "MANAGER": "Quản lý trực tiếp",
+    "DEPARTMENT_HEAD": "Trưởng phòng ban",
+    "ROLE": "Vai trò",
+    "SPECIFIC_USER": "Người chỉ định"
+  },
+  "toast": {
+    "created": "Đã tạo phiếu đề xuất mua hàng",
+    "resubmitted": "Đã gửi lại phiếu",
+    "approved": "Đã duyệt phiếu",
+    "returned": "Đã trả về để sửa",
+    "rejected": "Đã từ chối phiếu",
+    "cancelled": "Đã huỷ phiếu",
+    "ordered": "Đã đánh dấu đặt hàng",
+    "exported": "Đã xuất Excel",
+    "uploaded": "Đã tải chứng từ lên",
+    "deleted": "Đã xoá chứng từ",
+    "tryAgain": "Vui lòng thử lại sau.",
+    "errors": {
+      "PURCHASE_VENDOR_REQUIRED": "Tên nhà cung cấp là bắt buộc",
+      "PURCHASE_ITEMS_REQUIRED": "Phiếu phải có ít nhất 1 dòng hàng",
+      "PURCHASE_INVALID_QUANTITY": "Số lượng không hợp lệ",
+      "PURCHASE_INVALID_UNIT_PRICE": "Đơn giá không hợp lệ",
+      "PURCHASE_NOT_CURRENT_APPROVER": "Bạn không phải người duyệt ở bước hiện tại",
+      "PURCHASE_SELF_REVIEW": "Không thể duyệt phiếu của chính mình",
+      "PURCHASE_TOO_MANY_FILES": "Vượt quá số tệp cho phép",
+      "PURCHASE_UNSUPPORTED_TYPE": "Loại tệp không được hỗ trợ",
+      "PURCHASE_FILE_TOO_LARGE": "Tệp vượt quá 10MB"
+    }
+  }
+}

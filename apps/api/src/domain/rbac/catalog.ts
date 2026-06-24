@@ -42,6 +42,9 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       // SPEC-041: HR thường kiêm kế toán → được duyệt + đánh dấu đã trả.
       'payment_request:view', 'payment_request:create', 'payment_request:approve',
       'payment_request:reject', 'payment_request:mark_paid', 'payment_request:export',
+      // SPEC-042: HR kiêm mua hàng → duyệt + đánh dấu đã đặt hàng + export.
+      'purchase_request:view', 'purchase_request:create', 'purchase_request:approve',
+      'purchase_request:reject', 'purchase_request:mark_ordered', 'purchase_request:export',
       'contracts:view', 'contracts:create', 'contracts:update', 'contracts:delete',
       'probation:view', 'probation:review', 'probation:decide', 'probation:configure',
       'probation:self',
@@ -92,6 +95,9 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       // SPEC-041: duyệt/trả về/từ chối đơn của nhân viên cấp dưới (scope enforce ở service).
       'payment_request:view', 'payment_request:create',
       'payment_request:approve', 'payment_request:reject',
+      // SPEC-042: duyệt/trả về/từ chối phiếu mua hàng của cấp dưới (scope ở service).
+      'purchase_request:view', 'purchase_request:create',
+      'purchase_request:approve', 'purchase_request:reject',
       'contracts:view',
       // MANAGER evaluates direct reports (scope enforced server-side) but cannot
       // make the final decision or configure criteria — those are HR-only.
@@ -120,6 +126,8 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'payroll:view',
       // SPEC-041: nhân viên tạo & xem đơn thanh toán của chính mình (scope ở service).
       'payment_request:view', 'payment_request:create',
+      // SPEC-042: nhân viên tạo & xem phiếu mua hàng của chính mình (scope ở service).
+      'purchase_request:view', 'purchase_request:create',
       'contracts:view',
       'assets:view', 'assets:acknowledge',
       'notifications:view',

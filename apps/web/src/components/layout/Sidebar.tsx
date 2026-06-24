@@ -19,6 +19,7 @@ import {
   UserCheck,
   UserSearch,
   Receipt,
+  ShoppingCart,
   ChevronLeft,
   ChevronRight,
   X,
@@ -85,6 +86,7 @@ const navGroups: NavGroup[] = [
     titleKey: 'groups.finance',
     items: [
       { icon: Receipt, labelKey: 'items.paymentRequests', href: '/payment-requests', permission: 'payment_request:view' },
+      { icon: ShoppingCart, labelKey: 'items.purchaseRequests', href: '/purchase-requests', permission: 'purchase_request:view' },
     ],
   },
   {

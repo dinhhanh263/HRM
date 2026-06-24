@@ -18,6 +18,7 @@ import { seedHolidaysForTenant } from '../src/domain/timesheet/holiday-defaults.
 import { seedPipelineTemplatesForTenant } from '../src/domain/recruitment/defaults.js';
 import { seedProbationCriteriaForTenant } from '../src/domain/probation/defaults.js';
 import { seedDefaultPaymentFlowForTenant } from '../src/domain/payment-request/defaults.js';
+import { seedDefaultPurchaseFlowForTenant } from '../src/domain/purchase-request/defaults.js';
 
 const prisma = new PrismaClient();
 
@@ -900,6 +901,9 @@ async function main() {
 
   await seedDefaultPaymentFlowForTenant(prisma, tenant.id);
   console.log('Seeded default payment approval flow');
+
+  await seedDefaultPurchaseFlowForTenant(prisma, tenant.id);
+  console.log('Seeded default purchase approval flow');
 
   await prisma.timesheetPolicy.upsert({
     where: { tenantId: tenant.id },

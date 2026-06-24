@@ -114,6 +114,12 @@ export const settingsService = {
     };
   },
 
+  /** Company identity (name/address/taxCode/phone/contactEmail) for documents (PDF headers). */
+  async getCompanyInfo(tenantId: string) {
+    const stored = await tenantSettingsRepository.getSettings(tenantId);
+    return mergedSection(stored, 'company');
+  },
+
   /** Lightweight accessor for the reminder engine / dashboard (no seat count). */
   async getNotificationSettings(tenantId: string) {
     const stored = await tenantSettingsRepository.getSettings(tenantId);

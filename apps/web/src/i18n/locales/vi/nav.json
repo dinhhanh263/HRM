@@ -26,7 +26,8 @@
     "assetSettings": "Loại tài sản",
     "settings": "Cài đặt",
     "probationSelf": "Tự đánh giá",
-    "paymentRequests": "Yêu cầu thanh toán"
+    "paymentRequests": "Yêu cầu thanh toán",
+    "purchaseRequests": "Đề xuất mua hàng"
   },
   "titles": {
     "dashboard": "Dashboard",
@@ -45,7 +46,8 @@
     "timesheetSettings": "Cài đặt chấm công",
     "assetSettings": "Loại tài sản",
     "settings": "Cài đặt",
-    "paymentRequests": "Yêu cầu thanh toán"
+    "paymentRequests": "Yêu cầu thanh toán",
+    "purchaseRequests": "Đề xuất mua hàng"
   },
   "sidebar": {
     "collapse": "Thu gọn",

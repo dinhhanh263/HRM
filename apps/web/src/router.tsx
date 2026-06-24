@@ -20,6 +20,7 @@ import { PositionListPage } from '@/features/positions';
 import { RolesPage } from '@/features/roles';
 import { LeavePage, LeaveBalanceRosterPage } from '@/features/leave';
 import { PaymentRequestPage } from '@/features/payment-request';
+import { PurchaseRequestPage } from '@/features/purchase-request';
 import { TimesheetPage, TimesheetSettingsPage } from '@/features/timesheet';
 import { PayrollPage } from '@/features/payroll';
 import { ProbationPage, ProbationSelfPage } from '@/features/probation';
@@ -190,6 +191,14 @@ export const router = createBrowserRouter([
         element: (
           <RequirePermission permission="payment_request:view">
             <PaymentRequestPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'purchase-requests',
+        element: (
+          <RequirePermission permission="purchase_request:view">
+            <PurchaseRequestPage />
           </RequirePermission>
         ),
       },

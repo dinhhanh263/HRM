@@ -56,6 +56,13 @@
     "createDescription": "Điền thông tin và các dòng hàng. Đính kèm báo giá/hợp đồng sau khi tạo.",
     "resubmitTitle": "Sửa & gửi lại",
     "resubmitDescription": "Cập nhật thông tin rồi gửi lại để duyệt từ đầu.",
+    "backToList": "Quay lại danh sách",
+    "sections": {
+      "info": "Thông tin phiếu",
+      "infoDescription": "Tiêu đề, nhà cung cấp và thông tin chung của phiếu đề xuất.",
+      "items": "Dòng hàng",
+      "itemsDescription": "Thêm các mặt hàng cần mua, số lượng và đơn giá."
+    },
     "title": "Tiêu đề",
     "titlePlaceholder": "VD: Mua gỗ teak lô tháng 7",
     "vendorName": "Nhà cung cấp",

@@ -56,6 +56,13 @@
     "createDescription": "Fill in the details and line items. Attach quotes/contracts after creating.",
     "resubmitTitle": "Edit & resubmit",
     "resubmitDescription": "Update the details and resubmit for approval.",
+    "backToList": "Back to list",
+    "sections": {
+      "info": "Request information",
+      "infoDescription": "Title, vendor and general details of the purchase request.",
+      "items": "Line items",
+      "itemsDescription": "Add the items to purchase with quantity and unit price."
+    },
     "title": "Title",
     "titlePlaceholder": "e.g. Buy teak wood, July batch",
     "vendorName": "Vendor",

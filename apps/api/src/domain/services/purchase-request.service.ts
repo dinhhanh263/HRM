@@ -407,14 +407,15 @@ export const purchaseRequestService = {
 
   // ---- Attachments ----
 
-  /** Attach a quote/contract to the owner's editable (PENDING/RETURNED) request. */
+  /** Attach a quote/contract to the owner's active request (any status but
+      REJECTED/CANCELLED), so documents can be added even after approval. */
   async addAttachment(
     id: string,
     tenantId: string,
     ownerEmployeeId: string,
     file: { buffer: Buffer; originalName: string; mimeType: string; size: number },
   ) {
-    await requireEditableOwnRequest(id, tenantId, ownerEmployeeId);
+    await requireAttachableOwnRequest(id, tenantId, ownerEmployeeId);
 
     // Defence-in-depth: the middleware already filters MIME, but never trust it.
     if (!PURCHASE_ALLOWED_MIME.some((a) => a.mime === file.mimeType)) {
@@ -442,7 +443,7 @@ export const purchaseRequestService = {
     ownerEmployeeId: string,
     attachmentId: string,
   ): Promise<void> {
-    await requireEditableOwnRequest(id, tenantId, ownerEmployeeId);
+    await requireAttachableOwnRequest(id, tenantId, ownerEmployeeId);
     const attachment = await purchaseRequestRepository.findAttachmentScoped(attachmentId, id, tenantId);
     if (!attachment) {
       throw new NotFoundError('Attachment not found');
@@ -604,8 +605,12 @@ export const purchaseRequestService = {
   },
 };
 
-/** Load a request that the caller owns and that is still editable (PENDING/RETURNED). */
-async function requireEditableOwnRequest(id: string, tenantId: string, ownerEmployeeId: string) {
+/** Load a request the caller owns and that still accepts attachment changes.
+    The owner can add/remove quotes/contracts while the request is "active" —
+    every status except the terminal REJECTED/CANCELLED. This covers PENDING and
+    RETURNED, but also APPROVED/ORDERED so a request that was approved (e.g. an
+    admin's self-approved request) can still receive its supporting documents. */
+async function requireAttachableOwnRequest(id: string, tenantId: string, ownerEmployeeId: string) {
   const request = await purchaseRequestRepository.findById(id, tenantId);
   if (!request) {
     throw new NotFoundError('Purchase request not found');
@@ -613,8 +618,11 @@ async function requireEditableOwnRequest(id: string, tenantId: string, ownerEmpl
   if (request.employeeId !== ownerEmployeeId) {
     throw new ForbiddenError('You can only modify your own purchase requests');
   }
-  if (request.status !== 'PENDING' && request.status !== 'RETURNED') {
-    throw new BadRequestError('Attachments can only be changed while pending or returned', 'PURCHASE_NOT_EDITABLE');
+  if (request.status === 'REJECTED' || request.status === 'CANCELLED') {
+    throw new BadRequestError(
+      'Attachments cannot be changed on a rejected or cancelled request',
+      'PURCHASE_NOT_EDITABLE',
+    );
   }
   return request;
 }

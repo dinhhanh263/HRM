@@ -88,6 +88,10 @@ export function PurchaseRequestDetailSheet({ requestId, onOpenChange, onEdit }: 
 
   const isOwner = !!r && !!myEmployeeId && r.employeeId === myEmployeeId;
   const editable = isOwner && (r?.status === 'PENDING' || r?.status === 'RETURNED');
+  // Attachments can be added/removed while the request is still "active" — every
+  // status except the terminal REJECTED/CANCELLED (mirrors the server guard), so
+  // the owner can attach quotes/contracts even after the request is approved.
+  const canAttach = isOwner && r?.status !== 'REJECTED' && r?.status !== 'CANCELLED';
   const canReviewNow = !!r && r.status === 'PENDING' && !isOwner;
   const canApprove = canReviewNow && can('purchase_request:approve');
   const canRespond = canReviewNow && can('purchase_request:reject');
@@ -273,7 +277,7 @@ export function PurchaseRequestDetailSheet({ requestId, onOpenChange, onEdit }: 
               <PurchaseAttachmentUploader
                 requestId={r.id}
                 attachments={r.attachments ?? []}
-                editable={!!editable}
+                editable={canAttach}
               />
             </div>
 

@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type {
-  CreatePurchaseRequestRequest,
   PurchaseRequestDto,
   PurchaseRequestScope,
   PurchaseRequestStatus,
@@ -19,19 +19,12 @@ import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/toast';
 import { Can } from '@/components/auth/Can';
 import { usePermission } from '@/hooks/usePermission';
-import { getApiErrorCode } from '@/lib/api-error';
 import { formatVnd, cn } from '@/lib/utils';
 import { Plus, AlertTriangle, ShoppingCart, Search, Download, Loader2 } from 'lucide-react';
 import { PurchaseRequestTable } from '../components/PurchaseRequestTable';
-import { PurchaseRequestForm } from '../components/PurchaseRequestForm';
 import { PurchaseRequestDetailSheet } from '../components/PurchaseRequestDetailSheet';
 import { PurchaseStatsPanel } from '../components/PurchaseStatsPanel';
-import {
-  usePurchaseRequests,
-  useCreatePurchaseRequest,
-  useResubmitPurchaseRequest,
-  exportPurchaseRequests,
-} from '../hooks/usePurchaseRequests';
+import { usePurchaseRequests, exportPurchaseRequests } from '../hooks/usePurchaseRequests';
 
 type Tab = 'mine' | 'review' | 'all' | 'stats';
 
@@ -46,6 +39,7 @@ const STATUSES: PurchaseRequestStatus[] = [
 
 export function PurchaseRequestPage() {
   const { t } = useTranslation('purchase');
+  const navigate = useNavigate();
   const { can } = usePermission();
   const canReview = can('purchase_request:approve') || can('purchase_request:reject');
 
@@ -55,13 +49,20 @@ export function PurchaseRequestPage() {
   const [search, setSearch] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
-  const [formOpen, setFormOpen] = useState(false);
-  const [resubmitTarget, setResubmitTarget] = useState<PurchaseRequestDto | null>(null);
   const [detailId, setDetailId] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const createMutation = useCreatePurchaseRequest();
-  const resubmitMutation = useResubmitPurchaseRequest();
+  // Deep link from the create page (?detail=<id>) opens the new request, then
+  // strips the param so a refresh/back doesn't keep re-opening it.
+  useEffect(() => {
+    const d = searchParams.get('detail');
+    if (!d) return;
+    setDetailId(d);
+    const next = new URLSearchParams(searchParams);
+    next.delete('detail');
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   const tabs: { key: Tab; label: string; show: boolean }[] = [
     { key: 'mine', label: t('tabs.mine'), show: true },
@@ -88,8 +89,7 @@ export function PurchaseRequestPage() {
   const { data, isLoading, isError } = usePurchaseRequests(filters, { enabled: !isStats });
 
   function openCreate() {
-    setResubmitTarget(null);
-    setFormOpen(true);
+    navigate('/purchase-requests/new');
   }
 
   async function handleExport() {
@@ -107,34 +107,7 @@ export function PurchaseRequestPage() {
 
   function openResubmit(request: PurchaseRequestDto) {
     setDetailId(null);
-    setResubmitTarget(request);
-    setFormOpen(true);
-  }
-
-  function handleSubmit(payload: CreatePurchaseRequestRequest) {
-    const onErr = (error: unknown) => {
-      const code = getApiErrorCode(error);
-      toast.error((code && t(`toast.errors.${code}`, { defaultValue: '' })) || t('toast.tryAgain'));
-    };
-    if (resubmitTarget) {
-      resubmitMutation.mutate(
-        { id: resubmitTarget.id, data: payload },
-        {
-          onSuccess: () => { toast.success(t('toast.resubmitted')); setFormOpen(false); setResubmitTarget(null); },
-          onError: onErr,
-        },
-      );
-    } else {
-      createMutation.mutate(payload, {
-        onSuccess: (created) => {
-          toast.success(t('toast.created'));
-          setFormOpen(false);
-          // Open the new request so the user can attach quotes/contracts right away.
-          setDetailId(created.id);
-        },
-        onError: onErr,
-      });
-    }
+    navigate(`/purchase-requests/${request.id}/resubmit`);
   }
 
   const items = data?.items ?? [];
@@ -264,15 +237,6 @@ export function PurchaseRequestPage() {
           )}
         </>
       )}
-
-      {/* Form (create / resubmit) */}
-      <PurchaseRequestForm
-        open={formOpen}
-        onOpenChange={(o) => { setFormOpen(o); if (!o) setResubmitTarget(null); }}
-        initialRequest={resubmitTarget}
-        isSubmitting={createMutation.isPending || resubmitMutation.isPending}
-        onSubmit={handleSubmit}
-      />
 
       {/* Detail */}
       <PurchaseRequestDetailSheet

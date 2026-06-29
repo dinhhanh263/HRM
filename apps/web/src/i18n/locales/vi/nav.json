@@ -27,7 +27,12 @@
     "settings": "Cài đặt",
     "probationSelf": "Tự đánh giá",
     "paymentRequests": "Yêu cầu thanh toán",
-    "purchaseRequests": "Đề xuất mua hàng"
+    "purchaseRequests": "Đề xuất mua hàng",
+    "kpiFrameworks": "Khung KPI",
+    "teams": "Team/Squad",
+    "kpi": "KPI / Hiệu suất",
+    "myKpi": "KPI của tôi",
+    "kpiSurveys": "Khảo sát KPI"
   },
   "titles": {
     "dashboard": "Dashboard",
@@ -47,7 +52,12 @@
     "assetSettings": "Loại tài sản",
     "settings": "Cài đặt",
     "paymentRequests": "Yêu cầu thanh toán",
-    "purchaseRequests": "Đề xuất mua hàng"
+    "purchaseRequests": "Đề xuất mua hàng",
+    "kpiFrameworks": "Khung KPI",
+    "teams": "Team / Squad",
+    "kpi": "KPI / Hiệu suất",
+    "myKpi": "KPI của tôi",
+    "kpiSurveys": "Khảo sát Team Health"
   },
   "sidebar": {
     "collapse": "Thu gọn",

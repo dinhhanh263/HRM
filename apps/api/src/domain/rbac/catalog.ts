@@ -48,6 +48,9 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'contracts:view', 'contracts:create', 'contracts:update', 'contracts:delete',
       'probation:view', 'probation:review', 'probation:decide', 'probation:configure',
       'probation:self',
+      // SPEC-044: HR cấu hình framework + xem toàn công ty + duyệt cuối + export + survey.
+      'kpi:view', 'kpi:view_team', 'kpi:view_all', 'kpi:config', 'kpi:enter',
+      'kpi:self_assess', 'kpi:review', 'kpi:approve', 'kpi:export', 'kpi:survey_manage',
       'assets:view', 'assets:create', 'assets:update', 'assets:delete',
       'assets:assign', 'assets:acknowledge', 'assets:maintain', 'assets:dispose', 'assets:configure',
       'assets:export', 'assets:import',
@@ -77,6 +80,8 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'notifications:view',
       // SPEC-033: giám đốc/kế toán trưởng cũng có thể là người đang thử việc.
       'probation:self',
+      // SPEC-044: cũng được chấm KPI như mọi nhân viên.
+      'kpi:view', 'kpi:self_assess',
     ],
   },
   {
@@ -103,6 +108,9 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       // make the final decision or configure criteria — those are HR-only.
       // `self`: manager cũng có thể là người đang thử việc (SPEC-033).
       'probation:view', 'probation:review', 'probation:self',
+      // SPEC-044: nhập số liệu + review/calibrate KPI cho team mình (scope ở service);
+      // tự đánh giá scorecard của chính mình.
+      'kpi:view', 'kpi:view_team', 'kpi:enter', 'kpi:review', 'kpi:self_assess',
       'assets:view', 'assets:acknowledge', 'assets:export',
       'notifications:view',
       'recruitment:job_view',
@@ -134,6 +142,8 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       // SPEC-033: tự đánh giá thử việc — chỉ trên review của chính mình
       // (ownership check ở controller), không kèm probation:view.
       'probation:self',
+      // SPEC-044: xem scorecard của mình + tự đánh giá (ownership check ở service).
+      'kpi:view', 'kpi:self_assess',
       // An EMPLOYEE who is an interview panellist can submit their own scorecard,
       // but does NOT get candidate_view — that grant is unscoped (the service does
       // no hiring-team membership filtering), so it would expose every candidate's

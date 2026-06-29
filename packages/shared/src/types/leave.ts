@@ -36,6 +36,7 @@ export const ApprovalFlowType = {
   OVERTIME: 'OVERTIME',
   PAYMENT: 'PAYMENT', // SPEC-041
   PURCHASE: 'PURCHASE', // SPEC-042
+  KPI_REVIEW: 'KPI_REVIEW', // SPEC-044
 } as const;
 
 export type ApprovalFlowType = (typeof ApprovalFlowType)[keyof typeof ApprovalFlowType];

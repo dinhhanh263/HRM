@@ -1,0 +1,264 @@
+{
+  "config": {
+    "title": "KPI Frameworks",
+    "subtitle": "Define KPI sets per department: pillars, metrics, weights, rating scale.",
+    "empty": "No frameworks yet.",
+    "selectHint": "Select a framework to view its configuration.",
+    "pillarsShort": "pillars",
+    "deptsShort": "depts",
+    "balanced": "Weights balanced (Σ = 100%).",
+    "issuesTitle": "Weights not balanced:",
+    "issueScope": {
+      "PILLARS": "Total pillar weight",
+      "PILLAR_KPIS": "KPI weights within pillar",
+      "PROFILE": "Weight profile"
+    },
+    "pillarTotal": "Total pillar weight",
+    "confirmDeleteTitle": "Confirm delete?",
+    "confirmDeleteDesc": "Delete \"{{name}}\"? This cannot be undone."
+  },
+  "tabs": {
+    "structure": "Pillars & KPIs",
+    "profiles": "Weight profiles",
+    "bands": "Rating scale",
+    "departments": "Assigned departments"
+  },
+  "framework": {
+    "create": "New framework",
+    "createTitle": "Create KPI framework",
+    "editTitle": "Edit framework",
+    "formDescription": "A KPI set applied to one or more departments.",
+    "name": "Framework name",
+    "namePlaceholder": "e.g. Sales Performance",
+    "nameRequired": "Name is required",
+    "description": "Description",
+    "periodType": "Default period",
+    "inactive": "Inactive"
+  },
+  "pillar": {
+    "add": "Add pillar",
+    "createTitle": "Add pillar",
+    "editTitle": "Edit pillar",
+    "name": "Pillar name",
+    "weight": "Weight",
+    "color": "Color"
+  },
+  "kpi": {
+    "add": "Add KPI",
+    "empty": "No KPIs in this pillar yet.",
+    "createTitle": "Add KPI",
+    "editTitle": "Edit KPI",
+    "code": "Code",
+    "name": "KPI name",
+    "description": "Definition & formula",
+    "dataSource": "Data source",
+    "unit": "Unit",
+    "direction": "Direction",
+    "target": "Target (Good)",
+    "min": "Min (Pass)",
+    "scope": "Scope",
+    "weightInPillar": "Weight within pillar",
+    "inputType": "Input type",
+    "scoringMethod": "Scoring method"
+  },
+  "profile": {
+    "add": "Add profile",
+    "empty": "No weight profiles yet. Create pillars first, then add a per-role profile.",
+    "createTitle": "Add weight profile",
+    "editTitle": "Edit weight profile",
+    "name": "Profile name",
+    "pillarWeights": "Weights by pillar",
+    "total": "Total"
+  },
+  "band": {
+    "add": "Add band",
+    "createTitle": "Add rating band",
+    "editTitle": "Edit rating band",
+    "label": "Label",
+    "minScore": "Min score",
+    "maxScore": "Max score",
+    "color": "Color",
+    "recommendedAction": "Recommended action",
+    "rangeInvalid": "Min score must be ≤ max score"
+  },
+  "departments": {
+    "hint": "Select departments this framework applies to."
+  },
+  "teams": {
+    "title": "Teams / Squads",
+    "subtitle": "Small units within a department — used to score team-level KPIs.",
+    "add": "Add team",
+    "empty": "No teams yet.",
+    "createTitle": "Create team",
+    "editTitle": "Edit team",
+    "name": "Team name",
+    "department": "Department",
+    "noDept": "No department",
+    "lead": "Lead",
+    "noLead": "No lead",
+    "members": "members",
+    "assignMembers": "Assign members",
+    "membersHint": "Pick the employees in this team.",
+    "noMembers": "none"
+  },
+  "period": {
+    "MONTHLY": "Monthly",
+    "QUARTERLY": "Quarterly",
+    "ANNUAL": "Annual"
+  },
+  "direction": {
+    "HIGHER_BETTER": "Higher is better",
+    "LOWER_BETTER": "Lower is better"
+  },
+  "scope": {
+    "INDIVIDUAL": "Individual",
+    "TEAM": "Team"
+  },
+  "inputType": {
+    "MANUAL": "Manual",
+    "SURVEY": "Survey"
+  },
+  "scoringMethod": {
+    "THRESHOLD_LINEAR": "Linear by threshold",
+    "DIRECT": "Direct score (0-100)",
+    "BOOLEAN": "Pass/Fail",
+    "BANDED": "Banded"
+  },
+  "toast": {
+    "created": "Framework created",
+    "saved": "Saved",
+    "deleted": "Deleted"
+  },
+  "cycle": {
+    "title": "KPI Cycles",
+    "subtitle": "Create a cycle per framework, enter actuals and view scores.",
+    "create": "New cycle",
+    "createTitle": "Create KPI cycle",
+    "framework": "Framework",
+    "period": "Period",
+    "periodType": "Period type",
+    "periodHint": "Format YYYY-MM (monthly) or YYYY-Qn (quarterly).",
+    "selectFramework": "Select framework",
+    "scorecards": "Scorecards",
+    "empty": "No cycles yet.",
+    "created": "Cycle created",
+    "statusUpdated": "Status updated",
+    "backToList": "Back to cycles",
+    "member": "Member",
+    "weightProfile": "Weight profile",
+    "noProfile": "Default",
+    "total": "Total (weighted)",
+    "rating": "Rating",
+    "enterValues": "Enter",
+    "enterFor": "Enter values — {{name}}",
+    "noScorecards": "No scorecards. Assign the framework to a department with employees, then recreate the cycle.",
+    "teamMetrics": "Team-level metrics",
+    "team": "Team",
+    "saveTeamMetrics": "Save team metrics",
+    "status": {
+      "DRAFT": "Draft",
+      "DATA_ENTRY": "Data entry",
+      "SELF_ASSESSMENT": "Self-assessment",
+      "PENDING_REVIEW": "Pending review",
+      "FINALIZED": "Finalized",
+      "CLOSED": "Closed"
+    },
+    "transitions": {
+      "openEntry": "Open data entry",
+      "toSelfAssess": "Move to self-assessment",
+      "toReview": "Submit for review",
+      "finalize": "Finalize",
+      "close": "Close cycle",
+      "generic": "Advance"
+    }
+  },
+  "me": {
+    "title": "My KPI",
+    "subtitle": "Your KPI scores and trend across cycles.",
+    "empty": "You have no scorecards yet.",
+    "noData": "No data yet.",
+    "latestTotal": "Latest score",
+    "trend": "Trend by period",
+    "memberTitle": "Employee KPI",
+    "memberSubtitle": "Scorecard and trend across cycles.",
+    "vsPrev": "vs prev"
+  },
+  "aggregate": {
+    "title": "Team aggregate",
+    "teamAvg": "Team avg",
+    "scored": "Scored",
+    "topPerformer": "Top performer"
+  },
+  "selfAssess": {
+    "title": "Self-assessment",
+    "hint": "Write your self-assessment for this cycle before your manager reviews.",
+    "comment": "Self-assessment note",
+    "placeholder": "Strengths, highlights, challenges...",
+    "submit": "Submit self-assessment",
+    "update": "Update",
+    "submitted": "Self-assessment submitted",
+    "doneBadge": "Self-assessed"
+  },
+  "review": {
+    "title": "Review scorecard",
+    "action": "Review",
+    "selfComment": "Employee self-assessment",
+    "timeline": "Approval timeline",
+    "role": "Role",
+    "pending": "Pending",
+    "strengths": "Strengths",
+    "areasToImprove": "Areas to improve",
+    "actionPlan": "Action plan",
+    "recognition": "Recognition",
+    "reviewComment": "Overall comment",
+    "note": "Decision note",
+    "notePlaceholder": "Reason for approve/return...",
+    "return": "Return",
+    "approve": "Approve",
+    "resubmit": "Resubmit",
+    "done": "Review recorded",
+    "decision": {
+      "APPROVED": "Approved",
+      "RETURNED": "Returned",
+      "AUTO_SKIPPED": "Auto-skipped",
+      "REJECTED": "Rejected"
+    },
+    "round": "round {{n}}"
+  },
+  "survey": {
+    "title": "Team Health Surveys",
+    "subtitle": "Anonymous morale & collaboration surveys; results aggregate into Team Health KPIs.",
+    "add": "New survey",
+    "empty": "No surveys yet.",
+    "createTitle": "Create survey",
+    "titleField": "Title",
+    "typeField": "Type",
+    "framework": "Framework",
+    "minResponses": "Min responses threshold",
+    "responses": "responses",
+    "questions": "Questions",
+    "qCode": "Code",
+    "qText": "Question text",
+    "qMapsTo": "Maps to KPI",
+    "inactive": "Closed",
+    "activate": "Open",
+    "deactivate": "Close",
+    "aggregate": "Aggregate surveys",
+    "aggregateHint": "Average responses → write into Team KPIs (only when threshold met).",
+    "aggregatedCount": "Aggregated {{n}} metrics ({{skipped}} skipped)",
+    "type": {
+      "MONTHLY_MORALE": "Monthly morale",
+      "QUARTERLY_PEER_360": "Quarterly 360°"
+    }
+  },
+  "respond": {
+    "title": "Surveys to answer",
+    "anonymous": "anonymous",
+    "submit": "Submit",
+    "submitted": "Response submitted",
+    "thanks": "Thanks for answering \"{{title}}\""
+  },
+  "export": {
+    "button": "Export Excel"
+  }
+}

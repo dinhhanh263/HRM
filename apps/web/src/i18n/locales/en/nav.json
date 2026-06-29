@@ -27,7 +27,12 @@
     "settings": "Settings",
     "probationSelf": "My evaluation",
     "paymentRequests": "Payment requests",
-    "purchaseRequests": "Purchase requests"
+    "purchaseRequests": "Purchase requests",
+    "kpiFrameworks": "KPI Frameworks",
+    "teams": "Teams",
+    "kpi": "KPI / Performance",
+    "myKpi": "My KPI",
+    "kpiSurveys": "KPI Surveys"
   },
   "titles": {
     "dashboard": "Dashboard",
@@ -47,7 +52,12 @@
     "assetSettings": "Asset categories",
     "settings": "Settings",
     "paymentRequests": "Payment requests",
-    "purchaseRequests": "Purchase Requests"
+    "purchaseRequests": "Purchase Requests",
+    "kpiFrameworks": "KPI Frameworks",
+    "teams": "Teams / Squads",
+    "kpi": "KPI / Performance",
+    "myKpi": "My KPI",
+    "kpiSurveys": "Team Health Surveys"
   },
   "sidebar": {
     "collapse": "Collapse",

@@ -17,6 +17,8 @@ import {
   ShieldCheck,
   Settings,
   Plus,
+  Gauge,
+  Activity,
   CornerDownLeft,
 } from 'lucide-react';
 import type { PermissionKey } from '@hrm/shared';
@@ -51,6 +53,9 @@ const COMMANDS: Command[] = [
   { id: 'nav-timesheet', group: 'navigation', labelKey: 'items.timesheet', icon: Clock, to: '/timesheet', permission: 'timesheet:view' },
   { id: 'nav-leave', group: 'navigation', labelKey: 'items.leave', icon: CalendarOff, to: '/leave', permission: 'leave:view' },
   { id: 'nav-payroll', group: 'navigation', labelKey: 'items.payroll', icon: Banknote, to: '/payroll', permission: 'payroll:view' },
+  { id: 'nav-kpi', group: 'navigation', labelKey: 'items.kpi', icon: Gauge, to: '/kpi', permission: 'kpi:enter' },
+  { id: 'nav-mykpi', group: 'navigation', labelKey: 'items.myKpi', icon: Activity, to: '/kpi/me', permission: 'kpi:view' },
+  { id: 'nav-kpi-frameworks', group: 'navigation', labelKey: 'items.kpiFrameworks', icon: Gauge, to: '/settings/kpi', permission: 'kpi:config' },
   { id: 'nav-assets', group: 'navigation', labelKey: 'items.assets', icon: Package, to: '/assets', permission: 'assets:view' },
   { id: 'nav-roles', group: 'navigation', labelKey: 'items.roles', icon: ShieldCheck, to: '/settings/roles', permission: 'roles:view' },
   { id: 'nav-settings', group: 'navigation', labelKey: 'items.settings', icon: Settings, to: '/settings', permission: 'settings:view' },

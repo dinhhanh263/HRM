@@ -34,6 +34,7 @@ import {
   CandidateDetailPage,
   MyInterviewsPage,
 } from '@/features/recruitment';
+import { KpiConfigPage, KpiTeamsPage, KpiCyclesPage, KpiCycleDetailPage, MyKpiPage, EmployeeKpiPage, KpiSurveysPage } from '@/features/kpi';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { RequirePermission } from '@/components/auth/RequirePermission';
@@ -151,6 +152,62 @@ export const router = createBrowserRouter([
         element: (
           <RequirePermission permission="roles:view">
             <RolesPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'kpi',
+        element: (
+          <RequirePermission permission="kpi:enter">
+            <KpiCyclesPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'kpi/me',
+        element: (
+          <RequirePermission permission="kpi:view">
+            <MyKpiPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'kpi/employee/:employeeId',
+        element: (
+          <RequirePermission anyOf={['kpi:view', 'kpi:view_team', 'kpi:view_all']}>
+            <EmployeeKpiPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'kpi/:id',
+        element: (
+          <RequirePermission permission="kpi:enter">
+            <KpiCycleDetailPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'settings/kpi',
+        element: (
+          <RequirePermission permission="kpi:config">
+            <KpiConfigPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'settings/kpi/teams',
+        element: (
+          <RequirePermission permission="kpi:config">
+            <KpiTeamsPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'settings/kpi/surveys',
+        element: (
+          <RequirePermission permission="kpi:survey_manage">
+            <KpiSurveysPage />
           </RequirePermission>
         ),
       },

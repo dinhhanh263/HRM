@@ -112,6 +112,7 @@ enum ApprovalFlowType {
   OVERTIME
   PAYMENT // SPEC-041: luồng duyệt yêu cầu thanh toán (cố định NV → Quản lý → Founder)
   PURCHASE // SPEC-042: luồng duyệt đề xuất mua hàng (cố định NV → Quản lý → Founder)
+  KPI_REVIEW // SPEC-044: luồng duyệt review KPI (Quản lý → HR calibrate → finalize)
 }
 
 // SPEC-041: loại yêu cầu thanh toán
@@ -370,6 +371,17 @@ model Tenant {
   probationGuidelines ProbationGuideline[]
   settingsAuditLogs   SettingsAuditLog[]
 
+  // SPEC-044: KPI / Performance Management
+  teams                 Team[]
+  kpiFrameworks         KpiFramework[]
+  kpiCycles             KpiCycle[]
+  kpiScorecards         KpiScorecard[]
+  kpiScorecardApprovals KpiScorecardApproval[]
+  kpiEntries            KpiEntry[]
+  kpiSurveys              KpiSurvey[]
+  kpiSurveyResponses      KpiSurveyResponse[]
+  kpiSurveyParticipations KpiSurveyParticipation[]
+
   @@map("tenants")
 }
 
@@ -476,12 +488,14 @@ model Department {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  positions     Position[]
-  employees     Employee[]     @relation("DepartmentMembers")
-  manager       Employee?      @relation("DepartmentHead", fields: [managerId], references: [id])
-  approvalFlows ApprovalFlow[]
-  jobs          Job[]
+  tenant         Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  positions      Position[]
+  employees      Employee[]               @relation("DepartmentMembers")
+  manager        Employee?                @relation("DepartmentHead", fields: [managerId], references: [id])
+  approvalFlows  ApprovalFlow[]
+  jobs           Job[]
+  teams          Team[] // SPEC-044
+  kpiAssignments KpiFrameworkAssignment[] // SPEC-044
 
   @@unique([tenantId, name])
   @@index([managerId])
@@ -558,6 +572,8 @@ model Employee {
   createdAt         DateTime       @default(now()) @map("created_at")
   updatedAt         DateTime       @updatedAt @map("updated_at")
 
+  teamId String? @map("team_id") // SPEC-044: squad/team trong phòng ban
+
   tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   department Department? @relation("DepartmentMembers", fields: [departmentId], references: [id])
@@ -566,6 +582,12 @@ model Employee {
   manager           Employee?    @relation("EmployeeManager", fields: [managerId], references: [id])
   reports           Employee[]   @relation("EmployeeManager")
   headedDepartments Department[] @relation("DepartmentHead")
+
+  team     Team?  @relation("TeamMembers", fields: [teamId], references: [id]) // SPEC-044
+  ledTeams Team[] @relation("TeamLead") // SPEC-044
+
+  kpiScorecards         KpiScorecard[] @relation("KpiScorecardEmployee") // SPEC-044
+  kpiScorecardsReviewed KpiScorecard[] @relation("KpiScorecardReviewer") // SPEC-044
 
   leaveRequests    LeaveRequest[] @relation("EmployeeLeaveRequests")
   reviewedRequests LeaveRequest[] @relation("ReviewerLeaveRequests")
@@ -585,10 +607,10 @@ model Employee {
   paymentRequestsPaid     PaymentRequest[]         @relation("PaymentRequestPayer")
   paymentApprovalsDecided PaymentRequestApproval[] @relation("PaymentApprovalDecider")
 
-  purchaseRequests         PurchaseRequest[]          @relation("EmployeePurchaseRequests")
-  purchaseReviewed         PurchaseRequest[]          @relation("PurchaseRequestReviewer")
-  purchaseOrdered          PurchaseRequest[]          @relation("PurchaseRequestOrderer")
-  purchaseApprovalDecided  PurchaseRequestApproval[]  @relation("PurchaseApprovalDecider")
+  purchaseRequests        PurchaseRequest[]         @relation("EmployeePurchaseRequests")
+  purchaseReviewed        PurchaseRequest[]         @relation("PurchaseRequestReviewer")
+  purchaseOrdered         PurchaseRequest[]         @relation("PurchaseRequestOrderer")
+  purchaseApprovalDecided PurchaseRequestApproval[] @relation("PurchaseApprovalDecider")
 
   salaries        EmployeeSalary[] @relation("EmployeeSalaries")
   salariesCreated EmployeeSalary[] @relation("SalaryCreator")
@@ -750,13 +772,14 @@ model ApprovalFlow {
   createdAt    DateTime         @default(now()) @map("created_at")
   updatedAt    DateTime         @updatedAt @map("updated_at")
 
-  tenant          Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  department      Department?       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department       Department?       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   steps            ApprovalStep[]
   requests         LeaveRequest[]
   otRequests       OvertimeRequest[]
   paymentRequests  PaymentRequest[]
   purchaseRequests PurchaseRequest[]
+  kpiScorecards    KpiScorecard[] // SPEC-044
 
   // NOTE: Postgres coi mỗi NULL là khác nhau nên unique này KHÔNG ép một
   // default duy nhất/tenant/flowType — ràng buộc single-default enforce ở service layer.
@@ -1938,4 +1961,452 @@ model ImportJob {
 
   @@index([tenantId])
   @@map("import_job")
+}
+
+// ============================================================================
+// SPEC-044: KPI / Performance Management Engine
+// Engine cấu hình được: framework (bó KPI) → pillar (trụ cột) → definition (chỉ
+// số). Framework "Agile Software Team" được seed sẵn như 1 template; mọi phòng
+// ban tự định nghĩa framework riêng. Tracking mirror pattern PayrollRun→Payslip.
+// ============================================================================
+
+enum KpiDirection {
+  HIGHER_BETTER // giá trị cao = tốt (velocity, coverage…)
+  LOWER_BETTER // giá trị thấp = tốt (defect density, escaped, rework…)
+}
+
+enum KpiScope {
+  INDIVIDUAL // chấm cho từng nhân viên (doanh số, learning hours…)
+  TEAM // chấm 1 lần ở cấp squad, chia sẻ xuống mọi thành viên (velocity, CI/CD…)
+}
+
+enum KpiInputType {
+  MANUAL // quản lý nhập số liệu thực tế
+  SURVEY // lấy từ aggregate survey ẩn danh (Team Health)
+}
+
+enum KpiScoringMethod {
+  THRESHOLD_LINEAR // quy đổi tuyến tính theo target/min (mặc định)
+  DIRECT // actualValue đã là điểm 0..100
+  BOOLEAN // đạt/không = 100/0
+  BANDED // ánh xạ khoảng → điểm theo bảng cấu hình
+}
+
+enum KpiPeriodType {
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
+
+enum KpiCycleStatus {
+  DRAFT // mới tạo, chưa mở nhập liệu
+  DATA_ENTRY // đang nhập số liệu thực tế
+  SELF_ASSESSMENT // nhân viên tự đánh giá
+  PENDING_REVIEW // chờ quản lý/HR review + calibrate
+  FINALIZED // đã chốt, scorecard bất biến
+  CLOSED // đóng kỳ (lưu trữ)
+}
+
+enum KpiScorecardStatus {
+  PENDING // chưa nhập đủ
+  SELF_ASSESSED // nhân viên đã tự đánh giá
+  IN_REVIEW // đang trong chuỗi duyệt
+  FINALIZED // đã chốt
+}
+
+enum KpiSurveyType {
+  MONTHLY_MORALE // 3 câu, 1-10, ẩn danh hàng tháng
+  QUARTERLY_PEER_360 // 5 câu, 1-5, 360° peer review hàng quý
+}
+
+// Squad/team trong một phòng ban. KPI scope=TEAM chấm theo đơn vị này.
+model Team {
+  id           String   @id @default(cuid())
+  tenantId     String   @map("tenant_id")
+  departmentId String?  @map("department_id")
+  name         String
+  leadId       String?  @map("lead_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  lead       Employee?   @relation("TeamLead", fields: [leadId], references: [id])
+  members    Employee[]  @relation("TeamMembers")
+  kpiEntries KpiEntry[] // SPEC-044 F2
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@index([departmentId])
+  @@map("teams")
+}
+
+// Bó KPI có tên ("Agile Software Team", "Sales Performance"). passAnchor/
+// targetAnchor là 2 mốc neo cho engine quy đổi điểm (60="Đạt", 90="Tốt").
+model KpiFramework {
+  id                String        @id @default(cuid())
+  tenantId          String        @map("tenant_id")
+  name              String
+  description       String?
+  defaultPeriodType KpiPeriodType @default(MONTHLY) @map("default_period_type")
+  passAnchor        Decimal       @default(60) @map("pass_anchor") @db.Decimal(5, 2)
+  targetAnchor      Decimal       @default(90) @map("target_anchor") @db.Decimal(5, 2)
+  isActive          Boolean       @default(true) @map("is_active")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+
+  tenant         Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  pillars        KpiPillar[]
+  weightProfiles KpiWeightProfile[]
+  ratingBands    KpiRatingBand[]
+  assignments    KpiFrameworkAssignment[]
+  cycles         KpiCycle[]
+  surveys        KpiSurvey[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@map("kpi_frameworks")
+}
+
+// Trụ cột (Delivery/Quality/Process/Team Health…). Σ weight các pillar = 100%.
+model KpiPillar {
+  id          String   @id @default(cuid())
+  frameworkId String   @map("framework_id")
+  name        String
+  weight      Decimal  @db.Decimal(5, 2) // % trong tổng framework
+  order       Int      @default(0)
+  color       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  framework      KpiFramework             @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  definitions    KpiDefinition[]
+  profileWeights KpiProfilePillarWeight[]
+  scorecardRows  KpiScorecardPillar[]
+
+  @@unique([frameworkId, name])
+  @@index([frameworkId])
+  @@map("kpi_pillars")
+}
+
+// Chỉ số KPI. Σ weightInPillar trong cùng 1 pillar = 100%.
+model KpiDefinition {
+  id             String           @id @default(cuid())
+  pillarId       String           @map("pillar_id")
+  code           String // D1, Q1, P1, T1…
+  name           String
+  description    String? // định nghĩa & cách tính
+  dataSource     String?          @map("data_source")
+  unit           String? // %, stories/sprint, bugs/SP, 1-10, hours…
+  direction      KpiDirection     @default(HIGHER_BETTER)
+  targetValue    Decimal?         @map("target_value") @db.Decimal(14, 4) // mốc "Tốt"
+  minValue       Decimal?         @map("min_value") @db.Decimal(14, 4) // mốc "Đạt"
+  weightInPillar Decimal          @default(0) @map("weight_in_pillar") @db.Decimal(5, 2)
+  scope          KpiScope         @default(INDIVIDUAL)
+  inputType      KpiInputType     @default(MANUAL)
+  scoringMethod  KpiScoringMethod @default(THRESHOLD_LINEAR) @map("scoring_method")
+  surveyKpiCode  String?          @map("survey_kpi_code") // khi inputType=SURVEY: khớp question.mapsToKpiCode
+  frequency      String? // sprint/weekly/monthly/quarterly (thông tin)
+  order          Int              @default(0)
+  isActive       Boolean          @default(true) @map("is_active")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+
+  pillar  KpiPillar  @relation(fields: [pillarId], references: [id], onDelete: Cascade)
+  entries KpiEntry[]
+
+  @@unique([pillarId, code])
+  @@index([pillarId])
+  @@map("kpi_definitions")
+}
+
+// Bộ trọng số trụ cột theo role (Dev 40/30/20/10, QA 25/45/20/10…). Σ = 100%.
+model KpiWeightProfile {
+  id          String   @id @default(cuid())
+  frameworkId String   @map("framework_id")
+  name        String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  framework     KpiFramework             @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  pillarWeights KpiProfilePillarWeight[]
+
+  @@unique([frameworkId, name])
+  @@index([frameworkId])
+  @@map("kpi_weight_profiles")
+}
+
+model KpiProfilePillarWeight {
+  id        String  @id @default(cuid())
+  profileId String  @map("profile_id")
+  pillarId  String  @map("pillar_id")
+  weight    Decimal @db.Decimal(5, 2)
+
+  profile KpiWeightProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  pillar  KpiPillar        @relation(fields: [pillarId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, pillarId])
+  @@index([pillarId])
+  @@map("kpi_profile_pillar_weights")
+}
+
+// Thang điểm 5 mức (90-100 Xuất sắc → 0-39 Chưa đạt) + hành động gợi ý.
+model KpiRatingBand {
+  id                String   @id @default(cuid())
+  frameworkId       String   @map("framework_id")
+  label             String
+  minScore          Decimal  @map("min_score") @db.Decimal(5, 2)
+  maxScore          Decimal  @map("max_score") @db.Decimal(5, 2)
+  color             String?
+  recommendedAction String?  @map("recommended_action")
+  order             Int      @default(0)
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  framework KpiFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+
+  @@index([frameworkId])
+  @@map("kpi_rating_bands")
+}
+
+// Gán framework ↔ phòng ban. Employee → department → framework áp dụng.
+model KpiFrameworkAssignment {
+  id           String   @id @default(cuid())
+  frameworkId  String   @map("framework_id")
+  departmentId String   @map("department_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  framework  KpiFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  department Department   @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@unique([frameworkId, departmentId])
+  @@index([departmentId])
+  @@map("kpi_framework_assignments")
+}
+
+// Chu kỳ chấm KPI (= "run", mirror PayrollRun). configSnapshot đóng băng khi
+// finalize → scorecard lịch sử bất biến. Actor ids dùng String? như PayrollRun.
+model KpiCycle {
+  id             String         @id @default(cuid())
+  tenantId       String         @map("tenant_id")
+  frameworkId    String         @map("framework_id")
+  period         String // "YYYY-MM" hoặc "YYYY-Qn"
+  periodType     KpiPeriodType  @map("period_type")
+  status         KpiCycleStatus @default(DRAFT)
+  configSnapshot Json?          @map("config_snapshot")
+  createdById    String?        @map("created_by_id")
+  submittedById  String?        @map("submitted_by_id")
+  submittedAt    DateTime?      @map("submitted_at")
+  finalizedById  String?        @map("finalized_by_id")
+  finalizedAt    DateTime?      @map("finalized_at")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  tenant     Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  framework  KpiFramework   @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  scorecards KpiScorecard[]
+  entries    KpiEntry[]
+
+  @@unique([tenantId, frameworkId, period])
+  @@index([tenantId, status])
+  @@map("kpi_cycles")
+}
+
+// Phiếu điểm 1 nhân viên / 1 chu kỳ (mirror Payslip). Gồm điểm tính + nhận xét
+// 2 chiều (self-assessment + manager review) + routing duyệt.
+model KpiScorecard {
+  id                String             @id @default(cuid())
+  tenantId          String             @map("tenant_id")
+  cycleId           String             @map("cycle_id")
+  employeeId        String             @map("employee_id")
+  weightProfileId   String?            @map("weight_profile_id") // snapshot ref
+  weightProfileName String?            @map("weight_profile_name") // snapshot tên
+  weightedTotal     Decimal?           @map("weighted_total") @db.Decimal(6, 2)
+  ratingLabel       String?            @map("rating_label")
+  status            KpiScorecardStatus @default(PENDING)
+
+  // Self-assessment (nhân viên tự đánh giá)
+  selfComment     String?   @map("self_comment")
+  selfSubmittedAt DateTime? @map("self_submitted_at")
+
+  // Manager review / calibrate
+  strengths      String?
+  areasToImprove String?   @map("areas_to_improve")
+  actionPlan     String?   @map("action_plan")
+  recognition    String?
+  reviewComment  String?   @map("review_comment")
+  reviewerId     String?   @map("reviewer_id")
+  reviewedAt     DateTime? @map("reviewed_at")
+
+  // Routing duyệt (tái dùng ApprovalFlow)
+  flowId      String? @map("flow_id")
+  currentStep Int     @default(0) @map("current_step")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant    Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  cycle     KpiCycle               @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  employee  Employee               @relation("KpiScorecardEmployee", fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewer  Employee?              @relation("KpiScorecardReviewer", fields: [reviewerId], references: [id])
+  flow      ApprovalFlow?          @relation(fields: [flowId], references: [id])
+  pillars   KpiScorecardPillar[]
+  entries   KpiEntry[]
+  approvals KpiScorecardApproval[]
+
+  @@unique([cycleId, employeeId])
+  @@index([tenantId, status])
+  @@index([employeeId])
+  @@map("kpi_scorecards")
+}
+
+// Điểm tổng hợp theo từng trụ cột trong 1 scorecard (breakdown minh bạch).
+model KpiScorecardPillar {
+  id          String   @id @default(cuid())
+  scorecardId String   @map("scorecard_id")
+  pillarId    String   @map("pillar_id")
+  score       Decimal? @db.Decimal(6, 2)
+  weight      Decimal  @db.Decimal(5, 2) // trọng số áp dụng (từ weight profile)
+
+  scorecard KpiScorecard @relation(fields: [scorecardId], references: [id], onDelete: Cascade)
+  pillar    KpiPillar    @relation(fields: [pillarId], references: [id], onDelete: Cascade)
+
+  @@unique([scorecardId, pillarId])
+  @@index([scorecardId])
+  @@map("kpi_scorecard_pillars")
+}
+
+// "Ô vàng": giá trị thực tế đo được. scope=INDIVIDUAL → gắn scorecardId;
+// scope=TEAM → gắn teamId (chia sẻ xuống mọi member của squad), scorecardId null.
+model KpiEntry {
+  id              String    @id @default(cuid())
+  tenantId        String    @map("tenant_id")
+  cycleId         String    @map("cycle_id")
+  kpiDefinitionId String    @map("kpi_definition_id")
+  scorecardId     String?   @map("scorecard_id") // null cho entry cấp team
+  teamId          String?   @map("team_id") // set khi scope=TEAM
+  actualValue     Decimal?  @map("actual_value") @db.Decimal(14, 4)
+  computedScore   Decimal?  @map("computed_score") @db.Decimal(6, 2)
+  source          String? // manual | survey
+  note            String?
+  enteredById     String?   @map("entered_by_id")
+  enteredAt       DateTime? @map("entered_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  tenant     Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  cycle      KpiCycle      @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  definition KpiDefinition @relation(fields: [kpiDefinitionId], references: [id], onDelete: Cascade)
+  scorecard  KpiScorecard? @relation(fields: [scorecardId], references: [id], onDelete: Cascade)
+  team       Team?         @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  // Invariant scorecard XOR team chốt bằng CHECK constraint (thêm ở migration).
+  @@unique([scorecardId, kpiDefinitionId]) // entry cá nhân (PG: null scorecardId không xét)
+  @@unique([cycleId, teamId, kpiDefinitionId]) // entry team chia sẻ
+  @@index([cycleId])
+  @@index([tenantId])
+  @@map("kpi_entries")
+}
+
+// Timeline duyệt review KPI (snapshot từ ApprovalStep, song song LeaveApproval).
+model KpiScorecardApproval {
+  id           String            @id @default(cuid())
+  tenantId     String            @map("tenant_id")
+  scorecardId  String            @map("scorecard_id")
+  round        Int               @default(1)
+  stepOrder    Int               @map("step_order")
+  approverType ApproverType      @map("approver_type")
+  roleKey      String?           @map("role_key")
+  approverId   String?           @map("approver_id")
+  decision     ApprovalDecision? // null = đang chờ
+  decidedById  String?           @map("decided_by_id")
+  decidedAt    DateTime?         @map("decided_at")
+  note         String?
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  tenant    Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  scorecard KpiScorecard @relation(fields: [scorecardId], references: [id], onDelete: Cascade)
+
+  @@unique([scorecardId, round, stepOrder])
+  @@index([scorecardId])
+  @@index([tenantId])
+  @@map("kpi_scorecard_approvals")
+}
+
+// Mẫu khảo sát Team Health. Ẩn danh: KpiSurveyResponse KHÔNG lưu raterId.
+model KpiSurvey {
+  id           String        @id @default(cuid())
+  tenantId     String        @map("tenant_id")
+  frameworkId  String?       @map("framework_id")
+  type         KpiSurveyType
+  title        String
+  isAnonymous  Boolean       @default(true) @map("is_anonymous")
+  minResponses Int           @default(3) @map("min_responses") // ngưỡng N mới hiển thị kết quả
+  active       Boolean       @default(true)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  tenant         Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  framework      KpiFramework?            @relation(fields: [frameworkId], references: [id], onDelete: SetNull)
+  questions      KpiSurveyQuestion[]
+  responses      KpiSurveyResponse[]
+  participations KpiSurveyParticipation[]
+
+  @@index([tenantId])
+  @@map("kpi_surveys")
+}
+
+model KpiSurveyQuestion {
+  id            String  @id @default(cuid())
+  surveyId      String  @map("survey_id")
+  code          String // M1, P1…
+  text          String
+  scaleMin      Int     @default(1) @map("scale_min")
+  scaleMax      Int     @default(10) @map("scale_max")
+  mapsToKpiCode String? @map("maps_to_kpi_code") // khớp KpiDefinition.surveyKpiCode (T1/T2)
+  order         Int     @default(0)
+
+  survey KpiSurvey @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  @@unique([surveyId, code])
+  @@index([surveyId])
+  @@map("kpi_survey_questions")
+}
+
+// Phản hồi survey — ẩn danh: KHÔNG có raterId. subjectEmployeeId chỉ dùng cho
+// 360° peer (người ĐƯỢC đánh giá), không lộ ai chấm.
+model KpiSurveyResponse {
+  id                String   @id @default(cuid())
+  tenantId          String   @map("tenant_id")
+  surveyId          String   @map("survey_id")
+  cycleId           String?  @map("cycle_id")
+  subjectEmployeeId String?  @map("subject_employee_id") // 360: người được đánh giá
+  answers           Json // { [questionCode]: number }
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  tenant Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  survey KpiSurvey @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  @@index([surveyId])
+  @@index([tenantId])
+  @@map("kpi_survey_responses")
+}
+
+// Sổ tham gia survey — chống ballot-stuffing: ghi AI đã trả lời (userId) nhưng
+// KHÔNG ghi trả lời GÌ (answers nằm ở KpiSurveyResponse, không liên kết). Unique
+// (survey, cycle, user) ép mỗi người 1 lần/kỳ mà vẫn giữ phản hồi ẩn danh.
+model KpiSurveyParticipation {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  surveyId  String   @map("survey_id")
+  cycleId   String?  @map("cycle_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  survey KpiSurvey @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  @@unique([surveyId, cycleId, userId])
+  @@index([tenantId])
+  @@map("kpi_survey_participations")
 }

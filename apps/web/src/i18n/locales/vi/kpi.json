@@ -1,0 +1,264 @@
+{
+  "config": {
+    "title": "Khung KPI",
+    "subtitle": "Định nghĩa bộ KPI theo phòng ban: trụ cột, chỉ số, trọng số, thang điểm.",
+    "empty": "Chưa có framework nào.",
+    "selectHint": "Chọn một framework để xem cấu hình.",
+    "pillarsShort": "trụ cột",
+    "deptsShort": "phòng",
+    "balanced": "Trọng số cân đối (Σ = 100%).",
+    "issuesTitle": "Trọng số chưa cân đối:",
+    "issueScope": {
+      "PILLARS": "Tổng trọng số trụ cột",
+      "PILLAR_KPIS": "Trọng số KPI trong trụ cột",
+      "PROFILE": "Hồ sơ trọng số"
+    },
+    "pillarTotal": "Tổng trọng số trụ cột",
+    "confirmDeleteTitle": "Xác nhận xóa?",
+    "confirmDeleteDesc": "Xóa \"{{name}}\"? Hành động này không thể hoàn tác."
+  },
+  "tabs": {
+    "structure": "Trụ cột & KPI",
+    "profiles": "Hồ sơ trọng số",
+    "bands": "Thang điểm",
+    "departments": "Phòng ban áp dụng"
+  },
+  "framework": {
+    "create": "Thêm framework",
+    "createTitle": "Tạo framework KPI",
+    "editTitle": "Sửa framework",
+    "formDescription": "Một bó KPI áp dụng cho một hoặc nhiều phòng ban.",
+    "name": "Tên framework",
+    "namePlaceholder": "VD: Sales Performance",
+    "nameRequired": "Vui lòng nhập tên",
+    "description": "Mô tả",
+    "periodType": "Chu kỳ mặc định",
+    "inactive": "Ngừng dùng"
+  },
+  "pillar": {
+    "add": "Thêm trụ cột",
+    "createTitle": "Thêm trụ cột",
+    "editTitle": "Sửa trụ cột",
+    "name": "Tên trụ cột",
+    "weight": "Trọng số",
+    "color": "Màu"
+  },
+  "kpi": {
+    "add": "Thêm KPI",
+    "empty": "Chưa có KPI trong trụ cột này.",
+    "createTitle": "Thêm KPI",
+    "editTitle": "Sửa KPI",
+    "code": "Mã",
+    "name": "Tên KPI",
+    "description": "Định nghĩa & cách tính",
+    "dataSource": "Nguồn dữ liệu",
+    "unit": "Đơn vị",
+    "direction": "Chiều tốt",
+    "target": "Target (Tốt)",
+    "min": "Min (Đạt)",
+    "scope": "Cấp đo",
+    "weightInPillar": "Trọng số trong trụ cột",
+    "inputType": "Nguồn nhập",
+    "scoringMethod": "Cách quy điểm"
+  },
+  "profile": {
+    "add": "Thêm hồ sơ",
+    "empty": "Chưa có hồ sơ trọng số. Tạo trụ cột trước rồi thêm hồ sơ theo role.",
+    "createTitle": "Thêm hồ sơ trọng số",
+    "editTitle": "Sửa hồ sơ trọng số",
+    "name": "Tên hồ sơ",
+    "pillarWeights": "Trọng số theo trụ cột",
+    "total": "Tổng"
+  },
+  "band": {
+    "add": "Thêm mức",
+    "createTitle": "Thêm mức đánh giá",
+    "editTitle": "Sửa mức đánh giá",
+    "label": "Nhãn",
+    "minScore": "Điểm tối thiểu",
+    "maxScore": "Điểm tối đa",
+    "color": "Màu",
+    "recommendedAction": "Hành động gợi ý",
+    "rangeInvalid": "Điểm tối thiểu phải ≤ điểm tối đa"
+  },
+  "departments": {
+    "hint": "Chọn các phòng ban áp dụng framework này."
+  },
+  "teams": {
+    "title": "Team / Squad",
+    "subtitle": "Đơn vị nhỏ trong phòng ban — dùng để chấm KPI cấp team.",
+    "add": "Thêm team",
+    "empty": "Chưa có team nào.",
+    "createTitle": "Tạo team",
+    "editTitle": "Sửa team",
+    "name": "Tên team",
+    "department": "Phòng ban",
+    "noDept": "Không thuộc phòng ban",
+    "lead": "Trưởng nhóm",
+    "noLead": "Chưa có trưởng nhóm",
+    "members": "thành viên",
+    "assignMembers": "Gán thành viên",
+    "membersHint": "Chọn nhân viên thuộc team này.",
+    "noMembers": "chưa có"
+  },
+  "period": {
+    "MONTHLY": "Hàng tháng",
+    "QUARTERLY": "Hàng quý",
+    "ANNUAL": "Hàng năm"
+  },
+  "direction": {
+    "HIGHER_BETTER": "Cao hơn tốt",
+    "LOWER_BETTER": "Thấp hơn tốt"
+  },
+  "scope": {
+    "INDIVIDUAL": "Cá nhân",
+    "TEAM": "Team"
+  },
+  "inputType": {
+    "MANUAL": "Nhập tay",
+    "SURVEY": "Survey"
+  },
+  "scoringMethod": {
+    "THRESHOLD_LINEAR": "Tuyến tính theo ngưỡng",
+    "DIRECT": "Điểm trực tiếp (0-100)",
+    "BOOLEAN": "Đạt/Không",
+    "BANDED": "Theo khoảng"
+  },
+  "toast": {
+    "created": "Đã tạo framework",
+    "saved": "Đã lưu",
+    "deleted": "Đã xóa"
+  },
+  "cycle": {
+    "title": "Chu kỳ KPI",
+    "subtitle": "Tạo chu kỳ theo framework, nhập số liệu thực tế và xem điểm.",
+    "create": "Tạo chu kỳ",
+    "createTitle": "Tạo chu kỳ KPI",
+    "framework": "Framework",
+    "period": "Kỳ",
+    "periodType": "Loại kỳ",
+    "periodHint": "Định dạng YYYY-MM (tháng) hoặc YYYY-Qn (quý).",
+    "selectFramework": "Chọn framework",
+    "scorecards": "Scorecard",
+    "empty": "Chưa có chu kỳ nào.",
+    "created": "Đã tạo chu kỳ",
+    "statusUpdated": "Đã cập nhật trạng thái",
+    "backToList": "Danh sách chu kỳ",
+    "member": "Thành viên",
+    "weightProfile": "Hồ sơ trọng số",
+    "noProfile": "Mặc định",
+    "total": "Tổng (weighted)",
+    "rating": "Xếp loại",
+    "enterValues": "Nhập",
+    "enterFor": "Nhập số liệu — {{name}}",
+    "noScorecards": "Chưa có scorecard. Gán framework cho phòng ban có nhân viên rồi tạo lại chu kỳ.",
+    "teamMetrics": "Chỉ số cấp team",
+    "team": "Team",
+    "saveTeamMetrics": "Lưu chỉ số team",
+    "status": {
+      "DRAFT": "Nháp",
+      "DATA_ENTRY": "Đang nhập liệu",
+      "SELF_ASSESSMENT": "Tự đánh giá",
+      "PENDING_REVIEW": "Chờ duyệt",
+      "FINALIZED": "Đã chốt",
+      "CLOSED": "Đã đóng"
+    },
+    "transitions": {
+      "openEntry": "Mở nhập liệu",
+      "toSelfAssess": "Chuyển tự đánh giá",
+      "toReview": "Gửi duyệt",
+      "finalize": "Chốt",
+      "close": "Đóng kỳ",
+      "generic": "Chuyển"
+    }
+  },
+  "me": {
+    "title": "KPI của tôi",
+    "subtitle": "Điểm KPI và xu hướng theo các kỳ.",
+    "empty": "Bạn chưa có scorecard nào.",
+    "noData": "Chưa có dữ liệu.",
+    "latestTotal": "Điểm gần nhất",
+    "trend": "Xu hướng theo kỳ",
+    "memberTitle": "KPI nhân viên",
+    "memberSubtitle": "Scorecard và xu hướng theo kỳ.",
+    "vsPrev": "so kỳ trước"
+  },
+  "aggregate": {
+    "title": "Tổng hợp team",
+    "teamAvg": "Điểm TB team",
+    "scored": "Đã chấm",
+    "topPerformer": "Cao nhất"
+  },
+  "selfAssess": {
+    "title": "Tự đánh giá",
+    "hint": "Ghi nhận xét tự đánh giá của bạn cho kỳ này trước khi quản lý review.",
+    "comment": "Nhận xét tự đánh giá",
+    "placeholder": "Điểm mạnh, kết quả nổi bật, khó khăn...",
+    "submit": "Gửi tự đánh giá",
+    "update": "Cập nhật",
+    "submitted": "Đã gửi tự đánh giá",
+    "doneBadge": "Đã tự đánh giá"
+  },
+  "review": {
+    "title": "Review scorecard",
+    "action": "Duyệt",
+    "selfComment": "Tự đánh giá của nhân viên",
+    "timeline": "Tiến trình duyệt",
+    "role": "Vai trò",
+    "pending": "Đang chờ",
+    "strengths": "Điểm mạnh",
+    "areasToImprove": "Cần cải thiện",
+    "actionPlan": "Kế hoạch hành động",
+    "recognition": "Ghi nhận",
+    "reviewComment": "Nhận xét chung",
+    "note": "Ghi chú quyết định",
+    "notePlaceholder": "Lý do duyệt/trả về...",
+    "return": "Trả về",
+    "approve": "Duyệt",
+    "resubmit": "Gửi lại duyệt",
+    "done": "Đã xử lý review",
+    "decision": {
+      "APPROVED": "Đã duyệt",
+      "RETURNED": "Trả về",
+      "AUTO_SKIPPED": "Tự bỏ qua",
+      "REJECTED": "Từ chối"
+    },
+    "round": "vòng {{n}}"
+  },
+  "survey": {
+    "title": "Khảo sát Team Health",
+    "subtitle": "Survey ẩn danh đo tinh thần & hợp tác; kết quả tổng hợp vào KPI Team Health.",
+    "add": "Thêm survey",
+    "empty": "Chưa có survey nào.",
+    "createTitle": "Tạo survey",
+    "titleField": "Tiêu đề",
+    "typeField": "Loại",
+    "framework": "Framework",
+    "minResponses": "Ngưỡng phản hồi tối thiểu",
+    "responses": "phản hồi",
+    "questions": "Câu hỏi",
+    "qCode": "Mã",
+    "qText": "Nội dung câu hỏi",
+    "qMapsTo": "Map tới KPI",
+    "inactive": "Đã đóng",
+    "activate": "Mở",
+    "deactivate": "Đóng",
+    "aggregate": "Tổng hợp survey",
+    "aggregateHint": "Tính trung bình phản hồi → ghi vào KPI Team (đủ ngưỡng mới ghi).",
+    "aggregatedCount": "Đã tổng hợp {{n}} chỉ số ({{skipped}} bỏ qua)",
+    "type": {
+      "MONTHLY_MORALE": "Tinh thần hàng tháng",
+      "QUARTERLY_PEER_360": "360° hàng quý"
+    }
+  },
+  "respond": {
+    "title": "Khảo sát cần trả lời",
+    "anonymous": "ẩn danh",
+    "submit": "Gửi",
+    "submitted": "Đã gửi phản hồi",
+    "thanks": "Cảm ơn bạn đã trả lời \"{{title}}\""
+  },
+  "export": {
+    "button": "Xuất Excel"
+  }
+}

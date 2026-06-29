@@ -19,5 +19,6 @@ export * from './asset.js';
 export * from './asset-import.js';
 export * from './recruitment.js';
 export * from './probation.js';
+export * from './kpi.js';
 export * from './settings.js';
 export * from './account.js';

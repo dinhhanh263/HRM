@@ -23,6 +23,12 @@ export const PERMISSION_CATALOG = {
   // HR final decision; `configure` = manage evaluation criteria; `self` = nhân viên
   // thử việc tự đánh giá review của CHÍNH MÌNH (SPEC-033 — ownership check ở controller).
   probation: ['view', 'review', 'decide', 'configure', 'self'],
+  // KPI / Performance Management (SPEC-044). `config` = quản lý framework/pillar/KPI/
+  // weight profile/rating band (HR); `enter` = nhập số liệu thực tế; `self_assess` =
+  // nhân viên tự đánh giá scorecard của CHÍNH MÌNH; `review` = manager calibrate +
+  // nhận xét; `approve` = duyệt chuỗi review + finalize; `view_team`/`view_all` mở rộng
+  // phạm vi xem; `survey_manage` = quản lý survey Team Health. Scope enforce ở service.
+  kpi: ['view', 'view_team', 'view_all', 'config', 'enter', 'self_assess', 'review', 'approve', 'export', 'survey_manage'],
   assets: ['view', 'create', 'update', 'delete', 'assign', 'acknowledge', 'maintain', 'dispose', 'configure', 'export', 'import'],
   notifications: ['view'],
   users: ['view', 'create', 'update', 'delete'],

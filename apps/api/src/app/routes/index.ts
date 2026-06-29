@@ -19,6 +19,10 @@ import { recruitmentRoutes } from './v1/recruitment.routes.js';
 import { probationRoutes } from './v1/probation.routes.js';
 import { settingsRoutes } from './v1/settings.routes.js';
 import { accountRoutes } from './v1/account.routes.js';
+import { kpiFrameworkRoutes } from './v1/kpi-framework.routes.js';
+import { kpiTeamRoutes } from './v1/kpi-team.routes.js';
+import { kpiCycleRoutes } from './v1/kpi-cycle.routes.js';
+import { kpiSurveyRoutes } from './v1/kpi-survey.routes.js';
 
 const router: RouterType = Router();
 
@@ -42,5 +46,9 @@ router.use('/recruitment', recruitmentRoutes);
 router.use('/probation', probationRoutes);
 router.use('/settings', settingsRoutes);
 router.use('/account', accountRoutes);
+router.use('/kpi-frameworks', kpiFrameworkRoutes);
+router.use('/kpi-teams', kpiTeamRoutes);
+router.use('/kpi-cycles', kpiCycleRoutes);
+router.use('/kpi-surveys', kpiSurveyRoutes);
 
 export { router as routes };

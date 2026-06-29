@@ -15,6 +15,10 @@ import { PrismaClient } from '@prisma/client';
 import { seedPermissionCatalog, syncSystemRolesForTenant } from '../domain/rbac/catalog.js';
 import { seedDefaultPaymentFlowForTenant } from '../domain/payment-request/defaults.js';
 import { seedDefaultPurchaseFlowForTenant } from '../domain/purchase-request/defaults.js';
+import {
+  seedAgileFrameworkForTenant,
+  seedDefaultKpiReviewFlowForTenant,
+} from '../domain/kpi/defaults.js';
 
 async function main(): Promise<void> {
   const prisma = new PrismaClient();
@@ -25,7 +29,9 @@ async function main(): Promise<void> {
       await syncSystemRolesForTenant(prisma, tenant.id);
       await seedDefaultPaymentFlowForTenant(prisma, tenant.id);
       await seedDefaultPurchaseFlowForTenant(prisma, tenant.id);
-      console.log(`synced roles + payment + purchase flow for tenant ${tenant.slug}`);
+      await seedDefaultKpiReviewFlowForTenant(prisma, tenant.id);
+      await seedAgileFrameworkForTenant(prisma, tenant.id);
+      console.log(`synced roles + payment + purchase + kpi for tenant ${tenant.slug}`);
     }
   } finally {
     await prisma.$disconnect();

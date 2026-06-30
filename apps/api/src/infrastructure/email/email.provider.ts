@@ -47,6 +47,8 @@ export interface EmailProvider {
   sendPayrollApprovalRequest(input: PayrollApprovalEmailInput): Promise<void>;
   sendProbationReminder(input: ReminderEmailInput): Promise<void>;
   sendContractReminder(input: ReminderEmailInput): Promise<void>;
+  /** Generic transactional email (SPEC-045 sales outreach). Plain-text body → HTML. */
+  sendRaw(input: { to: string; subject: string; body: string }): Promise<void>;
 }
 
 /** Escape HTML special chars so user-controlled values can't inject markup. */
@@ -123,6 +125,19 @@ class ResendEmailProvider implements EmailProvider {
 
   constructor(apiKey: string) {
     this.client = apiKey ? new Resend(apiKey) : null;
+  }
+
+  async sendRaw({ to, subject, body }: { to: string; subject: string; body: string }): Promise<void> {
+    if (!this.client) {
+      logger.warn({ event: 'email.sales.skipped', to }, 'RESEND_API_KEY not set — skipping sales email');
+      return;
+    }
+    const html = `<div style="font-family:sans-serif;white-space:pre-wrap">${escapeHtml(body)}</div>`;
+    const { error } = await this.client.emails.send({ from: EMAIL_FROM, to, subject, html });
+    if (error) {
+      throw new Error(`Resend failed to send sales email to ${to}: ${error.message}`);
+    }
+    logger.info({ event: 'email.sales.sent', to }, 'Sales email sent');
   }
 
   async sendInvite({ to, fullName, link }: InviteEmailInput): Promise<void> {

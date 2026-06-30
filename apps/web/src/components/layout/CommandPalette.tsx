@@ -59,6 +59,12 @@ const COMMANDS: Command[] = [
   { id: 'nav-assets', group: 'navigation', labelKey: 'items.assets', icon: Package, to: '/assets', permission: 'assets:view' },
   { id: 'nav-roles', group: 'navigation', labelKey: 'items.roles', icon: ShieldCheck, to: '/settings/roles', permission: 'roles:view' },
   { id: 'nav-settings', group: 'navigation', labelKey: 'items.settings', icon: Settings, to: '/settings', permission: 'settings:view' },
+  // SPEC-045 Sales
+  { id: 'nav-sales-dashboard', group: 'navigation', labelKey: 'items.salesDashboard', icon: Gauge, to: '/sales', permission: 'sales:report_view' },
+  { id: 'nav-sales-customers', group: 'navigation', labelKey: 'items.salesCustomers', icon: Users, to: '/sales/customers', permission: 'sales:customer_view' },
+  { id: 'nav-sales-pipeline', group: 'navigation', labelKey: 'items.salesPipeline', icon: Gauge, to: '/sales/pipeline', permission: 'sales:deal_view' },
+  { id: 'nav-sales-tasks', group: 'navigation', labelKey: 'items.salesTasks', icon: Gauge, to: '/sales/tasks', permission: 'sales:task_view' },
+  { id: 'nav-sales-products', group: 'navigation', labelKey: 'items.salesProducts', icon: Package, to: '/sales/products', permission: 'sales:product_view' },
 ];
 
 const GROUP_ORDER: CommandGroup[] = ['actions', 'navigation'];

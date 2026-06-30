@@ -1,0 +1,466 @@
+{
+  "customers": {
+    "title": "Customers",
+    "subtitle": "Manage leads and customers",
+    "new": "Add customer",
+    "searchPlaceholder": "Search by name, email, phone...",
+    "leadPool": "Lead Pool (unassigned)",
+    "unassigned": "Unassigned",
+    "count_one": "{{count}} customer",
+    "count_other": "{{count}} customers",
+    "columns": {
+      "name": "Name",
+      "type": "Type",
+      "contact": "Contact",
+      "lifecycle": "Status",
+      "owner": "Owner",
+      "source": "Source",
+      "createdAt": "Created"
+    },
+    "empty": {
+      "title": "No customers yet",
+      "desc": "Add your first customer to start tracking sales opportunities"
+    },
+    "error": {
+      "title": "Failed to load list",
+      "retry": "Retry"
+    },
+    "filters": {
+      "all": "All",
+      "type": "Type",
+      "lifecycle": "Status",
+      "owner": "Owner",
+      "mine": "Mine",
+      "pool": "Lead Pool"
+    }
+  },
+  "type": {
+    "B2B": "Business",
+    "B2C": "Individual"
+  },
+  "lifecycle": {
+    "NEW": "New",
+    "CONTACTED": "Contacted",
+    "QUALIFIED": "Qualified",
+    "CONVERTED": "Converted",
+    "CUSTOMER": "Customer",
+    "DISQUALIFIED": "Disqualified"
+  },
+  "source": {
+    "WEB": "Website",
+    "REFERRAL": "Referral",
+    "COLD_CALL": "Cold call",
+    "COLD_EMAIL": "Cold email",
+    "EVENT": "Event",
+    "SOCIAL": "Social",
+    "ADVERTISING": "Advertising",
+    "PARTNER": "Partner",
+    "IMPORT": "Import",
+    "OTHER": "Other"
+  },
+  "form": {
+    "createTitle": "Add customer",
+    "createDesc": "Create a new lead",
+    "editTitle": "Edit customer",
+    "editDesc": "Update customer information",
+    "type": "Customer type",
+    "fullName": "Full name / Contact",
+    "fullNamePlaceholder": "John Doe",
+    "jobTitle": "Job title",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "source": "Source",
+    "notes": "Notes",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "required": "Required"
+  },
+  "dedupe": {
+    "title": "Customer already exists",
+    "byEmail": "A customer already uses this email: {{name}}",
+    "byPhone": "A customer already uses this phone: {{name}}",
+    "openExisting": "Open existing customer"
+  },
+  "detail": {
+    "back": "Customers",
+    "tabs": {
+      "info": "Info",
+      "activity": "Activity",
+      "deals": "Deals",
+      "quotes": "Quotes",
+      "email": "Email",
+      "tasks": "Tasks"
+    },
+    "comingSoon": "Coming in a later step",
+    "fields": {
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "source": "Source",
+      "owner": "Owner",
+      "company": "Company",
+      "createdAt": "Created"
+    }
+  },
+  "toast": {
+    "created": "Customer created",
+    "updated": "Customer updated",
+    "error": "Something went wrong, please try again"
+  },
+  "assign": {
+    "claim": "Claim",
+    "assignAction": "Assign",
+    "dialogTitle": "Assign owner",
+    "dialogDesc": "Choose an owner for this customer",
+    "bulkDialogDesc": "Assign {{count}} selected customers",
+    "ownerLabel": "Owner",
+    "leadPoolOption": "Lead Pool (unassign)",
+    "confirm": "Assign",
+    "cancel": "Cancel",
+    "selected": "{{count}} selected",
+    "clear": "Clear",
+    "toastClaimed": "Lead claimed",
+    "toastAssigned": "Owner assigned",
+    "toastBulk_one": "Assigned {{count}} customer",
+    "toastBulk_other": "Assigned {{count}} customers",
+    "toastError": "Assignment failed"
+  },
+  "lifecycleChange": {
+    "changeStatus": "Change status",
+    "disqualifyTitle": "Disqualify customer",
+    "disqualifyDesc": "Enter a reason for disqualifying this customer (required)",
+    "lostReasonLabel": "Reason",
+    "lostReasonPlaceholder": "e.g. Budget too low, chose competitor...",
+    "lostReasonField": "Disqualified reason",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "toastChanged": "Status updated",
+    "toastError": "Failed to update status"
+  },
+  "company": {
+    "title": "Companies",
+    "subtitle": "Manage companies (B2B customers)",
+    "new": "Add company",
+    "searchPlaceholder": "Search by name, tax code...",
+    "columns": {
+      "name": "Company",
+      "taxCode": "Tax code",
+      "industry": "Industry",
+      "contacts": "Contacts",
+      "createdAt": "Created"
+    },
+    "empty": {
+      "title": "No companies yet",
+      "desc": "Add a company to link B2B contacts"
+    },
+    "form": {
+      "createTitle": "Add company",
+      "editTitle": "Edit company",
+      "name": "Company name",
+      "taxCode": "Tax code",
+      "industry": "Industry",
+      "size": "Size",
+      "website": "Website",
+      "address": "Address",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "picker": {
+      "label": "Company",
+      "placeholder": "Pick or create a company",
+      "none": "No company",
+      "create": "Create company \"{{name}}\"",
+      "searchPlaceholder": "Search companies..."
+    },
+    "toast": {
+      "created": "Company created",
+      "updated": "Company updated",
+      "error": "Something went wrong"
+    }
+  },
+  "import": {
+    "button": "Import",
+    "title": "Import customers from file",
+    "desc": "Download the template, fill it in, then upload. Imported customers land in the Lead Pool.",
+    "downloadTemplate": "Download template",
+    "chooseFile": "Choose file (.xlsx/.csv)",
+    "analyzing": "Analyzing...",
+    "previewTitle": "Validation result",
+    "total": "Total rows",
+    "valid": "Valid",
+    "skipped": "Skipped",
+    "skippedCols": {
+      "row": "Row",
+      "name": "Name",
+      "reason": "Reason"
+    },
+    "commit": "Import {{count}} customers",
+    "committing": "Importing...",
+    "another": "Choose another file",
+    "cancel": "Close",
+    "toastDone": "Imported {{count}} customers",
+    "toastError": "Import failed"
+  },
+  "pipeline": {
+    "title": "Sales pipeline",
+    "subtitle": "Drag deals across stages",
+    "newDeal": "Add deal",
+    "empty": "No deals in this stage",
+    "loading": "Loading..."
+  },
+  "deal": {
+    "form": {
+      "createTitle": "Add deal",
+      "editTitle": "Edit deal",
+      "title": "Deal name",
+      "titlePlaceholder": "e.g. Sell SaaS plan to ...",
+      "customer": "Customer",
+      "customerPlaceholder": "Pick a customer",
+      "currency": "Currency",
+      "expectedCloseDate": "Expected close date",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "win": "Win",
+    "lose": "Lose",
+    "reopen": "Reopen",
+    "loseTitle": "Mark as lost",
+    "loseDesc": "Enter a reason (required)",
+    "loseReason": "Reason",
+    "loseReasonPlaceholder": "e.g. Price too high, chose competitor...",
+    "confirm": "Confirm",
+    "status": {
+      "OPEN": "Open",
+      "WON": "Won",
+      "LOST": "Lost"
+    },
+    "owner": "Owner",
+    "noCustomer": "—",
+    "toast": {
+      "created": "Deal created",
+      "updated": "Updated",
+      "moved": "Stage changed",
+      "won": "Marked as won",
+      "lost": "Marked as lost",
+      "error": "Something went wrong"
+    }
+  },
+  "stageConfig": {
+    "title": "Pipeline stages",
+    "add": "Add stage",
+    "name": "Name",
+    "type": "Type",
+    "probability": "Probability %",
+    "save": "Save",
+    "delete": "Delete",
+    "inUse": "Stage is in use, cannot delete",
+    "toastSaved": "Stage saved",
+    "toastDeleted": "Stage deleted",
+    "toastReordered": "Reordered",
+    "toastError": "Something went wrong"
+  },
+  "product": {
+    "title": "Products",
+    "subtitle": "Product & service catalog",
+    "new": "Add product",
+    "search": "Search by name, SKU...",
+    "columns": {
+      "name": "Name",
+      "sku": "SKU",
+      "price": "Unit price",
+      "unit": "Unit",
+      "status": "Status"
+    },
+    "empty": {
+      "title": "No products yet",
+      "desc": "Add a product to use in quotes"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "ARCHIVED": "Archived"
+    },
+    "form": {
+      "createTitle": "Add product",
+      "editTitle": "Edit product",
+      "name": "Product name",
+      "sku": "SKU",
+      "description": "Description",
+      "unitPrice": "Unit price",
+      "currency": "Currency",
+      "unit": "Unit",
+      "status": "Status",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "archive": "Archive",
+    "delete": "Delete",
+    "inUse": "Product used in a quote — archive instead",
+    "toast": {
+      "created": "Product created",
+      "updated": "Updated",
+      "deleted": "Deleted",
+      "error": "Something went wrong"
+    }
+  },
+  "quote": {
+    "tab": "Quotes",
+    "add": "Add quote",
+    "primary": "Primary quote",
+    "setPrimary": "Set primary",
+    "empty": "No quotes yet",
+    "pdf": "Download PDF",
+    "delete": "Delete",
+    "total": "Total",
+    "status": {
+      "DRAFT": "Draft",
+      "SENT": "Sent",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Rejected",
+      "EXPIRED": "Expired"
+    },
+    "form": {
+      "createTitle": "Add quote",
+      "editTitle": "Edit quote",
+      "items": "Line items",
+      "addItem": "Add line",
+      "product": "Product",
+      "freeText": "(Custom)",
+      "description": "Description",
+      "qty": "Qty",
+      "unitPrice": "Unit price",
+      "discount": "Disc%",
+      "lineTotal": "Total",
+      "isPrimary": "Set as primary quote",
+      "validUntil": "Valid until",
+      "status": "Status",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "remove": "Remove line"
+    },
+    "toast": {
+      "created": "Quote created",
+      "updated": "Updated",
+      "deleted": "Deleted",
+      "error": "Something went wrong"
+    }
+  },
+  "dealDetail": {
+    "title": "Deal details",
+    "tabs": {
+      "info": "Info",
+      "quotes": "Quotes"
+    },
+    "customer": "Customer",
+    "stage": "Stage",
+    "amount": "Amount",
+    "status": "Status",
+    "owner": "Owner",
+    "expectedClose": "Expected close",
+    "edit": "Edit"
+  },
+  "activity": {
+    "addNote": "Add note",
+    "notePlaceholder": "Note about this customer...",
+    "empty": "No activity yet",
+    "system": "System",
+    "type": {
+      "CALL": "Call",
+      "EMAIL": "Email",
+      "MEETING": "Meeting",
+      "NOTE": "Note",
+      "STAGE_CHANGED": "Stage changed",
+      "OWNER_CHANGED": "Owner changed",
+      "STATUS_CHANGED": "Outcome changed",
+      "LIFECYCLE_CHANGED": "Status changed"
+    }
+  },
+  "email": {
+    "sendTitle": "Send email",
+    "send": "Send",
+    "cancel": "Cancel",
+    "template": "Template",
+    "noTemplate": "No template",
+    "subject": "Subject",
+    "body": "Body",
+    "varsHint": "Vars: {{customerName}}, {{ownerName}}",
+    "sendButton": "Send email",
+    "historyEmpty": "No emails sent",
+    "status": {
+      "QUEUED": "Queued",
+      "SENT": "Sent",
+      "FAILED": "Failed",
+      "OPENED": "Opened",
+      "CLICKED": "Clicked"
+    },
+    "toast": {
+      "sent": "Email queued for delivery",
+      "error": "Failed to send"
+    }
+  },
+  "task": {
+    "add": "Add task",
+    "title": "Title",
+    "dueAt": "Due",
+    "type": "Type",
+    "complete": "Complete",
+    "empty": "No tasks yet",
+    "types": {
+      "CALL": "Call",
+      "EMAIL": "Email",
+      "MEETING": "Meeting",
+      "TODO": "To-do"
+    },
+    "save": "Save",
+    "cancel": "Cancel",
+    "toast": {
+      "created": "Task created",
+      "done": "Completed",
+      "error": "Something went wrong"
+    }
+  },
+  "myTasks": {
+    "title": "My tasks",
+    "subtitle": "Customer follow-up tasks",
+    "overdue": "Overdue",
+    "today": "Today",
+    "upcoming": "Upcoming",
+    "done": "Done",
+    "empty": "No tasks",
+    "forCustomer": "Customer"
+  },
+  "templates": {
+    "title": "Email templates",
+    "add": "Add template",
+    "name": "Template name",
+    "subject": "Subject",
+    "body": "Body",
+    "active": "Active",
+    "save": "Save",
+    "cancel": "Cancel",
+    "empty": "No templates",
+    "toast": {
+      "saved": "Template saved",
+      "error": "Something went wrong"
+    }
+  },
+  "dashboard": {
+    "title": "Sales overview",
+    "subtitle": "Sales performance",
+    "openPipeline": "Open pipeline",
+    "forecast": "Forecast (weighted)",
+    "wonThisMonth": "Won this month",
+    "totalLeads": "Total leads",
+    "pipelineByStage": "Pipeline by stage",
+    "leadSources": "Lead sources",
+    "byOwner": "By owner",
+    "amount": "Amount",
+    "count": "Count",
+    "empty": "No data yet"
+  }
+}

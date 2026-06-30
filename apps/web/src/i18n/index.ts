@@ -50,6 +50,8 @@ import enSettings from './locales/en/settings.json';
 import enAccount from './locales/en/account.json';
 import viKpi from './locales/vi/kpi.json';
 import enKpi from './locales/en/kpi.json';
+import viSales from './locales/vi/sales.json';
+import enSales from './locales/en/sales.json';
 
 export const defaultNS = 'common';
 
@@ -79,6 +81,7 @@ export const resources = {
     settings: viSettings,
     account: viAccount,
     kpi: viKpi,
+    sales: viSales,
   },
   en: {
     common: enCommon,
@@ -105,6 +108,7 @@ export const resources = {
     settings: enSettings,
     account: enAccount,
     kpi: enKpi,
+    sales: enSales,
   },
 } as const;
 
@@ -128,7 +132,7 @@ i18n.use(initReactI18next).init({
   lng: initialLanguage,
   fallbackLng: 'vi',
   defaultNS,
-  ns: ['common', 'nav', 'dashboard', 'auth', 'employee', 'department', 'position', 'permission', 'role', 'leave', 'payment', 'purchase', 'timesheet', 'payroll', 'employeeImport', 'contracts', 'notifications', 'asset', 'assetImport', 'recruitment', 'probation', 'settings', 'account', 'kpi'],
+  ns: ['common', 'nav', 'dashboard', 'auth', 'employee', 'department', 'position', 'permission', 'role', 'leave', 'payment', 'purchase', 'timesheet', 'payroll', 'employeeImport', 'contracts', 'notifications', 'asset', 'assetImport', 'recruitment', 'probation', 'settings', 'account', 'kpi', 'sales'],
   interpolation: { escapeValue: false },
   returnNull: false,
 });

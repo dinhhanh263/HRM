@@ -1,0 +1,466 @@
+{
+  "customers": {
+    "title": "Khách hàng",
+    "subtitle": "Quản lý khách hàng tiềm năng và khách hàng",
+    "new": "Thêm khách hàng",
+    "searchPlaceholder": "Tìm theo tên, email, số điện thoại...",
+    "leadPool": "Lead Pool (chưa gán)",
+    "unassigned": "Chưa gán",
+    "count_one": "{{count}} khách hàng",
+    "count_other": "{{count}} khách hàng",
+    "columns": {
+      "name": "Tên",
+      "type": "Loại",
+      "contact": "Liên hệ",
+      "lifecycle": "Trạng thái",
+      "owner": "Phụ trách",
+      "source": "Nguồn",
+      "createdAt": "Ngày tạo"
+    },
+    "empty": {
+      "title": "Chưa có khách hàng",
+      "desc": "Thêm khách hàng đầu tiên để bắt đầu theo dõi cơ hội bán hàng"
+    },
+    "error": {
+      "title": "Không tải được danh sách",
+      "retry": "Thử lại"
+    },
+    "filters": {
+      "all": "Tất cả",
+      "type": "Loại",
+      "lifecycle": "Trạng thái",
+      "owner": "Phụ trách",
+      "mine": "Của tôi",
+      "pool": "Lead Pool"
+    }
+  },
+  "type": {
+    "B2B": "Doanh nghiệp",
+    "B2C": "Cá nhân"
+  },
+  "lifecycle": {
+    "NEW": "Mới",
+    "CONTACTED": "Đã liên hệ",
+    "QUALIFIED": "Đủ điều kiện",
+    "CONVERTED": "Đã tạo cơ hội",
+    "CUSTOMER": "Khách hàng",
+    "DISQUALIFIED": "Loại"
+  },
+  "source": {
+    "WEB": "Website",
+    "REFERRAL": "Giới thiệu",
+    "COLD_CALL": "Gọi điện",
+    "COLD_EMAIL": "Email",
+    "EVENT": "Sự kiện",
+    "SOCIAL": "Mạng xã hội",
+    "ADVERTISING": "Quảng cáo",
+    "PARTNER": "Đối tác",
+    "IMPORT": "Nhập file",
+    "OTHER": "Khác"
+  },
+  "form": {
+    "createTitle": "Thêm khách hàng",
+    "createDesc": "Tạo một khách hàng tiềm năng mới",
+    "editTitle": "Chỉnh sửa khách hàng",
+    "editDesc": "Cập nhật thông tin khách hàng",
+    "type": "Loại khách hàng",
+    "fullName": "Họ tên / Người liên hệ",
+    "fullNamePlaceholder": "Nguyễn Văn A",
+    "jobTitle": "Chức danh",
+    "email": "Email",
+    "phone": "Số điện thoại",
+    "address": "Địa chỉ",
+    "source": "Nguồn",
+    "notes": "Ghi chú",
+    "save": "Lưu",
+    "saving": "Đang lưu...",
+    "cancel": "Hủy",
+    "required": "Bắt buộc"
+  },
+  "dedupe": {
+    "title": "Khách hàng đã tồn tại",
+    "byEmail": "Đã có khách hàng dùng email này: {{name}}",
+    "byPhone": "Đã có khách hàng dùng số điện thoại này: {{name}}",
+    "openExisting": "Mở khách hàng đã có"
+  },
+  "detail": {
+    "back": "Khách hàng",
+    "tabs": {
+      "info": "Thông tin",
+      "activity": "Hoạt động",
+      "deals": "Cơ hội",
+      "quotes": "Báo giá",
+      "email": "Email",
+      "tasks": "Việc cần làm"
+    },
+    "comingSoon": "Sẽ có ở bước tiếp theo",
+    "fields": {
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ",
+      "source": "Nguồn",
+      "owner": "Phụ trách",
+      "company": "Công ty",
+      "createdAt": "Ngày tạo"
+    }
+  },
+  "toast": {
+    "created": "Đã tạo khách hàng",
+    "updated": "Đã cập nhật khách hàng",
+    "error": "Có lỗi xảy ra, vui lòng thử lại"
+  },
+  "assign": {
+    "claim": "Nhận lead",
+    "assignAction": "Phân công",
+    "dialogTitle": "Phân công phụ trách",
+    "dialogDesc": "Chọn người phụ trách cho khách hàng này",
+    "bulkDialogDesc": "Phân công {{count}} khách hàng đã chọn",
+    "ownerLabel": "Người phụ trách",
+    "leadPoolOption": "Lead Pool (bỏ gán)",
+    "confirm": "Phân công",
+    "cancel": "Hủy",
+    "selected": "{{count}} đã chọn",
+    "clear": "Bỏ chọn",
+    "toastClaimed": "Đã nhận lead",
+    "toastAssigned": "Đã phân công",
+    "toastBulk_one": "Đã phân công {{count}} khách hàng",
+    "toastBulk_other": "Đã phân công {{count}} khách hàng",
+    "toastError": "Phân công thất bại"
+  },
+  "lifecycleChange": {
+    "changeStatus": "Đổi trạng thái",
+    "disqualifyTitle": "Loại khách hàng",
+    "disqualifyDesc": "Nhập lý do loại khách hàng này (bắt buộc)",
+    "lostReasonLabel": "Lý do",
+    "lostReasonPlaceholder": "VD: Ngân sách không đủ, chọn đối thủ...",
+    "lostReasonField": "Lý do loại",
+    "confirm": "Xác nhận",
+    "cancel": "Hủy",
+    "toastChanged": "Đã cập nhật trạng thái",
+    "toastError": "Cập nhật trạng thái thất bại"
+  },
+  "company": {
+    "title": "Công ty",
+    "subtitle": "Quản lý công ty (khách hàng B2B)",
+    "new": "Thêm công ty",
+    "searchPlaceholder": "Tìm theo tên, mã số thuế...",
+    "columns": {
+      "name": "Tên công ty",
+      "taxCode": "Mã số thuế",
+      "industry": "Ngành",
+      "contacts": "Liên hệ",
+      "createdAt": "Ngày tạo"
+    },
+    "empty": {
+      "title": "Chưa có công ty",
+      "desc": "Thêm công ty để gắn các liên hệ B2B"
+    },
+    "form": {
+      "createTitle": "Thêm công ty",
+      "editTitle": "Sửa công ty",
+      "name": "Tên công ty",
+      "taxCode": "Mã số thuế",
+      "industry": "Ngành nghề",
+      "size": "Quy mô",
+      "website": "Website",
+      "address": "Địa chỉ",
+      "save": "Lưu",
+      "saving": "Đang lưu...",
+      "cancel": "Hủy"
+    },
+    "picker": {
+      "label": "Công ty",
+      "placeholder": "Chọn hoặc tạo công ty",
+      "none": "Không gắn công ty",
+      "create": "Tạo công ty \"{{name}}\"",
+      "searchPlaceholder": "Tìm công ty..."
+    },
+    "toast": {
+      "created": "Đã tạo công ty",
+      "updated": "Đã cập nhật công ty",
+      "error": "Có lỗi xảy ra"
+    }
+  },
+  "import": {
+    "button": "Nhập file",
+    "title": "Nhập khách hàng từ file",
+    "desc": "Tải file mẫu, điền dữ liệu rồi tải lên. Khách hàng nhập vào sẽ nằm ở Lead Pool.",
+    "downloadTemplate": "Tải file mẫu",
+    "chooseFile": "Chọn file (.xlsx/.csv)",
+    "analyzing": "Đang phân tích...",
+    "previewTitle": "Kết quả kiểm tra",
+    "total": "Tổng dòng",
+    "valid": "Hợp lệ",
+    "skipped": "Bỏ qua",
+    "skippedCols": {
+      "row": "Dòng",
+      "name": "Tên",
+      "reason": "Lý do"
+    },
+    "commit": "Nhập {{count}} khách hàng",
+    "committing": "Đang nhập...",
+    "another": "Chọn file khác",
+    "cancel": "Đóng",
+    "toastDone": "Đã nhập {{count}} khách hàng",
+    "toastError": "Nhập file thất bại"
+  },
+  "pipeline": {
+    "title": "Pipeline bán hàng",
+    "subtitle": "Kéo-thả cơ hội qua các giai đoạn",
+    "newDeal": "Thêm cơ hội",
+    "empty": "Chưa có cơ hội nào ở giai đoạn này",
+    "loading": "Đang tải..."
+  },
+  "deal": {
+    "form": {
+      "createTitle": "Thêm cơ hội",
+      "editTitle": "Sửa cơ hội",
+      "title": "Tên cơ hội",
+      "titlePlaceholder": "VD: Bán gói SaaS cho ...",
+      "customer": "Khách hàng",
+      "customerPlaceholder": "Chọn khách hàng",
+      "currency": "Tiền tệ",
+      "expectedCloseDate": "Ngày dự kiến chốt",
+      "save": "Lưu",
+      "saving": "Đang lưu...",
+      "cancel": "Hủy"
+    },
+    "win": "Thắng",
+    "lose": "Thua",
+    "reopen": "Mở lại",
+    "loseTitle": "Đánh dấu thua",
+    "loseDesc": "Nhập lý do thua (bắt buộc)",
+    "loseReason": "Lý do",
+    "loseReasonPlaceholder": "VD: Giá cao, chọn đối thủ...",
+    "confirm": "Xác nhận",
+    "status": {
+      "OPEN": "Đang mở",
+      "WON": "Thắng",
+      "LOST": "Thua"
+    },
+    "owner": "Phụ trách",
+    "noCustomer": "—",
+    "toast": {
+      "created": "Đã tạo cơ hội",
+      "updated": "Đã cập nhật",
+      "moved": "Đã chuyển giai đoạn",
+      "won": "Đã đánh dấu thắng",
+      "lost": "Đã đánh dấu thua",
+      "error": "Có lỗi xảy ra"
+    }
+  },
+  "stageConfig": {
+    "title": "Giai đoạn pipeline",
+    "add": "Thêm giai đoạn",
+    "name": "Tên",
+    "type": "Loại",
+    "probability": "Xác suất %",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "inUse": "Giai đoạn đã được sử dụng, không thể xóa",
+    "toastSaved": "Đã lưu giai đoạn",
+    "toastDeleted": "Đã xóa giai đoạn",
+    "toastReordered": "Đã sắp xếp lại",
+    "toastError": "Có lỗi xảy ra"
+  },
+  "product": {
+    "title": "Sản phẩm",
+    "subtitle": "Danh mục sản phẩm & dịch vụ",
+    "new": "Thêm sản phẩm",
+    "search": "Tìm theo tên, SKU...",
+    "columns": {
+      "name": "Tên",
+      "sku": "SKU",
+      "price": "Đơn giá",
+      "unit": "ĐVT",
+      "status": "Trạng thái"
+    },
+    "empty": {
+      "title": "Chưa có sản phẩm",
+      "desc": "Thêm sản phẩm để dùng trong báo giá"
+    },
+    "status": {
+      "ACTIVE": "Đang bán",
+      "ARCHIVED": "Lưu trữ"
+    },
+    "form": {
+      "createTitle": "Thêm sản phẩm",
+      "editTitle": "Sửa sản phẩm",
+      "name": "Tên sản phẩm",
+      "sku": "SKU",
+      "description": "Mô tả",
+      "unitPrice": "Đơn giá",
+      "currency": "Tiền tệ",
+      "unit": "Đơn vị tính",
+      "status": "Trạng thái",
+      "save": "Lưu",
+      "saving": "Đang lưu...",
+      "cancel": "Hủy"
+    },
+    "archive": "Lưu trữ",
+    "delete": "Xóa",
+    "inUse": "Sản phẩm đã dùng trong báo giá — hãy lưu trữ",
+    "toast": {
+      "created": "Đã tạo sản phẩm",
+      "updated": "Đã cập nhật",
+      "deleted": "Đã xóa",
+      "error": "Có lỗi xảy ra"
+    }
+  },
+  "quote": {
+    "tab": "Báo giá",
+    "add": "Thêm báo giá",
+    "primary": "Báo giá chính",
+    "setPrimary": "Đặt làm chính",
+    "empty": "Chưa có báo giá",
+    "pdf": "Tải PDF",
+    "delete": "Xóa",
+    "total": "Tổng",
+    "status": {
+      "DRAFT": "Nháp",
+      "SENT": "Đã gửi",
+      "ACCEPTED": "Chấp nhận",
+      "REJECTED": "Từ chối",
+      "EXPIRED": "Hết hạn"
+    },
+    "form": {
+      "createTitle": "Thêm báo giá",
+      "editTitle": "Sửa báo giá",
+      "items": "Dòng báo giá",
+      "addItem": "Thêm dòng",
+      "product": "Sản phẩm",
+      "freeText": "(Tự nhập)",
+      "description": "Mô tả",
+      "qty": "SL",
+      "unitPrice": "Đơn giá",
+      "discount": "CK%",
+      "lineTotal": "Thành tiền",
+      "isPrimary": "Đặt làm báo giá chính",
+      "validUntil": "Hiệu lực đến",
+      "status": "Trạng thái",
+      "save": "Lưu",
+      "saving": "Đang lưu...",
+      "cancel": "Hủy",
+      "remove": "Xóa dòng"
+    },
+    "toast": {
+      "created": "Đã tạo báo giá",
+      "updated": "Đã cập nhật",
+      "deleted": "Đã xóa",
+      "error": "Có lỗi xảy ra"
+    }
+  },
+  "dealDetail": {
+    "title": "Chi tiết cơ hội",
+    "tabs": {
+      "info": "Thông tin",
+      "quotes": "Báo giá"
+    },
+    "customer": "Khách hàng",
+    "stage": "Giai đoạn",
+    "amount": "Giá trị",
+    "status": "Trạng thái",
+    "owner": "Phụ trách",
+    "expectedClose": "Dự kiến chốt",
+    "edit": "Sửa"
+  },
+  "activity": {
+    "addNote": "Thêm ghi chú",
+    "notePlaceholder": "Ghi chú về khách hàng...",
+    "empty": "Chưa có hoạt động",
+    "system": "Hệ thống",
+    "type": {
+      "CALL": "Gọi điện",
+      "EMAIL": "Email",
+      "MEETING": "Gặp mặt",
+      "NOTE": "Ghi chú",
+      "STAGE_CHANGED": "Chuyển giai đoạn",
+      "OWNER_CHANGED": "Đổi phụ trách",
+      "STATUS_CHANGED": "Đổi kết quả",
+      "LIFECYCLE_CHANGED": "Đổi trạng thái"
+    }
+  },
+  "email": {
+    "sendTitle": "Gửi email",
+    "send": "Gửi",
+    "cancel": "Hủy",
+    "template": "Mẫu email",
+    "noTemplate": "Không dùng mẫu",
+    "subject": "Tiêu đề",
+    "body": "Nội dung",
+    "varsHint": "Biến: {{customerName}}, {{ownerName}}",
+    "sendButton": "Gửi email",
+    "historyEmpty": "Chưa gửi email nào",
+    "status": {
+      "QUEUED": "Đang gửi",
+      "SENT": "Đã gửi",
+      "FAILED": "Thất bại",
+      "OPENED": "Đã mở",
+      "CLICKED": "Đã click"
+    },
+    "toast": {
+      "sent": "Đã đưa email vào hàng đợi gửi",
+      "error": "Gửi email thất bại"
+    }
+  },
+  "task": {
+    "add": "Thêm việc",
+    "title": "Tiêu đề",
+    "dueAt": "Hạn",
+    "type": "Loại",
+    "complete": "Hoàn thành",
+    "empty": "Chưa có việc cần làm",
+    "types": {
+      "CALL": "Gọi điện",
+      "EMAIL": "Email",
+      "MEETING": "Gặp mặt",
+      "TODO": "Việc"
+    },
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "toast": {
+      "created": "Đã tạo việc",
+      "done": "Đã hoàn thành",
+      "error": "Có lỗi xảy ra"
+    }
+  },
+  "myTasks": {
+    "title": "Việc của tôi",
+    "subtitle": "Việc follow-up khách hàng",
+    "overdue": "Quá hạn",
+    "today": "Hôm nay",
+    "upcoming": "Sắp tới",
+    "done": "Đã xong",
+    "empty": "Không có việc nào",
+    "forCustomer": "Khách"
+  },
+  "templates": {
+    "title": "Mẫu email",
+    "add": "Thêm mẫu",
+    "name": "Tên mẫu",
+    "subject": "Tiêu đề",
+    "body": "Nội dung",
+    "active": "Đang dùng",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "empty": "Chưa có mẫu",
+    "toast": {
+      "saved": "Đã lưu mẫu",
+      "error": "Có lỗi xảy ra"
+    }
+  },
+  "dashboard": {
+    "title": "Tổng quan bán hàng",
+    "subtitle": "Hiệu suất kinh doanh",
+    "openPipeline": "Pipeline đang mở",
+    "forecast": "Dự báo (trọng số)",
+    "wonThisMonth": "Thắng tháng này",
+    "totalLeads": "Tổng khách/lead",
+    "pipelineByStage": "Pipeline theo giai đoạn",
+    "leadSources": "Nguồn lead",
+    "byOwner": "Phân bổ theo nhân viên",
+    "amount": "Giá trị",
+    "count": "Số lượng",
+    "empty": "Chưa có dữ liệu"
+  }
+}

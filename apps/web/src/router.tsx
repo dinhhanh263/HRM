@@ -35,6 +35,7 @@ import {
   MyInterviewsPage,
 } from '@/features/recruitment';
 import { KpiConfigPage, KpiTeamsPage, KpiCyclesPage, KpiCycleDetailPage, MyKpiPage, EmployeeKpiPage, KpiSurveysPage } from '@/features/kpi';
+import { CustomerListPage, CustomerDetailPage, CompanyListPage, PipelinePage, SalesSettingsPage, ProductListPage, MyTasksPage, SalesDashboardPage } from '@/features/sales';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { RequirePermission } from '@/components/auth/RequirePermission';
@@ -152,6 +153,71 @@ export const router = createBrowserRouter([
         element: (
           <RequirePermission permission="roles:view">
             <RolesPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        // SPEC-045: Sales / CRM — Khách hàng (Task 1.1)
+        path: 'sales/customers',
+        element: (
+          <RequirePermission permission="sales:customer_view">
+            <CustomerListPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'sales/customers/:id',
+        element: (
+          <RequirePermission permission="sales:customer_view">
+            <CustomerDetailPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'sales/companies',
+        element: (
+          <RequirePermission permission="sales:customer_view">
+            <CompanyListPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'sales/pipeline',
+        element: (
+          <RequirePermission permission="sales:deal_view">
+            <PipelinePage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'sales',
+        element: (
+          <RequirePermission permission="sales:report_view">
+            <SalesDashboardPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'sales/tasks',
+        element: (
+          <RequirePermission permission="sales:task_view">
+            <MyTasksPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'sales/products',
+        element: (
+          <RequirePermission permission="sales:product_view">
+            <ProductListPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'settings/sales',
+        element: (
+          <RequirePermission permission="sales:settings">
+            <SalesSettingsPage />
           </RequirePermission>
         ),
       },

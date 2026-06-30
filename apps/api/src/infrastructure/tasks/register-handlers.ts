@@ -4,6 +4,8 @@ import { employeeImportHandler } from '../../domain/employee-import/employee-imp
 import { inviteHandler } from '../../domain/employee-import/employee-import.invite.worker.js';
 import { reminderEmailHandler } from '../../domain/reminders/reminder-email.worker.js';
 import { reminderScanHandler } from '../../domain/reminders/reminders.scan.worker.js';
+import { salesTaskReminderHandler } from '../../domain/sales/task-reminder.worker.js';
+import { salesEmailHandler } from '../../domain/sales/email.worker.js';
 
 let registered = false;
 
@@ -16,5 +18,7 @@ export function registerAllHandlers(): void {
   registerHandler('employee-invite', inviteHandler);
   registerHandler('reminder-email', reminderEmailHandler);
   registerHandler('reminder-scan', reminderScanHandler);
+  registerHandler('sales-task-reminder', salesTaskReminderHandler);
+  registerHandler('sales-email', salesEmailHandler);
   registered = true;
 }

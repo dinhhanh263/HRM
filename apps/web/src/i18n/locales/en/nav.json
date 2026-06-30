@@ -5,7 +5,8 @@
     "hr": "Human Resources",
     "operations": "Operations",
     "finance": "Finance",
-    "system": "System"
+    "system": "System",
+    "sales": "Sales"
   },
   "items": {
     "dashboard": "Dashboard",
@@ -32,7 +33,14 @@
     "teams": "Teams",
     "kpi": "KPI / Performance",
     "myKpi": "My KPI",
-    "kpiSurveys": "KPI Surveys"
+    "kpiSurveys": "KPI Surveys",
+    "salesCustomers": "Customers",
+    "salesCompanies": "Companies",
+    "salesPipeline": "Pipeline",
+    "salesSettings": "Sales settings",
+    "salesProducts": "Products",
+    "salesTasks": "My tasks",
+    "salesDashboard": "Sales overview"
   },
   "titles": {
     "dashboard": "Dashboard",
@@ -57,7 +65,15 @@
     "teams": "Teams / Squads",
     "kpi": "KPI / Performance",
     "myKpi": "My KPI",
-    "kpiSurveys": "Team Health Surveys"
+    "kpiSurveys": "Team Health Surveys",
+    "salesCustomers": "Customers",
+    "salesCustomerDetail": "Customer details",
+    "salesCompanies": "Companies",
+    "salesPipeline": "Sales pipeline",
+    "salesSettings": "Sales settings",
+    "salesProducts": "Products",
+    "salesTasks": "My tasks",
+    "salesDashboard": "Sales overview"
   },
   "sidebar": {
     "collapse": "Collapse",

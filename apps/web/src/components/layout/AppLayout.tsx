@@ -34,6 +34,13 @@ const pageTitleKeys: Record<string, string> = {
   '/payroll': 'titles.payroll',
   '/assets': 'titles.assets',
   '/settings': 'titles.settings',
+  '/sales': 'titles.salesDashboard',
+  '/sales/customers': 'titles.salesCustomers',
+  '/sales/companies': 'titles.salesCompanies',
+  '/sales/pipeline': 'titles.salesPipeline',
+  '/sales/products': 'titles.salesProducts',
+  '/sales/tasks': 'titles.salesTasks',
+  '/settings/sales': 'titles.salesSettings',
 };
 
 function getInitials(name: string) {

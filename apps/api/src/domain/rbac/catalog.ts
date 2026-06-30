@@ -67,6 +67,14 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'recruitment:interview_schedule',
       'recruitment:scorecard_submit',
       'recruitment:bulk_import',
+      // SPEC-045: HR quản trị CRM toàn công ty (config + view_all).
+      'sales:customer_view', 'sales:customer_create', 'sales:customer_update', 'sales:customer_assign',
+      'sales:deal_view', 'sales:deal_create', 'sales:deal_update', 'sales:deal_move',
+      'sales:product_view', 'sales:product_manage',
+      'sales:quote_view', 'sales:quote_manage',
+      'sales:task_view', 'sales:task_manage',
+      'sales:email_send', 'sales:template_manage',
+      'sales:report_view', 'sales:view_all', 'sales:settings',
     ],
   },
   {
@@ -185,6 +193,51 @@ export async function seedPermissionCatalog(prisma: PrismaClient): Promise<void>
 }
 
 /**
+ * Idempotently reconcile a role's permission grants to exactly `desiredKeys`
+ * (add missing, remove extra). Unknown keys are ignored. Shared by the system-role
+ * sync here and the SPEC-045 sales-role seeder so the diff logic lives in one place.
+ */
+export async function syncRolePermissions(
+  prisma: PrismaClient,
+  roleId: string,
+  desiredKeys: readonly string[],
+  permissionByKey: Map<string, string>,
+): Promise<void> {
+  const desiredIds = desiredKeys
+    .map((k) => permissionByKey.get(k))
+    .filter((id): id is string => Boolean(id));
+  const desiredSet = new Set(desiredIds);
+
+  const existing = await prisma.rolePermission.findMany({
+    where: { roleId },
+    select: { permissionId: true },
+  });
+  const existingIds = new Set(existing.map((rp) => rp.permissionId));
+
+  const toAdd = desiredIds.filter((id) => !existingIds.has(id));
+  const toRemove = [...existingIds].filter((id) => !desiredSet.has(id));
+
+  if (toAdd.length > 0) {
+    await prisma.rolePermission.createMany({
+      data: toAdd.map((permissionId) => ({ roleId, permissionId })),
+      skipDuplicates: true,
+    });
+  }
+  if (toRemove.length > 0) {
+    await prisma.rolePermission.deleteMany({
+      where: { roleId, permissionId: { in: toRemove } },
+    });
+  }
+}
+
+/** Load the tenant-agnostic permission key -> id map (catalog is global). */
+export async function loadPermissionIdMap(prisma: PrismaClient): Promise<Map<string, string>> {
+  return new Map(
+    (await prisma.permission.findMany({ select: { id: true, key: true } })).map((p) => [p.key, p.id]),
+  );
+}
+
+/**
  * Idempotently seed the 4 system roles for a tenant and sync their permission
  * mappings to the defaults. Returns a map of roleKey -> roleId. Assumes the
  * permission catalog has already been seeded.
@@ -193,10 +246,7 @@ export async function syncSystemRolesForTenant(
   prisma: PrismaClient,
   tenantId: string,
 ): Promise<Map<string, string>> {
-  const permissionByKey = new Map(
-    (await prisma.permission.findMany({ select: { id: true, key: true } })).map((p) => [p.key, p.id]),
-  );
-
+  const permissionByKey = await loadPermissionIdMap(prisma);
   const roleIdByKey = new Map<string, string>();
 
   for (const def of SYSTEM_ROLES) {
@@ -214,31 +264,7 @@ export async function syncSystemRolesForTenant(
     roleIdByKey.set(def.key, role.id);
 
     const keys = def.permissions === '*' ? ALL_PERMISSION_KEYS : def.permissions;
-    const desiredIds = keys
-      .map((k) => permissionByKey.get(k))
-      .filter((id): id is string => Boolean(id));
-    const desiredSet = new Set(desiredIds);
-
-    const existing = await prisma.rolePermission.findMany({
-      where: { roleId: role.id },
-      select: { permissionId: true },
-    });
-    const existingIds = new Set(existing.map((rp) => rp.permissionId));
-
-    const toAdd = desiredIds.filter((id) => !existingIds.has(id));
-    const toRemove = [...existingIds].filter((id) => !desiredSet.has(id));
-
-    if (toAdd.length > 0) {
-      await prisma.rolePermission.createMany({
-        data: toAdd.map((permissionId) => ({ roleId: role.id, permissionId })),
-        skipDuplicates: true,
-      });
-    }
-    if (toRemove.length > 0) {
-      await prisma.rolePermission.deleteMany({
-        where: { roleId: role.id, permissionId: { in: toRemove } },
-      });
-    }
+    await syncRolePermissions(prisma, role.id, keys, permissionByKey);
   }
 
   return roleIdByKey;

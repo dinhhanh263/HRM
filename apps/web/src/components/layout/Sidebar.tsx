@@ -25,6 +25,8 @@ import {
   Gauge,
   Activity,
   MessageSquare,
+  Contact,
+  Columns3,
   ChevronLeft,
   ChevronRight,
   X,
@@ -97,12 +99,24 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    titleKey: 'groups.sales',
+    items: [
+      { icon: Gauge, labelKey: 'items.salesDashboard', href: '/sales', permission: 'sales:report_view' },
+      { icon: Contact, labelKey: 'items.salesCustomers', href: '/sales/customers', permission: 'sales:customer_view' },
+      { icon: Columns3, labelKey: 'items.salesPipeline', href: '/sales/pipeline', permission: 'sales:deal_view' },
+      { icon: ClipboardList, labelKey: 'items.salesTasks', href: '/sales/tasks', permission: 'sales:task_view' },
+      { icon: Building2, labelKey: 'items.salesCompanies', href: '/sales/companies', permission: 'sales:customer_view' },
+      { icon: Package, labelKey: 'items.salesProducts', href: '/sales/products', permission: 'sales:product_view' },
+    ],
+  },
+  {
     titleKey: 'groups.system',
     items: [
       { icon: ShieldCheck, labelKey: 'items.roles', href: '/settings/roles', permission: 'roles:view' },
       { icon: Target, labelKey: 'items.kpiFrameworks', href: '/settings/kpi', permission: 'kpi:config' },
       { icon: UsersRound, labelKey: 'items.teams', href: '/settings/kpi/teams', permission: 'kpi:config' },
       { icon: MessageSquare, labelKey: 'items.kpiSurveys', href: '/settings/kpi/surveys', permission: 'kpi:survey_manage' },
+      { icon: Columns3, labelKey: 'items.salesSettings', href: '/settings/sales', permission: 'sales:settings' },
       { icon: CalendarCog, labelKey: 'items.timesheetSettings', href: '/settings/timesheet', permission: 'timesheet:view' },
       { icon: Boxes, labelKey: 'items.assetSettings', href: '/settings/assets', permission: 'assets:view' },
       { icon: Settings, labelKey: 'items.settings', href: '/settings', permission: 'settings:view' },

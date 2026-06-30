@@ -372,15 +372,27 @@ model Tenant {
   settingsAuditLogs   SettingsAuditLog[]
 
   // SPEC-044: KPI / Performance Management
-  teams                 Team[]
-  kpiFrameworks         KpiFramework[]
-  kpiCycles             KpiCycle[]
-  kpiScorecards         KpiScorecard[]
-  kpiScorecardApprovals KpiScorecardApproval[]
-  kpiEntries            KpiEntry[]
+  teams                   Team[]
+  kpiFrameworks           KpiFramework[]
+  kpiCycles               KpiCycle[]
+  kpiScorecards           KpiScorecard[]
+  kpiScorecardApprovals   KpiScorecardApproval[]
+  kpiEntries              KpiEntry[]
   kpiSurveys              KpiSurvey[]
   kpiSurveyResponses      KpiSurveyResponse[]
   kpiSurveyParticipations KpiSurveyParticipation[]
+
+  // SPEC-045: Sales / CRM
+  salesCompanies      SalesCompany[]
+  customers           Customer[]
+  salesPipelines      SalesPipeline[]
+  deals               Deal[]
+  products            Product[]
+  quotes              Quote[]
+  salesActivities     SalesActivity[]
+  salesTasks          SalesTask[]
+  salesEmailTemplates SalesEmailTemplate[]
+  salesEmailMessages  SalesEmailMessage[]
 
   @@map("tenants")
 }
@@ -634,6 +646,14 @@ model Employee {
   probationReviews        ProbationReview[] @relation("EmployeeProbationReviews")
   probationReviewsGiven   ProbationReview[] @relation("ProbationReviewer")
   probationReviewsDecided ProbationReview[] @relation("ProbationDecider")
+
+  // SPEC-045: Sales / CRM — owner/assignee/author/sender
+  customersOwned     Customer[]          @relation("CustomerOwner")
+  dealsOwned         Deal[]              @relation("DealOwner")
+  dealStageChanges   DealStageHistory[]  @relation("DealStageChanger")
+  salesActivities    SalesActivity[]     @relation("SalesActivityAuthor")
+  salesTasksAssigned SalesTask[]         @relation("SalesTaskAssignee")
+  salesEmailsSent    SalesEmailMessage[] @relation("SalesEmailSender")
 
   @@unique([tenantId, employeeCode])
   @@index([tenantId, status])
@@ -1068,6 +1088,7 @@ model IssuingEntity {
 
   tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   purchaseRequests PurchaseRequest[]
+  quotes           Quote[] // SPEC-045: báo giá xuất theo pháp nhân
 
   @@index([tenantId])
   @@map("issuing_entities")
@@ -2409,4 +2430,385 @@ model KpiSurveyParticipation {
   @@unique([surveyId, cycleId, userId])
   @@index([tenantId])
   @@map("kpi_survey_participations")
+}
+
+// =============================================================================
+// SPEC-045: Sales / CRM (B2B + B2C)
+// Tách Customer (vòng đời lead, ownership) khỏi Deal (cơ hội, stage pipeline).
+// Tiền dùng Decimal(18,2). owner/assignee/author/sender -> Employee.
+// =============================================================================
+
+enum CustomerType {
+  B2B
+  B2C
+}
+
+enum CustomerLifecycle {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CONVERTED
+  CUSTOMER
+  DISQUALIFIED
+}
+
+enum LeadSource {
+  WEB
+  REFERRAL
+  COLD_CALL
+  COLD_EMAIL
+  EVENT
+  SOCIAL
+  ADVERTISING
+  PARTNER
+  IMPORT
+  OTHER
+}
+
+enum SalesStageType {
+  NEW
+  QUALIFYING
+  PROPOSAL
+  NEGOTIATION
+  WON
+  LOST
+}
+
+enum DealStatus {
+  OPEN
+  WON
+  LOST
+}
+
+enum ProductStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+enum SalesActivityType {
+  CALL
+  EMAIL
+  MEETING
+  NOTE
+  STAGE_CHANGED
+  OWNER_CHANGED
+  STATUS_CHANGED
+  LIFECYCLE_CHANGED
+}
+
+enum SalesTaskType {
+  CALL
+  EMAIL
+  MEETING
+  TODO
+}
+
+enum SalesTaskStatus {
+  OPEN
+  DONE
+  CANCELLED
+}
+
+enum SalesEmailStatus {
+  QUEUED
+  SENT
+  FAILED
+  OPENED // Tier 2
+  CLICKED // Tier 2
+}
+
+// Tổ chức (B2B). B2C bỏ trống — Customer không gắn company.
+model SalesCompany {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  name      String
+  taxCode   String?  @map("tax_code")
+  industry  String?
+  size      String?
+  website   String?
+  address   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customers Customer[]
+
+  @@index([tenantId])
+  @@map("sales_companies")
+}
+
+// Khách hàng / lead thống nhất. lifecycleStatus = trục "có đáng theo đuổi không".
+model Customer {
+  id              String            @id @default(cuid())
+  tenantId        String            @map("tenant_id")
+  type            CustomerType      @default(B2C)
+  companyId       String?           @map("company_id")
+  fullName        String            @map("full_name")
+  title           String?
+  email           String?
+  phone           String? // chuẩn hóa E.164 ở service để dedupe
+  address         String?
+  source          LeadSource        @default(OTHER)
+  lifecycleStatus CustomerLifecycle @default(NEW) @map("lifecycle_status")
+  lostReason      String?           @map("lost_reason")
+  ownerId         String?           @map("owner_id") // null = Lead Pool
+  assignedAt      DateTime?         @map("assigned_at")
+  notes           String?
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+
+  tenant     Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  company    SalesCompany?       @relation(fields: [companyId], references: [id])
+  owner      Employee?           @relation("CustomerOwner", fields: [ownerId], references: [id])
+  deals      Deal[]
+  activities SalesActivity[]
+  tasks      SalesTask[]
+  emails     SalesEmailMessage[]
+
+  @@index([tenantId, lifecycleStatus])
+  @@index([tenantId, ownerId])
+  @@index([companyId])
+  @@map("customers")
+}
+
+// Pipeline cấp tenant (hỗ trợ nhiều — Giai đoạn 1 seed 1 cái mặc định).
+model SalesPipeline {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  name      String
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  stages SalesStage[]
+  deals  Deal[]
+
+  @@unique([tenantId, name])
+  @@map("sales_pipelines")
+}
+
+model SalesStage {
+  id          String         @id @default(cuid())
+  pipelineId  String         @map("pipeline_id")
+  name        String
+  order       Int
+  type        SalesStageType
+  probability Int            @default(0) // % cho forecast
+
+  pipeline    SalesPipeline      @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+  deals       Deal[]
+  fromHistory DealStageHistory[] @relation("DealFromStage")
+  toHistory   DealStageHistory[] @relation("DealToStage")
+
+  @@unique([pipelineId, order])
+  @@map("sales_stages")
+}
+
+// Cơ hội bán hàng. stage = trục "thương vụ đang tới đâu". amount đồng bộ từ Quote chính.
+model Deal {
+  id                String     @id @default(cuid())
+  tenantId          String     @map("tenant_id")
+  customerId        String     @map("customer_id")
+  pipelineId        String     @map("pipeline_id")
+  currentStageId    String     @map("current_stage_id")
+  ownerId           String     @map("owner_id")
+  title             String
+  amount            Decimal    @default(0) @db.Decimal(18, 2) // = tổng báo giá chính
+  currency          String     @default("VND")
+  status            DealStatus @default(OPEN)
+  expectedCloseDate DateTime?  @map("expected_close_date")
+  wonAt             DateTime?  @map("won_at")
+  lostAt            DateTime?  @map("lost_at")
+  lostReason        String?    @map("lost_reason")
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
+
+  tenant            Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer          Customer            @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  pipeline          SalesPipeline       @relation(fields: [pipelineId], references: [id])
+  currentStage      SalesStage          @relation(fields: [currentStageId], references: [id])
+  owner             Employee            @relation("DealOwner", fields: [ownerId], references: [id])
+  stageHistory      DealStageHistory[]
+  quotes            Quote[]
+  activities        SalesActivity[]
+  tasks             SalesTask[]
+  SalesEmailMessage SalesEmailMessage[]
+
+  @@index([tenantId, pipelineId, currentStageId])
+  @@index([tenantId, ownerId])
+  @@index([customerId])
+  @@map("deals")
+}
+
+// Lịch sử chuyển stage — build NGAY cho analytics velocity/conversion.
+model DealStageHistory {
+  id          String   @id @default(cuid())
+  dealId      String   @map("deal_id")
+  fromStageId String?  @map("from_stage_id")
+  toStageId   String   @map("to_stage_id")
+  changedById String?  @map("changed_by_id") // null = hệ thống / admin không gắn hồ sơ NV
+  note        String?
+  changedAt   DateTime @default(now()) @map("changed_at")
+
+  deal      Deal        @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  fromStage SalesStage? @relation("DealFromStage", fields: [fromStageId], references: [id])
+  toStage   SalesStage  @relation("DealToStage", fields: [toStageId], references: [id])
+  changedBy Employee?   @relation("DealStageChanger", fields: [changedById], references: [id])
+
+  @@index([dealId])
+  @@map("deal_stage_history")
+}
+
+model Product {
+  id          String        @id @default(cuid())
+  tenantId    String        @map("tenant_id")
+  name        String
+  sku         String?
+  description String?
+  unitPrice   Decimal       @default(0) @map("unit_price") @db.Decimal(18, 2)
+  currency    String        @default("VND")
+  unit        String?
+  status      ProductStatus @default(ACTIVE)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  quoteItems QuoteItem[]
+
+  @@unique([tenantId, sku])
+  @@map("products")
+}
+
+model Quote {
+  id              String      @id @default(cuid())
+  tenantId        String      @map("tenant_id")
+  dealId          String      @map("deal_id")
+  issuingEntityId String?     @map("issuing_entity_id")
+  code            String
+  status          QuoteStatus @default(DRAFT)
+  isPrimary       Boolean     @default(true) @map("is_primary") // báo giá chính -> Deal.amount
+  validUntil      DateTime?   @map("valid_until")
+  total           Decimal     @default(0) @db.Decimal(18, 2) // = Σ items (đồng bộ ở service)
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  deal          Deal           @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  issuingEntity IssuingEntity? @relation(fields: [issuingEntityId], references: [id])
+  items         QuoteItem[]
+
+  @@index([dealId])
+  @@map("quotes")
+}
+
+model QuoteItem {
+  id          String  @id @default(cuid())
+  quoteId     String  @map("quote_id")
+  productId   String? @map("product_id") // null = dòng tự do
+  description String?
+  quantity    Decimal @default(1) @db.Decimal(18, 2)
+  unitPrice   Decimal @default(0) @map("unit_price") @db.Decimal(18, 2)
+  discountPct Decimal @default(0) @map("discount_pct") @db.Decimal(5, 2)
+  lineTotal   Decimal @default(0) @map("line_total") @db.Decimal(18, 2) // tính ra ở service
+
+  quote   Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id])
+
+  @@index([quoteId])
+  @@map("quote_items")
+}
+
+// Timeline: note thủ công + sự kiện hệ thống (stage/owner/status/lifecycle/email).
+model SalesActivity {
+  id         String            @id @default(cuid())
+  tenantId   String            @map("tenant_id")
+  customerId String            @map("customer_id")
+  dealId     String?           @map("deal_id")
+  authorId   String?           @map("author_id") // null = hệ thống
+  type       SalesActivityType
+  body       String?
+  occurredAt DateTime          @default(now()) @map("occurred_at")
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  deal     Deal?     @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  author   Employee? @relation("SalesActivityAuthor", fields: [authorId], references: [id])
+
+  @@index([customerId])
+  @@index([dealId])
+  @@map("sales_activities")
+}
+
+// Việc follow-up có hạn — nhắc tự động qua BullMQ (domain/reminders).
+model SalesTask {
+  id          String          @id @default(cuid())
+  tenantId    String          @map("tenant_id")
+  customerId  String          @map("customer_id")
+  dealId      String?         @map("deal_id")
+  assigneeId  String          @map("assignee_id")
+  type        SalesTaskType   @default(TODO)
+  title       String
+  dueAt       DateTime        @map("due_at")
+  status      SalesTaskStatus @default(OPEN)
+  completedAt DateTime?       @map("completed_at")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  deal     Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  assignee Employee @relation("SalesTaskAssignee", fields: [assigneeId], references: [id])
+
+  @@index([tenantId, assigneeId, status])
+  @@index([dueAt])
+  @@map("sales_tasks")
+}
+
+model SalesEmailTemplate {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  name      String
+  subject   String
+  body      String
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant   Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  messages SalesEmailMessage[]
+
+  @@unique([tenantId, name])
+  @@map("sales_email_templates")
+}
+
+model SalesEmailMessage {
+  id         String           @id @default(cuid())
+  tenantId   String           @map("tenant_id")
+  customerId String           @map("customer_id")
+  dealId     String?          @map("deal_id")
+  templateId String?          @map("template_id")
+  to         String
+  subject    String
+  body       String
+  status     SalesEmailStatus @default(QUEUED)
+  sentById   String?          @map("sent_by_id") // null = hệ thống / admin không gắn hồ sơ NV
+  sentAt     DateTime?        @map("sent_at")
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  tenant   Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer Customer            @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  deal     Deal?               @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  template SalesEmailTemplate? @relation(fields: [templateId], references: [id])
+  sentBy   Employee?           @relation("SalesEmailSender", fields: [sentById], references: [id])
+
+  @@index([customerId])
+  @@map("sales_email_messages")
 }

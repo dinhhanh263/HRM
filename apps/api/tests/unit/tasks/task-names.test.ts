@@ -2,9 +2,12 @@ import { describe, it, expect } from 'vitest';
 import { TASK_CONFIG, TASK_NAMES } from '../../../src/infrastructure/tasks/task-names.js';
 
 describe('task-names', () => {
-  it('exposes the five job names', () => {
+  it('exposes the registered job names', () => {
     expect([...TASK_NAMES].sort()).toEqual(
-      ['cv-parse', 'employee-import', 'employee-invite', 'reminder-email', 'reminder-scan'].sort(),
+      [
+        'cv-parse', 'employee-import', 'employee-invite', 'reminder-email', 'reminder-scan',
+        'sales-task-reminder', 'sales-email',
+      ].sort(),
     );
   });
 

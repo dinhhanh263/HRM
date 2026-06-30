@@ -47,6 +47,19 @@ export const PERMISSION_CATALOG = {
     'scorecard_submit',
     'bulk_import',
   ],
+  // Sales / CRM (SPEC-045). Single-colon keys per catalog convention: resource
+  // `sales`, action `entity_verb` (sub-entity encoded in the action). Visibility
+  // is owner-scoped server-side; `view_all` widens to the whole team. `assign` =
+  // gán/chuyển owner cho người khác; `settings` = cấu hình pipeline/template/sản phẩm.
+  sales: [
+    'customer_view', 'customer_create', 'customer_update', 'customer_assign',
+    'deal_view', 'deal_create', 'deal_update', 'deal_move',
+    'product_view', 'product_manage',
+    'quote_view', 'quote_manage',
+    'task_view', 'task_manage',
+    'email_send', 'template_manage',
+    'report_view', 'view_all', 'settings',
+  ],
 } as const;
 
 export type PermissionResource = keyof typeof PERMISSION_CATALOG;

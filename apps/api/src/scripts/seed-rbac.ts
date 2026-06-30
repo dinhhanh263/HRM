@@ -19,6 +19,10 @@ import {
   seedAgileFrameworkForTenant,
   seedDefaultKpiReviewFlowForTenant,
 } from '../domain/kpi/defaults.js';
+import {
+  seedDefaultSalesRolesForTenant,
+  seedDefaultSalesPipelineForTenant,
+} from '../domain/sales/defaults.js';
 
 async function main(): Promise<void> {
   const prisma = new PrismaClient();
@@ -31,7 +35,9 @@ async function main(): Promise<void> {
       await seedDefaultPurchaseFlowForTenant(prisma, tenant.id);
       await seedDefaultKpiReviewFlowForTenant(prisma, tenant.id);
       await seedAgileFrameworkForTenant(prisma, tenant.id);
-      console.log(`synced roles + payment + purchase + kpi for tenant ${tenant.slug}`);
+      await seedDefaultSalesRolesForTenant(prisma, tenant.id);
+      await seedDefaultSalesPipelineForTenant(prisma, tenant.id);
+      console.log(`synced roles + payment + purchase + kpi + sales for tenant ${tenant.slug}`);
     }
   } finally {
     await prisma.$disconnect();

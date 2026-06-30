@@ -6,6 +6,8 @@ export const TASK_NAMES = [
   'employee-invite',
   'reminder-email',
   'reminder-scan',
+  'sales-task-reminder',
+  'sales-email',
 ] as const;
 
 export type TaskName = (typeof TASK_NAMES)[number];

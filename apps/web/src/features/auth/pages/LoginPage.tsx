@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useLogin } from '../hooks/useAuth';
 import { useThemeStore } from '@/stores/theme.store';
+import { CORE_MODULE_COUNT } from '@/config/nav';
 import logoUrl from '@/assets/logo.svg';
 import {
   Mail,
@@ -90,12 +91,8 @@ export function LoginPage() {
           {/* Stats */}
           <div className="flex gap-8 mt-10">
             <div>
-              <div className="text-[22px] font-bold text-white">4</div>
+              <div className="text-[22px] font-bold text-white">{CORE_MODULE_COUNT}</div>
               <div className="text-[13px] text-white/65 mt-0.5">{t('brand.modules')}</div>
-            </div>
-            <div>
-              <div className="text-[22px] font-bold text-white">99.9%</div>
-              <div className="text-[13px] text-white/65 mt-0.5">{t('brand.uptime')}</div>
             </div>
             <div>
               <div className="text-[22px] font-bold text-white">VI/EN</div>

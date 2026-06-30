@@ -5,14 +5,16 @@ import { db } from '../../src/infrastructure/database/client.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import { seedPermissionCatalog, syncSystemRolesForTenant } from '../../src/domain/rbac/catalog.js';
 
-// SPEC-043: IssuingEntity CRUD — tenant-scoped, settings-permission-driven:
-//   GET    /issuing-entities         → settings:view   (HR_MANAGER, SUPER_ADMIN)
+// SPEC-043: IssuingEntity CRUD — tenant-scoped, permission-driven:
+//   GET    /issuing-entities         → settings:view OR purchase_request:view/create
+//                                       (PR creators pick an entity in the PR form)
 //   POST   /issuing-entities         → settings:update
 //   PATCH  /issuing-entities/:id     → settings:update  (set default / hide)
 //   DELETE /issuing-entities/:id     → settings:update  (soft-hide active=false)
-//   *      /logo                     → upload/serve/clear (PNG/JPEG only)
-// Invariants under test: only ONE isDefault per tenant; EMPLOYEE is denied;
-// cross-tenant ids are invisible (404).
+//   GET    /:id/logo                 → settings:view OR purchase_request:view/create
+//   POST/DELETE /:id/logo            → settings:update (PNG/JPEG only)
+// Invariants under test: only ONE isDefault per tenant; EMPLOYEE can read (to fill
+// the PR form) but cannot write; cross-tenant ids are invisible (404).
 const SLUG = 'issuing-it-tenant';
 const OTHER_SLUG = 'issuing-it-other';
 const HR = { email: 'hr@issuing.com', password: 'HrTest@123' };
@@ -72,9 +74,19 @@ describe('IssuingEntity routes (RBAC + single-default + tenant scope + logo)', (
     otherHrToken = await login(OTHER_HR.email, OTHER_HR.password, OTHER_SLUG);
   });
 
-  it('denies EMPLOYEE from listing or creating (settings perms)', async () => {
+  it('lets a PR-creator EMPLOYEE list (to fill the PR form) but not create', async () => {
+    // The default EMPLOYEE role has purchase_request:view/create but no settings:*.
+    // Before the fix the PR form's GET 403'd for them and the issuing-entity field
+    // silently disappeared; now the read is allowed while writes stay settings-only.
     const list = await request(app).get('/api/v1/issuing-entities').set('Authorization', `Bearer ${empToken}`);
-    expect(list.status).toBe(403);
+    expect(list.status).toBe(200);
+    expect(Array.isArray(list.body.data)).toBe(true);
+
+    const activeOnly = await request(app)
+      .get('/api/v1/issuing-entities?activeOnly=1')
+      .set('Authorization', `Bearer ${empToken}`);
+    expect(activeOnly.status).toBe(200);
+
     const create = await request(app)
       .post('/api/v1/issuing-entities')
       .set('Authorization', `Bearer ${empToken}`)

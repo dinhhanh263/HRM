@@ -75,6 +75,11 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'sales:task_view', 'sales:task_manage',
       'sales:email_send', 'sales:template_manage',
       'sales:report_view', 'sales:view_all', 'sales:settings',
+      // SPEC-048: HR/Finance kiểm soát ngân sách & dòng tiền — toàn quyền module.
+      'finance:view', 'finance:export',
+      'fund_account:view', 'fund_account:create', 'fund_account:update', 'fund_account:delete',
+      'cash_transaction:view', 'cash_transaction:create', 'cash_transaction:update',
+      'cash_transaction:delete', 'cash_transaction:import',
     ],
   },
   {

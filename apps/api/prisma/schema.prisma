@@ -394,6 +394,11 @@ model Tenant {
   salesEmailTemplates SalesEmailTemplate[]
   salesEmailMessages  SalesEmailMessage[]
 
+  // SPEC-048: Ngân sách & Dòng tiền
+  fundAccounts      FundAccount[]
+  financeCategories FinanceCategory[]
+  cashTransactions  CashTransaction[]
+
   @@map("tenants")
 }
 
@@ -500,14 +505,15 @@ model Department {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  tenant         Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  positions      Position[]
-  employees      Employee[]               @relation("DepartmentMembers")
-  manager        Employee?                @relation("DepartmentHead", fields: [managerId], references: [id])
-  approvalFlows  ApprovalFlow[]
-  jobs           Job[]
-  teams          Team[] // SPEC-044
-  kpiAssignments KpiFrameworkAssignment[] // SPEC-044
+  tenant           Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  positions        Position[]
+  employees        Employee[]               @relation("DepartmentMembers")
+  manager          Employee?                @relation("DepartmentHead", fields: [managerId], references: [id])
+  approvalFlows    ApprovalFlow[]
+  jobs             Job[]
+  teams            Team[] // SPEC-044
+  kpiAssignments   KpiFrameworkAssignment[] // SPEC-044
+  cashTransactions CashTransaction[] // SPEC-048
 
   @@unique([tenantId, name])
   @@index([managerId])
@@ -1110,6 +1116,8 @@ model IssuingEntity {
   tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   purchaseRequests PurchaseRequest[]
   quotes           Quote[] // SPEC-045: báo giá xuất theo pháp nhân
+  fundAccounts     FundAccount[] // SPEC-048
+  cashTransactions CashTransaction[] // SPEC-048
 
   @@index([tenantId])
   @@map("issuing_entities")
@@ -2832,4 +2840,115 @@ model SalesEmailMessage {
 
   @@index([customerId])
   @@map("sales_email_messages")
+}
+
+// ============================================================================
+// SPEC-048: Ngân sách & Dòng tiền (Budget & Cash Flow) — GĐ1 (MVP)
+// ============================================================================
+
+enum TransactionDirection {
+  IN
+  OUT
+}
+
+// ACTUAL = đã phát sinh (ảnh hưởng số dư & báo cáo).
+// PLANNED = dự kiến (chỉ feed dự báo GĐ2, KHÔNG đụng số dư).
+enum TransactionStatus {
+  ACTUAL
+  PLANNED
+}
+
+enum CategoryKind {
+  INCOME
+  EXPENSE
+}
+
+enum FundAccountType {
+  BANK
+  CASH
+  EWALLET
+}
+
+enum TransactionSource {
+  MANUAL
+  IMPORT
+  PAYMENT_REQUEST
+  PURCHASE_REQUEST
+  PAYROLL
+}
+
+// Tài khoản quỹ: nơi chứa tiền (TK ngân hàng / tiền mặt / ví). Số dư hiện tại KHÔNG
+// nhập tay — luôn = openingBalance + Σ(IN actual) − Σ(OUT actual), recompute nguyên tử.
+model FundAccount {
+  id              String          @id @default(cuid())
+  tenantId        String          @map("tenant_id")
+  issuingEntityId String          @map("issuing_entity_id") // pháp nhân sở hữu quỹ (SPEC-043)
+  name            String
+  type            FundAccountType @default(BANK)
+  currency        String          @default("VND")
+  openingBalance  Decimal         @default(0) @map("opening_balance") @db.Decimal(14, 2)
+  currentBalance  Decimal         @default(0) @map("current_balance") @db.Decimal(14, 2) // denormalized
+  active          Boolean         @default(true)
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  tenant        Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  issuingEntity IssuingEntity     @relation(fields: [issuingEntityId], references: [id])
+  transactions  CashTransaction[]
+
+  @@index([tenantId, issuingEntityId])
+  @@map("fund_accounts")
+}
+
+// Danh mục thu/chi phân cấp (tối đa 2 cấp qua parentId). kind tách INCOME vs EXPENSE.
+model FinanceCategory {
+  id        String       @id @default(cuid())
+  tenantId  String       @map("tenant_id")
+  kind      CategoryKind
+  name      String
+  parentId  String?      @map("parent_id")
+  active    Boolean      @default(true)
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  tenant       Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent       FinanceCategory?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children     FinanceCategory[] @relation("CategoryTree")
+  transactions CashTransaction[]
+
+  @@index([tenantId, kind])
+  @@map("finance_categories")
+}
+
+// Sổ giao dịch: 1 dòng thu (IN) hoặc chi (OUT). ACTUAL đụng số dư; PLANNED chỉ dự báo.
+model CashTransaction {
+  id              String               @id @default(cuid())
+  tenantId        String               @map("tenant_id")
+  accountId       String               @map("account_id")
+  issuingEntityId String               @map("issuing_entity_id")
+  direction       TransactionDirection
+  status          TransactionStatus    @default(ACTUAL)
+  amount          Decimal              @db.Decimal(14, 2)
+  currency        String               @default("VND")
+  occurredAt      DateTime             @map("occurred_at") // ngày phát sinh / dự kiến
+  categoryId      String?              @map("category_id")
+  departmentId    String?              @map("department_id")
+  description     String?
+  reference       String? // số chứng từ / mã chuyển khoản
+  source          TransactionSource    @default(MANUAL)
+  sourceRefId     String?              @map("source_ref_id") // nối PR/Payment/Payroll (GĐ4)
+  createdById     String               @map("created_by_id")
+  createdAt       DateTime             @default(now()) @map("created_at")
+  updatedAt       DateTime             @updatedAt @map("updated_at")
+
+  tenant        Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  account       FundAccount      @relation(fields: [accountId], references: [id])
+  issuingEntity IssuingEntity    @relation(fields: [issuingEntityId], references: [id])
+  category      FinanceCategory? @relation(fields: [categoryId], references: [id])
+  department    Department?      @relation(fields: [departmentId], references: [id])
+
+  @@index([tenantId, issuingEntityId, occurredAt])
+  @@index([accountId, status])
+  @@index([categoryId])
+  @@map("cash_transactions")
 }

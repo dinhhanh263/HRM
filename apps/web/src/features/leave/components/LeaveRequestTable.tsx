@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Check, X, Ban, CalendarOff, RotateCcw } from 'lucide-react';
+import { Check, X, Ban, CalendarOff, RotateCcw, Eye } from 'lucide-react';
 import { LeaveStatusBadge } from './LeaveStatusBadge';
 import { formatDays, formatLeaveDate } from '../utils';
 
@@ -27,9 +27,10 @@ interface LeaveRequestTableProps {
   requests: LeaveRequestDto[];
   /**
    * 'review' shows the employee column + approve/reject actions; 'mine' shows
-   * cancel/resubmit; 'all' is a read-only tenant-wide view (HR/Admin).
+   * cancel/resubmit; 'all' is a read-only tenant-wide view (HR/Admin);
+   * 'watching' is a read-only CC view — the actor follows but cannot act (SPEC-046).
    */
-  mode: 'mine' | 'review' | 'all';
+  mode: 'mine' | 'review' | 'all' | 'watching';
   onCancel?: (id: string) => void;
   onApprove?: (id: string) => void;
   onReject?: (request: LeaveRequestDto) => void;
@@ -49,7 +50,7 @@ export function LeaveRequestTable({
   pendingId,
 }: LeaveRequestTableProps) {
   const { t } = useTranslation('leave');
-  const showEmployee = mode === 'review' || mode === 'all';
+  const showEmployee = mode === 'review' || mode === 'all' || mode === 'watching';
 
   if (requests.length === 0) {
     return (
@@ -58,7 +59,11 @@ export function LeaveRequestTable({
           <CalendarOff className="size-5 text-text-muted" />
         </div>
         <p className="text-text-primary font-medium">
-          {mode === 'mine' ? t('requests.empty') : t('requests.emptyReview')}
+          {mode === 'mine'
+            ? t('requests.empty')
+            : mode === 'watching'
+              ? t('requests.emptyWatching')
+              : t('requests.emptyReview')}
         </p>
         {mode === 'mine' && (
           <p className="text-text-muted text-sm mt-1">{t('requests.emptyHint')}</p>
@@ -151,7 +156,15 @@ export function LeaveRequestTable({
                 </span>
               </TableCell>
               <TableCell>
-                <LeaveStatusBadge status={req.status} />
+                <div className="flex items-center gap-1.5">
+                  <LeaveStatusBadge status={req.status} />
+                  {mode === 'watching' && (
+                    <span className="inline-flex items-center gap-1 text-[10px] rounded-md bg-info-light px-1.5 py-0.5 text-info dark:bg-info/15">
+                      <Eye className="size-3" />
+                      {t('requests.ccOnly')}
+                    </span>
+                  )}
+                </div>
               </TableCell>
               <TableCell>
                 <div

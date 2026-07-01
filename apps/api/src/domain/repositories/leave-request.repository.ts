@@ -25,12 +25,14 @@ const requestInclude = {
 } satisfies Prisma.LeaveRequestInclude;
 
 // Detail include adds the full approval timeline (all rounds) for a single request.
+// SPEC-046: also pull the flow's CC/watchers so the caller can decide watcher visibility.
 const requestDetailInclude = {
   ...requestInclude,
   approvals: {
     orderBy: [{ round: 'asc' }, { stepOrder: 'asc' }],
     include: { decidedBy: { select: { id: true, fullName: true } } },
   },
+  flow: { select: { watchers: { select: { watcherType: true, roleKey: true, watcherId: true } } } },
 } satisfies Prisma.LeaveRequestInclude;
 
 export const leaveRequestRepository = {
@@ -155,6 +157,114 @@ export const leaveRequestRepository = {
       include: requestDetailInclude,
       orderBy: { createdAt: 'desc' },
     });
+  },
+
+  /**
+   * SPEC-046: requests the actor watches (CC) — any status — because their flow
+   * lists the actor as a ROLE or SPECIFIC_USER watcher. View-only; the actor is
+   * never an approver here (that is enforced separately at the approve endpoint).
+   */
+  async findWatchedCandidates(
+    tenantId: string,
+    actor: { employeeId: string | null; roleKey: string | null },
+    filters: LeaveRequestFilters = {},
+    pagination: PaginationOptions = { page: 1, limit: 20 },
+  ) {
+    const watcherOr: Prisma.ApprovalWatcherWhereInput[] = [];
+    if (actor.roleKey) watcherOr.push({ watcherType: 'ROLE', roleKey: actor.roleKey });
+    if (actor.employeeId)
+      watcherOr.push({ watcherType: 'SPECIFIC_USER', watcherId: actor.employeeId });
+
+    // No matchable identity → empty page (avoids a where that matches everything).
+    if (watcherOr.length === 0) {
+      return {
+        data: [],
+        pagination: { page: pagination.page, limit: pagination.limit, total: 0, totalPages: 0 },
+      };
+    }
+
+    const where: Prisma.LeaveRequestWhereInput = {
+      tenantId,
+      flow: { is: { watchers: { some: { OR: watcherOr } } } },
+    };
+    if (filters.status) where.status = filters.status;
+    if (filters.leaveTypeId) where.leaveTypeId = filters.leaveTypeId;
+    if (filters.year) {
+      where.startDate = {
+        gte: new Date(Date.UTC(filters.year, 0, 1)),
+        lte: new Date(Date.UTC(filters.year, 11, 31, 23, 59, 59, 999)),
+      };
+    }
+    if (filters.search) {
+      where.employee = {
+        OR: [
+          { fullName: { contains: filters.search, mode: 'insensitive' } },
+          { employeeCode: { contains: filters.search, mode: 'insensitive' } },
+        ],
+      };
+    }
+
+    const skip = (pagination.page - 1) * pagination.limit;
+    const [requests, total] = await Promise.all([
+      db.leaveRequest.findMany({
+        where,
+        include: requestInclude,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: pagination.limit,
+      }),
+      db.leaveRequest.count({ where }),
+    ]);
+
+    return {
+      data: requests,
+      pagination: {
+        page: pagination.page,
+        limit: pagination.limit,
+        total,
+        totalPages: Math.ceil(total / pagination.limit),
+      },
+    };
+  },
+
+  /**
+   * SPEC-046: resolve the set of recipient User ids for a flow's CC/watchers.
+   * ROLE watchers expand to every user holding that role; SPECIFIC_USER watchers
+   * expand to the linked employee's user (if any). Returns a de-duplicated list.
+   */
+  async findWatcherRecipientUserIds(tenantId: string, flowId: string): Promise<string[]> {
+    const watchers = await db.approvalWatcher.findMany({
+      where: { flowId },
+      select: { watcherType: true, roleKey: true, watcherId: true },
+    });
+    if (watchers.length === 0) return [];
+
+    const roleKeys = watchers
+      .filter((w) => w.watcherType === 'ROLE' && w.roleKey)
+      .map((w) => w.roleKey as string);
+    const employeeIds = watchers
+      .filter((w) => w.watcherType === 'SPECIFIC_USER' && w.watcherId)
+      .map((w) => w.watcherId as string);
+
+    const userIds = new Set<string>();
+
+    if (roleKeys.length) {
+      const roleUsers = await db.user.findMany({
+        where: { tenantId, roleRef: { key: { in: roleKeys } } },
+        select: { id: true },
+      });
+      roleUsers.forEach((u) => userIds.add(u.id));
+    }
+
+    if (employeeIds.length) {
+      const employees = await db.employee.findMany({
+        where: { tenantId, id: { in: employeeIds } },
+        select: { userId: true },
+      });
+      employees.forEach((e) => userIds.add(e.userId));
+    }
+
+    return [...userIds];
   },
 
   /**

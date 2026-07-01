@@ -5,6 +5,8 @@ const requestRepoMock = {
   findById: vi.fn(),
   findByIdWithApprovals: vi.fn(),
   findReviewCandidates: vi.fn(),
+  findWatchedCandidates: vi.fn(),
+  findWatcherRecipientUserIds: vi.fn().mockResolvedValue([]),
   findOverlapping: vi.fn(),
   create: vi.fn(),
   createWithApprovals: vi.fn(),
@@ -24,6 +26,7 @@ const flowRepoMock = {
 };
 const employeeRepoMock = {
   findRoutingContext: vi.fn(),
+  findUserIdsByIds: vi.fn().mockResolvedValue([]),
 };
 
 vi.mock('../../src/domain/repositories/leave-request.repository.js', () => ({

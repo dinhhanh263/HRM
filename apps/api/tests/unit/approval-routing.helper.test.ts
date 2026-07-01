@@ -5,11 +5,13 @@ import {
   buildApprovalSnapshot,
   findNextActiveStep,
   matchesApprover,
+  isWatcher,
   type FlowCandidate,
   type RoutingContext,
   type StepConfig,
   type ApprovalActor,
   type ApprovalTarget,
+  type WatcherTarget,
 } from '../../src/domain/leave/approval-routing.helper.js';
 
 function step(overrides: Partial<StepConfig> = {}): StepConfig {
@@ -267,5 +269,33 @@ describe('matchesApprover', () => {
   it('matches a ROLE step by capability (role key), ignoring employee id', () => {
     expect(matchesApprover(target({ approverType: 'ROLE', roleKey: 'hr_manager' }), actor({ employeeId: null, roleKey: 'hr_manager' }))).toBe(true);
     expect(matchesApprover(target({ approverType: 'ROLE', roleKey: 'hr_manager' }), actor({ roleKey: 'manager' }))).toBe(false);
+  });
+});
+
+describe('isWatcher (SPEC-046)', () => {
+  const roleWatcher: WatcherTarget = { watcherType: 'ROLE', roleKey: 'hr_manager', watcherId: null };
+  const userWatcher: WatcherTarget = { watcherType: 'SPECIFIC_USER', roleKey: null, watcherId: 'emp-9' };
+
+  it('matches a ROLE watcher by role key', () => {
+    expect(isWatcher([roleWatcher], { employeeId: 'anyone', roleKey: 'hr_manager' })).toBe(true);
+    expect(isWatcher([roleWatcher], { employeeId: 'anyone', roleKey: 'manager' })).toBe(false);
+  });
+
+  it('matches a SPECIFIC_USER watcher by employee id', () => {
+    expect(isWatcher([userWatcher], { employeeId: 'emp-9', roleKey: null })).toBe(true);
+    expect(isWatcher([userWatcher], { employeeId: 'emp-1', roleKey: null })).toBe(false);
+  });
+
+  it('returns false for an empty watcher list', () => {
+    expect(isWatcher([], { employeeId: 'emp-9', roleKey: 'hr_manager' })).toBe(false);
+  });
+
+  it('never matches a ROLE watcher with a null role key against a null actor role', () => {
+    const nullRole: WatcherTarget = { watcherType: 'ROLE', roleKey: null, watcherId: null };
+    expect(isWatcher([nullRole], { employeeId: null, roleKey: null })).toBe(false);
+  });
+
+  it('matches when any one of several watchers matches', () => {
+    expect(isWatcher([roleWatcher, userWatcher], { employeeId: 'emp-9', roleKey: 'x' })).toBe(true);
   });
 });

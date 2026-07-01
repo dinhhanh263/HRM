@@ -5,6 +5,7 @@ import type {
   ApprovalStepInput,
   ApproverType,
   CreateApprovalFlowRequest,
+  WatcherInput,
 } from '@hrm/shared';
 import {
   Table,
@@ -46,7 +47,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from '@/components/ui/toast';
 import { getApiErrorCode, getApiErrorMessage } from '@/lib/api-error';
 import { Can } from '@/components/auth/Can';
-import { Plus, Pencil, Trash2, ArrowUp, ArrowDown, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, ArrowUp, ArrowDown, X, Eye } from 'lucide-react';
 import {
   useApprovalFlows,
   useCreateApprovalFlow,
@@ -58,17 +59,21 @@ import { useRoles } from '@/features/roles/hooks/useRoles';
 import { useEmployees } from '@/features/employees/hooks/useEmployees';
 
 const APPROVER_TYPES: ApproverType[] = ['MANAGER', 'DEPARTMENT_HEAD', 'ROLE', 'SPECIFIC_USER'];
+// SPEC-046: CC/watchers only support ROLE (e.g. HR Manager/Staff) or a specific person.
+const WATCHER_TYPES: WatcherInput['watcherType'][] = ['ROLE', 'SPECIFIC_USER'];
 
 interface FlowFormState {
   name: string;
   departmentId: string | null;
   steps: ApprovalStepInput[];
+  watchers: WatcherInput[];
 }
 
 const EMPTY_FORM: FlowFormState = {
   name: '',
   departmentId: null,
   steps: [{ approverType: 'MANAGER' }],
+  watchers: [],
 };
 
 export function ApprovalFlowSettings() {
@@ -115,6 +120,11 @@ export function ApprovalFlowSettings() {
         roleKey: s.roleKey,
         approverId: s.approverId,
       })),
+      watchers: flow.watchers.map((w) => ({
+        watcherType: w.watcherType,
+        roleKey: w.roleKey,
+        watcherId: w.watcherId,
+      })),
     });
     setFormOpen(true);
   }
@@ -142,12 +152,32 @@ export function ApprovalFlowSettings() {
     }));
   }
 
+  // ---- watchers (CC) editor ----
+  function addWatcher() {
+    setForm((f) => ({ ...f, watchers: [...f.watchers, { watcherType: 'ROLE' }] }));
+  }
+  function removeWatcher(idx: number) {
+    setForm((f) => ({ ...f, watchers: f.watchers.filter((_, i) => i !== idx) }));
+  }
+  function updateWatcher(idx: number, patch: Partial<WatcherInput>) {
+    setForm((f) => ({
+      ...f,
+      watchers: f.watchers.map((w, i) => (i === idx ? { ...w, ...patch } : w)),
+    }));
+  }
+
   function isFormValid(): boolean {
     if (!form.name.trim() || form.steps.length === 0) return false;
-    return form.steps.every((s) => {
+    const stepsOk = form.steps.every((s) => {
       if (s.approverType === 'ROLE') return !!s.roleKey;
       if (s.approverType === 'SPECIFIC_USER') return !!s.approverId;
       return true;
+    });
+    if (!stepsOk) return false;
+    // Watchers are optional, but each present row must be complete.
+    return form.watchers.every((w) => {
+      if (w.watcherType === 'ROLE') return !!w.roleKey;
+      return !!w.watcherId;
     });
   }
 
@@ -159,9 +189,16 @@ export function ApprovalFlowSettings() {
       approverId: s.approverType === 'SPECIFIC_USER' ? s.approverId : null,
     }));
 
+    // Normalize CC/watchers: keep only the field relevant to each type.
+    const watchers: WatcherInput[] = form.watchers.map((w) => ({
+      watcherType: w.watcherType,
+      roleKey: w.watcherType === 'ROLE' ? w.roleKey : null,
+      watcherId: w.watcherType === 'SPECIFIC_USER' ? w.watcherId : null,
+    }));
+
     if (editing) {
       updateMutation.mutate(
-        { name: form.name, steps },
+        { name: form.name, steps, watchers },
         {
           onSuccess: () => {
             toast.success(t('toast.flowSaved'));
@@ -175,6 +212,7 @@ export function ApprovalFlowSettings() {
         name: form.name,
         departmentId: form.departmentId,
         steps,
+        watchers,
       };
       createMutation.mutate(payload, {
         onSuccess: () => {
@@ -273,6 +311,15 @@ export function ApprovalFlowSettings() {
                           : t(`approverType.${s.approverType}`)}
                       </span>
                     ))}
+                    {flow.watchers.length > 0 && (
+                      <span
+                        className="inline-flex items-center gap-1 text-[11px] rounded-md bg-info-light px-1.5 py-0.5 text-info dark:bg-info/15"
+                        title={t('flows.form.watchers.label')}
+                      >
+                        <Eye className="size-3" />
+                        {t('flows.watchersCount', { count: flow.watchers.length })}
+                      </span>
+                    )}
                   </div>
                 </TableCell>
                 <TableCell className="text-center">
@@ -482,6 +529,107 @@ export function ApprovalFlowSettings() {
               >
                 <Plus className="size-3.5" />
                 {t('flows.form.addStep')}
+              </Button>
+            </div>
+
+            {/* CC / watchers (view-only, SPEC-046) */}
+            <div className="space-y-2">
+              <div>
+                <Label className="flex items-center gap-1.5 text-sm font-medium">
+                  <Eye className="size-3.5 text-text-muted" />
+                  {t('flows.form.watchers.label')}
+                </Label>
+                <p className="text-[11px] text-text-muted mt-0.5">
+                  {t('flows.form.watchers.hint')}
+                </p>
+              </div>
+              <div className="space-y-2">
+                {form.watchers.map((watcher, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-2 rounded-lg border border-border bg-background p-2.5"
+                  >
+                    <div className="flex-1 space-y-2 min-w-0">
+                      <Select
+                        value={watcher.watcherType}
+                        onValueChange={(v) =>
+                          updateWatcher(idx, {
+                            watcherType: v as WatcherInput['watcherType'],
+                            roleKey: null,
+                            watcherId: null,
+                          })
+                        }
+                      >
+                        <SelectTrigger className="h-8 text-xs">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {WATCHER_TYPES.map((tp) => (
+                            <SelectItem key={tp} value={tp}>
+                              {t(`approverType.${tp}`)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      {watcher.watcherType === 'ROLE' && (
+                        <Select
+                          value={watcher.roleKey ?? ''}
+                          onValueChange={(v) => updateWatcher(idx, { roleKey: v })}
+                        >
+                          <SelectTrigger className="h-8 text-xs">
+                            <SelectValue placeholder={t('flows.form.rolePlaceholder')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {roles?.map((r) => (
+                              <SelectItem key={r.id} value={r.key}>
+                                {r.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+
+                      {watcher.watcherType === 'SPECIFIC_USER' && (
+                        <Select
+                          value={watcher.watcherId ?? ''}
+                          onValueChange={(v) => updateWatcher(idx, { watcherId: v })}
+                        >
+                          <SelectTrigger className="h-8 text-xs">
+                            <SelectValue placeholder={t('flows.form.userPlaceholder')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {employees.map((e) => (
+                              <SelectItem key={e.id} value={e.id}>
+                                {e.fullName} · {e.employeeCode}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 text-text-muted hover:text-danger shrink-0"
+                      aria-label={t('flows.form.watchers.remove')}
+                      onClick={() => removeWatcher(idx)}
+                    >
+                      <X className="size-3.5" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs gap-1.5 w-full"
+                onClick={addWatcher}
+              >
+                <Plus className="size-3.5" />
+                {t('flows.form.watchers.add')}
               </Button>
             </div>
           </div>

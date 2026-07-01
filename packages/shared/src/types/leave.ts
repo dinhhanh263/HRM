@@ -85,6 +85,16 @@ export interface ApprovalStepDto {
   approver?: Pick<LeaveRequestEmployeeDto, 'id' | 'fullName' | 'employeeCode'> | null;
 }
 
+// SPEC-046: một CC/người theo dõi của flow. Chỉ ROLE | SPECIFIC_USER.
+export interface ApprovalWatcherDto {
+  id: string;
+  watcherType: Extract<ApproverType, 'ROLE' | 'SPECIFIC_USER'>;
+  roleKey: string | null; // khi watcherType = ROLE
+  watcherId: string | null; // khi watcherType = SPECIFIC_USER (Employee.id)
+  // Tên hiển thị của người theo dõi cụ thể (chỉ khi SPECIFIC_USER), tiện cho UI.
+  watcher?: Pick<LeaveRequestEmployeeDto, 'id' | 'fullName' | 'employeeCode'> | null;
+}
+
 export interface ApprovalFlowDto {
   id: string;
   tenantId: string;
@@ -94,6 +104,7 @@ export interface ApprovalFlowDto {
   name: string;
   active: boolean;
   steps: ApprovalStepDto[];
+  watchers: ApprovalWatcherDto[]; // SPEC-046: CC/người theo dõi (chỉ xem)
   createdAt: string;
   updatedAt: string;
 }
@@ -137,6 +148,8 @@ export interface LeaveRequestDto {
   employee?: LeaveRequestEmployeeDto | null;
   reviewedBy?: Pick<LeaveRequestEmployeeDto, 'id' | 'fullName'> | null;
   approvals?: LeaveApprovalDto[]; // timeline phê duyệt (khi đơn dùng luồng cấu hình)
+  // SPEC-046: true khi actor chỉ xem đơn với tư cách CC/người theo dõi (không được duyệt).
+  watchOnly?: boolean;
 }
 
 export interface LeaveBalanceDto {
@@ -222,8 +235,9 @@ export interface RejectLeaveRequestRequest {
 export interface LeaveRequestListQuery {
   page?: number;
   limit?: number;
-  // 'mine' = đơn của tôi; 'review' = đơn tôi cần duyệt; 'all' = toàn tenant (HR/Admin).
-  scope?: 'mine' | 'review' | 'all';
+  // 'mine' = đơn của tôi; 'review' = đơn tôi cần duyệt; 'all' = toàn tenant (HR/Admin);
+  // 'watching' = đơn tôi được CC/theo dõi (chỉ xem, SPEC-046).
+  scope?: 'mine' | 'review' | 'all' | 'watching';
   status?: LeaveStatus;
   leaveTypeId?: string;
   year?: number;
@@ -238,17 +252,26 @@ export interface ApprovalStepInput {
   approverId?: string | null; // bắt buộc khi approverType = SPECIFIC_USER
 }
 
+// SPEC-046: đầu vào cấu hình một CC/người theo dõi.
+export interface WatcherInput {
+  watcherType: Extract<ApproverType, 'ROLE' | 'SPECIFIC_USER'>;
+  roleKey?: string | null; // bắt buộc khi watcherType = ROLE
+  watcherId?: string | null; // bắt buộc khi watcherType = SPECIFIC_USER
+}
+
 export interface CreateApprovalFlowRequest {
   departmentId?: string | null; // null/undefined = luồng mặc định của tenant
   name: string;
   active?: boolean;
   steps: ApprovalStepInput[]; // thứ tự mảng = stepOrder (0-based)
+  watchers?: WatcherInput[]; // SPEC-046: danh sách CC (có thể rỗng)
 }
 
 export interface UpdateApprovalFlowRequest {
   name?: string;
   active?: boolean;
   steps?: ApprovalStepInput[]; // nếu có, thay thế toàn bộ các bước
+  watchers?: WatcherInput[]; // nếu có, thay thế toàn bộ danh sách CC
 }
 
 // ── Tenant leave settings (cấu hình nghỉ phép cấp công ty) ─────────────────

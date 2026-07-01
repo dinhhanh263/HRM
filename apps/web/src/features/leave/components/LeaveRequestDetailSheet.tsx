@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Check, X, Ban, RotateCcw, ExternalLink, Undo2 } from 'lucide-react';
+import { Check, X, Ban, RotateCcw, ExternalLink, Undo2, Eye } from 'lucide-react';
 import { LeaveStatusBadge } from './LeaveStatusBadge';
 import { LeaveTimeline } from './LeaveTimeline';
 import { useLeaveRequest } from '../hooks/useLeave';
@@ -19,7 +19,7 @@ import { formatDays, formatLeaveDate } from '../utils';
 interface LeaveRequestDetailSheetProps {
   requestId: string | null;
   onOpenChange: (open: boolean) => void;
-  mode: 'mine' | 'review' | 'all';
+  mode: 'mine' | 'review' | 'all' | 'watching';
   onApprove?: (id: string) => void;
   onReject?: (request: LeaveRequestDto) => void;
   onCancel?: (id: string) => void;
@@ -70,6 +70,16 @@ export function LeaveRequestDetailSheet({
           </div>
         ) : (
           <div className="mt-6 flex-1 overflow-y-auto space-y-5">
+            {/* SPEC-046: CC/watcher read-only notice. */}
+            {(mode === 'watching' || req.watchOnly) && (
+              <div className="rounded-lg border border-info/30 bg-info-light dark:bg-info/10 px-3 py-2.5">
+                <p className="flex items-center gap-1.5 text-xs font-medium text-info">
+                  <Eye className="size-3.5" />
+                  {t('detail.watcherBanner')}
+                </p>
+              </div>
+            )}
+
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span
@@ -84,7 +94,7 @@ export function LeaveRequestDetailSheet({
               <LeaveStatusBadge status={req.status} />
             </div>
 
-            {(mode === 'review' || mode === 'all') && req.employee && (
+            {(mode === 'review' || mode === 'all' || mode === 'watching') && req.employee && (
               <Field label={t('requests.columns.employee')}>
                 {req.employee.fullName}
                 <span className="text-text-muted"> · {req.employee.employeeCode}</span>

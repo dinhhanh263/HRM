@@ -149,6 +149,14 @@ export const leaveController = {
       res.json({ success: true, data: result.data, pagination: result.pagination });
       return;
     }
+    // SPEC-046: 'watching' is the CC queue — needs only leave:view (route-gated),
+    // never approve/reject. Returns view-only rows the actor is a watcher of.
+    if (input.scope === 'watching') {
+      const actor = await buildApprovalActor(req);
+      const result = await leaveRequestService.listWatched(tenantId, actor, input, { page, limit });
+      res.json({ success: true, data: result.data, pagination: result.pagination });
+      return;
+    }
 
     // 'mine' scope: a user without a linked employee profile (e.g. a tenant admin)
     // simply has no personal requests — return an empty list, not an error.
@@ -167,10 +175,17 @@ export const leaveController = {
     const tenantId = req.user!.tenantId;
     const request = await leaveRequestService.getById(req.params.id, tenantId);
 
-    // Owners always see their own request; viewing anyone else's detail (with its
-    // approval timeline) requires review capability.
+    // Owners always see their own request. For anyone else, allow if they are a
+    // CC/watcher of the request's flow (SPEC-046, view-only) — otherwise require
+    // review capability. Watchers with only leave:view can thus follow the request.
     const employee = await resolveCurrentEmployee(req);
     if (!employee || request.employeeId !== employee.id) {
+      const actor = await buildApprovalActor(req);
+      const watching = await leaveRequestService.isWatcherOf(req.params.id, tenantId, actor);
+      if (watching) {
+        res.json({ success: true, data: { ...request, watchOnly: true } });
+        return;
+      }
       await requireReviewCapability(req);
     }
 
@@ -255,6 +270,18 @@ export const leaveController = {
   async replaceFlowSteps(req: Request, res: Response) {
     const tenantId = req.user!.tenantId;
     const flow = await approvalFlowService.replaceSteps(req.params.id, tenantId, req.body.steps);
+
+    res.json({ success: true, data: flow });
+  },
+
+  // SPEC-046: replace the CC/watcher list of a flow.
+  async replaceFlowWatchers(req: Request, res: Response) {
+    const tenantId = req.user!.tenantId;
+    const flow = await approvalFlowService.replaceWatchers(
+      req.params.id,
+      tenantId,
+      req.body.watchers,
+    );
 
     res.json({ success: true, data: flow });
   },

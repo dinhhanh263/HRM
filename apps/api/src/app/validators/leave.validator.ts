@@ -86,11 +86,37 @@ const approvalStepSchema = z
     }
   });
 
+// SPEC-046: CC/người theo dõi — chỉ ROLE | SPECIFIC_USER (không MANAGER/DEPARTMENT_HEAD).
+const watcherSchema = z
+  .object({
+    watcherType: z.enum(['ROLE', 'SPECIFIC_USER']),
+    roleKey: z.string().min(1).max(50).optional().nullable(),
+    watcherId: z.string().cuid().optional().nullable(),
+  })
+  .superRefine((watcher, ctx) => {
+    if (watcher.watcherType === 'ROLE' && !watcher.roleKey) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'roleKey is required when watcherType is ROLE',
+        path: ['roleKey'],
+      });
+    }
+    if (watcher.watcherType === 'SPECIFIC_USER' && !watcher.watcherId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'watcherId is required when watcherType is SPECIFIC_USER',
+        path: ['watcherId'],
+      });
+    }
+  });
+
 export const createApprovalFlowSchema = z.object({
   departmentId: z.string().cuid().optional().nullable(),
   name: z.string().min(1, 'Name is required').max(100),
   active: z.boolean().optional(),
   steps: z.array(approvalStepSchema).min(1, 'At least one step is required'),
+  // SPEC-046: danh sách CC (có thể rỗng / bỏ trống).
+  watchers: z.array(watcherSchema).optional(),
 });
 
 export const updateApprovalFlowSchema = z
@@ -99,19 +125,33 @@ export const updateApprovalFlowSchema = z
     active: z.boolean().optional(),
     // When present, replaces the flow's entire step list.
     steps: z.array(approvalStepSchema).min(1, 'At least one step is required').optional(),
+    // When present, replaces the flow's entire watcher list (empty = clear all CC).
+    watchers: z.array(watcherSchema).optional(),
   })
-  .refine((d) => d.name !== undefined || d.active !== undefined || d.steps !== undefined, {
-    message: 'Provide at least one field to update',
-  });
+  .refine(
+    (d) =>
+      d.name !== undefined ||
+      d.active !== undefined ||
+      d.steps !== undefined ||
+      d.watchers !== undefined,
+    {
+      message: 'Provide at least one field to update',
+    },
+  );
 
 export const replaceApprovalStepsSchema = z.object({
   steps: z.array(approvalStepSchema).min(1, 'At least one step is required'),
 });
 
+// SPEC-046: replace toàn bộ danh sách CC của một flow (rỗng = xoá hết CC).
+export const replaceWatchersSchema = z.object({
+  watchers: z.array(watcherSchema),
+});
+
 export const leaveRequestQuerySchema = z.object({
   page: z.coerce.number().int().positive().optional().default(1),
   limit: z.coerce.number().int().positive().max(100).optional().default(20),
-  scope: z.enum(['mine', 'review', 'all']).optional(),
+  scope: z.enum(['mine', 'review', 'all', 'watching']).optional(),
   status: leaveStatusEnum.optional(),
   leaveTypeId: z.string().cuid().optional(),
   year: z.coerce.number().int().min(2000).max(2100).optional(),

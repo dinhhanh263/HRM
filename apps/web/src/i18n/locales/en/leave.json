@@ -6,7 +6,8 @@
     "review": "Approvals",
     "all": "All Requests",
     "settings": "Leave Types",
-    "flows": "Approval Flows"
+    "flows": "Approval Flows",
+    "watching": "Watching"
   },
   "balances": {
     "title": "Leave balance {{year}}",
@@ -81,7 +82,9 @@
       "reviewer": "Reviewer"
     },
     "halfDay": "Half day",
-    "to": "to"
+    "to": "to",
+    "emptyWatching": "No requests you're following yet",
+    "ccOnly": "CC · view-only"
   },
   "status": {
     "PENDING": "Pending",
@@ -134,7 +137,8 @@
     "title": "Leave Request Details",
     "subtitle": "View request info and approval progress",
     "viewAttachment": "View attachment",
-    "returnedReason": "Reason for return"
+    "returnedReason": "Reason for return",
+    "watcherBanner": "You are following this request (view-only, no approval rights)."
   },
   "timeline": {
     "title": "Approval Progress",
@@ -192,13 +196,20 @@
       "userPlaceholder": "Select an employee",
       "moveUp": "Move up",
       "moveDown": "Move down",
-      "removeStep": "Remove step"
+      "removeStep": "Remove step",
+      "watchers": {
+        "label": "CC / Watchers (view-only)",
+        "hint": "Watchers can view the request at any time but cannot approve. Optional.",
+        "add": "Add watcher",
+        "remove": "Remove watcher"
+      }
     },
     "deleteDialog": {
       "title": "Delete this flow?",
       "description": "This action cannot be undone.",
       "confirm": "Delete"
-    }
+    },
+    "watchersCount": "CC · {{count}}"
   },
   "cancelDialog": {
     "title": "Cancel this request?",

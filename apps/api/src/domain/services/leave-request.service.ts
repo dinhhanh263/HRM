@@ -9,9 +9,12 @@ import {
   buildApprovalSnapshot,
   findNextActiveStep,
   matchesApprover,
+  isWatcher,
   type FlowCandidate,
   type ApprovalActor,
 } from '../leave/approval-routing.helper.js';
+import { notifyLeaveWatchers } from '../leave/watcher-notifications.js';
+import { logger } from '../../shared/utils/logger.js';
 import { countWorkingDays } from '../../shared/helpers/working-days.helper.js';
 import { NotFoundError, BadRequestError, ForbiddenError } from '../../shared/errors/index.js';
 import type { PaginationOptions } from '../repositories/employee.repository.js';
@@ -19,7 +22,7 @@ import type { LeaveStatus, Prisma } from '@prisma/client';
 import type { LeaveRequestDto } from '@hrm/shared';
 
 export interface ListLeaveRequestsInput {
-  scope?: 'mine' | 'review' | 'all';
+  scope?: 'mine' | 'review' | 'all' | 'watching';
   status?: LeaveStatus;
   leaveTypeId?: string;
   year?: number;
@@ -115,6 +118,28 @@ export const leaveRequestService = {
     };
   },
 
+  /**
+   * SPEC-046: the actor's CC/watch queue — requests (any status) whose flow lists
+   * the actor as a watcher. View-only; every row is flagged `watchOnly`.
+   */
+  async listWatched(
+    tenantId: string,
+    actor: ApprovalActor,
+    input: ListLeaveRequestsInput,
+    pagination: PaginationOptions,
+  ) {
+    const result = await leaveRequestRepository.findWatchedCandidates(
+      tenantId,
+      { employeeId: actor.employeeId, roleKey: actor.roleKey },
+      { status: input.status, leaveTypeId: input.leaveTypeId, year: input.year, search: input.search },
+      pagination,
+    );
+    return {
+      data: result.data.map((r) => ({ ...toLeaveRequestDto(r), watchOnly: true })),
+      pagination: result.pagination,
+    };
+  },
+
   /** A single request with its full approval timeline (authorization in controller). */
   async getById(id: string, tenantId: string): Promise<LeaveRequestDto> {
     const request = await leaveRequestRepository.findByIdWithApprovals(id, tenantId);
@@ -122,6 +147,28 @@ export const leaveRequestService = {
       throw new NotFoundError('Leave request not found');
     }
     return toLeaveRequestDto(request);
+  },
+
+  /**
+   * SPEC-046: whether `actor` may view a request purely as a CC/watcher (its flow
+   * lists them as a watcher). Used by the controller to widen read access beyond
+   * owner + reviewers, without granting any approval capability.
+   */
+  async isWatcherOf(
+    id: string,
+    tenantId: string,
+    actor: Pick<ApprovalActor, 'employeeId' | 'roleKey'>,
+  ): Promise<boolean> {
+    const request = await leaveRequestRepository.findByIdWithApprovals(id, tenantId);
+    const watchers = request?.flow?.watchers ?? [];
+    return isWatcher(
+      watchers.map((w) => ({
+        watcherType: w.watcherType as 'ROLE' | 'SPECIFIC_USER',
+        roleKey: w.roleKey,
+        watcherId: w.watcherId,
+      })),
+      actor,
+    );
   },
 
   async create(
@@ -176,6 +223,36 @@ export const leaveRequestService = {
       },
       approvals,
     );
+
+    // SPEC-046: notify CC/watchers (best-effort — must never fail the submission).
+    // Exclude the requester so they are never self-notified about their own request.
+    try {
+      const ownerUserId = await resolveEmployeeUserId(tenantId, employeeId);
+      const exclude = ownerUserId ? [ownerUserId] : [];
+      const name = created.employee?.fullName ?? '';
+      await notifyLeaveWatchers('submitted', {
+        tenantId,
+        requestId: created.id,
+        flowId: routed.flowId,
+        employeeName: name,
+        excludeUserIds: exclude,
+      });
+      if (fullyApproved) {
+        await notifyLeaveWatchers('decided', {
+          tenantId,
+          requestId: created.id,
+          flowId: routed.flowId,
+          employeeName: name,
+          status: 'APPROVED',
+          excludeUserIds: exclude,
+        });
+      }
+    } catch (error) {
+      logger.error(
+        { err: error, event: 'leave.watch_notify_failed', requestId: created.id },
+        'Failed to notify leave-request watchers on submit',
+      );
+    }
 
     return toLeaveRequestDto(created);
   },
@@ -258,6 +335,35 @@ export const leaveRequestService = {
       approvals,
     );
 
+    // SPEC-046: a resubmission is a fresh submission for watchers too (best-effort).
+    try {
+      const ownerUserId = await resolveEmployeeUserId(tenantId, ownerEmployeeId);
+      const exclude = ownerUserId ? [ownerUserId] : [];
+      const name = updated.employee?.fullName ?? '';
+      await notifyLeaveWatchers('submitted', {
+        tenantId,
+        requestId: updated.id,
+        flowId: routed.flowId,
+        employeeName: name,
+        excludeUserIds: exclude,
+      });
+      if (fullyApproved) {
+        await notifyLeaveWatchers('decided', {
+          tenantId,
+          requestId: updated.id,
+          flowId: routed.flowId,
+          employeeName: name,
+          status: 'APPROVED',
+          excludeUserIds: exclude,
+        });
+      }
+    } catch (error) {
+      logger.error(
+        { err: error, event: 'leave.watch_notify_failed', requestId: updated.id },
+        'Failed to notify leave-request watchers on resubmit',
+      );
+    }
+
     return toLeaveRequestDto(updated);
   },
 
@@ -301,6 +407,21 @@ type RequestWithApprovals = NonNullable<
 /** The highest round present on a request's timeline (the round currently running). */
 function currentRound(approvals: { round: number }[]): number {
   return approvals.reduce((max, a) => Math.max(max, a.round), 1);
+}
+
+/** SPEC-046: resolve a single employee's linked User id (null if none). */
+async function resolveEmployeeUserId(tenantId: string, employeeId: string): Promise<string | null> {
+  const [userId] = await employeeRepository.findUserIdsByIds(tenantId, [employeeId]);
+  return userId ?? null;
+}
+
+/** SPEC-046: resolve linked User ids for several employees, skipping nullish ids. */
+async function resolveEmployeeUserIds(
+  tenantId: string,
+  employeeIds: (string | null)[],
+): Promise<string[]> {
+  const ids = employeeIds.filter((id): id is string => Boolean(id));
+  return employeeRepository.findUserIdsByIds(tenantId, ids);
 }
 
 /**
@@ -493,6 +614,31 @@ async function approveStep(
     tenantId,
     requestData,
   );
+
+  // SPEC-046: on final approval, notify CC/watchers (best-effort — must never
+  // fail the approval). Exclude the requester and the deciding actor.
+  if (updated.status === 'APPROVED' && request.flowId) {
+    try {
+      const excludeUserIds = await resolveEmployeeUserIds(tenantId, [
+        request.employeeId,
+        actor.employeeId,
+      ]);
+      await notifyLeaveWatchers('decided', {
+        tenantId,
+        requestId: request.id,
+        flowId: request.flowId,
+        employeeName: updated.employee?.fullName ?? '',
+        status: 'APPROVED',
+        excludeUserIds,
+      });
+    } catch (error) {
+      logger.error(
+        { err: error, event: 'leave.watch_notify_failed', requestId: request.id },
+        'Failed to notify leave-request watchers on approval',
+      );
+    }
+  }
+
   return toLeaveRequestDto(updated);
 }
 

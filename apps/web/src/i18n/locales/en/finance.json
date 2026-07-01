@@ -70,5 +70,58 @@
       "deleteError": "Could not delete the category. Please try again.",
       "inUse": "This category is in use — deactivate it instead of deleting."
     }
+  },
+  "transactions": {
+    "title": "Transaction ledger",
+    "subtitle": "Record the company's money in and out",
+    "searchPlaceholder": "Search by description, reference...",
+    "direction": { "IN": "In", "OUT": "Out" },
+    "status": { "ACTUAL": "Actual", "PLANNED": "Planned" },
+    "totals": { "in": "Total in (actual)", "out": "Total out (actual)", "net": "Net" },
+    "filters": {
+      "allEntities": "All entities",
+      "allAccounts": "All accounts",
+      "allDirections": "In & Out",
+      "allStatuses": "All statuses"
+    },
+    "table": { "date": "Date", "detail": "Detail", "account": "Account", "amount": "Amount" },
+    "empty": {
+      "title": "No transactions yet",
+      "description": "Add an in/out transaction or import from Excel to get started"
+    },
+    "pagination": { "total": "{{count}} transactions", "prev": "Prev", "next": "Next" },
+    "form": {
+      "create": "Add transaction",
+      "edit": "Edit transaction",
+      "description": "Record money in or out. \"Actual\" transactions update the account balance.",
+      "accountLabel": "Fund account",
+      "accountPlaceholder": "Select account",
+      "amountLabel": "Amount",
+      "dateLabel": "Date",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select category",
+      "noCategory": "Uncategorized",
+      "departmentLabel": "Department",
+      "departmentPlaceholder": "Select department",
+      "noDepartment": "No department",
+      "statusLabel": "Status",
+      "statusHint": "\"Planned\" is used for forecasting only and does not affect the current balance.",
+      "referenceLabel": "Reference / doc no.",
+      "referencePlaceholder": "e.g. transfer reference",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Note about this transaction",
+      "submitCreate": "Add transaction"
+    },
+    "delete": {
+      "title": "Delete transaction?",
+      "description": "The transaction will be deleted and the account balance recomputed. This cannot be undone."
+    },
+    "toast": {
+      "created": "Transaction added",
+      "updated": "Transaction updated",
+      "deleted": "Transaction deleted",
+      "saveError": "Could not save the transaction. Please try again.",
+      "deleteError": "Could not delete the transaction. Please try again."
+    }
   }
 }

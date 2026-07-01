@@ -21,7 +21,7 @@ import { RolesPage } from '@/features/roles';
 import { LeavePage, LeaveBalanceRosterPage } from '@/features/leave';
 import { PaymentRequestPage } from '@/features/payment-request';
 import { PurchaseRequestPage, CreatePurchaseRequestPage } from '@/features/purchase-request';
-import { FundAccountsPage, FinanceCategoriesPage } from '@/features/finance';
+import { FundAccountsPage, FinanceCategoriesPage, CashTransactionsPage } from '@/features/finance';
 import { TimesheetPage, TimesheetSettingsPage } from '@/features/timesheet';
 import { PayrollPage } from '@/features/payroll';
 import { ProbationPage, ProbationSelfPage } from '@/features/probation';
@@ -347,6 +347,14 @@ export const router = createBrowserRouter([
         element: (
           <RequirePermission permission="fund_account:view">
             <FundAccountsPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'finance/transactions',
+        element: (
+          <RequirePermission permission="cash_transaction:view">
+            <CashTransactionsPage />
           </RequirePermission>
         ),
       },

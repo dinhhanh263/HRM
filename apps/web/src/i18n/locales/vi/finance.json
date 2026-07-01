@@ -70,5 +70,58 @@
       "deleteError": "Không thể xoá danh mục. Vui lòng thử lại.",
       "inUse": "Danh mục đang được sử dụng — hãy vô hiệu hoá thay vì xoá."
     }
+  },
+  "transactions": {
+    "title": "Sổ giao dịch",
+    "subtitle": "Ghi nhận dòng tiền vào và ra của công ty",
+    "searchPlaceholder": "Tìm theo mô tả, số chứng từ...",
+    "direction": { "IN": "Thu", "OUT": "Chi" },
+    "status": { "ACTUAL": "Thực tế", "PLANNED": "Dự kiến" },
+    "totals": { "in": "Tổng thu (thực tế)", "out": "Tổng chi (thực tế)", "net": "Chênh lệch ròng" },
+    "filters": {
+      "allEntities": "Tất cả pháp nhân",
+      "allAccounts": "Tất cả tài khoản",
+      "allDirections": "Thu & Chi",
+      "allStatuses": "Mọi trạng thái"
+    },
+    "table": { "date": "Ngày", "detail": "Nội dung", "account": "Tài khoản", "amount": "Số tiền" },
+    "empty": {
+      "title": "Chưa có giao dịch",
+      "description": "Thêm giao dịch thu/chi hoặc import từ Excel để bắt đầu"
+    },
+    "pagination": { "total": "Tổng {{count}} giao dịch", "prev": "Trước", "next": "Sau" },
+    "form": {
+      "create": "Thêm giao dịch",
+      "edit": "Sửa giao dịch",
+      "description": "Ghi nhận một khoản thu hoặc chi. Giao dịch \"Thực tế\" sẽ cập nhật số dư tài khoản.",
+      "accountLabel": "Tài khoản quỹ",
+      "accountPlaceholder": "Chọn tài khoản",
+      "amountLabel": "Số tiền",
+      "dateLabel": "Ngày giao dịch",
+      "categoryLabel": "Danh mục",
+      "categoryPlaceholder": "Chọn danh mục",
+      "noCategory": "Không phân loại",
+      "departmentLabel": "Bộ phận",
+      "departmentPlaceholder": "Chọn bộ phận",
+      "noDepartment": "Không gắn bộ phận",
+      "statusLabel": "Trạng thái",
+      "statusHint": "\"Dự kiến\" chỉ dùng cho dự báo, không ảnh hưởng số dư hiện tại.",
+      "referenceLabel": "Số chứng từ / tham chiếu",
+      "referencePlaceholder": "VD: mã chuyển khoản",
+      "descriptionLabel": "Mô tả",
+      "descriptionPlaceholder": "Ghi chú về khoản thu/chi này",
+      "submitCreate": "Thêm giao dịch"
+    },
+    "delete": {
+      "title": "Xoá giao dịch?",
+      "description": "Giao dịch sẽ bị xoá và số dư tài khoản được tính lại. Hành động này không thể hoàn tác."
+    },
+    "toast": {
+      "created": "Đã thêm giao dịch",
+      "updated": "Đã cập nhật giao dịch",
+      "deleted": "Đã xoá giao dịch",
+      "saveError": "Không thể lưu giao dịch. Vui lòng thử lại.",
+      "deleteError": "Không thể xoá giao dịch. Vui lòng thử lại."
+    }
   }
 }

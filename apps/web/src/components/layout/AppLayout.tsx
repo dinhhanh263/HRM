@@ -42,6 +42,7 @@ const pageTitleKeys: Record<string, string> = {
   '/sales/tasks': 'titles.salesTasks',
   '/settings/sales': 'titles.salesSettings',
   '/finance/accounts': 'titles.fundAccounts',
+  '/finance/transactions': 'titles.cashTransactions',
   '/finance/categories': 'titles.financeCategories',
 };
 

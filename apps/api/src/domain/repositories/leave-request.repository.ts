@@ -268,6 +268,50 @@ export const leaveRequestRepository = {
   },
 
   /**
+   * SPEC-046: a flow's CC/watchers reduced to concrete targets — specific-user
+   * employee ids and role keys — ready to resolve into email recipients.
+   */
+  async findFlowWatcherTargets(
+    flowId: string,
+  ): Promise<{ employeeIds: string[]; roleKeys: string[] }> {
+    const watchers = await db.approvalWatcher.findMany({
+      where: { flowId },
+      select: { watcherType: true, roleKey: true, watcherId: true },
+    });
+    return {
+      roleKeys: watchers
+        .filter((w) => w.watcherType === 'ROLE' && w.roleKey)
+        .map((w) => w.roleKey as string),
+      employeeIds: watchers
+        .filter((w) => w.watcherType === 'SPECIFIC_USER' && w.watcherId)
+        .map((w) => w.watcherId as string),
+    };
+  },
+
+  /**
+   * SPEC-046: resolve email recipients for a set of employees and/or role keys.
+   * Only ACTIVE users are returned; the result is de-duplicated by user id (a
+   * user matching both an employee and a role appears once).
+   */
+  async findUserRecipients(
+    tenantId: string,
+    employeeIds: string[],
+    roleKeys: string[],
+  ): Promise<{ userId: string; email: string; fullName: string }[]> {
+    if (employeeIds.length === 0 && roleKeys.length === 0) return [];
+
+    const or: Prisma.UserWhereInput[] = [];
+    if (employeeIds.length) or.push({ employee: { id: { in: employeeIds } } });
+    if (roleKeys.length) or.push({ roleRef: { key: { in: roleKeys } } });
+
+    const users = await db.user.findMany({
+      where: { tenantId, status: 'ACTIVE', OR: or },
+      select: { id: true, email: true, fullName: true },
+    });
+    return users.map((u) => ({ userId: u.id, email: u.email, fullName: u.fullName }));
+  },
+
+  /**
    * APPROVED leave requests for an employee that overlap [startDate, endDate],
    * carrying the leave type's `paid` flag so the timesheet summary can split paid
    * vs unpaid leave days. Tenant-scoped.

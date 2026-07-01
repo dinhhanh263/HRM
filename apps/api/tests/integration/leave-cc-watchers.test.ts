@@ -1,9 +1,10 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import request from 'supertest';
 import { app } from '../../src/app.js';
 import { db } from '../../src/infrastructure/database/client.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import { roleRepository } from '../../src/domain/repositories/role.repository.js';
+import { emailProvider } from '../../src/infrastructure/email/email.provider.js';
 import {
   seedPermissionCatalog,
   syncSystemRolesForTenant,
@@ -186,33 +187,69 @@ describe('Leave CC / watchers (SPEC-046)', () => {
 
   // ── Slice 3 (submit) + Slice 2 (view) ───────────────────────────────────
   let requestId: string;
-  it('requester submits a request → watchers are notified on submit', async () => {
-    const res = await request(app)
-      .post('/api/v1/leave/requests')
-      .set('Authorization', `Bearer ${reqToken}`)
-      .send({
-        leaveTypeId,
-        startDate: '2026-07-06T00:00:00.000Z',
-        endDate: '2026-07-06T00:00:00.000Z',
+  it('requester submits a request → watchers notified in-app + approver/watchers emailed', async () => {
+    const emailSpy = vi
+      .spyOn(emailProvider, 'sendLeaveRequestNotification')
+      .mockResolvedValue(undefined);
+    try {
+      const res = await request(app)
+        .post('/api/v1/leave/requests')
+        .set('Authorization', `Bearer ${reqToken}`)
+        .send({
+          leaveTypeId,
+          startDate: '2026-07-06T00:00:00.000Z',
+          endDate: '2026-07-06T00:00:00.000Z',
+        });
+      expect(res.status).toBe(201);
+      expect(res.body.data.status).toBe('PENDING');
+      requestId = res.body.data.id;
+
+      const staffNote = await db.notification.findFirst({
+        where: { userId: staffUserId, kind: 'leave_watch_submitted', entityId: requestId },
       });
-    expect(res.status).toBe(201);
-    expect(res.body.data.status).toBe('PENDING');
-    requestId = res.body.data.id;
+      const specificNote = await db.notification.findFirst({
+        where: { userId: specificUserId, kind: 'leave_watch_submitted', entityId: requestId },
+      });
+      expect(staffNote).not.toBeNull();
+      expect(specificNote).not.toBeNull();
 
-    const staffNote = await db.notification.findFirst({
-      where: { userId: staffUserId, kind: 'leave_watch_submitted', entityId: requestId },
-    });
-    const specificNote = await db.notification.findFirst({
-      where: { userId: specificUserId, kind: 'leave_watch_submitted', entityId: requestId },
-    });
-    expect(staffNote).not.toBeNull();
-    expect(specificNote).not.toBeNull();
+      // Requester (owner) is never self-notified.
+      const ownerNote = await db.notification.findFirst({
+        where: { userId: reqUserId, kind: 'leave_watch_submitted' },
+      });
+      expect(ownerNote).toBeNull();
 
-    // Requester (owner) is never self-notified.
-    const ownerNote = await db.notification.findFirst({
-      where: { userId: reqUserId, kind: 'leave_watch_submitted' },
-    });
-    expect(ownerNote).toBeNull();
+      // Emails: the current-step ROLE approver (hr_manager) as 'approver',
+      // and both watchers as 'watcher'; requester never receives one.
+      const calls = emailSpy.mock.calls.map(([a]) => ({ to: a.to, audience: a.audience }));
+      const approvers = calls.filter((c) => c.audience === 'approver').map((c) => c.to);
+      const watchers = calls.filter((c) => c.audience === 'watcher').map((c) => c.to);
+      expect(approvers).toContain(HR_EMAIL);
+      expect(watchers).toEqual(expect.arrayContaining([STAFF_EMAIL, SPECIFIC_EMAIL]));
+      expect(calls.map((c) => c.to)).not.toContain(REQ_EMAIL);
+    } finally {
+      emailSpy.mockRestore();
+    }
+  });
+
+  it('still creates the request when notification emails fail (best-effort)', async () => {
+    const emailSpy = vi
+      .spyOn(emailProvider, 'sendLeaveRequestNotification')
+      .mockRejectedValue(new Error('smtp down'));
+    try {
+      const res = await request(app)
+        .post('/api/v1/leave/requests')
+        .set('Authorization', `Bearer ${reqToken}`)
+        .send({
+          leaveTypeId,
+          startDate: '2026-07-07T00:00:00.000Z',
+          endDate: '2026-07-07T00:00:00.000Z',
+        });
+      expect(res.status).toBe(201);
+      expect(res.body.data.status).toBe('PENDING');
+    } finally {
+      emailSpy.mockRestore();
+    }
   });
 
   it('ROLE watcher (leave:view only) sees the request in scope=watching and detail', async () => {

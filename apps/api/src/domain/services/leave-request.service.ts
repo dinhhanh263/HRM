@@ -14,6 +14,7 @@ import {
   type ApprovalActor,
 } from '../leave/approval-routing.helper.js';
 import { notifyLeaveWatchers } from '../leave/watcher-notifications.js';
+import { emailLeaveRequestParticipants } from '../leave/leave-request-emails.js';
 import { logger } from '../../shared/utils/logger.js';
 import { countWorkingDays } from '../../shared/helpers/working-days.helper.js';
 import { NotFoundError, BadRequestError, ForbiddenError } from '../../shared/errors/index.js';
@@ -224,8 +225,8 @@ export const leaveRequestService = {
       approvals,
     );
 
-    // SPEC-046: notify CC/watchers (best-effort — must never fail the submission).
-    // Exclude the requester so they are never self-notified about their own request.
+    // SPEC-046: notify CC/watchers in-app + email the approver & watchers
+    // (best-effort — must never fail the submission). Exclude the requester.
     try {
       const ownerUserId = await resolveEmployeeUserId(tenantId, employeeId);
       const exclude = ownerUserId ? [ownerUserId] : [];
@@ -247,6 +248,21 @@ export const leaveRequestService = {
           excludeUserIds: exclude,
         });
       }
+      await emailLeaveRequestParticipants({
+        tenantId,
+        requestId: created.id,
+        requesterName: name,
+        requesterUserId: ownerUserId,
+        leaveTypeName: created.leaveType?.name ?? '',
+        startDate: created.startDate,
+        endDate: created.endDate,
+        totalDays: created.totalDays,
+        reason: created.reason,
+        flowId: routed.flowId,
+        approver: fullyApproved
+          ? { employeeIds: [], roleKeys: [] }
+          : currentApproverTargets(routed.snapshot, nextStep),
+      });
     } catch (error) {
       logger.error(
         { err: error, event: 'leave.watch_notify_failed', requestId: created.id },
@@ -357,6 +373,21 @@ export const leaveRequestService = {
           excludeUserIds: exclude,
         });
       }
+      await emailLeaveRequestParticipants({
+        tenantId,
+        requestId: updated.id,
+        requesterName: name,
+        requesterUserId: ownerUserId,
+        leaveTypeName: updated.leaveType?.name ?? '',
+        startDate: updated.startDate,
+        endDate: updated.endDate,
+        totalDays: updated.totalDays,
+        reason: updated.reason,
+        flowId: routed.flowId,
+        approver: fullyApproved
+          ? { employeeIds: [], roleKeys: [] }
+          : currentApproverTargets(routed.snapshot, nextStep),
+      });
     } catch (error) {
       logger.error(
         { err: error, event: 'leave.watch_notify_failed', requestId: updated.id },
@@ -407,6 +438,24 @@ type RequestWithApprovals = NonNullable<
 /** The highest round present on a request's timeline (the round currently running). */
 function currentRound(approvals: { round: number }[]): number {
   return approvals.reduce((max, a) => Math.max(max, a.round), 1);
+}
+
+/**
+ * SPEC-046: reduce the current pending approval step to concrete email targets.
+ * A ROLE step yields a role key (all holders are approvers); any other type
+ * yields the resolved employee id. Returns empty targets when nothing applies.
+ */
+function currentApproverTargets(
+  snapshot: { stepOrder: number; approverType: string; roleKey: string | null; approverId: string | null }[],
+  stepOrder: number | null,
+): { employeeIds: string[]; roleKeys: string[] } {
+  if (stepOrder === null) return { employeeIds: [], roleKeys: [] };
+  const step = snapshot.find((s) => s.stepOrder === stepOrder);
+  if (!step) return { employeeIds: [], roleKeys: [] };
+  if (step.approverType === 'ROLE') {
+    return { employeeIds: [], roleKeys: step.roleKey ? [step.roleKey] : [] };
+  }
+  return { employeeIds: step.approverId ? [step.approverId] : [], roleKeys: [] };
 }
 
 /** SPEC-046: resolve a single employee's linked User id (null if none). */

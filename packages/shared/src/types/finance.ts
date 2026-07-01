@@ -334,3 +334,97 @@ export interface ForecastResponse {
   shortfall: string; // how far below 0 the balance ends (0 if never negative)
   series: ForecastDay[];
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SPEC-048 GĐ3: Đề xuất nạp quỹ (Top-up Request)
+// ══════════════════════════════════════════════════════════════════════════════
+
+export type TopUpStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+
+export interface TopUpRequestDto {
+  id: string;
+  issuingEntityId: string;
+  issuingEntityName: string;
+  title: string;
+  amount: string;
+  currency: string;
+  neededByDate: string | null;
+  period: string | null;
+  justification: string;
+  status: TopUpStatus;
+  reviewedById: string | null;
+  reviewedAt: string | null;
+  reviewNote: string | null;
+  fundedAccountId: string | null;
+  fundedAccountName: string | null;
+  fundedAt: string | null;
+  createdById: string;
+  createdByName: string | null;
+  createdByEmail: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateTopUpRequest {
+  issuingEntityId: string;
+  title: string;
+  amount: number;
+  currency?: string;
+  neededByDate?: string | null;
+  period?: string | null;
+  justification: string;
+}
+
+export interface ReviewTopUpRequest {
+  decision: 'APPROVED' | 'REJECTED';
+  note?: string | null;
+  fundedAccountId?: string | null; // khi duyệt: tài khoản được nạp → tự sinh giao dịch IN
+}
+
+export interface TopUpRequestListQuery {
+  status?: TopUpStatus;
+  issuingEntityId?: string;
+}
+
+// Bản giải trình gợi ý tự sinh (HR có thể sửa trước khi gửi).
+export interface TopUpJustificationDraft {
+  period: string;
+  text: string;
+  totalPlanned: string; // tổng kế hoạch chi APPROVED trong kỳ
+  shortfall: string; // thiếu hụt dự báo (0 nếu đủ)
+  suggestedAmount: string; // gợi ý số tiền nạp = shortfall
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SPEC-048 GĐ3: Báo cáo thu/chi đa pháp nhân
+// ══════════════════════════════════════════════════════════════════════════════
+
+export interface FinanceReportMonth {
+  month: number; // 1–12
+  in: string;
+  out: string;
+  net: string;
+}
+
+export interface FinanceReportGroup {
+  key: string;
+  label: string;
+  in: string;
+  out: string;
+}
+
+export interface FinanceReportResponse {
+  year: number;
+  months: FinanceReportMonth[]; // luôn đủ 12 tháng
+  byEntity: FinanceReportGroup[];
+  byCategory: FinanceReportGroup[];
+  byDepartment: FinanceReportGroup[];
+  totalIn: string;
+  totalOut: string;
+  net: string;
+}
+
+export interface FinanceReportQuery {
+  year?: number;
+  issuingEntityId?: string;
+}

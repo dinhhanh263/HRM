@@ -82,6 +82,8 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'cash_transaction:delete', 'cash_transaction:import',
       // SPEC-048 GĐ2: HR tổng hợp + duyệt/từ chối kế hoạch chi các bộ phận.
       'spending_plan:view', 'spending_plan:approve', 'spending_plan:reject',
+      // SPEC-048 GĐ3: HR/Finance lập & trình đề xuất nạp quỹ (Founder duyệt).
+      'topup_request:view', 'topup_request:create', 'topup_request:export',
     ],
   },
   {

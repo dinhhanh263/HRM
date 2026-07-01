@@ -140,3 +140,57 @@ export interface CashTransactionListResponse {
   totalOut: string;
   net: string;
 }
+
+// ── Excel/CSV import (stateless parse → preview → confirm) ────────────────────
+
+export const CASH_TX_IMPORT_COLUMNS = [
+  'account',
+  'direction',
+  'amount',
+  'date',
+  'category',
+  'department',
+  'reference',
+  'description',
+] as const;
+export type CashTxImportColumn = (typeof CASH_TX_IMPORT_COLUMNS)[number];
+
+// account / direction / amount / date are required; the rest optional.
+export const REQUIRED_CASH_TX_IMPORT_COLUMNS: readonly CashTxImportColumn[] = [
+  'account',
+  'direction',
+  'amount',
+  'date',
+];
+
+export type CashTxImportLang = 'vi' | 'en';
+
+export interface CashTxImportRowError {
+  row: number; // 0 = file-level
+  column: CashTxImportColumn | null;
+  code: string;
+  message: string;
+}
+
+export type ParsedCashTxRow = { rowNumber: number } & Record<CashTxImportColumn, string>;
+
+export interface CashTxImportPreviewRow {
+  rowNumber: number;
+  data: ParsedCashTxRow;
+  errors: CashTxImportRowError[];
+}
+
+// Response of POST /cash-transactions/import/parse (nothing persisted yet).
+export interface CashTxImportParseResult {
+  totalRows: number;
+  validCount: number;
+  errorCount: number;
+  fileErrors: CashTxImportRowError[];
+  rows: CashTxImportPreviewRow[];
+}
+
+// Response of POST /cash-transactions/import/confirm.
+export interface CashTxImportConfirmResult {
+  created: number;
+  skipped: number;
+}

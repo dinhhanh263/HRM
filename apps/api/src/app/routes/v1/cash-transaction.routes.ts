@@ -1,8 +1,10 @@
 import { Router, type Router as RouterType } from 'express';
 import { cashTransactionController } from '../../controllers/cash-transaction.controller.js';
+import { cashTransactionImportController } from '../../controllers/cash-transaction-import.controller.js';
 import { authenticate } from '../../middlewares/auth.middleware.js';
 import { requirePermission } from '../../middlewares/authorize.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
+import { uploadImportFile } from '../../middlewares/upload.middleware.js';
 import {
   createCashTransactionSchema,
   updateCashTransactionSchema,
@@ -14,6 +16,11 @@ import { asyncHandler } from '../../../shared/utils/async-handler.js';
 const router: RouterType = Router();
 
 router.use(asyncHandler(authenticate));
+
+// Import routes first (before any future `/:id`) — gated by cash_transaction:import.
+router.get('/import/template', asyncHandler(requirePermission('cash_transaction:import')), asyncHandler(cashTransactionImportController.template));
+router.post('/import/parse', asyncHandler(requirePermission('cash_transaction:import')), uploadImportFile(), asyncHandler(cashTransactionImportController.parse));
+router.post('/import/confirm', asyncHandler(requirePermission('cash_transaction:import')), uploadImportFile(), asyncHandler(cashTransactionImportController.confirm));
 
 router.get('/', asyncHandler(requirePermission('cash_transaction:view')), asyncHandler(cashTransactionController.list));
 router.post('/', asyncHandler(requirePermission('cash_transaction:create')), validate(createCashTransactionSchema), asyncHandler(cashTransactionController.create));

@@ -74,6 +74,7 @@
   "transactions": {
     "title": "Transaction ledger",
     "subtitle": "Record the company's money in and out",
+    "import": "Import Excel",
     "searchPlaceholder": "Search by description, reference...",
     "direction": { "IN": "In", "OUT": "Out" },
     "status": { "ACTUAL": "Actual", "PLANNED": "Planned" },
@@ -122,6 +123,22 @@
       "deleted": "Transaction deleted",
       "saveError": "Could not save the transaction. Please try again.",
       "deleteError": "Could not delete the transaction. Please try again."
+    }
+  },
+  "import": {
+    "title": "Import transactions from Excel",
+    "description": "Download the template, fill it in, then upload to preview before saving. Account/category/department match by name.",
+    "downloadTemplate": "Download Excel template",
+    "pickFile": "Choose or drop a .xlsx / .csv file",
+    "parsing": "Reading file...",
+    "onlyValidNote": "Only valid rows will be saved. Rows with errors are skipped.",
+    "confirm": "Save {{count}} transactions",
+    "summary": { "total": "Total rows", "valid": "Valid", "errors": "Errors" },
+    "table": { "row": "Row", "error": "Error" },
+    "toast": {
+      "done": "Imported {{created}} transactions ({{skipped}} skipped)",
+      "parseError": "Could not read the file. Check the format.",
+      "confirmError": "Import failed. Please try again."
     }
   }
 }

@@ -30,8 +30,9 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from '@/components/ui/toast';
 import { formatVnd } from '@/lib/utils';
-import { Plus, Search, X, MoreHorizontal, Pencil, Trash2, ArrowDownLeft, ArrowUpRight, ArrowRightLeft } from 'lucide-react';
+import { Plus, Search, X, MoreHorizontal, Pencil, Trash2, ArrowDownLeft, ArrowUpRight, ArrowRightLeft, Upload } from 'lucide-react';
 import { useFundAccounts, useIssuingEntitiesLite } from '../hooks/useFundAccounts';
+import { CashTransactionImportSheet } from '../components/CashTransactionImportSheet';
 import {
   useCashTransactions,
   useCreateCashTransaction,
@@ -65,6 +66,7 @@ export function CashTransactionsPage() {
   }, [searchInput]);
 
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [editing, setEditing] = useState<CashTransactionDto | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<CashTransactionDto | null>(null);
 
@@ -138,15 +140,21 @@ export function CashTransactionsPage() {
           <h1 className="text-2xl font-bold text-text-primary m-0">{t('transactions.title')}</h1>
           <p className="text-sm text-text-secondary mt-1">{t('transactions.subtitle')}</p>
         </div>
-        <Button
-          onClick={() => {
-            setEditing(null);
-            setSheetOpen(true);
-          }}
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          {t('transactions.form.create')}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => setImportOpen(true)}>
+            <Upload className="w-4 h-4 mr-2" />
+            {t('transactions.import')}
+          </Button>
+          <Button
+            onClick={() => {
+              setEditing(null);
+              setSheetOpen(true);
+            }}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            {t('transactions.form.create')}
+          </Button>
+        </div>
       </div>
 
       {/* Totals bar */}
@@ -296,6 +304,8 @@ export function CashTransactionsPage() {
         onSubmit={handleSubmit}
         isLoading={createMutation.isPending || updateMutation.isPending}
       />
+
+      <CashTransactionImportSheet open={importOpen} onOpenChange={setImportOpen} />
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(o) => !o && setDeleteTarget(null)}>
         <AlertDialogContent>

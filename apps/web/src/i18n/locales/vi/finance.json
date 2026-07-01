@@ -74,6 +74,7 @@
   "transactions": {
     "title": "Sổ giao dịch",
     "subtitle": "Ghi nhận dòng tiền vào và ra của công ty",
+    "import": "Import Excel",
     "searchPlaceholder": "Tìm theo mô tả, số chứng từ...",
     "direction": { "IN": "Thu", "OUT": "Chi" },
     "status": { "ACTUAL": "Thực tế", "PLANNED": "Dự kiến" },
@@ -122,6 +123,22 @@
       "deleted": "Đã xoá giao dịch",
       "saveError": "Không thể lưu giao dịch. Vui lòng thử lại.",
       "deleteError": "Không thể xoá giao dịch. Vui lòng thử lại."
+    }
+  },
+  "import": {
+    "title": "Import giao dịch từ Excel",
+    "description": "Tải mẫu, điền dữ liệu, rồi tải lên để đối chiếu trước khi ghi. Tài khoản/danh mục/bộ phận khớp theo tên.",
+    "downloadTemplate": "Tải mẫu Excel",
+    "pickFile": "Chọn hoặc kéo thả tệp .xlsx / .csv",
+    "parsing": "Đang đọc tệp...",
+    "onlyValidNote": "Chỉ các dòng hợp lệ sẽ được ghi. Các dòng lỗi sẽ bị bỏ qua.",
+    "confirm": "Ghi {{count}} giao dịch",
+    "summary": { "total": "Tổng dòng", "valid": "Hợp lệ", "errors": "Lỗi" },
+    "table": { "row": "Dòng", "error": "Lỗi" },
+    "toast": {
+      "done": "Đã import {{created}} giao dịch (bỏ qua {{skipped}})",
+      "parseError": "Không đọc được tệp. Kiểm tra định dạng.",
+      "confirmError": "Import thất bại. Vui lòng thử lại."
     }
   }
 }

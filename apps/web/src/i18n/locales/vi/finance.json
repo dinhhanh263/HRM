@@ -21,6 +21,40 @@
       "empty": "Chưa có khoản chi nào trong kỳ"
     }
   },
+  "plans": {
+    "title": "Kế hoạch chi theo bộ phận",
+    "subtitle": "Lập & gửi kế hoạch chi hàng tháng của bộ phận để HR duyệt",
+    "status": { "DRAFT": "Nháp", "SUBMITTED": "Chờ duyệt", "APPROVED": "Đã duyệt", "REJECTED": "Bị từ chối" },
+    "empty": { "title": "Chưa có kế hoạch chi", "description": "Tạo kế hoạch chi cho bộ phận của bạn để bắt đầu" },
+    "table": { "department": "Bộ phận", "period": "Kỳ", "status": "Trạng thái", "total": "Tổng dự chi", "itemsSuffix": "khoản" },
+    "actions": { "edit": "Sửa", "submit": "Gửi duyệt" },
+    "form": {
+      "create": "Tạo kế hoạch",
+      "edit": "Sửa kế hoạch chi",
+      "description": "Liệt kê các khoản dự chi trong kỳ. Gửi duyệt để HR/Finance tổng hợp.",
+      "department": "Bộ phận",
+      "departmentPlaceholder": "Chọn bộ phận",
+      "period": "Kỳ (tháng)",
+      "entity": "Pháp nhân",
+      "entityPlaceholder": "Chọn pháp nhân",
+      "lockedHint": "Không đổi được bộ phận/kỳ/pháp nhân sau khi tạo.",
+      "items": "Các khoản dự chi",
+      "total": "Tổng",
+      "itemTitle": "Tên khoản chi (VD: Facebook Ads)",
+      "category": "Danh mục",
+      "noCategory": "Không phân loại",
+      "addItem": "Thêm khoản",
+      "submitCreate": "Tạo kế hoạch"
+    },
+    "toast": {
+      "created": "Đã tạo kế hoạch chi",
+      "updated": "Đã cập nhật kế hoạch",
+      "submitted": "Đã gửi kế hoạch để duyệt",
+      "saveError": "Không thể lưu kế hoạch. Vui lòng thử lại.",
+      "duplicate": "Bộ phận đã có kế hoạch cho kỳ này.",
+      "forbidden": "Bạn chỉ lập được kế hoạch cho bộ phận mình phụ trách."
+    }
+  },
   "accounts": {
     "title": "Tài khoản quỹ",
     "subtitle": "Quản lý các nguồn tiền của công ty theo pháp nhân",

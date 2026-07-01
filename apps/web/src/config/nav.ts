@@ -88,6 +88,7 @@ export const navGroups: NavGroup[] = [
       { icon: ShoppingCart, labelKey: 'items.purchaseRequests', href: '/purchase-requests', permission: 'purchase_request:view' },
       { icon: Wallet, labelKey: 'items.fundAccounts', href: '/finance/accounts', permission: 'fund_account:view' },
       { icon: ArrowRightLeft, labelKey: 'items.cashTransactions', href: '/finance/transactions', permission: 'cash_transaction:view' },
+      { icon: ClipboardList, labelKey: 'items.spendingPlans', href: '/finance/spending-plans', permission: 'spending_plan:view' },
       { icon: Tags, labelKey: 'items.financeCategories', href: '/finance/categories', permission: 'cash_transaction:view' },
     ],
   },

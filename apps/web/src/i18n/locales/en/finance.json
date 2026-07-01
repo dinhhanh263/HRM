@@ -21,6 +21,40 @@
       "empty": "No expenses in this period"
     }
   },
+  "plans": {
+    "title": "Department spending plans",
+    "subtitle": "Draft & submit your department's monthly spending plan for HR review",
+    "status": { "DRAFT": "Draft", "SUBMITTED": "Pending", "APPROVED": "Approved", "REJECTED": "Rejected" },
+    "empty": { "title": "No spending plans yet", "description": "Create a spending plan for your department to get started" },
+    "table": { "department": "Department", "period": "Period", "status": "Status", "total": "Planned total", "itemsSuffix": "items" },
+    "actions": { "edit": "Edit", "submit": "Submit" },
+    "form": {
+      "create": "Create plan",
+      "edit": "Edit spending plan",
+      "description": "List the planned expenses for the period. Submit for HR/Finance to consolidate.",
+      "department": "Department",
+      "departmentPlaceholder": "Select department",
+      "period": "Period (month)",
+      "entity": "Legal entity",
+      "entityPlaceholder": "Select entity",
+      "lockedHint": "Department / period / entity cannot change after creation.",
+      "items": "Planned line items",
+      "total": "Total",
+      "itemTitle": "Line title (e.g. Facebook Ads)",
+      "category": "Category",
+      "noCategory": "Uncategorized",
+      "addItem": "Add line",
+      "submitCreate": "Create plan"
+    },
+    "toast": {
+      "created": "Spending plan created",
+      "updated": "Plan updated",
+      "submitted": "Plan submitted for review",
+      "saveError": "Could not save the plan. Please try again.",
+      "duplicate": "This department already has a plan for this period.",
+      "forbidden": "You can only plan for the department you head."
+    }
+  },
   "accounts": {
     "title": "Fund accounts",
     "subtitle": "Manage the company's cash sources per legal entity",

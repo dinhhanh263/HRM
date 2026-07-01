@@ -19,6 +19,20 @@
     "categories": {
       "title": "Spending by category",
       "empty": "No expenses in this period"
+    },
+    "forecast": {
+      "title": "Projected balance this period",
+      "balance": "Projected balance",
+      "projectedEnd": "Projected end balance",
+      "alertTitle": "Funds last until {{date}}, then short by {{amount}}",
+      "alertHint": "Based on expected income and approved spending plans. Consider requesting a fund top-up from the Founder."
+    },
+    "bva": {
+      "title": "Budget vs Actual",
+      "byDepartment": "By department",
+      "byCategory": "By category",
+      "planned": "Planned",
+      "actual": "Actual"
     }
   },
   "plans": {

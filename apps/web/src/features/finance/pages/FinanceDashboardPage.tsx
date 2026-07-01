@@ -4,6 +4,9 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  LineChart,
+  Line,
+  ReferenceLine,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -20,10 +23,11 @@ import {
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatVnd } from '@/lib/utils';
-import { Wallet, ArrowDownLeft, ArrowUpRight, TrendingUp, TrendingDown, PlusCircle } from 'lucide-react';
+import { Wallet, ArrowDownLeft, ArrowUpRight, TrendingUp, TrendingDown, PlusCircle, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useIssuingEntitiesLite } from '../hooks/useFundAccounts';
 import { useFinanceDashboard } from '../hooks/useFinanceDashboard';
+import { useBudgetVsActual, useFinanceForecast } from '../hooks/useFinanceReports';
 
 const ALL = '__all__';
 function currentMonth() {
@@ -35,11 +39,11 @@ export function FinanceDashboardPage() {
   const [entityId, setEntityId] = useState(ALL);
   const [month, setMonth] = useState(currentMonth());
 
+  const reportQuery = { issuingEntityId: entityId === ALL ? undefined : entityId, month };
   const { data: entities = [] } = useIssuingEntitiesLite();
-  const { data, isLoading } = useFinanceDashboard({
-    issuingEntityId: entityId === ALL ? undefined : entityId,
-    month,
-  });
+  const { data, isLoading } = useFinanceDashboard(reportQuery);
+  const { data: forecast } = useFinanceForecast(reportQuery);
+  const { data: bva } = useBudgetVsActual(reportQuery);
 
   const chartData = (data?.series ?? []).map((d) => ({
     date: d.date.slice(8), // day-of-month
@@ -71,6 +75,22 @@ export function FinanceDashboardPage() {
           <Input type="month" value={month} onChange={(e) => setMonth(e.target.value)} className="h-9 w-40" />
         </div>
       </div>
+
+      {/* Shortfall alert — projected cash-out within the period */}
+      {forecast && forecast.cashOutDate && (
+        <div className="flex items-start gap-3 rounded-xl border border-danger/30 bg-danger-light p-4">
+          <AlertTriangle className="size-5 text-danger shrink-0 mt-0.5" />
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-danger">
+              {t('dashboard.forecast.alertTitle', {
+                date: forecast.cashOutDate.slice(0, 10).split('-').reverse().join('/'),
+                amount: formatVnd(forecast.shortfall),
+              })}
+            </p>
+            <p className="text-xs text-text-secondary mt-0.5">{t('dashboard.forecast.alertHint')}</p>
+          </div>
+        </div>
+      )}
 
       {/* KPI cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -138,6 +158,74 @@ export function FinanceDashboardPage() {
           </ul>
         )}
       </div>
+
+      {/* Projected balance (forecast) */}
+      {forecast && forecast.series.length > 0 && (
+        <div className="bg-surface rounded-xl border border-border p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <h2 className="text-base font-semibold text-text-primary">{t('dashboard.forecast.title')}</h2>
+            <span className="text-sm text-text-secondary">
+              {t('dashboard.forecast.projectedEnd')}:{' '}
+              <span className={`font-semibold tabular-nums ${Number(forecast.projectedEndBalance) < 0 ? 'text-danger' : 'text-success'}`}>
+                {formatVnd(forecast.projectedEndBalance)}
+              </span>
+            </span>
+          </div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={forecast.series.map((d) => ({ date: d.date.slice(8), balance: Number(d.balance) }))} margin={{ top: 8, right: 16, left: 8, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
+                <XAxis dataKey="date" tick={{ fontSize: 12, fill: 'var(--color-text-muted)' }} />
+                <YAxis tick={{ fontSize: 12, fill: 'var(--color-text-muted)' }} tickFormatter={(v: number) => formatVnd(v)} width={72} />
+                <Tooltip formatter={(v) => formatVnd(v as number)} contentStyle={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 8, fontSize: 12 }} />
+                <ReferenceLine y={0} stroke="var(--color-danger)" strokeDasharray="4 4" />
+                <Line type="monotone" dataKey="balance" name={t('dashboard.forecast.balance')} stroke="var(--color-primary)" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* Budget vs Actual */}
+      {bva && (bva.byDepartment.length > 0 || bva.byCategory.length > 0) && (
+        <div className="bg-surface rounded-xl border border-border p-5 shadow-sm">
+          <h2 className="text-base font-semibold text-text-primary mb-4">{t('dashboard.bva.title')}</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <BvaTable title={t('dashboard.bva.byDepartment')} rows={bva.byDepartment} />
+            <BvaTable title={t('dashboard.bva.byCategory')} rows={bva.byCategory} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BvaTable({ title, rows }: { title: string; rows: import('@hrm/shared').BudgetVsActualRow[] }) {
+  const { t } = useTranslation('finance');
+  if (rows.length === 0) return null;
+  return (
+    <div>
+      <p className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-2">{title}</p>
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="text-xs text-text-muted">
+            <th className="text-left font-medium py-1">{title}</th>
+            <th className="text-right font-medium py-1">{t('dashboard.bva.planned')}</th>
+            <th className="text-right font-medium py-1">{t('dashboard.bva.actual')}</th>
+            <th className="text-right font-medium py-1 w-14">%</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.key} className="border-t border-border">
+              <td className="py-1.5 text-text-secondary truncate max-w-[140px]">{r.label}</td>
+              <td className="py-1.5 text-right tabular-nums text-text-secondary">{formatVnd(r.planned)}</td>
+              <td className="py-1.5 text-right tabular-nums text-text-primary font-medium">{formatVnd(r.actual)}</td>
+              <td className={`py-1.5 text-right tabular-nums font-medium ${r.over ? 'text-danger' : 'text-text-secondary'}`}>{r.usedPct}%</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

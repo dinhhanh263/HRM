@@ -19,6 +19,20 @@
     "categories": {
       "title": "Chi tiêu theo danh mục",
       "empty": "Chưa có khoản chi nào trong kỳ"
+    },
+    "forecast": {
+      "title": "Dự báo số dư trong kỳ",
+      "balance": "Số dư dự phóng",
+      "projectedEnd": "Số dư cuối kỳ dự kiến",
+      "alertTitle": "Đủ chi đến ngày {{date}}, sau đó thiếu {{amount}}",
+      "alertHint": "Dựa trên thu dự kiến và kế hoạch chi đã duyệt. Cân nhắc đề xuất Founder nạp thêm quỹ."
+    },
+    "bva": {
+      "title": "Kế hoạch vs Thực chi",
+      "byDepartment": "Theo bộ phận",
+      "byCategory": "Theo danh mục",
+      "planned": "Kế hoạch",
+      "actual": "Thực chi"
     }
   },
   "plans": {

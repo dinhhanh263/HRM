@@ -251,8 +251,8 @@ export interface SpendingPlanItemInput {
 
 export interface SpendingPlanDto {
   id: string;
-  departmentId: string;
-  departmentName: string;
+  departmentId: string | null;
+  departmentName: string | null;
   issuingEntityId: string;
   issuingEntityName: string;
   period: string; // "YYYY-MM"
@@ -270,7 +270,7 @@ export interface SpendingPlanDto {
 }
 
 export interface CreateSpendingPlanRequest {
-  departmentId: string;
+  departmentId?: string | null; // optional; defaults to the creator's own department
   issuingEntityId: string;
   period: string; // "YYYY-MM"
   items: SpendingPlanItemInput[];

@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client';
 import { spendingPlanRepository } from '../repositories/spending-plan.repository.js';
 import { db } from '../../infrastructure/database/client.js';
-import { NotFoundError, BadRequestError, ForbiddenError, ConflictError } from '../../shared/errors/index.js';
+import { NotFoundError, BadRequestError, ConflictError } from '../../shared/errors/index.js';
 import type {
   SpendingPlanDto,
   SpendingPlanItemInput,
@@ -10,7 +10,9 @@ import type {
 } from '@hrm/shared';
 import type { SpendingPlanListInput } from '../../app/validators/spending-plan.validator.js';
 
-// Who is acting: their linked employee (for dept-manager scope) + super-admin bypass.
+// Who is acting. SPEC-048 GĐ2': plans are personal proposals — any employee may
+// create; only the creator (owner) edits their own; HR/Founder review. `employeeId`
+// is used only to default the department to the creator's own.
 export interface PlanActor {
   userId: string;
   employeeId: string | null;
@@ -29,7 +31,7 @@ function toDto(p: PlanRow): SpendingPlanDto {
   return {
     id: p.id,
     departmentId: p.departmentId,
-    departmentName: p.department.name,
+    departmentName: p.department?.name ?? null,
     issuingEntityId: p.issuingEntityId,
     issuingEntityName: p.issuingEntity.name,
     period: p.period,
@@ -55,13 +57,30 @@ function toDto(p: PlanRow): SpendingPlanDto {
   };
 }
 
-// A manager may act on a department only if they head it (or are super-admin).
-async function assertCanManageDept(actor: PlanActor, departmentId: string, tenantId: string): Promise<void> {
-  const dept = await db.department.findFirst({ where: { id: departmentId, tenantId } });
-  if (!dept) throw new BadRequestError('Bộ phận không hợp lệ', 'PLAN_INVALID_DEPARTMENT');
+// Resolve the department to tag on the plan: use the one supplied (validated against
+// the tenant) or default to the creator's own department; may be null.
+async function resolveDepartmentId(
+  actor: PlanActor,
+  supplied: string | null | undefined,
+  tenantId: string,
+): Promise<string | null> {
+  if (supplied) {
+    const dept = await db.department.findFirst({ where: { id: supplied, tenantId } });
+    if (!dept) throw new BadRequestError('Bộ phận không hợp lệ', 'PLAN_INVALID_DEPARTMENT');
+    return supplied;
+  }
+  if (actor.employeeId) {
+    const emp = await db.employee.findFirst({ where: { id: actor.employeeId, tenantId }, select: { departmentId: true } });
+    return emp?.departmentId ?? null;
+  }
+  return null;
+}
+
+// Only the creator may modify their own proposal (super-admin bypass).
+function assertOwner(existing: { createdById: string }, actor: PlanActor): void {
   if (actor.isSuperAdmin) return;
-  if (!actor.employeeId || dept.managerId !== actor.employeeId) {
-    throw new ForbiddenError('Bạn chỉ có thể lập kế hoạch cho bộ phận mình phụ trách', 'PLAN_DEPT_FORBIDDEN');
+  if (existing.createdById !== actor.userId) {
+    throw new NotFoundError('Không tìm thấy kế hoạch chi');
   }
 }
 
@@ -118,11 +137,10 @@ export const spendingPlanService = {
     if (query.status) where.status = query.status;
     if (query.departmentId) where.departmentId = query.departmentId;
 
-    // scope=all is HR/Founder only (gated by controller); otherwise restrict to the
-    // departments this manager heads.
+    // scope=all is HR/Founder only (gated by controller); otherwise a user sees only
+    // the proposals they created.
     if (query.scope !== 'all') {
-      const deptIds = actor.employeeId ? await spendingPlanRepository.managedDepartmentIds(actor.employeeId, tenantId) : [];
-      where.departmentId = query.departmentId && deptIds.includes(query.departmentId) ? query.departmentId : { in: deptIds };
+      where.createdById = actor.userId;
     }
     const rows = await spendingPlanRepository.findMany(tenantId, where);
     return rows.map(toDto);
@@ -131,45 +149,38 @@ export const spendingPlanService = {
   async getById(id: string, tenantId: string, actor: PlanActor, canReviewAll: boolean): Promise<SpendingPlanDto> {
     const row = await spendingPlanRepository.findById(id, tenantId);
     if (!row) throw new NotFoundError('Không tìm thấy kế hoạch chi');
-    if (!actor.isSuperAdmin && !canReviewAll) {
-      const deptIds = actor.employeeId ? await spendingPlanRepository.managedDepartmentIds(actor.employeeId, tenantId) : [];
-      if (!deptIds.includes(row.departmentId)) throw new NotFoundError('Không tìm thấy kế hoạch chi');
+    // Owner or a reviewer (HR/Founder) may read; otherwise hide.
+    if (!actor.isSuperAdmin && !canReviewAll && row.createdById !== actor.userId) {
+      throw new NotFoundError('Không tìm thấy kế hoạch chi');
     }
     return toDto(row);
   },
 
   async create(tenantId: string, actor: PlanActor, input: CreateSpendingPlanRequest): Promise<SpendingPlanDto> {
-    await assertCanManageDept(actor, input.departmentId, tenantId);
     await assertEntity(input.issuingEntityId, tenantId);
+    const departmentId = await resolveDepartmentId(actor, input.departmentId, tenantId);
     const { data, total } = await buildItems(input.items, tenantId, input.period);
 
-    try {
-      const created = await db.spendingPlan.create({
-        data: {
-          tenantId,
-          departmentId: input.departmentId,
-          issuingEntityId: input.issuingEntityId,
-          period: input.period,
-          status: 'DRAFT',
-          totalAmount: total,
-          createdById: actor.userId,
-          items: { create: data },
-        },
-        select: { id: true },
-      });
-      return this.getById(created.id, tenantId, actor, true);
-    } catch (err) {
-      if ((err as { code?: string }).code === 'P2002') {
-        throw new ConflictError('Bộ phận đã có kế hoạch cho kỳ này (theo pháp nhân)', 'PLAN_DUPLICATE');
-      }
-      throw err;
-    }
+    const created = await db.spendingPlan.create({
+      data: {
+        tenantId,
+        departmentId,
+        issuingEntityId: input.issuingEntityId,
+        period: input.period,
+        status: 'DRAFT',
+        totalAmount: total,
+        createdById: actor.userId,
+        items: { create: data },
+      },
+      select: { id: true },
+    });
+    return this.getById(created.id, tenantId, actor, true);
   },
 
   async update(id: string, tenantId: string, actor: PlanActor, input: UpdateSpendingPlanRequest): Promise<SpendingPlanDto> {
     const existing = await spendingPlanRepository.findById(id, tenantId);
     if (!existing) throw new NotFoundError('Không tìm thấy kế hoạch chi');
-    await assertCanManageDept(actor, existing.departmentId, tenantId);
+    assertOwner(existing, actor);
     if (existing.status !== 'DRAFT' && existing.status !== 'REJECTED') {
       throw new ConflictError('Chỉ sửa được kế hoạch ở trạng thái nháp hoặc bị từ chối', 'PLAN_NOT_EDITABLE');
     }
@@ -193,7 +204,7 @@ export const spendingPlanService = {
   },
 
   // HR/Finance decision on a SUBMITTED plan. Reject requires a note and returns the
-  // plan to REJECTED so the manager can revise & resubmit; approve locks it APPROVED.
+  // plan to REJECTED so the owner can revise & resubmit; approve locks it APPROVED.
   async review(
     id: string,
     tenantId: string,
@@ -224,7 +235,7 @@ export const spendingPlanService = {
   async submit(id: string, tenantId: string, actor: PlanActor): Promise<SpendingPlanDto> {
     const existing = await spendingPlanRepository.findById(id, tenantId);
     if (!existing) throw new NotFoundError('Không tìm thấy kế hoạch chi');
-    await assertCanManageDept(actor, existing.departmentId, tenantId);
+    assertOwner(existing, actor);
     if (existing.status !== 'DRAFT' && existing.status !== 'REJECTED') {
       throw new ConflictError('Chỉ gửi được kế hoạch ở trạng thái nháp hoặc bị từ chối', 'PLAN_NOT_SUBMITTABLE');
     }

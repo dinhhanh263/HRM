@@ -65,9 +65,10 @@ export const financeReportService = {
     const plannedByDept = new Map<string, number>();
     const plannedByCat = new Map<string, number>();
     for (const plan of plans) {
+      const dk = plan.departmentId ?? 'none';
       for (const it of plan.items) {
         const amt = Number(it.amount);
-        plannedByDept.set(plan.departmentId, (plannedByDept.get(plan.departmentId) ?? 0) + amt);
+        plannedByDept.set(dk, (plannedByDept.get(dk) ?? 0) + amt);
         const ck = it.categoryId ?? 'none';
         plannedByCat.set(ck, (plannedByCat.get(ck) ?? 0) + amt);
       }

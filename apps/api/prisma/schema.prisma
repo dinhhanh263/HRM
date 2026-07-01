@@ -2973,7 +2973,7 @@ enum SpendingPlanStatus {
 model SpendingPlan {
   id              String             @id @default(cuid())
   tenantId        String             @map("tenant_id")
-  departmentId    String             @map("department_id")
+  departmentId    String?            @map("department_id") // GĐ2': nhãn tùy chọn (mặc định phòng người tạo)
   issuingEntityId String             @map("issuing_entity_id")
   period          String // "YYYY-MM"
   status          SpendingPlanStatus @default(DRAFT)
@@ -2988,12 +2988,13 @@ model SpendingPlan {
   updatedAt       DateTime           @updatedAt @map("updated_at")
 
   tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  department    Department         @relation(fields: [departmentId], references: [id])
+  department    Department?        @relation(fields: [departmentId], references: [id])
   issuingEntity IssuingEntity      @relation(fields: [issuingEntityId], references: [id])
   items         SpendingPlanItem[]
 
-  @@unique([departmentId, period, issuingEntityId])
+  // GĐ2': ai cũng lập được (đề xuất theo người tạo) — bỏ giới hạn 1 kế hoạch/phòng/kỳ.
   @@index([tenantId, period, status])
+  @@index([createdById])
   @@map("spending_plans")
 }
 

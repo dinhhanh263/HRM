@@ -26,7 +26,7 @@ import { useFinanceCategories } from '../hooks/useFinanceCategories';
 import { useDepartments } from '@/features/departments/hooks/useDepartments';
 
 export interface SpendingPlanFormData {
-  departmentId: string;
+  departmentId: string | null;
   issuingEntityId: string;
   period: string;
   items: SpendingPlanItemInput[];
@@ -64,14 +64,14 @@ export function SpendingPlanFormSheet({ open, onOpenChange, plan, onSubmit, isLo
   const { data: categories = [] } = useFinanceCategories({ active: true });
   const expenseCats = categories.filter((c) => c.kind === 'EXPENSE');
 
-  const [departmentId, setDepartmentId] = useState('');
+  const [departmentId, setDepartmentId] = useState(NONE);
   const [entityId, setEntityId] = useState('');
   const [period, setPeriod] = useState(nextMonth());
   const [rows, setRows] = useState<Row[]>([emptyRow()]);
 
   useEffect(() => {
     if (open) {
-      setDepartmentId(plan?.departmentId ?? '');
+      setDepartmentId(plan?.departmentId ?? NONE);
       setEntityId(plan?.issuingEntityId ?? '');
       setPeriod(plan?.period ?? nextMonth());
       setRows(
@@ -102,8 +102,8 @@ export function SpendingPlanFormSheet({ open, onOpenChange, plan, onSubmit, isLo
         categoryId: r.categoryId === NONE ? null : r.categoryId,
         expectedDate: r.expectedDate || null,
       }));
-    if (!departmentId || !entityId || items.length === 0) return;
-    onSubmit({ departmentId, issuingEntityId: entityId, period, items });
+    if (!entityId || items.length === 0) return;
+    onSubmit({ departmentId: departmentId === NONE ? null : departmentId, issuingEntityId: entityId, period, items });
   }
 
   return (
@@ -117,10 +117,11 @@ export function SpendingPlanFormSheet({ open, onOpenChange, plan, onSubmit, isLo
         <div className="mt-6 flex-1 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label>{t('plans.form.department')} <span className="text-danger">*</span></Label>
+              <Label>{t('plans.form.department')}</Label>
               <Select value={departmentId} onValueChange={setDepartmentId} disabled={isEditing}>
                 <SelectTrigger><SelectValue placeholder={t('plans.form.departmentPlaceholder')} /></SelectTrigger>
                 <SelectContent>
+                  <SelectItem value={NONE}>{t('plans.form.noDepartment')}</SelectItem>
                   {departments.map((d) => (
                     <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
                   ))}

@@ -1,0 +1,66 @@
+{
+  "trigger": "Import from Excel",
+  "title": "Import line items from a file",
+  "description": "Download the template, fill it in, then upload. Valid rows are added to the form.",
+  "steps": {
+    "upload": "Upload",
+    "review": "Review"
+  },
+  "template": {
+    "title": "Step 1 — Download template",
+    "hint": "Use the provided template so columns and formats match the system.",
+    "downloadXlsx": "Download Excel (.xlsx)",
+    "downloadCsv": "Download CSV",
+    "downloaded": "Template downloaded",
+    "downloadError": "Could not download the template, please try again."
+  },
+  "upload": {
+    "title": "Step 2 — Upload file",
+    "choose": "Choose file",
+    "change": "Change file",
+    "empty": "No file selected",
+    "formats": "Supports .xlsx and .csv, up to 200 rows.",
+    "mergeHint": "Valid rows are added to the form; error rows are skipped. You still need to click Create.",
+    "parse": "Read file",
+    "parsing": "Reading..."
+  },
+  "review": {
+    "valid": "Valid",
+    "errors": "Errors",
+    "totalRows": "Total rows",
+    "errorsTitle": "Error list",
+    "colRow": "Row",
+    "colColumn": "Column",
+    "colMessage": "Message",
+    "noneValid": "No valid rows. Please fix the file and re-upload.",
+    "willImport": "{{count}} valid rows will be added to the form.",
+    "back": "Upload another file",
+    "confirm": "Add {{count}} rows to the request",
+    "imported": "Added {{count}} rows to the request"
+  },
+  "errors": {
+    "fileRequired": "Please choose a file first.",
+    "parseFailed": "Could not read the file, please try again."
+  },
+  "columns": {
+    "productName": "Product name",
+    "sku": "SKU",
+    "unit": "Unit",
+    "quantity": "Quantity",
+    "unitPrice": "Unit price",
+    "taxRate": "Tax rate (%)"
+  },
+  "code": {
+    "IMPORT_FILE_TOO_LARGE": "File too large",
+    "IMPORT_TOO_MANY_ROWS": "Too many rows (max 200)",
+    "IMPORT_EMPTY_FILE": "File has no data",
+    "IMPORT_UNREADABLE_FILE": "Could not read the file",
+    "IMPORT_MISSING_COLUMNS": "Missing required columns",
+    "IMPORT_MISSING_REQUIRED": "Missing required value",
+    "IMPORT_INVALID_NUMBER": "Invalid number",
+    "IMPORT_QUANTITY_NOT_POSITIVE": "Quantity must be greater than 0",
+    "IMPORT_UNIT_PRICE_NEGATIVE": "Unit price cannot be negative",
+    "IMPORT_TAX_RATE_RANGE": "Tax rate must be between 0 and 100",
+    "IMPORT_TOO_LONG": "Value too long"
+  }
+}

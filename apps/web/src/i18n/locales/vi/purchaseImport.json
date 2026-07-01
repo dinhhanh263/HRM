@@ -1,0 +1,66 @@
+{
+  "trigger": "Nhập từ Excel",
+  "title": "Nhập dòng hàng từ file",
+  "description": "Tải mẫu, điền dữ liệu rồi tải lên. Dòng hợp lệ sẽ được thêm vào biểu mẫu.",
+  "steps": {
+    "upload": "Tải lên",
+    "review": "Kiểm tra"
+  },
+  "template": {
+    "title": "Bước 1 — Tải file mẫu",
+    "hint": "Dùng đúng file mẫu để cột và định dạng khớp với hệ thống.",
+    "downloadXlsx": "Tải Excel (.xlsx)",
+    "downloadCsv": "Tải CSV",
+    "downloaded": "Đã tải file mẫu",
+    "downloadError": "Không tải được file mẫu, vui lòng thử lại."
+  },
+  "upload": {
+    "title": "Bước 2 — Tải file lên",
+    "choose": "Chọn file",
+    "change": "Đổi file",
+    "empty": "Chưa chọn file",
+    "formats": "Hỗ trợ .xlsx và .csv, tối đa 200 dòng.",
+    "mergeHint": "Dòng hợp lệ sẽ được thêm vào biểu mẫu; dòng lỗi sẽ được bỏ qua. Bạn vẫn cần bấm Tạo phiếu.",
+    "parse": "Đọc file",
+    "parsing": "Đang đọc..."
+  },
+  "review": {
+    "valid": "Hợp lệ",
+    "errors": "Lỗi",
+    "totalRows": "Tổng dòng",
+    "errorsTitle": "Danh sách lỗi",
+    "colRow": "Dòng",
+    "colColumn": "Cột",
+    "colMessage": "Thông báo",
+    "noneValid": "Không có dòng nào hợp lệ. Vui lòng sửa file và tải lại.",
+    "willImport": "{{count}} dòng hợp lệ sẽ được thêm vào biểu mẫu.",
+    "back": "Tải file khác",
+    "confirm": "Thêm {{count}} dòng vào phiếu",
+    "imported": "Đã thêm {{count}} dòng vào phiếu"
+  },
+  "errors": {
+    "fileRequired": "Vui lòng chọn file trước khi đọc.",
+    "parseFailed": "Đọc file thất bại, vui lòng thử lại."
+  },
+  "columns": {
+    "productName": "Tên sản phẩm",
+    "sku": "Mã SKU",
+    "unit": "Đơn vị",
+    "quantity": "Số lượng",
+    "unitPrice": "Đơn giá",
+    "taxRate": "Thuế (%)"
+  },
+  "code": {
+    "IMPORT_FILE_TOO_LARGE": "File quá lớn",
+    "IMPORT_TOO_MANY_ROWS": "Quá nhiều dòng (tối đa 200)",
+    "IMPORT_EMPTY_FILE": "File không có dữ liệu",
+    "IMPORT_UNREADABLE_FILE": "Không đọc được file",
+    "IMPORT_MISSING_COLUMNS": "Thiếu cột bắt buộc",
+    "IMPORT_MISSING_REQUIRED": "Thiếu giá trị bắt buộc",
+    "IMPORT_INVALID_NUMBER": "Số không hợp lệ",
+    "IMPORT_QUANTITY_NOT_POSITIVE": "Số lượng phải lớn hơn 0",
+    "IMPORT_UNIT_PRICE_NEGATIVE": "Đơn giá không được âm",
+    "IMPORT_TAX_RATE_RANGE": "Thuế phải trong khoảng 0–100",
+    "IMPORT_TOO_LONG": "Giá trị quá dài"
+  }
+}

@@ -13,6 +13,7 @@ import viRole from './locales/vi/role.json';
 import viLeave from './locales/vi/leave.json';
 import viPayment from './locales/vi/payment.json';
 import viPurchase from './locales/vi/purchase.json';
+import viPurchaseImport from './locales/vi/purchaseImport.json';
 import viTimesheet from './locales/vi/timesheet.json';
 import viPayroll from './locales/vi/payroll.json';
 import viEmployeeImport from './locales/vi/employeeImport.json';
@@ -37,6 +38,7 @@ import enRole from './locales/en/role.json';
 import enLeave from './locales/en/leave.json';
 import enPayment from './locales/en/payment.json';
 import enPurchase from './locales/en/purchase.json';
+import enPurchaseImport from './locales/en/purchaseImport.json';
 import enTimesheet from './locales/en/timesheet.json';
 import enPayroll from './locales/en/payroll.json';
 import enEmployeeImport from './locales/en/employeeImport.json';
@@ -69,6 +71,7 @@ export const resources = {
     leave: viLeave,
     payment: viPayment,
     purchase: viPurchase,
+    purchaseImport: viPurchaseImport,
     timesheet: viTimesheet,
     payroll: viPayroll,
     employeeImport: viEmployeeImport,
@@ -96,6 +99,7 @@ export const resources = {
     leave: enLeave,
     payment: enPayment,
     purchase: enPurchase,
+    purchaseImport: enPurchaseImport,
     timesheet: enTimesheet,
     payroll: enPayroll,
     employeeImport: enEmployeeImport,
@@ -132,7 +136,7 @@ i18n.use(initReactI18next).init({
   lng: initialLanguage,
   fallbackLng: 'vi',
   defaultNS,
-  ns: ['common', 'nav', 'dashboard', 'auth', 'employee', 'department', 'position', 'permission', 'role', 'leave', 'payment', 'purchase', 'timesheet', 'payroll', 'employeeImport', 'contracts', 'notifications', 'asset', 'assetImport', 'recruitment', 'probation', 'settings', 'account', 'kpi', 'sales'],
+  ns: ['common', 'nav', 'dashboard', 'auth', 'employee', 'department', 'position', 'permission', 'role', 'leave', 'payment', 'purchase', 'timesheet', 'payroll', 'employeeImport', 'contracts', 'notifications', 'asset', 'assetImport', 'recruitment', 'probation', 'settings', 'account', 'kpi', 'sales', 'purchaseImport'],
   interpolation: { escapeValue: false },
   returnNull: false,
 });

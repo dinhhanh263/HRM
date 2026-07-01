@@ -4,7 +4,7 @@ import { useForm, useFieldArray, useWatch, Controller, type Control } from 'reac
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import type { CreatePurchaseRequestRequest } from '@hrm/shared';
+import type { CreatePurchaseRequestRequest, ValidatedPRItemRow } from '@hrm/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -27,6 +27,7 @@ import {
   useCreatePurchaseRequest,
   useResubmitPurchaseRequest,
 } from '../hooks/usePurchaseRequests';
+import { PurchaseItemImportSheet } from '../components/PurchaseItemImportSheet';
 
 const itemSchema = z.object({
   sku: z.string().optional(),
@@ -166,13 +167,38 @@ export function CreatePurchaseRequestPage() {
     reset,
     watch,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { currency: 'VND', issuingEntityId: '', items: [{ ...EMPTY_ITEM }] },
   });
 
-  const { fields, append, remove } = useFieldArray({ control, name: 'items' });
+  const { fields, append, remove, replace } = useFieldArray({ control, name: 'items' });
+
+  // Merge imported line items into the form. If the form still holds only the
+  // blank starter row, replace it; otherwise append so existing rows are kept.
+  function handleImportItems(items: ValidatedPRItemRow[]) {
+    const mapped = items.map((it) => ({
+      sku: it.sku ?? '',
+      productName: it.productName,
+      unit: it.unit ?? '',
+      quantity: it.quantity,
+      unitPrice: it.unitPrice,
+      taxRate: it.taxRate ?? EMPTY_ITEM.taxRate,
+    }));
+    const current = getValues('items');
+    const onlyBlankStarter =
+      current.length === 1 &&
+      !current[0].productName?.trim() &&
+      !current[0].sku?.trim() &&
+      !current[0].unit?.trim();
+    if (onlyBlankStarter) {
+      replace(mapped);
+    } else {
+      mapped.forEach((m) => append(m));
+    }
+  }
 
   // Hydrate the form once the request to resubmit resolves.
   useEffect(() => {
@@ -415,10 +441,13 @@ export function CreatePurchaseRequestPage() {
                 {t('form.sections.itemsDescription')}
               </p>
             </div>
-            <Button type="button" variant="outline" size="sm" onClick={() => append({ ...EMPTY_ITEM })}>
-              <Plus className="mr-1.5 size-4" />
-              {t('form.items.addRow')}
-            </Button>
+            <div className="flex items-center gap-2">
+              <PurchaseItemImportSheet onImport={handleImportItems} />
+              <Button type="button" variant="outline" size="sm" onClick={() => append({ ...EMPTY_ITEM })}>
+                <Plus className="mr-1.5 size-4" />
+                {t('form.items.addRow')}
+              </Button>
+            </div>
           </div>
 
           <div className="p-6 space-y-3">

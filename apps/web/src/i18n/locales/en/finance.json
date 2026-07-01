@@ -1,0 +1,53 @@
+{
+  "accounts": {
+    "title": "Fund accounts",
+    "subtitle": "Manage the company's cash sources per legal entity",
+    "allEntities": "All entities",
+    "totalBalance": "Total balance",
+    "inactive": "Deactivated",
+    "activate": "Reactivate",
+    "deactivate": "Deactivate",
+    "type": {
+      "BANK": "Bank",
+      "CASH": "Cash",
+      "EWALLET": "E-wallet"
+    },
+    "table": {
+      "name": "Account name",
+      "entity": "Entity",
+      "type": "Type",
+      "balance": "Current balance"
+    },
+    "empty": {
+      "title": "No fund accounts yet",
+      "description": "Add your first account to start tracking cash flow"
+    },
+    "form": {
+      "create": "Add account",
+      "edit": "Edit fund account",
+      "description": "A fund account holds money: a bank account, cash, or an e-wallet.",
+      "entityLabel": "Legal entity",
+      "entityPlaceholder": "Select owning entity",
+      "nameLabel": "Account name",
+      "namePlaceholder": "e.g. Vietcombank - Codecrush",
+      "typeLabel": "Account type",
+      "openingLabel": "Opening balance",
+      "openingHint": "The current balance is computed from transactions, not entered manually.",
+      "submitCreate": "Create account"
+    },
+    "delete": {
+      "title": "Delete fund account?",
+      "description": "Account \"{{name}}\" will be permanently deleted. This cannot be undone."
+    },
+    "toast": {
+      "created": "Fund account created",
+      "updated": "Fund account updated",
+      "deleted": "Fund account deleted",
+      "activated": "Account reactivated",
+      "deactivated": "Account deactivated",
+      "saveError": "Could not save the account. Please try again.",
+      "deleteError": "Could not delete the account. Please try again.",
+      "hasTransactions": "This account has transactions — deactivate it instead of deleting."
+    }
+  }
+}

@@ -41,6 +41,7 @@ const pageTitleKeys: Record<string, string> = {
   '/sales/products': 'titles.salesProducts',
   '/sales/tasks': 'titles.salesTasks',
   '/settings/sales': 'titles.salesSettings',
+  '/finance/accounts': 'titles.fundAccounts',
 };
 
 function getInitials(name: string) {

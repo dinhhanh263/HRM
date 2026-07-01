@@ -1,0 +1,53 @@
+{
+  "accounts": {
+    "title": "Tài khoản quỹ",
+    "subtitle": "Quản lý các nguồn tiền của công ty theo pháp nhân",
+    "allEntities": "Tất cả pháp nhân",
+    "totalBalance": "Tổng số dư",
+    "inactive": "Đã vô hiệu hoá",
+    "activate": "Kích hoạt lại",
+    "deactivate": "Vô hiệu hoá",
+    "type": {
+      "BANK": "Ngân hàng",
+      "CASH": "Tiền mặt",
+      "EWALLET": "Ví điện tử"
+    },
+    "table": {
+      "name": "Tên tài khoản",
+      "entity": "Pháp nhân",
+      "type": "Loại",
+      "balance": "Số dư hiện tại"
+    },
+    "empty": {
+      "title": "Chưa có tài khoản quỹ",
+      "description": "Thêm tài khoản đầu tiên để bắt đầu theo dõi dòng tiền"
+    },
+    "form": {
+      "create": "Thêm tài khoản",
+      "edit": "Sửa tài khoản quỹ",
+      "description": "Tài khoản quỹ là nơi chứa tiền: ngân hàng, tiền mặt hoặc ví điện tử.",
+      "entityLabel": "Pháp nhân",
+      "entityPlaceholder": "Chọn pháp nhân sở hữu",
+      "nameLabel": "Tên tài khoản",
+      "namePlaceholder": "VD: Vietcombank - Codecrush",
+      "typeLabel": "Loại tài khoản",
+      "openingLabel": "Số dư ban đầu",
+      "openingHint": "Số dư hiện tại được tính tự động từ giao dịch, không nhập tay.",
+      "submitCreate": "Tạo tài khoản"
+    },
+    "delete": {
+      "title": "Xoá tài khoản quỹ?",
+      "description": "Tài khoản \"{{name}}\" sẽ bị xoá vĩnh viễn. Hành động này không thể hoàn tác."
+    },
+    "toast": {
+      "created": "Đã tạo tài khoản quỹ",
+      "updated": "Đã cập nhật tài khoản quỹ",
+      "deleted": "Đã xoá tài khoản quỹ",
+      "activated": "Đã kích hoạt lại tài khoản",
+      "deactivated": "Đã vô hiệu hoá tài khoản",
+      "saveError": "Không thể lưu tài khoản. Vui lòng thử lại.",
+      "deleteError": "Không thể xoá tài khoản. Vui lòng thử lại.",
+      "hasTransactions": "Tài khoản đã có giao dịch — hãy vô hiệu hoá thay vì xoá."
+    }
+  }
+}

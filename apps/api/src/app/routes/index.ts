@@ -24,6 +24,7 @@ import { kpiTeamRoutes } from './v1/kpi-team.routes.js';
 import { kpiCycleRoutes } from './v1/kpi-cycle.routes.js';
 import { kpiSurveyRoutes } from './v1/kpi-survey.routes.js';
 import { salesRoutes } from './v1/sales.routes.js';
+import { fundAccountRoutes } from './v1/fund-account.routes.js';
 
 const router: RouterType = Router();
 
@@ -52,5 +53,6 @@ router.use('/kpi-teams', kpiTeamRoutes);
 router.use('/kpi-cycles', kpiCycleRoutes);
 router.use('/kpi-surveys', kpiSurveyRoutes);
 router.use('/sales', salesRoutes);
+router.use('/fund-accounts', fundAccountRoutes);
 
 export { router as routes };

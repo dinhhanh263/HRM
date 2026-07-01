@@ -25,7 +25,8 @@
       "balance": "Số dư dự phóng",
       "projectedEnd": "Số dư cuối kỳ dự kiến",
       "alertTitle": "Đủ chi đến ngày {{date}}, sau đó thiếu {{amount}}",
-      "alertHint": "Dựa trên thu dự kiến và kế hoạch chi đã duyệt. Cân nhắc đề xuất Founder nạp thêm quỹ."
+      "alertHint": "Dựa trên thu dự kiến và kế hoạch chi đã duyệt. Cân nhắc đề xuất Founder nạp thêm quỹ.",
+      "createTopup": "Tạo đề xuất nạp quỹ"
     },
     "bva": {
       "title": "Kế hoạch vs Thực chi",
@@ -83,6 +84,49 @@
       "approved": "Đã duyệt kế hoạch",
       "rejected": "Đã từ chối kế hoạch",
       "reviewError": "Không thể xử lý. Vui lòng thử lại."
+    }
+  },
+  "topup": {
+    "title": "Đề xuất nạp quỹ",
+    "subtitle": "Trình Founder phê duyệt nạp thêm tiền vào quỹ",
+    "status": { "PENDING": "Chờ duyệt", "APPROVED": "Đã duyệt", "REJECTED": "Bị từ chối", "CANCELLED": "Đã huỷ" },
+    "empty": { "title": "Chưa có đề xuất nạp quỹ", "description": "Tạo đề xuất khi dự báo cho thấy quỹ sắp không đủ" },
+    "table": { "title": "Nội dung", "requester": "Người đề xuất", "amount": "Số tiền", "status": "Trạng thái", "neededBy": "Cần trước" },
+    "actions": { "detail": "Chi tiết", "approve": "Duyệt", "reject": "Từ chối", "cancel": "Huỷ" },
+    "requestedBy": "Người đề xuất",
+    "fundedInto": "Đã nạp vào tài khoản: {{account}}",
+    "form": {
+      "create": "Tạo đề xuất",
+      "description": "Đề xuất nạp thêm tiền vào quỹ. Có thể tạo giải trình tự động từ kế hoạch chi & dự báo.",
+      "entity": "Pháp nhân",
+      "entityPlaceholder": "Chọn pháp nhân",
+      "period": "Kỳ liên quan",
+      "title": "Tiêu đề",
+      "titlePlaceholder": "VD: Nạp quỹ tháng 8",
+      "amount": "Số tiền đề nghị nạp",
+      "neededBy": "Cần trước ngày",
+      "justification": "Giải trình",
+      "justificationPlaceholder": "Lý do & cơ sở đề nghị nạp quỹ...",
+      "autoDraft": "Tạo giải trình tự động",
+      "autoDraftHint": "Giải trình tự động tổng hợp từ kế hoạch chi đã duyệt và thiếu hụt dự báo của kỳ — bạn có thể sửa lại.",
+      "submitCreate": "Tạo đề xuất"
+    },
+    "approve": {
+      "title": "Duyệt đề xuất nạp quỹ?",
+      "description": "Phê duyệt nạp {{amount}}. Chọn tài khoản để ghi nhận nạp ngay (tuỳ chọn).",
+      "accountLabel": "Nạp vào tài khoản",
+      "noFund": "Duyệt, chưa nạp ngay",
+      "hint": "Nếu chọn tài khoản, hệ thống tự tạo giao dịch thu \"Nạp quỹ\" và cập nhật số dư."
+    },
+    "reject": { "title": "Từ chối đề xuất?", "description": "Nêu lý do để người đề xuất nắm được.", "placeholder": "Lý do từ chối (bắt buộc)" },
+    "toast": {
+      "created": "Đã tạo đề xuất nạp quỹ",
+      "approved": "Đã duyệt đề xuất",
+      "rejected": "Đã từ chối đề xuất",
+      "cancelled": "Đã huỷ đề xuất",
+      "saveError": "Không thể lưu. Vui lòng thử lại.",
+      "reviewError": "Không thể xử lý. Vui lòng thử lại.",
+      "draftError": "Không tạo được giải trình tự động."
     }
   },
   "accounts": {

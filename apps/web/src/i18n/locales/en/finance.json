@@ -25,7 +25,8 @@
       "balance": "Projected balance",
       "projectedEnd": "Projected end balance",
       "alertTitle": "Funds last until {{date}}, then short by {{amount}}",
-      "alertHint": "Based on expected income and approved spending plans. Consider requesting a fund top-up from the Founder."
+      "alertHint": "Based on expected income and approved spending plans. Consider requesting a fund top-up from the Founder.",
+      "createTopup": "Create top-up request"
     },
     "bva": {
       "title": "Budget vs Actual",
@@ -83,6 +84,49 @@
       "approved": "Plan approved",
       "rejected": "Plan rejected",
       "reviewError": "Could not process. Please try again."
+    }
+  },
+  "topup": {
+    "title": "Fund top-up requests",
+    "subtitle": "Ask the Founder to approve adding money to the fund",
+    "status": { "PENDING": "Pending", "APPROVED": "Approved", "REJECTED": "Rejected", "CANCELLED": "Cancelled" },
+    "empty": { "title": "No top-up requests yet", "description": "Raise a request when the forecast shows funds running low" },
+    "table": { "title": "Detail", "requester": "Requested by", "amount": "Amount", "status": "Status", "neededBy": "Needed by" },
+    "actions": { "detail": "Details", "approve": "Approve", "reject": "Reject", "cancel": "Cancel" },
+    "requestedBy": "Requested by",
+    "fundedInto": "Funded into account: {{account}}",
+    "form": {
+      "create": "New request",
+      "description": "Request more money for the fund. You can auto-draft the justification from plans & forecast.",
+      "entity": "Legal entity",
+      "entityPlaceholder": "Select entity",
+      "period": "Related period",
+      "title": "Title",
+      "titlePlaceholder": "e.g. August fund top-up",
+      "amount": "Requested amount",
+      "neededBy": "Needed by",
+      "justification": "Justification",
+      "justificationPlaceholder": "Reason & basis for the top-up...",
+      "autoDraft": "Auto-draft",
+      "autoDraftHint": "The draft is composed from approved plans and the period's forecast shortfall — you can edit it.",
+      "submitCreate": "Create request"
+    },
+    "approve": {
+      "title": "Approve top-up request?",
+      "description": "Approve topping up {{amount}}. Optionally pick an account to record the deposit now.",
+      "accountLabel": "Fund into account",
+      "noFund": "Approve, don't fund yet",
+      "hint": "If an account is picked, an income \"Nạp quỹ\" transaction is created and the balance updated."
+    },
+    "reject": { "title": "Reject request?", "description": "Give a reason so the requester understands.", "placeholder": "Rejection reason (required)" },
+    "toast": {
+      "created": "Top-up request created",
+      "approved": "Request approved",
+      "rejected": "Request rejected",
+      "cancelled": "Request cancelled",
+      "saveError": "Could not save. Please try again.",
+      "reviewError": "Could not process. Please try again.",
+      "draftError": "Could not auto-draft the justification."
     }
   },
   "accounts": {

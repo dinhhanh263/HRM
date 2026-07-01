@@ -29,6 +29,7 @@ import { financeCategoryRoutes } from './v1/finance-category.routes.js';
 import { cashTransactionRoutes } from './v1/cash-transaction.routes.js';
 import { financeRoutes } from './v1/finance.routes.js';
 import { spendingPlanRoutes } from './v1/spending-plan.routes.js';
+import { topUpRequestRoutes } from './v1/topup-request.routes.js';
 
 const router: RouterType = Router();
 
@@ -62,5 +63,6 @@ router.use('/finance-categories', financeCategoryRoutes);
 router.use('/cash-transactions', cashTransactionRoutes);
 router.use('/finance', financeRoutes);
 router.use('/spending-plans', spendingPlanRoutes);
+router.use('/topup-requests', topUpRequestRoutes);
 
 export { router as routes };

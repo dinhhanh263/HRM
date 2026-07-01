@@ -21,7 +21,7 @@ import { RolesPage } from '@/features/roles';
 import { LeavePage, LeaveBalanceRosterPage } from '@/features/leave';
 import { PaymentRequestPage } from '@/features/payment-request';
 import { PurchaseRequestPage, CreatePurchaseRequestPage } from '@/features/purchase-request';
-import { FinanceDashboardPage, FundAccountsPage, FinanceCategoriesPage, CashTransactionsPage, SpendingPlansPage } from '@/features/finance';
+import { FinanceDashboardPage, FundAccountsPage, FinanceCategoriesPage, CashTransactionsPage, SpendingPlansPage, TopUpRequestsPage } from '@/features/finance';
 import { TimesheetPage, TimesheetSettingsPage } from '@/features/timesheet';
 import { PayrollPage } from '@/features/payroll';
 import { ProbationPage, ProbationSelfPage } from '@/features/probation';
@@ -371,6 +371,14 @@ export const router = createBrowserRouter([
         element: (
           <RequirePermission permission="spending_plan:view">
             <SpendingPlansPage />
+          </RequirePermission>
+        ),
+      },
+      {
+        path: 'finance/topup-requests',
+        element: (
+          <RequirePermission permission="topup_request:view">
+            <TopUpRequestsPage />
           </RequirePermission>
         ),
       },

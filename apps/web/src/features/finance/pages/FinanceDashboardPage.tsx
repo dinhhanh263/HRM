@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatVnd } from '@/lib/utils';
-import { Wallet, ArrowDownLeft, ArrowUpRight, TrendingUp, TrendingDown, PlusCircle, AlertTriangle } from 'lucide-react';
+import { Wallet, ArrowDownLeft, ArrowUpRight, TrendingUp, TrendingDown, PlusCircle, AlertTriangle, Coins } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useIssuingEntitiesLite } from '../hooks/useFundAccounts';
 import { useFinanceDashboard } from '../hooks/useFinanceDashboard';
@@ -80,7 +80,7 @@ export function FinanceDashboardPage() {
       {forecast && forecast.cashOutDate && (
         <div className="flex items-start gap-3 rounded-xl border border-danger/30 bg-danger-light p-4">
           <AlertTriangle className="size-5 text-danger shrink-0 mt-0.5" />
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-danger">
               {t('dashboard.forecast.alertTitle', {
                 date: forecast.cashOutDate.slice(0, 10).split('-').reverse().join('/'),
@@ -89,6 +89,13 @@ export function FinanceDashboardPage() {
             </p>
             <p className="text-xs text-text-secondary mt-0.5">{t('dashboard.forecast.alertHint')}</p>
           </div>
+          <Link
+            to="/finance/topup-requests"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-md bg-danger px-3 py-1.5 text-xs font-medium text-white hover:bg-danger/90 transition-colors"
+          >
+            <Coins className="size-3.5" />
+            {t('dashboard.forecast.createTopup')}
+          </Link>
         </div>
       )}
 

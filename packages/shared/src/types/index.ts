@@ -24,3 +24,4 @@ export * from './kpi.js';
 export * from './settings.js';
 export * from './account.js';
 export * from './sales.js';
+export * from './finance.js';

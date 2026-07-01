@@ -1,0 +1,166 @@
+{
+  "dashboard": {
+    "title": "Finance overview",
+    "subtitle": "Balance, cash in/out and spending by category",
+    "allEntities": "All entities",
+    "kpi": {
+      "balance": "Total current balance",
+      "in": "In this period",
+      "out": "Out this period",
+      "net": "Net"
+    },
+    "chart": {
+      "title": "Daily cash in/out",
+      "in": "In",
+      "out": "Out",
+      "empty": "No transactions in this period yet",
+      "emptyCta": "Add a transaction"
+    },
+    "categories": {
+      "title": "Spending by category",
+      "empty": "No expenses in this period"
+    }
+  },
+  "accounts": {
+    "title": "Fund accounts",
+    "subtitle": "Manage the company's cash sources per legal entity",
+    "allEntities": "All entities",
+    "totalBalance": "Total balance",
+    "inactive": "Deactivated",
+    "activate": "Reactivate",
+    "deactivate": "Deactivate",
+    "type": {
+      "BANK": "Bank",
+      "CASH": "Cash",
+      "EWALLET": "E-wallet"
+    },
+    "table": {
+      "name": "Account name",
+      "entity": "Entity",
+      "type": "Type",
+      "balance": "Current balance"
+    },
+    "empty": {
+      "title": "No fund accounts yet",
+      "description": "Add your first account to start tracking cash flow"
+    },
+    "form": {
+      "create": "Add account",
+      "edit": "Edit fund account",
+      "description": "A fund account holds money: a bank account, cash, or an e-wallet.",
+      "entityLabel": "Legal entity",
+      "entityPlaceholder": "Select owning entity",
+      "nameLabel": "Account name",
+      "namePlaceholder": "e.g. Vietcombank - Codecrush",
+      "typeLabel": "Account type",
+      "openingLabel": "Opening balance",
+      "openingHint": "The current balance is computed from transactions, not entered manually.",
+      "submitCreate": "Create account"
+    },
+    "delete": {
+      "title": "Delete fund account?",
+      "description": "Account \"{{name}}\" will be permanently deleted. This cannot be undone."
+    },
+    "toast": {
+      "created": "Fund account created",
+      "updated": "Fund account updated",
+      "deleted": "Fund account deleted",
+      "activated": "Account reactivated",
+      "deactivated": "Account deactivated",
+      "saveError": "Could not save the account. Please try again.",
+      "deleteError": "Could not delete the account. Please try again.",
+      "hasTransactions": "This account has transactions — deactivate it instead of deleting."
+    }
+  },
+  "categories": {
+    "title": "Income / expense categories",
+    "subtitle": "Classify money in and out for tracking and reporting",
+    "income": "Income categories",
+    "expense": "Expense categories",
+    "addPlaceholder": "Add a new category...",
+    "empty": "No categories yet",
+    "inactive": "Hidden",
+    "rename": "Rename",
+    "activate": "Reactivate",
+    "deactivate": "Deactivate",
+    "delete": "Delete",
+    "toast": {
+      "created": "Category added",
+      "updated": "Category updated",
+      "deleted": "Category deleted",
+      "saveError": "Could not save the category. Please try again.",
+      "deleteError": "Could not delete the category. Please try again.",
+      "inUse": "This category is in use — deactivate it instead of deleting."
+    }
+  },
+  "transactions": {
+    "title": "Transaction ledger",
+    "subtitle": "Record the company's money in and out",
+    "import": "Import Excel",
+    "searchPlaceholder": "Search by description, reference...",
+    "direction": { "IN": "In", "OUT": "Out" },
+    "status": { "ACTUAL": "Actual", "PLANNED": "Planned" },
+    "totals": { "in": "Total in (actual)", "out": "Total out (actual)", "net": "Net" },
+    "filters": {
+      "allEntities": "All entities",
+      "allAccounts": "All accounts",
+      "allDirections": "In & Out",
+      "allStatuses": "All statuses"
+    },
+    "table": { "date": "Date", "detail": "Detail", "account": "Account", "amount": "Amount" },
+    "empty": {
+      "title": "No transactions yet",
+      "description": "Add an in/out transaction or import from Excel to get started"
+    },
+    "pagination": { "total": "{{count}} transactions", "prev": "Prev", "next": "Next" },
+    "form": {
+      "create": "Add transaction",
+      "edit": "Edit transaction",
+      "description": "Record money in or out. \"Actual\" transactions update the account balance.",
+      "accountLabel": "Fund account",
+      "accountPlaceholder": "Select account",
+      "amountLabel": "Amount",
+      "dateLabel": "Date",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select category",
+      "noCategory": "Uncategorized",
+      "departmentLabel": "Department",
+      "departmentPlaceholder": "Select department",
+      "noDepartment": "No department",
+      "statusLabel": "Status",
+      "statusHint": "\"Planned\" is used for forecasting only and does not affect the current balance.",
+      "referenceLabel": "Reference / doc no.",
+      "referencePlaceholder": "e.g. transfer reference",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Note about this transaction",
+      "submitCreate": "Add transaction"
+    },
+    "delete": {
+      "title": "Delete transaction?",
+      "description": "The transaction will be deleted and the account balance recomputed. This cannot be undone."
+    },
+    "toast": {
+      "created": "Transaction added",
+      "updated": "Transaction updated",
+      "deleted": "Transaction deleted",
+      "saveError": "Could not save the transaction. Please try again.",
+      "deleteError": "Could not delete the transaction. Please try again."
+    }
+  },
+  "import": {
+    "title": "Import transactions from Excel",
+    "description": "Download the template, fill it in, then upload to preview before saving. Account/category/department match by name.",
+    "downloadTemplate": "Download Excel template",
+    "pickFile": "Choose or drop a .xlsx / .csv file",
+    "parsing": "Reading file...",
+    "onlyValidNote": "Only valid rows will be saved. Rows with errors are skipped.",
+    "confirm": "Save {{count}} transactions",
+    "summary": { "total": "Total rows", "valid": "Valid", "errors": "Errors" },
+    "table": { "row": "Row", "error": "Error" },
+    "toast": {
+      "done": "Imported {{created}} transactions ({{skipped}} skipped)",
+      "parseError": "Could not read the file. Check the format.",
+      "confirmError": "Import failed. Please try again."
+    }
+  }
+}

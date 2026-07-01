@@ -60,6 +60,13 @@ export const PERMISSION_CATALOG = {
     'email_send', 'template_manage',
     'report_view', 'view_all', 'settings',
   ],
+  // Ngân sách & Dòng tiền (SPEC-048). `finance` = xem Dashboard/báo cáo tổng +
+  // export; `fund_account` = quản lý tài khoản quỹ; `cash_transaction` = sổ giao
+  // dịch thu/chi (kèm `import` từ Excel). Đa pháp nhân qua IssuingEntity; tenant-
+  // scoped + RBAC server-side. (spending_plan / topup_request thêm ở GĐ2/GĐ3.)
+  finance: ['view', 'export'],
+  fund_account: ['view', 'create', 'update', 'delete'],
+  cash_transaction: ['view', 'create', 'update', 'delete', 'import'],
 } as const;
 
 export type PermissionResource = keyof typeof PERMISSION_CATALOG;

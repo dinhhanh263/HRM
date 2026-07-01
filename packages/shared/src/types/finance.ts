@@ -223,3 +223,112 @@ export interface FinanceDashboardResponse {
   series: FinanceDashboardDay[]; // daily ACTUAL in/out across the period
   byCategory: FinanceDashboardCategory[]; // top expense categories within the period
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SPEC-048 GĐ2: Kế hoạch chi + Budget vs Actual + Dự báo
+// ══════════════════════════════════════════════════════════════════════════════
+
+export type SpendingPlanStatus = 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
+export type SpendingPlanScope = 'mine' | 'all';
+
+export interface SpendingPlanItemDto {
+  id: string;
+  categoryId: string | null;
+  categoryName: string | null;
+  title: string;
+  amount: string;
+  expectedDate: string | null;
+  note: string | null;
+}
+
+export interface SpendingPlanItemInput {
+  categoryId?: string | null;
+  title: string;
+  amount: number;
+  expectedDate?: string | null;
+  note?: string | null;
+}
+
+export interface SpendingPlanDto {
+  id: string;
+  departmentId: string;
+  departmentName: string;
+  issuingEntityId: string;
+  issuingEntityName: string;
+  period: string; // "YYYY-MM"
+  status: SpendingPlanStatus;
+  totalAmount: string;
+  submittedById: string | null;
+  submittedAt: string | null;
+  reviewedById: string | null;
+  reviewedAt: string | null;
+  reviewNote: string | null;
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
+  items: SpendingPlanItemDto[];
+}
+
+export interface CreateSpendingPlanRequest {
+  departmentId: string;
+  issuingEntityId: string;
+  period: string; // "YYYY-MM"
+  items: SpendingPlanItemInput[];
+}
+
+export interface UpdateSpendingPlanRequest {
+  period?: string;
+  issuingEntityId?: string;
+  items?: SpendingPlanItemInput[];
+}
+
+export interface ReviewSpendingPlanRequest {
+  decision: 'APPROVED' | 'REJECTED';
+  note?: string | null;
+}
+
+export interface SpendingPlanListQuery {
+  scope?: SpendingPlanScope;
+  period?: string;
+  departmentId?: string;
+  issuingEntityId?: string;
+  status?: SpendingPlanStatus;
+}
+
+// ── Budget vs Actual ──────────────────────────────────────────────────────────
+
+export interface BudgetVsActualRow {
+  key: string; // departmentId | categoryId | 'none'
+  label: string;
+  planned: string; // APPROVED plan amount in period
+  actual: string; // ACTUAL OUT in period
+  variance: string; // planned − actual
+  usedPct: number; // actual / planned * 100 (0 if no plan)
+  over: boolean; // actual > planned
+}
+
+export interface BudgetVsActualResponse {
+  period: string;
+  byDepartment: BudgetVsActualRow[];
+  byCategory: BudgetVsActualRow[];
+  totalPlanned: string;
+  totalActual: string;
+}
+
+// ── Cash flow forecast ────────────────────────────────────────────────────────
+
+export interface ForecastDay {
+  date: string; // "YYYY-MM-DD"
+  balance: string; // projected running balance at end of that day
+}
+
+export interface ForecastResponse {
+  period: string;
+  openingBalance: string; // current balance across matching accounts (as of now)
+  expectedIn: string; // Σ PLANNED IN within period
+  expectedOut: string; // APPROVED plan items (by expectedDate) + PLANNED OUT within period
+  projectedEndBalance: string;
+  cashOutDate: string | null; // first day the projected balance goes below 0
+  shortfall: string; // how far below 0 the balance ends (0 if never negative)
+  series: ForecastDay[];
+}

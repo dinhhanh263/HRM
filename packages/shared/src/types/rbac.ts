@@ -67,6 +67,10 @@ export const PERMISSION_CATALOG = {
   finance: ['view', 'export'],
   fund_account: ['view', 'create', 'update', 'delete'],
   cash_transaction: ['view', 'create', 'update', 'delete', 'import'],
+  // SPEC-048 GĐ2: kế hoạch chi theo bộ phận. MANAGER nhập/gửi kế hoạch bộ phận mình
+  // (scope enforce ở service); HR/Finance duyệt/từ chối. Dự báo & budget-vs-actual
+  // dùng `finance:view`.
+  spending_plan: ['view', 'create', 'update', 'submit', 'approve', 'reject'],
 } as const;
 
 export type PermissionResource = keyof typeof PERMISSION_CATALOG;

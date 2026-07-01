@@ -398,6 +398,7 @@ model Tenant {
   fundAccounts      FundAccount[]
   financeCategories FinanceCategory[]
   cashTransactions  CashTransaction[]
+  spendingPlans     SpendingPlan[] // GĐ2
 
   @@map("tenants")
 }
@@ -514,6 +515,7 @@ model Department {
   teams            Team[] // SPEC-044
   kpiAssignments   KpiFrameworkAssignment[] // SPEC-044
   cashTransactions CashTransaction[] // SPEC-048
+  spendingPlans    SpendingPlan[] // SPEC-048 GĐ2
 
   @@unique([tenantId, name])
   @@index([managerId])
@@ -1118,6 +1120,7 @@ model IssuingEntity {
   quotes           Quote[] // SPEC-045: báo giá xuất theo pháp nhân
   fundAccounts     FundAccount[] // SPEC-048
   cashTransactions CashTransaction[] // SPEC-048
+  spendingPlans    SpendingPlan[] // SPEC-048 GĐ2
 
   @@index([tenantId])
   @@map("issuing_entities")
@@ -2915,6 +2918,7 @@ model FinanceCategory {
   parent       FinanceCategory?  @relation("CategoryTree", fields: [parentId], references: [id])
   children     FinanceCategory[] @relation("CategoryTree")
   transactions CashTransaction[]
+  planItems    SpendingPlanItem[] // SPEC-048 GĐ2
 
   @@index([tenantId, kind])
   @@map("finance_categories")
@@ -2951,4 +2955,60 @@ model CashTransaction {
   @@index([accountId, status])
   @@index([categoryId])
   @@map("cash_transactions")
+}
+
+// ============================================================================
+// SPEC-048 GĐ2: Kế hoạch chi theo bộ phận (Spending Plan)
+// ============================================================================
+
+enum SpendingPlanStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+// Kế hoạch chi của một bộ phận cho một kỳ (tháng), theo pháp nhân. Trưởng bộ phận
+// nhập & gửi; HR/Finance duyệt. Feed vào dự báo dòng tiền khi APPROVED.
+model SpendingPlan {
+  id              String             @id @default(cuid())
+  tenantId        String             @map("tenant_id")
+  departmentId    String             @map("department_id")
+  issuingEntityId String             @map("issuing_entity_id")
+  period          String // "YYYY-MM"
+  status          SpendingPlanStatus @default(DRAFT)
+  totalAmount     Decimal            @default(0) @map("total_amount") @db.Decimal(14, 2) // denormalized = Σ items
+  submittedById   String?            @map("submitted_by_id")
+  submittedAt     DateTime?          @map("submitted_at")
+  reviewedById    String?            @map("reviewed_by_id")
+  reviewedAt      DateTime?          @map("reviewed_at")
+  reviewNote      String?            @map("review_note")
+  createdById     String             @map("created_by_id")
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+
+  tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department    Department         @relation(fields: [departmentId], references: [id])
+  issuingEntity IssuingEntity      @relation(fields: [issuingEntityId], references: [id])
+  items         SpendingPlanItem[]
+
+  @@unique([departmentId, period, issuingEntityId])
+  @@index([tenantId, period, status])
+  @@map("spending_plans")
+}
+
+model SpendingPlanItem {
+  id           String    @id @default(cuid())
+  planId       String    @map("plan_id")
+  categoryId   String?   @map("category_id")
+  title        String
+  amount       Decimal   @db.Decimal(14, 2)
+  expectedDate DateTime? @map("expected_date")
+  note         String?
+
+  plan     SpendingPlan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  category FinanceCategory? @relation(fields: [categoryId], references: [id])
+
+  @@index([planId])
+  @@map("spending_plan_items")
 }

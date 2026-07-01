@@ -80,6 +80,8 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'fund_account:view', 'fund_account:create', 'fund_account:update', 'fund_account:delete',
       'cash_transaction:view', 'cash_transaction:create', 'cash_transaction:update',
       'cash_transaction:delete', 'cash_transaction:import',
+      // SPEC-048 GĐ2: HR tổng hợp + duyệt/từ chối kế hoạch chi các bộ phận.
+      'spending_plan:view', 'spending_plan:approve', 'spending_plan:reject',
     ],
   },
   {
@@ -116,6 +118,9 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       // SPEC-042: duyệt/trả về/từ chối phiếu mua hàng của cấp dưới (scope ở service).
       'purchase_request:view', 'purchase_request:create',
       'purchase_request:approve', 'purchase_request:reject',
+      // SPEC-048 GĐ2: trưởng bộ phận lập & gửi kế hoạch chi của bộ phận mình
+      // (không duyệt — scope "bộ phận mình" enforce ở service).
+      'spending_plan:view', 'spending_plan:create', 'spending_plan:update', 'spending_plan:submit',
       'contracts:view',
       // MANAGER evaluates direct reports (scope enforced server-side) but cannot
       // make the final decision or configure criteria — those are HR-only.

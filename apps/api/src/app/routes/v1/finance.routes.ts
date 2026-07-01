@@ -10,5 +10,7 @@ const router: RouterType = Router();
 router.use(asyncHandler(authenticate));
 
 router.get('/dashboard', asyncHandler(requirePermission('finance:view')), asyncHandler(financeDashboardController.dashboard));
+router.get('/budget-vs-actual', asyncHandler(requirePermission('finance:view')), asyncHandler(financeDashboardController.budgetVsActual));
+router.get('/forecast', asyncHandler(requirePermission('finance:view')), asyncHandler(financeDashboardController.forecast));
 
 export { router as financeRoutes };

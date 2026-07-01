@@ -40,11 +40,32 @@ export interface ReminderEmailInput {
   link: string;
 }
 
+/**
+ * Payload for a new-leave-request notification (SPEC-046). Sent to the current
+ * approver ('approver') and to CC/watchers ('watcher') — same shape, different copy.
+ */
+export interface LeaveRequestEmailInput {
+  to: string;
+  recipientName: string;
+  audience: 'approver' | 'watcher';
+  requesterName: string;
+  leaveTypeName: string;
+  /** Pre-formatted dd/MM/yyyy. */
+  startDate: string;
+  /** Pre-formatted dd/MM/yyyy. */
+  endDate: string;
+  /** Pre-formatted day count (e.g. "1", "2.5"). */
+  totalDays: string;
+  reason?: string | null;
+  link: string;
+}
+
 /** Abstraction over the email transport so callers don't depend on Resend. */
 export interface EmailProvider {
   sendInvite(input: InviteEmailInput): Promise<void>;
   sendPasswordReset(input: PasswordResetEmailInput): Promise<void>;
   sendPayrollApprovalRequest(input: PayrollApprovalEmailInput): Promise<void>;
+  sendLeaveRequestNotification(input: LeaveRequestEmailInput): Promise<void>;
   sendProbationReminder(input: ReminderEmailInput): Promise<void>;
   sendContractReminder(input: ReminderEmailInput): Promise<void>;
   /** Generic transactional email (SPEC-045 sales outreach). Plain-text body → HTML. */
@@ -97,6 +118,32 @@ function payrollApprovalHtml(input: PayrollApprovalEmailInput): string {
     '</ul>',
     `<p><a href="${link}">Xem &amp; phê duyệt kỳ lương</a></p>`,
   ].join('');
+}
+
+/** Minimal HTML body for the new-leave-request notification (approver + watcher). */
+function leaveRequestHtml(input: LeaveRequestEmailInput): string {
+  const { recipientName, audience, requesterName, leaveTypeName, startDate, endDate, totalDays, reason, link } =
+    input;
+  const period = startDate === endDate ? startDate : `${startDate} → ${endDate}`;
+  const lead =
+    audience === 'approver'
+      ? `<strong>${escapeHtml(requesterName)}</strong> vừa gửi một đơn nghỉ phép đang chờ bạn duyệt:`
+      : `<strong>${escapeHtml(requesterName)}</strong> vừa gửi một đơn nghỉ phép mà bạn được CC để theo dõi:`;
+  const cta =
+    audience === 'approver' ? 'Xem &amp; duyệt đơn nghỉ phép' : 'Xem đơn nghỉ phép';
+  return [
+    `<p>Xin chào ${escapeHtml(recipientName)},</p>`,
+    `<p>${lead}</p>`,
+    '<ul>',
+    `<li>Loại nghỉ: <strong>${escapeHtml(leaveTypeName)}</strong></li>`,
+    `<li>Thời gian: <strong>${escapeHtml(period)}</strong></li>`,
+    `<li>Số ngày: <strong>${escapeHtml(totalDays)}</strong></li>`,
+    reason ? `<li>Lý do: ${escapeHtml(reason)}</li>` : '',
+    '</ul>',
+    `<p><a href="${link}">${cta}</a></p>`,
+  ]
+    .filter(Boolean)
+    .join('');
 }
 
 /** Vietnamese "in N days" suffix for the reminder email subject/body. */
@@ -209,6 +256,35 @@ class ResendEmailProvider implements EmailProvider {
     }
 
     logger.info({ event: 'email.payroll_approval.sent', to, period }, 'Payroll approval email sent');
+  }
+
+  async sendLeaveRequestNotification(input: LeaveRequestEmailInput): Promise<void> {
+    const { to, audience, requesterName } = input;
+    if (!this.client) {
+      logger.warn(
+        { event: 'email.leave_request.skipped', to, audience },
+        'RESEND_API_KEY not set — skipping leave request email',
+      );
+      return;
+    }
+
+    const subject =
+      audience === 'approver'
+        ? `Đơn nghỉ phép chờ duyệt — ${requesterName}`
+        : `Đơn nghỉ phép mới (theo dõi) — ${requesterName}`;
+
+    const { error } = await this.client.emails.send({
+      from: EMAIL_FROM,
+      to,
+      subject,
+      html: leaveRequestHtml(input),
+    });
+
+    if (error) {
+      throw new Error(`Resend failed to send leave request email to ${to}: ${error.message}`);
+    }
+
+    logger.info({ event: 'email.leave_request.sent', to, audience }, 'Leave request email sent');
   }
 
   async sendProbationReminder(input: ReminderEmailInput): Promise<void> {

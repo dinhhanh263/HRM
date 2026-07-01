@@ -39,3 +39,8 @@ export function buildPayrollRunsLink(): string {
 export function buildDashboardLink(): string {
   return `${APP_WEB_URL}/`;
 }
+
+/** Build the link an approver/watcher follows to view leave requests (SPEC-046). */
+export function buildLeaveRequestsLink(): string {
+  return `${APP_WEB_URL}/leave`;
+}

@@ -45,6 +45,11 @@ approve/reject** — chỉ quan sát để nắm tình hình. Tận dụng tối
 6. **Notification:** báo in-app cho watcher **khi đơn được nộp** và **khi có quyết định
    cuối cùng** (APPROVED / REJECTED). Không báo ở từng bước trung gian. Nối leave vào
    notification service sẵn có (leave hiện chưa phát notification).
+6b. **Email (bổ sung):** khi đơn được **nộp/nộp lại**, gửi email cho **approver ở bước
+   đang chờ hiện tại** (audience `approver`) và cho **tất cả watcher** (audience
+   `watcher`) — người nộp không nhận; ai vừa approver vừa watcher chỉ nhận 1 email
+   (ưu tiên approver). Best-effort qua `emailProvider.sendLeaveRequestNotification`
+   (no-op khi thiếu `RESEND_API_KEY`), không làm hỏng việc tạo đơn.
 7. **Không tự-CC người nộp/người duyệt gây trùng:** nếu watcher trùng owner hoặc approver,
    họ vẫn xem được theo quyền vốn có — không tạo bản ghi/notification trùng lặp.
 

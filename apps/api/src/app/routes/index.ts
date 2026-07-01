@@ -27,6 +27,7 @@ import { salesRoutes } from './v1/sales.routes.js';
 import { fundAccountRoutes } from './v1/fund-account.routes.js';
 import { financeCategoryRoutes } from './v1/finance-category.routes.js';
 import { cashTransactionRoutes } from './v1/cash-transaction.routes.js';
+import { financeRoutes } from './v1/finance.routes.js';
 
 const router: RouterType = Router();
 
@@ -58,5 +59,6 @@ router.use('/sales', salesRoutes);
 router.use('/fund-accounts', fundAccountRoutes);
 router.use('/finance-categories', financeCategoryRoutes);
 router.use('/cash-transactions', cashTransactionRoutes);
+router.use('/finance', financeRoutes);
 
 export { router as routes };

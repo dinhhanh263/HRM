@@ -1,4 +1,26 @@
 {
+  "dashboard": {
+    "title": "Finance overview",
+    "subtitle": "Balance, cash in/out and spending by category",
+    "allEntities": "All entities",
+    "kpi": {
+      "balance": "Total current balance",
+      "in": "In this period",
+      "out": "Out this period",
+      "net": "Net"
+    },
+    "chart": {
+      "title": "Daily cash in/out",
+      "in": "In",
+      "out": "Out",
+      "empty": "No transactions in this period yet",
+      "emptyCta": "Add a transaction"
+    },
+    "categories": {
+      "title": "Spending by category",
+      "empty": "No expenses in this period"
+    }
+  },
   "accounts": {
     "title": "Fund accounts",
     "subtitle": "Manage the company's cash sources per legal entity",

@@ -1,4 +1,26 @@
 {
+  "dashboard": {
+    "title": "Tổng quan tài chính",
+    "subtitle": "Số dư, dòng tiền vào/ra và chi tiêu theo danh mục",
+    "allEntities": "Tất cả pháp nhân",
+    "kpi": {
+      "balance": "Tổng số dư hiện tại",
+      "in": "Thu trong kỳ",
+      "out": "Chi trong kỳ",
+      "net": "Chênh lệch ròng"
+    },
+    "chart": {
+      "title": "Dòng tiền vào/ra theo ngày",
+      "in": "Thu",
+      "out": "Chi",
+      "empty": "Chưa có giao dịch trong kỳ này",
+      "emptyCta": "Thêm giao dịch"
+    },
+    "categories": {
+      "title": "Chi tiêu theo danh mục",
+      "empty": "Chưa có khoản chi nào trong kỳ"
+    }
+  },
   "accounts": {
     "title": "Tài khoản quỹ",
     "subtitle": "Quản lý các nguồn tiền của công ty theo pháp nhân",

@@ -194,3 +194,32 @@ export interface CashTxImportConfirmResult {
   created: number;
   skipped: number;
 }
+
+// ── Dashboard (MVP) ───────────────────────────────────────────────────────────
+
+export interface FinanceDashboardQuery {
+  issuingEntityId?: string;
+  month?: string; // "YYYY-MM"; defaults to the current month
+}
+
+export interface FinanceDashboardDay {
+  date: string; // "YYYY-MM-DD"
+  in: string;
+  out: string;
+}
+
+export interface FinanceDashboardCategory {
+  categoryId: string | null;
+  name: string;
+  total: string;
+}
+
+export interface FinanceDashboardResponse {
+  period: string; // "YYYY-MM"
+  totalBalance: string; // current balance across matching accounts (as of now)
+  totalIn: string; // ACTUAL IN within the period
+  totalOut: string; // ACTUAL OUT within the period
+  net: string;
+  series: FinanceDashboardDay[]; // daily ACTUAL in/out across the period
+  byCategory: FinanceDashboardCategory[]; // top expense categories within the period
+}

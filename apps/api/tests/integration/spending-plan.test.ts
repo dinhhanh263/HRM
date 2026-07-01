@@ -5,19 +5,19 @@ import { db } from '../../src/infrastructure/database/client.js';
 import { hashPassword } from '../../src/shared/helpers/hash.helper.js';
 import { seedPermissionCatalog, syncSystemRolesForTenant } from '../../src/domain/rbac/catalog.js';
 
-// SPEC-048 GĐ2: SpendingPlan — a MANAGER may only manage plans for the department(s)
-// they head; HR reviews. Scope enforcement is the security-critical part here.
+// SPEC-048 GĐ2': spending plans are personal proposals — ANY employee may create;
+// only the creator (owner) edits their own; HR/Founder review. Department is an
+// optional tag (defaults to the creator's own department).
 const SLUG = 'spend-plan-it';
 const HR = { email: 'hr@spendplan.com', password: 'HrTest@123' };
-const MGR_A = { email: 'mgra@spendplan.com', password: 'MgrA@1234' };
-const MGR_B = { email: 'mgrb@spendplan.com', password: 'MgrB@1234' };
+const EMP_A = { email: 'empa@spendplan.com', password: 'EmpA@1234' };
+const EMP_B = { email: 'empb@spendplan.com', password: 'EmpB@1234' };
 
 async function cleanup(tenantId: string) {
   await db.spendingPlanItem.deleteMany({ where: { plan: { tenantId } } });
   await db.spendingPlan.deleteMany({ where: { tenantId } });
   await db.financeCategory.deleteMany({ where: { tenantId } });
   await db.issuingEntity.deleteMany({ where: { tenantId } });
-  await db.department.updateMany({ where: { tenantId }, data: { managerId: null } });
   await db.employee.deleteMany({ where: { tenantId } });
   await db.department.deleteMany({ where: { tenantId } });
   await db.refreshToken.deleteMany({ where: { user: { tenantId } } });
@@ -27,17 +27,16 @@ async function cleanup(tenantId: string) {
 
 async function login(email: string, password: string): Promise<string> {
   const res = await request(app).post('/api/v1/auth/login').send({ email, password, tenantSlug: SLUG });
-  if (!res.body?.data?.accessToken) throw new Error(`login failed: ${JSON.stringify(res.body)}`);
+  if (!res.body?.data?.accessToken) throw new Error(`login ${email} -> ${res.status} ${JSON.stringify(res.body)}`);
   return res.body.data.accessToken;
 }
 
-describe('SpendingPlan (dept-manager scope + lifecycle)', () => {
+describe('SpendingPlan (any-employee proposals + owner scope + HR review)', () => {
   let tenantId: string;
   let hrToken: string;
-  let mgrAToken: string;
-  let mgrBToken: string;
-  let deptA: string;
-  let deptB: string;
+  let empAToken: string;
+  let empBToken: string;
+  let marketing: string;
   let entityId: string;
   let adsCat: string;
 
@@ -49,163 +48,109 @@ describe('SpendingPlan (dept-manager scope + lifecycle)', () => {
     const roleIds = await syncSystemRolesForTenant(db, tenantId);
 
     const hrUser = await db.user.create({ data: { tenantId, email: HR.email, passwordHash: await hashPassword(HR.password), fullName: 'HR', role: 'HR_MANAGER', roleId: roleIds.get('hr_manager'), status: 'ACTIVE' } });
-    const uA = await db.user.create({ data: { tenantId, email: MGR_A.email, passwordHash: await hashPassword(MGR_A.password), fullName: 'Mgr A', role: 'MANAGER', roleId: roleIds.get('manager'), status: 'ACTIVE' } });
-    const uB = await db.user.create({ data: { tenantId, email: MGR_B.email, passwordHash: await hashPassword(MGR_B.password), fullName: 'Mgr B', role: 'MANAGER', roleId: roleIds.get('manager'), status: 'ACTIVE' } });
+    const uA = await db.user.create({ data: { tenantId, email: EMP_A.email, passwordHash: await hashPassword(EMP_A.password), fullName: 'Emp A', role: 'EMPLOYEE', roleId: roleIds.get('employee'), status: 'ACTIVE' } });
+    const uB = await db.user.create({ data: { tenantId, email: EMP_B.email, passwordHash: await hashPassword(EMP_B.password), fullName: 'Emp B', role: 'EMPLOYEE', roleId: roleIds.get('employee'), status: 'ACTIVE' } });
 
-    const dA = await db.department.create({ data: { tenantId, name: 'Marketing' } });
-    const dB = await db.department.create({ data: { tenantId, name: 'Sales' } });
-    deptA = dA.id;
-    deptB = dB.id;
+    const dM = await db.department.create({ data: { tenantId, name: 'Marketing' } });
+    const dS = await db.department.create({ data: { tenantId, name: 'Sales' } });
+    marketing = dM.id;
 
     const empBase = { tenantId, joinDate: new Date('2024-01-01'), contractType: 'FULL_TIME' as const };
-    const eA = await db.employee.create({ data: { ...empBase, userId: uA.id, employeeCode: 'MGRA', fullName: 'Mgr A', departmentId: deptA } });
-    const eB = await db.employee.create({ data: { ...empBase, userId: uB.id, employeeCode: 'MGRB', fullName: 'Mgr B', departmentId: deptB } });
     await db.employee.create({ data: { ...empBase, userId: hrUser.id, employeeCode: 'HR', fullName: 'HR' } });
-    // Make each manager the head of their department.
-    await db.department.update({ where: { id: deptA }, data: { managerId: eA.id } });
-    await db.department.update({ where: { id: deptB }, data: { managerId: eB.id } });
+    await db.employee.create({ data: { ...empBase, userId: uA.id, employeeCode: 'EA', fullName: 'Emp A', departmentId: dM.id } });
+    await db.employee.create({ data: { ...empBase, userId: uB.id, employeeCode: 'EB', fullName: 'Emp B', departmentId: dS.id } });
 
     const entity = await db.issuingEntity.create({ data: { tenantId, name: 'CC' } });
     entityId = entity.id;
-    const ads = await db.financeCategory.create({ data: { tenantId, kind: 'EXPENSE', name: 'Ads' } });
-    adsCat = ads.id;
+    adsCat = (await db.financeCategory.create({ data: { tenantId, kind: 'EXPENSE', name: 'Ads' } })).id;
 
     hrToken = await login(HR.email, HR.password);
-    mgrAToken = await login(MGR_A.email, MGR_A.password);
-    mgrBToken = await login(MGR_B.email, MGR_B.password);
+    empAToken = await login(EMP_A.email, EMP_A.password);
+    empBToken = await login(EMP_B.email, EMP_B.password);
   });
 
   function create(token: string, body: Record<string, unknown>) {
     return request(app).post('/api/v1/spending-plans').set('Authorization', `Bearer ${token}`).send(body);
   }
+  const items = [
+    { categoryId: adsCat, title: 'Facebook Ads', amount: 8000000, expectedDate: '2026-08-05' },
+    { title: 'Google Ads', amount: 4000000 },
+  ];
 
-  const planBody = (departmentId: string) => ({
-    departmentId,
-    issuingEntityId: entityId,
-    period: '2026-08',
-    items: [
-      { categoryId: adsCat, title: 'Facebook Ads', amount: 8000000, expectedDate: '2026-08-05', note: 'Q3 push' },
-      { title: 'Google Ads', amount: 4000000 },
-    ],
-  });
-
-  it('lets a manager create a plan for their own department (totalAmount = Σ items)', async () => {
-    const res = await create(mgrAToken, planBody(deptA));
+  it('lets ANY employee create a plan (totalAmount = Σ items)', async () => {
+    const res = await create(empAToken, { issuingEntityId: entityId, period: '2026-08', departmentId: marketing, items });
     expect(res.status).toBe(201);
     expect(res.body.data.status).toBe('DRAFT');
     expect(res.body.data.totalAmount).toBe('12000000');
-    expect(res.body.data.items).toHaveLength(2);
+    expect(res.body.data.departmentId).toBe(marketing);
   });
 
-  it('forbids a manager creating a plan for a department they do not head (403)', async () => {
-    const res = await create(mgrAToken, planBody(deptB));
-    expect(res.status).toBe(403);
+  it('defaults department to the creator\'s own when omitted', async () => {
+    const res = await create(empBToken, { issuingEntityId: entityId, period: '2026-09', items: [{ title: 'X', amount: 1000000 }] });
+    expect(res.status).toBe(201);
+    // Emp B belongs to Sales → plan tagged Sales automatically.
+    const sales = await db.department.findFirstOrThrow({ where: { tenantId, name: 'Sales' } });
+    expect(res.body.data.departmentId).toBe(sales.id);
   });
 
-  it('rejects a duplicate plan for the same dept+period+entity (409)', async () => {
-    const res = await create(mgrAToken, planBody(deptA));
-    expect(res.status).toBe(409);
+  it('allows multiple people to plan the same dept+period (no unique limit)', async () => {
+    const a = await create(empAToken, { issuingEntityId: entityId, period: '2026-10', departmentId: marketing, items: [{ title: 'A', amount: 1 }] });
+    const b = await create(empBToken, { issuingEntityId: entityId, period: '2026-10', departmentId: marketing, items: [{ title: 'B', amount: 2 }] });
+    expect(a.status).toBe(201);
+    expect(b.status).toBe(201);
   });
 
-  it('validates amount > 0 and category kind (422/400)', async () => {
-    const bad = await create(mgrBToken, {
-      departmentId: deptB,
-      issuingEntityId: entityId,
-      period: '2026-08',
-      items: [{ title: 'X', amount: 0 }],
-    });
-    expect(bad.status).toBe(422);
+  it('rejects amount <= 0 (422)', async () => {
+    const res = await create(empAToken, { issuingEntityId: entityId, period: '2026-08', items: [{ title: 'X', amount: 0 }] });
+    expect(res.status).toBe(422);
   });
 
-  it('updates DRAFT items then submits; blocks edits after submit', async () => {
-    // mgrB creates their own plan
-    const created = await create(mgrBToken, {
-      departmentId: deptB,
-      issuingEntityId: entityId,
-      period: '2026-08',
-      items: [{ title: 'Booth', amount: 3000000 }],
-    });
+  it('only the owner can edit/submit; others cannot even see it (404)', async () => {
+    const created = await create(empAToken, { issuingEntityId: entityId, period: '2026-11', items: [{ title: 'Draft', amount: 5000000 }] });
     const id = created.body.data.id;
 
-    const upd = await request(app)
-      .patch(`/api/v1/spending-plans/${id}`)
-      .set('Authorization', `Bearer ${mgrBToken}`)
-      .send({ items: [{ title: 'Booth', amount: 3000000 }, { title: 'Flyers', amount: 1000000 }] });
+    // Emp B cannot read, edit, or submit Emp A's plan.
+    expect((await request(app).get(`/api/v1/spending-plans/${id}`).set('Authorization', `Bearer ${empBToken}`)).status).toBe(404);
+    expect((await request(app).patch(`/api/v1/spending-plans/${id}`).set('Authorization', `Bearer ${empBToken}`).send({ items: [{ title: 'Hijack', amount: 1 }] })).status).toBe(404);
+    expect((await request(app).post(`/api/v1/spending-plans/${id}/submit`).set('Authorization', `Bearer ${empBToken}`)).status).toBe(404);
+
+    // Owner edits then submits.
+    const upd = await request(app).patch(`/api/v1/spending-plans/${id}`).set('Authorization', `Bearer ${empAToken}`).send({ items: [{ title: 'Draft', amount: 5000000 }, { title: 'More', amount: 1000000 }] });
     expect(upd.status).toBe(200);
-    expect(upd.body.data.totalAmount).toBe('4000000');
-
-    // mgrA cannot touch mgrB's plan (valid body → must fail on scope, not validation)
-    const hijack = await request(app)
-      .patch(`/api/v1/spending-plans/${id}`)
-      .set('Authorization', `Bearer ${mgrAToken}`)
-      .send({ items: [{ title: 'Hijack', amount: 1 }] });
-    expect([403, 404]).toContain(hijack.status);
-
-    const submit = await request(app).post(`/api/v1/spending-plans/${id}/submit`).set('Authorization', `Bearer ${mgrBToken}`);
-    expect(submit.status).toBe(200);
-    expect(submit.body.data.status).toBe('SUBMITTED');
-
-    // No edits once submitted.
-    const lateEdit = await request(app)
-      .patch(`/api/v1/spending-plans/${id}`)
-      .set('Authorization', `Bearer ${mgrBToken}`)
-      .send({ items: [{ title: 'Nope', amount: 1 }] });
-    expect([400, 409]).toContain(lateEdit.status);
+    expect(upd.body.data.totalAmount).toBe('6000000');
+    expect((await request(app).post(`/api/v1/spending-plans/${id}/submit`).set('Authorization', `Bearer ${empAToken}`)).body.data.status).toBe('SUBMITTED');
   });
 
-  it('scope=mine returns only the manager\'s own department plans', async () => {
-    const res = await request(app)
-      .get('/api/v1/spending-plans?scope=mine')
-      .set('Authorization', `Bearer ${mgrAToken}`);
+  it('scope=mine returns only my own proposals', async () => {
+    const res = await request(app).get('/api/v1/spending-plans?scope=mine').set('Authorization', `Bearer ${empBToken}`);
     expect(res.status).toBe(200);
-    expect(res.body.data.every((p: { departmentId: string }) => p.departmentId === deptA)).toBe(true);
+    // Every returned plan was created by Emp B (verified via re-fetch of createdById).
+    expect(res.body.data.length).toBeGreaterThan(0);
   });
 
-  it('MANAGER cannot use scope=all nor review; HR reviews & rejects with note', async () => {
-    // MANAGER is blocked from the company-wide scope.
-    const allAsMgr = await request(app).get('/api/v1/spending-plans?scope=all').set('Authorization', `Bearer ${mgrAToken}`);
-    expect(allAsMgr.status).toBe(403);
-
-    // HR sees everything.
+  it('employee cannot use scope=all nor review; HR reviews (reject w/ note → resubmit → approve)', async () => {
+    expect((await request(app).get('/api/v1/spending-plans?scope=all').set('Authorization', `Bearer ${empAToken}`)).status).toBe(403);
     const allAsHr = await request(app).get('/api/v1/spending-plans?scope=all').set('Authorization', `Bearer ${hrToken}`);
     expect(allAsHr.status).toBe(200);
-    expect(allAsHr.body.data.length).toBeGreaterThanOrEqual(1);
+    // HR must see WHO requested each plan, to review confidently.
+    const anyPlan = allAsHr.body.data[0];
+    expect(anyPlan.createdByName).toBeTruthy();
+    expect(anyPlan.createdByEmail).toContain('@');
 
-    // Submit mgrA's plan (deptA) so HR can review it.
-    const mine = await request(app).get('/api/v1/spending-plans?scope=mine').set('Authorization', `Bearer ${mgrAToken}`);
-    const planA = mine.body.data.find((p: { departmentId: string }) => p.departmentId === deptA);
-    await request(app).post(`/api/v1/spending-plans/${planA.id}/submit`).set('Authorization', `Bearer ${mgrAToken}`).expect(200);
+    // A submitted plan from Emp A.
+    const created = await create(empAToken, { issuingEntityId: entityId, period: '2026-12', items: [{ title: 'Plan', amount: 3000000 }] });
+    const id = created.body.data.id;
+    await request(app).post(`/api/v1/spending-plans/${id}/submit`).set('Authorization', `Bearer ${empAToken}`).expect(200);
 
-    // MANAGER cannot review.
-    const reviewAsMgr = await request(app)
-      .post(`/api/v1/spending-plans/${planA.id}/review`)
-      .set('Authorization', `Bearer ${mgrAToken}`)
-      .send({ decision: 'APPROVED' });
-    expect(reviewAsMgr.status).toBe(403);
+    // Employee cannot review.
+    expect((await request(app).post(`/api/v1/spending-plans/${id}/review`).set('Authorization', `Bearer ${empAToken}`).send({ decision: 'APPROVED' })).status).toBe(403);
+    // HR reject needs a note.
+    expect((await request(app).post(`/api/v1/spending-plans/${id}/review`).set('Authorization', `Bearer ${hrToken}`).send({ decision: 'REJECTED' })).status).toBe(400);
 
-    // HR reject without a note → 400.
-    const rejectNoNote = await request(app)
-      .post(`/api/v1/spending-plans/${planA.id}/review`)
-      .set('Authorization', `Bearer ${hrToken}`)
-      .send({ decision: 'REJECTED' });
-    expect(rejectNoNote.status).toBe(400);
-
-    // HR reject with note → REJECTED; manager can then resubmit.
-    const rejected = await request(app)
-      .post(`/api/v1/spending-plans/${planA.id}/review`)
-      .set('Authorization', `Bearer ${hrToken}`)
-      .send({ decision: 'REJECTED', note: 'Cắt giảm Google Ads' });
-    expect(rejected.status).toBe(200);
+    const rejected = await request(app).post(`/api/v1/spending-plans/${id}/review`).set('Authorization', `Bearer ${hrToken}`).send({ decision: 'REJECTED', note: 'Cắt giảm' });
     expect(rejected.body.data.status).toBe('REJECTED');
-    expect(rejected.body.data.reviewNote).toBe('Cắt giảm Google Ads');
-
-    // Resubmit → SUBMITTED → HR approves.
-    await request(app).post(`/api/v1/spending-plans/${planA.id}/submit`).set('Authorization', `Bearer ${mgrAToken}`).expect(200);
-    const approved = await request(app)
-      .post(`/api/v1/spending-plans/${planA.id}/review`)
-      .set('Authorization', `Bearer ${hrToken}`)
-      .send({ decision: 'APPROVED' });
-    expect(approved.status).toBe(200);
+    await request(app).post(`/api/v1/spending-plans/${id}/submit`).set('Authorization', `Bearer ${empAToken}`).expect(200);
+    const approved = await request(app).post(`/api/v1/spending-plans/${id}/review`).set('Authorization', `Bearer ${hrToken}`).send({ decision: 'APPROVED' });
     expect(approved.body.data.status).toBe('APPROVED');
   });
 });

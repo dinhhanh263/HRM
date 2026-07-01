@@ -154,6 +154,9 @@ export const SYSTEM_ROLES: SystemRoleDef[] = [
       'payment_request:view', 'payment_request:create',
       // SPEC-042: nhân viên tạo & xem phiếu mua hàng của chính mình (scope ở service).
       'purchase_request:view', 'purchase_request:create',
+      // SPEC-048 GĐ2': bất kỳ nhân viên nào cũng lập & gửi kế hoạch chi (đề xuất theo
+      // người tạo — ownership ở service); HR duyệt. Không kèm approve/reject.
+      'spending_plan:view', 'spending_plan:create', 'spending_plan:update', 'spending_plan:submit',
       'contracts:view',
       'assets:view', 'assets:acknowledge',
       'notifications:view',

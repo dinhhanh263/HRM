@@ -70,11 +70,19 @@ function PlanDetailSheet({ plan, onOpenChange }: { plan: SpendingPlanDto | null;
     <Sheet open={!!plan} onOpenChange={onOpenChange}>
       <SheetContent className="flex flex-col overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>{plan?.departmentName} · {plan?.period}</SheetTitle>
+          <SheetTitle>{(plan?.departmentName ?? t('plans.form.noDepartment'))} · {plan?.period}</SheetTitle>
           <SheetDescription>{plan?.issuingEntityName}</SheetDescription>
         </SheetHeader>
         {plan && (
           <div className="mt-6 space-y-2">
+            {/* Người đề xuất — để HR biết đang duyệt cho ai */}
+            <div className="rounded-lg bg-surface-alt px-3 py-2">
+              <span className="text-xs text-text-muted">{t('plans.requestedBy')}</span>
+              <p className="text-sm font-medium text-text-primary">
+                {plan.createdByName ?? '—'}
+                {plan.createdByEmail && <span className="font-normal text-text-muted"> · {plan.createdByEmail}</span>}
+              </p>
+            </div>
             {plan.status === 'REJECTED' && plan.reviewNote && (
               <p className="text-sm text-danger">↩ {plan.reviewNote}</p>
             )}
@@ -172,6 +180,7 @@ function HrReviewView() {
             <thead className="bg-border border-b-2 border-border-strong">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-bold text-text-primary uppercase tracking-wider">{t('plans.table.department')}</th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-text-primary uppercase tracking-wider w-[180px]">{t('plans.table.requester')}</th>
                 <th className="px-4 py-3 text-left text-xs font-bold text-text-primary uppercase tracking-wider w-[100px]">{t('plans.table.period')}</th>
                 <th className="px-4 py-3 text-left text-xs font-bold text-text-primary uppercase tracking-wider w-[120px]">{t('plans.table.status')}</th>
                 <th className="px-4 py-3 text-right text-xs font-bold text-text-primary uppercase tracking-wider w-[140px]">{t('plans.table.total')}</th>
@@ -182,8 +191,12 @@ function HrReviewView() {
               {data.map((p) => (
                 <tr key={p.id} className="hover:bg-surface-alt bg-surface">
                   <td className="px-4 py-3 border-b border-border">
-                    <span className="font-medium text-text-primary">{p.departmentName}</span>
+                    <span className="font-medium text-text-primary">{p.departmentName ?? t('plans.form.noDepartment')}</span>
                     <span className="block text-xs text-text-muted">{p.issuingEntityName} · {p.items.length} {t('plans.table.itemsSuffix')}</span>
+                  </td>
+                  <td className="px-4 py-3 border-b border-border">
+                    <span className="text-text-primary">{p.createdByName ?? '—'}</span>
+                    {p.createdByEmail && <span className="block text-xs text-text-muted truncate">{p.createdByEmail}</span>}
                   </td>
                   <td className="px-4 py-3 border-b border-border tabular-nums text-text-secondary">{p.period}</td>
                   <td className="px-4 py-3 border-b border-border"><SpendingPlanStatusBadge status={p.status} /></td>
@@ -218,7 +231,7 @@ function HrReviewView() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t('plans.reject.title')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('plans.reject.description', { name: rejectTarget?.departmentName })}</AlertDialogDescription>
+            <AlertDialogDescription>{t('plans.reject.description', { name: rejectTarget?.departmentName ?? t('plans.form.noDepartment') })}</AlertDialogDescription>
           </AlertDialogHeader>
           <Textarea value={rejectNote} onChange={(e) => setRejectNote(e.target.value)} placeholder={t('plans.reject.placeholder')} />
           <AlertDialogFooter>
@@ -313,7 +326,7 @@ function ManagerView() {
                 return (
                   <tr key={p.id} className="hover:bg-surface-alt bg-surface align-top">
                     <td className="px-4 py-3 border-b border-border">
-                      <span className="font-medium text-text-primary">{p.departmentName}</span>
+                      <span className="font-medium text-text-primary">{p.departmentName ?? t('plans.form.noDepartment')}</span>
                       <span className="block text-xs text-text-muted">{p.issuingEntityName} · {p.items.length} {t('plans.table.itemsSuffix')}</span>
                       {p.status === 'REJECTED' && p.reviewNote && <span className="block text-xs text-danger mt-1">↩ {p.reviewNote}</span>}
                     </td>

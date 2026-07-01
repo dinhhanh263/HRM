@@ -13,7 +13,7 @@ const itemSchema = z.object({
 });
 
 export const createSpendingPlanSchema = z.object({
-  departmentId: z.string().min(1, 'Bộ phận là bắt buộc'),
+  departmentId: z.string().optional().nullable(), // tùy chọn; mặc định phòng người tạo
   issuingEntityId: z.string().min(1, 'Pháp nhân là bắt buộc'),
   period: periodSchema,
   items: z.array(itemSchema).min(1, 'Cần ít nhất một khoản chi'),

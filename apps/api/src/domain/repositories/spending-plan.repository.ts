@@ -19,10 +19,4 @@ export const spendingPlanRepository = {
   async findById(id: string, tenantId: string) {
     return db.spendingPlan.findFirst({ where: { id, tenantId }, include: withRefs });
   },
-
-  // Department ids the given employee heads (manager scope).
-  async managedDepartmentIds(employeeId: string, tenantId: string): Promise<string[]> {
-    const rows = await db.department.findMany({ where: { tenantId, managerId: employeeId }, select: { id: true } });
-    return rows.map((r) => r.id);
-  },
 };

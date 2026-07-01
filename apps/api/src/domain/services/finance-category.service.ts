@@ -20,6 +20,10 @@ const DEFAULT_CATEGORIES: { kind: CategoryKind; name: string }[] = [
   { kind: 'EXPENSE', name: 'Thuế / Phí' },
   { kind: 'EXPENSE', name: 'Khác' },
   { kind: 'INCOME', name: 'Ecom / Bán hàng' },
+  // Nạp quỹ/góp vốn từ Founder là dòng tiền vào (financing), KHÔNG phải doanh thu —
+  // tách riêng để không thổi phồng "Thu trong kỳ" & làm sai net/dự báo. GĐ3 (TopUp)
+  // sẽ tự sinh giao dịch IN vào danh mục này khi Founder duyệt.
+  { kind: 'INCOME', name: 'Nạp quỹ / Góp vốn' },
   { kind: 'INCOME', name: 'Nguồn khác' },
 ];
 

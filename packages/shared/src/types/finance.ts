@@ -394,3 +394,37 @@ export interface TopUpJustificationDraft {
   shortfall: string; // thiếu hụt dự báo (0 nếu đủ)
   suggestedAmount: string; // gợi ý số tiền nạp = shortfall
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SPEC-048 GĐ3: Báo cáo thu/chi đa pháp nhân
+// ══════════════════════════════════════════════════════════════════════════════
+
+export interface FinanceReportMonth {
+  month: number; // 1–12
+  in: string;
+  out: string;
+  net: string;
+}
+
+export interface FinanceReportGroup {
+  key: string;
+  label: string;
+  in: string;
+  out: string;
+}
+
+export interface FinanceReportResponse {
+  year: number;
+  months: FinanceReportMonth[]; // luôn đủ 12 tháng
+  byEntity: FinanceReportGroup[];
+  byCategory: FinanceReportGroup[];
+  byDepartment: FinanceReportGroup[];
+  totalIn: string;
+  totalOut: string;
+  net: string;
+}
+
+export interface FinanceReportQuery {
+  year?: number;
+  issuingEntityId?: string;
+}

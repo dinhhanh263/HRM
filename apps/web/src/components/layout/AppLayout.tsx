@@ -46,6 +46,7 @@ const pageTitleKeys: Record<string, string> = {
   '/finance/transactions': 'titles.cashTransactions',
   '/finance/spending-plans': 'titles.spendingPlans',
   '/finance/topup-requests': 'titles.topUpRequests',
+  '/finance/reports': 'titles.financeReport',
   '/finance/categories': 'titles.financeCategories',
 };
 

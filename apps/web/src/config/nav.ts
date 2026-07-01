@@ -30,6 +30,7 @@ import {
   ArrowRightLeft,
   PieChart,
   Coins,
+  FileBarChart,
 } from 'lucide-react';
 import type { PermissionKey } from '@hrm/shared';
 
@@ -91,6 +92,7 @@ export const navGroups: NavGroup[] = [
       { icon: ArrowRightLeft, labelKey: 'items.cashTransactions', href: '/finance/transactions', permission: 'cash_transaction:view' },
       { icon: ClipboardList, labelKey: 'items.spendingPlans', href: '/finance/spending-plans', permission: 'spending_plan:view' },
       { icon: Coins, labelKey: 'items.topUpRequests', href: '/finance/topup-requests', permission: 'topup_request:view' },
+      { icon: FileBarChart, labelKey: 'items.financeReport', href: '/finance/reports', permission: 'finance:view' },
       { icon: Tags, labelKey: 'items.financeCategories', href: '/finance/categories', permission: 'cash_transaction:view' },
     ],
   },

@@ -86,6 +86,24 @@
       "reviewError": "Could not process. Please try again."
     }
   },
+  "report": {
+    "title": "Finance report",
+    "subtitle": "Money in/out by month, entity and category",
+    "allEntities": "All entities",
+    "export": "Export Excel",
+    "exportError": "Could not export Excel. Please try again.",
+    "totalIn": "Total in (year)",
+    "totalOut": "Total out (year)",
+    "net": "Net",
+    "byMonth": "In/out by month",
+    "byEntity": "By entity",
+    "byCategory": "By category",
+    "month": "Month",
+    "in": "In",
+    "out": "Out",
+    "netCol": "Net",
+    "empty": "No data"
+  },
   "topup": {
     "title": "Fund top-up requests",
     "subtitle": "Ask the Founder to approve adding money to the fund",

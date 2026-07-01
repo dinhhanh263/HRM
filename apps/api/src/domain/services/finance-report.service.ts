@@ -4,6 +4,8 @@ import type {
   BudgetVsActualRow,
   ForecastResponse,
   ForecastDay,
+  FinanceReportResponse,
+  FinanceReportGroup,
 } from '@hrm/shared';
 
 function monthWindow(month?: string): { start: Date; end: Date; period: string } {
@@ -193,6 +195,66 @@ export const financeReportService = {
       cashOutDate,
       shortfall: String(shortfall),
       series,
+    };
+  },
+
+  // Company-wide ACTUAL thu/chi for a year, broken down by month / entity / category
+  // / department. Optional entity filter. Powers the multi-entity report + Excel.
+  async report(tenantId: string, opts: { year?: number; issuingEntityId?: string }): Promise<FinanceReportResponse> {
+    const year = opts.year && opts.year >= 2000 && opts.year <= 2100 ? opts.year : new Date().getUTCFullYear();
+    const start = new Date(Date.UTC(year, 0, 1));
+    const end = new Date(Date.UTC(year + 1, 0, 1));
+    const entity = opts.issuingEntityId ? { issuingEntityId: opts.issuingEntityId } : {};
+
+    const txs = await db.cashTransaction.findMany({
+      where: { tenantId, status: 'ACTUAL', occurredAt: { gte: start, lt: end }, ...entity },
+      select: { amount: true, direction: true, occurredAt: true, issuingEntityId: true, categoryId: true, departmentId: true },
+    });
+
+    const months = Array.from({ length: 12 }, (_, i) => ({ month: i + 1, in: 0, out: 0 }));
+    const byEntity = new Map<string, { in: number; out: number }>();
+    const byCategory = new Map<string, { in: number; out: number }>();
+    const byDepartment = new Map<string, { in: number; out: number }>();
+    const bump = (m: Map<string, { in: number; out: number }>, key: string, dir: 'IN' | 'OUT', amt: number) => {
+      const b = m.get(key) ?? { in: 0, out: 0 };
+      if (dir === 'IN') b.in += amt; else b.out += amt;
+      m.set(key, b);
+    };
+    let totalIn = 0;
+    let totalOut = 0;
+    for (const tx of txs) {
+      const amt = Number(tx.amount);
+      const dir = tx.direction;
+      if (dir === 'IN') totalIn += amt; else totalOut += amt;
+      const mi = tx.occurredAt.getUTCMonth();
+      if (dir === 'IN') months[mi].in += amt; else months[mi].out += amt;
+      bump(byEntity, tx.issuingEntityId, dir, amt);
+      bump(byCategory, tx.categoryId ?? 'none', dir, amt);
+      bump(byDepartment, tx.departmentId ?? 'none', dir, amt);
+    }
+
+    // Resolve labels.
+    const [entities, cats, depts] = await Promise.all([
+      db.issuingEntity.findMany({ where: { id: { in: [...byEntity.keys()] } }, select: { id: true, name: true } }),
+      db.financeCategory.findMany({ where: { id: { in: [...byCategory.keys()].filter((k) => k !== 'none') } }, select: { id: true, name: true } }),
+      db.department.findMany({ where: { id: { in: [...byDepartment.keys()].filter((k) => k !== 'none') } }, select: { id: true, name: true } }),
+    ]);
+    const label = (list: { id: string; name: string }[], key: string, fallback: string) =>
+      key === 'none' ? fallback : list.find((x) => x.id === key)?.name ?? fallback;
+    const toGroups = (m: Map<string, { in: number; out: number }>, list: { id: string; name: string }[], fallback: string): FinanceReportGroup[] =>
+      [...m.entries()]
+        .map(([key, v]) => ({ key, label: label(list, key, fallback), in: String(v.in), out: String(v.out) }))
+        .sort((a, b) => Number(b.out) + Number(b.in) - (Number(a.out) + Number(a.in)));
+
+    return {
+      year,
+      months: months.map((m) => ({ month: m.month, in: String(m.in), out: String(m.out), net: String(m.in - m.out) })),
+      byEntity: toGroups(byEntity, entities, '—'),
+      byCategory: toGroups(byCategory, cats, 'Chưa phân loại'),
+      byDepartment: toGroups(byDepartment, depts, 'Không gắn bộ phận'),
+      totalIn: String(totalIn),
+      totalOut: String(totalOut),
+      net: String(totalIn - totalOut),
     };
   },
 };

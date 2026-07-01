@@ -26,6 +26,7 @@ import {
   Contact,
   Columns3,
   Wallet,
+  Tags,
 } from 'lucide-react';
 import type { PermissionKey } from '@hrm/shared';
 
@@ -83,6 +84,7 @@ export const navGroups: NavGroup[] = [
       { icon: Receipt, labelKey: 'items.paymentRequests', href: '/payment-requests', permission: 'payment_request:view' },
       { icon: ShoppingCart, labelKey: 'items.purchaseRequests', href: '/purchase-requests', permission: 'purchase_request:view' },
       { icon: Wallet, labelKey: 'items.fundAccounts', href: '/finance/accounts', permission: 'fund_account:view' },
+      { icon: Tags, labelKey: 'items.financeCategories', href: '/finance/categories', permission: 'cash_transaction:view' },
     ],
   },
   {

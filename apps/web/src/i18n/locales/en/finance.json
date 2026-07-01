@@ -49,5 +49,26 @@
       "deleteError": "Could not delete the account. Please try again.",
       "hasTransactions": "This account has transactions — deactivate it instead of deleting."
     }
+  },
+  "categories": {
+    "title": "Income / expense categories",
+    "subtitle": "Classify money in and out for tracking and reporting",
+    "income": "Income categories",
+    "expense": "Expense categories",
+    "addPlaceholder": "Add a new category...",
+    "empty": "No categories yet",
+    "inactive": "Hidden",
+    "rename": "Rename",
+    "activate": "Reactivate",
+    "deactivate": "Deactivate",
+    "delete": "Delete",
+    "toast": {
+      "created": "Category added",
+      "updated": "Category updated",
+      "deleted": "Category deleted",
+      "saveError": "Could not save the category. Please try again.",
+      "deleteError": "Could not delete the category. Please try again.",
+      "inUse": "This category is in use — deactivate it instead of deleting."
+    }
   }
 }

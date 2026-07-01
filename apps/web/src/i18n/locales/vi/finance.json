@@ -49,5 +49,26 @@
       "deleteError": "Không thể xoá tài khoản. Vui lòng thử lại.",
       "hasTransactions": "Tài khoản đã có giao dịch — hãy vô hiệu hoá thay vì xoá."
     }
+  },
+  "categories": {
+    "title": "Danh mục thu / chi",
+    "subtitle": "Phân loại các khoản tiền vào và ra để theo dõi & báo cáo",
+    "income": "Danh mục thu",
+    "expense": "Danh mục chi",
+    "addPlaceholder": "Thêm danh mục mới...",
+    "empty": "Chưa có danh mục",
+    "inactive": "Đã ẩn",
+    "rename": "Đổi tên",
+    "activate": "Kích hoạt lại",
+    "deactivate": "Vô hiệu hoá",
+    "delete": "Xoá",
+    "toast": {
+      "created": "Đã thêm danh mục",
+      "updated": "Đã cập nhật danh mục",
+      "deleted": "Đã xoá danh mục",
+      "saveError": "Không thể lưu danh mục. Vui lòng thử lại.",
+      "deleteError": "Không thể xoá danh mục. Vui lòng thử lại.",
+      "inUse": "Danh mục đang được sử dụng — hãy vô hiệu hoá thay vì xoá."
+    }
   }
 }

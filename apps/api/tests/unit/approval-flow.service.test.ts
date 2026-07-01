@@ -7,6 +7,7 @@ const flowRepo = {
   create: vi.fn(),
   update: vi.fn(),
   replaceSteps: vi.fn(),
+  replaceWatchers: vi.fn(),
   delete: vi.fn(),
 };
 const roleRepo = { findByKey: vi.fn() };
@@ -41,6 +42,7 @@ function makeFlow(overrides: Record<string, unknown> = {}) {
     createdAt: now,
     updatedAt: now,
     department: null,
+    watchers: [],
     steps: [
       {
         id: 'step-1',

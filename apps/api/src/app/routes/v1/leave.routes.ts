@@ -11,6 +11,7 @@ import {
   createApprovalFlowSchema,
   updateApprovalFlowSchema,
   replaceApprovalStepsSchema,
+  replaceWatchersSchema,
   setLeaveBalanceSchema,
   updateLeaveSettingsSchema,
 } from '../../validators/leave.validator.js';
@@ -32,6 +33,7 @@ router.post('/flows', asyncHandler(requirePermission('leave:configure')), valida
 router.get('/flows/:id', asyncHandler(requirePermission('leave:configure')), asyncHandler(leaveController.getFlow));
 router.patch('/flows/:id', asyncHandler(requirePermission('leave:configure')), validate(updateApprovalFlowSchema), asyncHandler(leaveController.updateFlow));
 router.put('/flows/:id/steps', asyncHandler(requirePermission('leave:configure')), validate(replaceApprovalStepsSchema), asyncHandler(leaveController.replaceFlowSteps));
+router.put('/flows/:id/watchers', asyncHandler(requirePermission('leave:configure')), validate(replaceWatchersSchema), asyncHandler(leaveController.replaceFlowWatchers));
 router.delete('/flows/:id', asyncHandler(requirePermission('leave:configure')), asyncHandler(leaveController.deleteFlow));
 
 // ---- Settings ---- (tenant-level leave config; HR/Admin only)

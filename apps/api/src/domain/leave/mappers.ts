@@ -111,6 +111,15 @@ export function toApprovalFlowDto(f: ApprovalFlowWithRelations): ApprovalFlowDto
         ? { id: s.approver.id, fullName: s.approver.fullName, employeeCode: s.approver.employeeCode }
         : null,
     })),
+    watchers: f.watchers.map((w) => ({
+      id: w.id,
+      watcherType: w.watcherType as 'ROLE' | 'SPECIFIC_USER',
+      roleKey: w.roleKey,
+      watcherId: w.watcherId,
+      watcher: w.watcher
+        ? { id: w.watcher.id, fullName: w.watcher.fullName, employeeCode: w.watcher.employeeCode }
+        : null,
+    })),
     createdAt: f.createdAt.toISOString(),
     updatedAt: f.updatedAt.toISOString(),
   };

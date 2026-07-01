@@ -10,11 +10,24 @@ export interface ApprovalStepData {
   approverId: string | null;
 }
 
+/** SPEC-046: a normalized CC/watcher ready to persist (irrelevant fields nulled). */
+export interface ApprovalWatcherData {
+  watcherType: ApproverType; // only ROLE | SPECIFIC_USER reach here
+  roleKey: string | null;
+  watcherId: string | null;
+}
+
 const flowInclude = {
   steps: {
     orderBy: { stepOrder: 'asc' },
     include: {
       approver: { select: { id: true, fullName: true, employeeCode: true } },
+    },
+  },
+  watchers: {
+    orderBy: { createdAt: 'asc' },
+    include: {
+      watcher: { select: { id: true, fullName: true, employeeCode: true } },
     },
   },
   department: { select: { name: true } },
@@ -59,6 +72,7 @@ export const approvalFlowRepository = {
     data: { departmentId: string | null; name: string; active: boolean },
     steps: ApprovalStepData[],
     flowType: ApprovalFlowType = ApprovalFlowType.LEAVE,
+    watchers: ApprovalWatcherData[] = [],
   ) {
     return db.$transaction(async (tx) => {
       const flow = await tx.approvalFlow.create({
@@ -73,6 +87,11 @@ export const approvalFlowRepository = {
       if (steps.length) {
         await tx.approvalStep.createMany({
           data: steps.map((s) => ({ ...s, flowId: flow.id })),
+        });
+      }
+      if (watchers.length) {
+        await tx.approvalWatcher.createMany({
+          data: watchers.map((w) => ({ ...w, flowId: flow.id })),
         });
       }
       return tx.approvalFlow.findFirstOrThrow({ where: { id: flow.id }, include: flowInclude });
@@ -92,6 +111,21 @@ export const approvalFlowRepository = {
         });
       }
       // Bump updatedAt so the flow reflects the step change.
+      await tx.approvalFlow.update({ where: { id, tenantId }, data: {} });
+      return tx.approvalFlow.findFirstOrThrow({ where: { id, tenantId }, include: flowInclude });
+    });
+  },
+
+  // SPEC-046: replace the flow's entire watcher list (empty array = clear all CC).
+  async replaceWatchers(id: string, tenantId: string, watchers: ApprovalWatcherData[]) {
+    return db.$transaction(async (tx) => {
+      await tx.approvalWatcher.deleteMany({ where: { flowId: id } });
+      if (watchers.length) {
+        await tx.approvalWatcher.createMany({
+          data: watchers.map((w) => ({ ...w, flowId: id })),
+        });
+      }
+      // Bump updatedAt so the flow reflects the watcher change.
       await tx.approvalFlow.update({ where: { id, tenantId }, data: {} });
       return tx.approvalFlow.findFirstOrThrow({ where: { id, tenantId }, include: flowInclude });
     });

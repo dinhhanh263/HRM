@@ -195,6 +195,16 @@ export const employeeRepository = {
     });
   },
 
+  /** SPEC-046: linked User ids for the given employees (every employee has one). */
+  async findUserIdsByIds(tenantId: string, ids: string[]): Promise<string[]> {
+    if (ids.length === 0) return [];
+    const rows = await db.employee.findMany({
+      where: { tenantId, id: { in: ids } },
+      select: { userId: true },
+    });
+    return rows.map((r) => r.userId);
+  },
+
   async findByIdNumber(idNumber: string, tenantId: string, excludeId?: string) {
     return db.employee.findFirst({
       where: {

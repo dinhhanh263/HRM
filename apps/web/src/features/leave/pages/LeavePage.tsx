@@ -45,7 +45,7 @@ import { LeaveSettingsCard } from '../components/LeaveSettingsCard';
 import { ApprovalFlowSettings } from '../components/ApprovalFlowSettings';
 import { RejectDialog } from '../components/RejectDialog';
 
-type Tab = 'mine' | 'review' | 'all' | 'settings' | 'flows';
+type Tab = 'mine' | 'review' | 'all' | 'watching' | 'settings' | 'flows';
 
 export function LeavePage() {
   const { t } = useTranslation('leave');
@@ -63,9 +63,15 @@ export function LeavePage() {
   const [cancelId, setCancelId] = useState<string | null>(null);
   const [rejectTarget, setRejectTarget] = useState<LeaveRequestDto | null>(null);
 
-  const isListTab = tab === 'mine' || tab === 'review' || tab === 'all';
-  const listMode: 'mine' | 'review' | 'all' =
-    tab === 'review' ? 'review' : tab === 'all' ? 'all' : 'mine';
+  const isListTab = tab === 'mine' || tab === 'review' || tab === 'all' || tab === 'watching';
+  const listMode: 'mine' | 'review' | 'all' | 'watching' =
+    tab === 'review' ? 'review' : tab === 'all' ? 'all' : tab === 'watching' ? 'watching' : 'mine';
+
+  // SPEC-046: the "Watching" (CC) tab is only relevant to users who actually
+  // watch at least one request. Probe cheaply so plain employees never see an
+  // always-empty tab, but keep it visible while the tab is active.
+  const { data: watchingProbe } = useLeaveRequests({ scope: 'watching', year });
+  const hasWatching = (watchingProbe?.pagination?.total ?? 0) > 0;
 
   // The Approvals (review) tab is a to-do queue of requests awaiting *your*
   // decision — once you act, the request leaves the queue. A status filter is
@@ -187,6 +193,7 @@ export function LeavePage() {
     { key: 'mine', label: t('tabs.mine'), show: true },
     { key: 'review', label: t('tabs.review'), show: canReview },
     { key: 'all', label: t('tabs.all'), show: canReview },
+    { key: 'watching', label: t('tabs.watching'), show: hasWatching || tab === 'watching' },
     { key: 'settings', label: t('tabs.settings'), show: canConfigure },
     { key: 'flows', label: t('tabs.flows'), show: canConfigure },
   ];

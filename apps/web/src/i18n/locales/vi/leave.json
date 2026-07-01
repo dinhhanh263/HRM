@@ -6,7 +6,8 @@
     "review": "Duyệt đơn",
     "all": "Tất cả đơn",
     "settings": "Loại nghỉ phép",
-    "flows": "Luồng duyệt"
+    "flows": "Luồng duyệt",
+    "watching": "Đang theo dõi"
   },
   "balances": {
     "title": "Số dư phép {{year}}",
@@ -81,7 +82,9 @@
       "reviewer": "Người duyệt"
     },
     "halfDay": "Nửa ngày",
-    "to": "đến"
+    "to": "đến",
+    "emptyWatching": "Chưa có đơn nào bạn theo dõi",
+    "ccOnly": "CC · chỉ xem"
   },
   "status": {
     "PENDING": "Chờ duyệt",
@@ -134,7 +137,8 @@
     "title": "Chi tiết đơn nghỉ phép",
     "subtitle": "Xem thông tin đơn và tiến trình duyệt",
     "viewAttachment": "Xem tệp đính kèm",
-    "returnedReason": "Lý do trả về"
+    "returnedReason": "Lý do trả về",
+    "watcherBanner": "Bạn đang theo dõi đơn này (chỉ xem, không có quyền duyệt)."
   },
   "timeline": {
     "title": "Tiến trình duyệt",
@@ -192,13 +196,20 @@
       "userPlaceholder": "Chọn nhân viên",
       "moveUp": "Lên",
       "moveDown": "Xuống",
-      "removeStep": "Xóa bước"
+      "removeStep": "Xóa bước",
+      "watchers": {
+        "label": "CC / Người theo dõi (chỉ xem)",
+        "hint": "Người được CC xem được đơn ở mọi thời điểm nhưng không có quyền duyệt. Có thể để trống.",
+        "add": "Thêm người theo dõi",
+        "remove": "Xóa người theo dõi"
+      }
     },
     "deleteDialog": {
       "title": "Xóa luồng duyệt?",
       "description": "Hành động này không thể hoàn tác.",
       "confirm": "Xóa"
-    }
+    },
+    "watchersCount": "CC · {{count}}"
   },
   "cancelDialog": {
     "title": "Hủy đơn nghỉ phép?",

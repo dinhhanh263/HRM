@@ -605,8 +605,9 @@ model Employee {
   reviewedRequests LeaveRequest[] @relation("ReviewerLeaveRequests")
   leaveBalances    LeaveBalance[]
 
-  stepApprovals         ApprovalStep[]  @relation("StepSpecificApprover")
-  leaveApprovalsDecided LeaveApproval[] @relation("LeaveApprovalDecider")
+  stepApprovals         ApprovalStep[]    @relation("StepSpecificApprover")
+  watchingFlows         ApprovalWatcher[] @relation("WatcherEmployee") // SPEC-046
+  leaveApprovalsDecided LeaveApproval[]   @relation("LeaveApprovalDecider")
 
   attendanceRecords        AttendanceRecord[] @relation("EmployeeAttendance")
   adjustedAttendance       AttendanceRecord[] @relation("AttendanceAdjuster")
@@ -795,6 +796,7 @@ model ApprovalFlow {
   tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   department       Department?       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   steps            ApprovalStep[]
+  watchers         ApprovalWatcher[] // SPEC-046: CC/người theo dõi (chỉ xem, không duyệt)
   requests         LeaveRequest[]
   otRequests       OvertimeRequest[]
   paymentRequests  PaymentRequest[]
@@ -824,6 +826,25 @@ model ApprovalStep {
   @@unique([flowId, stepOrder])
   @@index([flowId])
   @@map("approval_steps")
+}
+
+// SPEC-046: CC / người theo dõi gắn vào một ApprovalFlow. Watcher XEM được mọi đơn
+// đi qua flow này ở mọi trạng thái nhưng KHÔNG nằm trong ApprovalStep/LeaveApproval →
+// matchesApprover() không bao giờ khớp → về bản chất không thể duyệt/từ chối.
+// Resolve động từ flow tại thời điểm xem (không snapshot per-request).
+model ApprovalWatcher {
+  id          String       @id @default(cuid())
+  flowId      String       @map("flow_id")
+  watcherType ApproverType @map("watcher_type") // dùng lại enum: chỉ ROLE | SPECIFIC_USER
+  roleKey     String?      @map("role_key") // khi watcherType = ROLE (Role.key của custom role)
+  watcherId   String?      @map("watcher_id") // khi watcherType = SPECIFIC_USER (Employee.id)
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  flow    ApprovalFlow @relation(fields: [flowId], references: [id], onDelete: Cascade)
+  watcher Employee?    @relation("WatcherEmployee", fields: [watcherId], references: [id])
+
+  @@index([flowId])
+  @@map("approval_watchers")
 }
 
 model LeaveApproval {

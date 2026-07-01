@@ -185,3 +185,28 @@ export function matchesApprover(target: ApprovalTarget, actor: ApprovalActor): b
   }
   return target.approverId !== null && actor.employeeId === target.approverId;
 }
+
+/** SPEC-046: a single CC/watcher entry on a flow (view-only, never an approver). */
+export interface WatcherTarget {
+  watcherType: 'ROLE' | 'SPECIFIC_USER';
+  roleKey: string | null;
+  watcherId: string | null;
+}
+
+/**
+ * Decide whether `actor` watches (is CC'd on) a flow given its watcher list.
+ * ROLE watchers match any holder of the role key; SPECIFIC_USER watchers match
+ * exactly the named employee. This grants *view* only — it never confers the
+ * ability to approve/reject (watchers are absent from the approval step chain).
+ */
+export function isWatcher(
+  watchers: WatcherTarget[],
+  actor: Pick<ApprovalActor, 'employeeId' | 'roleKey'>,
+): boolean {
+  return watchers.some((w) => {
+    if (w.watcherType === 'ROLE') {
+      return w.roleKey !== null && actor.roleKey === w.roleKey;
+    }
+    return w.watcherId !== null && actor.employeeId === w.watcherId;
+  });
+}

@@ -160,4 +160,52 @@ describe('SpendingPlan (dept-manager scope + lifecycle)', () => {
     expect(res.status).toBe(200);
     expect(res.body.data.every((p: { departmentId: string }) => p.departmentId === deptA)).toBe(true);
   });
+
+  it('MANAGER cannot use scope=all nor review; HR reviews & rejects with note', async () => {
+    // MANAGER is blocked from the company-wide scope.
+    const allAsMgr = await request(app).get('/api/v1/spending-plans?scope=all').set('Authorization', `Bearer ${mgrAToken}`);
+    expect(allAsMgr.status).toBe(403);
+
+    // HR sees everything.
+    const allAsHr = await request(app).get('/api/v1/spending-plans?scope=all').set('Authorization', `Bearer ${hrToken}`);
+    expect(allAsHr.status).toBe(200);
+    expect(allAsHr.body.data.length).toBeGreaterThanOrEqual(1);
+
+    // Submit mgrA's plan (deptA) so HR can review it.
+    const mine = await request(app).get('/api/v1/spending-plans?scope=mine').set('Authorization', `Bearer ${mgrAToken}`);
+    const planA = mine.body.data.find((p: { departmentId: string }) => p.departmentId === deptA);
+    await request(app).post(`/api/v1/spending-plans/${planA.id}/submit`).set('Authorization', `Bearer ${mgrAToken}`).expect(200);
+
+    // MANAGER cannot review.
+    const reviewAsMgr = await request(app)
+      .post(`/api/v1/spending-plans/${planA.id}/review`)
+      .set('Authorization', `Bearer ${mgrAToken}`)
+      .send({ decision: 'APPROVED' });
+    expect(reviewAsMgr.status).toBe(403);
+
+    // HR reject without a note → 400.
+    const rejectNoNote = await request(app)
+      .post(`/api/v1/spending-plans/${planA.id}/review`)
+      .set('Authorization', `Bearer ${hrToken}`)
+      .send({ decision: 'REJECTED' });
+    expect(rejectNoNote.status).toBe(400);
+
+    // HR reject with note → REJECTED; manager can then resubmit.
+    const rejected = await request(app)
+      .post(`/api/v1/spending-plans/${planA.id}/review`)
+      .set('Authorization', `Bearer ${hrToken}`)
+      .send({ decision: 'REJECTED', note: 'Cắt giảm Google Ads' });
+    expect(rejected.status).toBe(200);
+    expect(rejected.body.data.status).toBe('REJECTED');
+    expect(rejected.body.data.reviewNote).toBe('Cắt giảm Google Ads');
+
+    // Resubmit → SUBMITTED → HR approves.
+    await request(app).post(`/api/v1/spending-plans/${planA.id}/submit`).set('Authorization', `Bearer ${mgrAToken}`).expect(200);
+    const approved = await request(app)
+      .post(`/api/v1/spending-plans/${planA.id}/review`)
+      .set('Authorization', `Bearer ${hrToken}`)
+      .send({ decision: 'APPROVED' });
+    expect(approved.status).toBe(200);
+    expect(approved.body.data.status).toBe('APPROVED');
+  });
 });

@@ -27,7 +27,18 @@
     "status": { "DRAFT": "Draft", "SUBMITTED": "Pending", "APPROVED": "Approved", "REJECTED": "Rejected" },
     "empty": { "title": "No spending plans yet", "description": "Create a spending plan for your department to get started" },
     "table": { "department": "Department", "period": "Period", "status": "Status", "total": "Planned total", "itemsSuffix": "items" },
-    "actions": { "edit": "Edit", "submit": "Submit" },
+    "reviewTitle": "Review spending plans",
+    "reviewSubtitle": "Consolidate & approve department spending plans",
+    "reviewCount": "{{count}} plans",
+    "reviewEmpty": "No plans found",
+    "totalPlanned": "Total planned",
+    "filters": { "all": "All" },
+    "actions": { "edit": "Edit", "submit": "Submit", "detail": "Details", "approve": "Approve", "reject": "Reject" },
+    "reject": {
+      "title": "Reject plan?",
+      "description": "{{name}}'s plan will be returned for revision. Provide a reason:",
+      "placeholder": "Rejection reason (required)"
+    },
     "form": {
       "create": "Create plan",
       "edit": "Edit spending plan",
@@ -52,7 +63,10 @@
       "submitted": "Plan submitted for review",
       "saveError": "Could not save the plan. Please try again.",
       "duplicate": "This department already has a plan for this period.",
-      "forbidden": "You can only plan for the department you head."
+      "forbidden": "You can only plan for the department you head.",
+      "approved": "Plan approved",
+      "rejected": "Plan rejected",
+      "reviewError": "Could not process. Please try again."
     }
   },
   "accounts": {

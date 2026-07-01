@@ -192,6 +192,35 @@ export const spendingPlanService = {
     return this.getById(id, tenantId, actor, true);
   },
 
+  // HR/Finance decision on a SUBMITTED plan. Reject requires a note and returns the
+  // plan to REJECTED so the manager can revise & resubmit; approve locks it APPROVED.
+  async review(
+    id: string,
+    tenantId: string,
+    actor: PlanActor,
+    decision: 'APPROVED' | 'REJECTED',
+    note: string | null | undefined,
+  ): Promise<SpendingPlanDto> {
+    const existing = await spendingPlanRepository.findById(id, tenantId);
+    if (!existing) throw new NotFoundError('Không tìm thấy kế hoạch chi');
+    if (existing.status !== 'SUBMITTED') {
+      throw new ConflictError('Chỉ duyệt được kế hoạch đang chờ duyệt', 'PLAN_NOT_REVIEWABLE');
+    }
+    if (decision === 'REJECTED' && !note?.trim()) {
+      throw new BadRequestError('Cần nêu lý do khi từ chối', 'PLAN_REJECT_NOTE_REQUIRED');
+    }
+    await db.spendingPlan.update({
+      where: { id },
+      data: {
+        status: decision,
+        reviewedById: actor.userId,
+        reviewedAt: new Date(),
+        reviewNote: note?.trim() || null,
+      },
+    });
+    return this.getById(id, tenantId, actor, true);
+  },
+
   async submit(id: string, tenantId: string, actor: PlanActor): Promise<SpendingPlanDto> {
     const existing = await spendingPlanRepository.findById(id, tenantId);
     if (!existing) throw new NotFoundError('Không tìm thấy kế hoạch chi');

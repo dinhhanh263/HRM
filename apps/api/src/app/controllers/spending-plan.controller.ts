@@ -6,6 +6,7 @@ import { permissionService } from '../../domain/services/permission.service.js';
 import { ForbiddenError } from '../../shared/errors/index.js';
 import {
   spendingPlanListQuerySchema,
+  reviewSpendingPlanSchema,
 } from '../validators/spending-plan.validator.js';
 
 async function resolveActor(req: Request): Promise<PlanActor> {
@@ -63,6 +64,14 @@ export const spendingPlanController = {
     const tenantId = req.user!.tenantId;
     const actor = await resolveActor(req);
     const data = await spendingPlanService.submit(req.params.id, tenantId, actor);
+    res.json({ success: true, data });
+  },
+
+  async review(req: Request, res: Response) {
+    const tenantId = req.user!.tenantId;
+    const actor = await resolveActor(req);
+    const { decision, note } = reviewSpendingPlanSchema.parse(req.body);
+    const data = await spendingPlanService.review(req.params.id, tenantId, actor, decision, note);
     res.json({ success: true, data });
   },
 };

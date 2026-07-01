@@ -27,7 +27,18 @@
     "status": { "DRAFT": "Nháp", "SUBMITTED": "Chờ duyệt", "APPROVED": "Đã duyệt", "REJECTED": "Bị từ chối" },
     "empty": { "title": "Chưa có kế hoạch chi", "description": "Tạo kế hoạch chi cho bộ phận của bạn để bắt đầu" },
     "table": { "department": "Bộ phận", "period": "Kỳ", "status": "Trạng thái", "total": "Tổng dự chi", "itemsSuffix": "khoản" },
-    "actions": { "edit": "Sửa", "submit": "Gửi duyệt" },
+    "reviewTitle": "Duyệt kế hoạch chi",
+    "reviewSubtitle": "Tổng hợp & duyệt kế hoạch chi của các bộ phận",
+    "reviewCount": "{{count}} kế hoạch",
+    "reviewEmpty": "Không có kế hoạch nào",
+    "totalPlanned": "Tổng dự chi",
+    "filters": { "all": "Tất cả" },
+    "actions": { "edit": "Sửa", "submit": "Gửi duyệt", "detail": "Chi tiết", "approve": "Duyệt", "reject": "Từ chối" },
+    "reject": {
+      "title": "Từ chối kế hoạch?",
+      "description": "Kế hoạch của {{name}} sẽ được trả lại để chỉnh sửa. Nêu lý do:",
+      "placeholder": "Lý do từ chối (bắt buộc)"
+    },
     "form": {
       "create": "Tạo kế hoạch",
       "edit": "Sửa kế hoạch chi",
@@ -52,7 +63,10 @@
       "submitted": "Đã gửi kế hoạch để duyệt",
       "saveError": "Không thể lưu kế hoạch. Vui lòng thử lại.",
       "duplicate": "Bộ phận đã có kế hoạch cho kỳ này.",
-      "forbidden": "Bạn chỉ lập được kế hoạch cho bộ phận mình phụ trách."
+      "forbidden": "Bạn chỉ lập được kế hoạch cho bộ phận mình phụ trách.",
+      "approved": "Đã duyệt kế hoạch",
+      "rejected": "Đã từ chối kế hoạch",
+      "reviewError": "Không thể xử lý. Vui lòng thử lại."
     }
   },
   "accounts": {

@@ -1,7 +1,7 @@
 import { Router, type Router as RouterType } from 'express';
 import { spendingPlanController } from '../../controllers/spending-plan.controller.js';
 import { authenticate } from '../../middlewares/auth.middleware.js';
-import { requirePermission } from '../../middlewares/authorize.middleware.js';
+import { requireAnyPermission, requirePermission } from '../../middlewares/authorize.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
 import {
   createSpendingPlanSchema,
@@ -20,5 +20,6 @@ router.get('/:id', asyncHandler(requirePermission('spending_plan:view')), asyncH
 router.post('/', asyncHandler(requirePermission('spending_plan:create')), validate(createSpendingPlanSchema), asyncHandler(spendingPlanController.create));
 router.patch('/:id', asyncHandler(requirePermission('spending_plan:update')), validate(updateSpendingPlanSchema), asyncHandler(spendingPlanController.update));
 router.post('/:id/submit', asyncHandler(requirePermission('spending_plan:submit')), asyncHandler(spendingPlanController.submit));
+router.post('/:id/review', asyncHandler(requireAnyPermission('spending_plan:approve', 'spending_plan:reject')), asyncHandler(spendingPlanController.review));
 
 export { router as spendingPlanRoutes };

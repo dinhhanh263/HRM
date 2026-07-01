@@ -92,7 +92,7 @@
     "status": { "PENDING": "Chờ duyệt", "APPROVED": "Đã duyệt", "REJECTED": "Bị từ chối", "CANCELLED": "Đã huỷ" },
     "empty": { "title": "Chưa có đề xuất nạp quỹ", "description": "Tạo đề xuất khi dự báo cho thấy quỹ sắp không đủ" },
     "table": { "title": "Nội dung", "requester": "Người đề xuất", "amount": "Số tiền", "status": "Trạng thái", "neededBy": "Cần trước" },
-    "actions": { "detail": "Chi tiết", "approve": "Duyệt", "reject": "Từ chối", "cancel": "Huỷ" },
+    "actions": { "detail": "Chi tiết", "approve": "Duyệt", "reject": "Từ chối", "cancel": "Huỷ", "exportPdf": "Xuất PDF" },
     "requestedBy": "Người đề xuất",
     "fundedInto": "Đã nạp vào tài khoản: {{account}}",
     "form": {
@@ -126,7 +126,8 @@
       "cancelled": "Đã huỷ đề xuất",
       "saveError": "Không thể lưu. Vui lòng thử lại.",
       "reviewError": "Không thể xử lý. Vui lòng thử lại.",
-      "draftError": "Không tạo được giải trình tự động."
+      "draftError": "Không tạo được giải trình tự động.",
+      "pdfError": "Không xuất được PDF. Vui lòng thử lại."
     }
   },
   "accounts": {

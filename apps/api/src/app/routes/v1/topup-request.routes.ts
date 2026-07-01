@@ -14,6 +14,7 @@ router.use(asyncHandler(authenticate));
 
 router.get('/justification-draft', asyncHandler(requirePermission('topup_request:create')), asyncHandler(topUpRequestController.justificationDraft));
 router.get('/', asyncHandler(requirePermission('topup_request:view')), asyncHandler(topUpRequestController.list));
+router.get('/:id/pdf', asyncHandler(requirePermission('topup_request:export')), asyncHandler(topUpRequestController.pdf));
 router.get('/:id', asyncHandler(requirePermission('topup_request:view')), asyncHandler(topUpRequestController.getById));
 router.post('/', asyncHandler(requirePermission('topup_request:create')), validate(createTopUpRequestSchema), asyncHandler(topUpRequestController.create));
 router.post('/:id/cancel', asyncHandler(requirePermission('topup_request:create')), asyncHandler(topUpRequestController.cancel));

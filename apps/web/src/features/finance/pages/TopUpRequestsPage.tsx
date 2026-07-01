@@ -31,13 +31,14 @@ import {
 } from '@/components/ui/alert-dialog';
 import { usePermission } from '@/hooks/usePermission';
 import { formatVnd } from '@/lib/utils';
-import { Plus, Check, X, Ban, Eye, Coins } from 'lucide-react';
+import { Plus, Check, X, Ban, Eye, Coins, Download } from 'lucide-react';
 import { useFundAccounts } from '../hooks/useFundAccounts';
 import {
   useTopUpRequests,
   useCreateTopUpRequest,
   useCancelTopUpRequest,
   useReviewTopUpRequest,
+  useDownloadTopUpPdf,
 } from '../hooks/useTopUpRequests';
 import { TopUpRequestFormSheet } from '../components/TopUpRequestFormSheet';
 
@@ -67,6 +68,8 @@ export function TopUpRequestsPage() {
   const createMutation = useCreateTopUpRequest();
   const cancelMutation = useCancelTopUpRequest();
   const reviewMutation = useReviewTopUpRequest();
+  const pdfMutation = useDownloadTopUpPdf();
+  const canExport = can('topup_request:export');
 
   const [sheetOpen, setSheetOpen] = useState(false);
   const [detail, setDetail] = useState<TopUpRequestDto | null>(null);
@@ -186,6 +189,18 @@ export function TopUpRequestsPage() {
             <SheetTitle>{detail?.title}</SheetTitle>
             <SheetDescription>{detail?.issuingEntityName} · {formatVnd(detail?.amount)}</SheetDescription>
           </SheetHeader>
+          {detail && canExport && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-4 w-fit"
+              disabled={pdfMutation.isPending}
+              onClick={() => pdfMutation.mutate(detail.id, { onError: () => toast.error(t('topup.toast.pdfError')) })}
+            >
+              <Download className="size-3.5 mr-1.5" />
+              {t('topup.actions.exportPdf')}
+            </Button>
+          )}
           {detail && (
             <div className="mt-6 space-y-3">
               <div className="rounded-lg bg-surface-alt px-3 py-2">

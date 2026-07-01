@@ -92,7 +92,7 @@
     "status": { "PENDING": "Pending", "APPROVED": "Approved", "REJECTED": "Rejected", "CANCELLED": "Cancelled" },
     "empty": { "title": "No top-up requests yet", "description": "Raise a request when the forecast shows funds running low" },
     "table": { "title": "Detail", "requester": "Requested by", "amount": "Amount", "status": "Status", "neededBy": "Needed by" },
-    "actions": { "detail": "Details", "approve": "Approve", "reject": "Reject", "cancel": "Cancel" },
+    "actions": { "detail": "Details", "approve": "Approve", "reject": "Reject", "cancel": "Cancel", "exportPdf": "Export PDF" },
     "requestedBy": "Requested by",
     "fundedInto": "Funded into account: {{account}}",
     "form": {
@@ -126,7 +126,8 @@
       "cancelled": "Request cancelled",
       "saveError": "Could not save. Please try again.",
       "reviewError": "Could not process. Please try again.",
-      "draftError": "Could not auto-draft the justification."
+      "draftError": "Could not auto-draft the justification.",
+      "pdfError": "Could not export the PDF. Please try again."
     }
   },
   "accounts": {

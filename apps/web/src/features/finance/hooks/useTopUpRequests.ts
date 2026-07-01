@@ -8,6 +8,7 @@ import type {
   ApiResponse,
 } from '@hrm/shared';
 import { apiClient } from '@/lib/api-client';
+import { filenameFromDisposition, saveBlob } from '@/lib/download';
 import { fundAccountKeys } from './useFundAccounts';
 
 export const topUpKeys = {
@@ -66,6 +67,20 @@ export function useCancelTopUpRequest() {
       return res.data.data;
     },
     onSuccess: () => invalidate(qc),
+  });
+}
+
+export function useDownloadTopUpPdf() {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await apiClient.get(`/topup-requests/${id}/pdf`, { responseType: 'blob' });
+      const filename = filenameFromDisposition(
+        res.headers['content-disposition'] as string | undefined,
+        `de-xuat-nap-quy-${id}.pdf`,
+      );
+      saveBlob(res.data as Blob, filename);
+      return filename;
+    },
   });
 }
 

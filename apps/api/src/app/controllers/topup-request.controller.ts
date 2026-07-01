@@ -50,4 +50,11 @@ export const topUpRequestController = {
     const data = await topUpRequestService.review(req.params.id, req.user!.tenantId, actor(req), body);
     res.json({ success: true, data });
   },
+
+  async pdf(req: Request, res: Response) {
+    const { buffer, filename } = await topUpRequestService.pdf(req.params.id, req.user!.tenantId);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(buffer);
+  },
 };

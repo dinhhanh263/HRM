@@ -2,6 +2,7 @@ import type { Prisma } from '@prisma/client';
 import { topUpRequestRepository } from '../repositories/topup-request.repository.js';
 import { recomputeAccountBalance } from '../repositories/cash-transaction.repository.js';
 import { financeReportService } from './finance-report.service.js';
+import { renderTopUpPdf } from '../topup-request/topup.pdf.js';
 import { db } from '../../infrastructure/database/client.js';
 import { NotFoundError, BadRequestError, ConflictError } from '../../shared/errors/index.js';
 import type {
@@ -129,6 +130,35 @@ export const topUpRequestService = {
       select: { id: true },
     });
     return this.getById(created.id, tenantId);
+  },
+
+  // Render the justification as a PDF to submit/archive for the Founder.
+  async pdf(id: string, tenantId: string): Promise<{ buffer: Buffer; filename: string }> {
+    const row = await topUpRequestRepository.findById(id, tenantId);
+    if (!row) throw new NotFoundError('Không tìm thấy đề xuất nạp quỹ');
+    const userIds = [row.createdById, row.reviewedById].filter((x): x is string => !!x);
+    const users = userIds.length
+      ? await db.user.findMany({ where: { id: { in: userIds }, tenantId }, select: { id: true, fullName: true } })
+      : [];
+    const nameOf = (uid: string | null) => (uid ? users.find((u) => u.id === uid)?.fullName ?? null : null);
+
+    const buffer = await renderTopUpPdf({
+      entityName: row.issuingEntity.name,
+      title: row.title,
+      amount: row.amount.toString(),
+      currency: row.currency,
+      period: row.period,
+      neededByDate: row.neededByDate,
+      status: row.status,
+      statusLabel: '',
+      justification: row.justification,
+      requesterName: nameOf(row.createdById),
+      createdAt: row.createdAt,
+      reviewedByName: nameOf(row.reviewedById),
+      reviewNote: row.reviewNote,
+      fundedAccountName: row.fundedAccount?.name ?? null,
+    });
+    return { buffer, filename: `de-xuat-nap-quy-${row.id}.pdf` };
   },
 
   async cancel(id: string, tenantId: string, actor: TopUpActor): Promise<TopUpRequestDto> {

@@ -71,6 +71,9 @@ export const PERMISSION_CATALOG = {
   // (scope enforce ở service); HR/Finance duyệt/từ chối. Dự báo & budget-vs-actual
   // dùng `finance:view`.
   spending_plan: ['view', 'create', 'update', 'submit', 'approve', 'reject'],
+  // SPEC-048 GĐ3: đề xuất nạp quỹ. HR/Finance lập & trình (view/create/export);
+  // Founder (SUPER_ADMIN) duyệt/từ chối (approve/reject). Company-wide, không scope.
+  topup_request: ['view', 'create', 'approve', 'reject', 'export'],
 } as const;
 
 export type PermissionResource = keyof typeof PERMISSION_CATALOG;

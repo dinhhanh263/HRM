@@ -399,6 +399,7 @@ model Tenant {
   financeCategories FinanceCategory[]
   cashTransactions  CashTransaction[]
   spendingPlans     SpendingPlan[] // GĐ2
+  topUpRequests     TopUpRequest[] // GĐ3
 
   @@map("tenants")
 }
@@ -1121,6 +1122,7 @@ model IssuingEntity {
   fundAccounts     FundAccount[] // SPEC-048
   cashTransactions CashTransaction[] // SPEC-048
   spendingPlans    SpendingPlan[] // SPEC-048 GĐ2
+  topUpRequests    TopUpRequest[] // SPEC-048 GĐ3
 
   @@index([tenantId])
   @@map("issuing_entities")
@@ -2898,6 +2900,7 @@ model FundAccount {
   tenant        Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   issuingEntity IssuingEntity     @relation(fields: [issuingEntityId], references: [id])
   transactions  CashTransaction[]
+  topUpRequests TopUpRequest[] // SPEC-048 GĐ3 (funded account)
 
   @@index([tenantId, issuingEntityId])
   @@map("fund_accounts")
@@ -3012,4 +3015,45 @@ model SpendingPlanItem {
 
   @@index([planId])
   @@map("spending_plan_items")
+}
+
+// ============================================================================
+// SPEC-048 GĐ3: Đề xuất nạp quỹ (Top-up Request)
+// ============================================================================
+
+enum TopUpStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+// HR/Finance lập đề xuất nạp thêm tiền vào quỹ (kèm giải trình); Founder duyệt.
+// Khi duyệt kèm tài khoản → tự sinh giao dịch IN "Nạp quỹ" và tính lại số dư.
+model TopUpRequest {
+  id              String      @id @default(cuid())
+  tenantId        String      @map("tenant_id")
+  issuingEntityId String      @map("issuing_entity_id")
+  title           String
+  amount          Decimal     @db.Decimal(14, 2)
+  currency        String      @default("VND")
+  neededByDate    DateTime?   @map("needed_by_date")
+  period          String? // "YYYY-MM" kỳ liên quan (cho giải trình)
+  justification   String // giải trình (tự sinh + sửa được)
+  status          TopUpStatus @default(PENDING)
+  reviewedById    String?     @map("reviewed_by_id")
+  reviewedAt      DateTime?   @map("reviewed_at")
+  reviewNote      String?     @map("review_note")
+  fundedAccountId String?     @map("funded_account_id") // tài khoản được nạp khi duyệt
+  fundedAt        DateTime?   @map("funded_at")
+  createdById     String      @map("created_by_id")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  tenant        Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  issuingEntity IssuingEntity @relation(fields: [issuingEntityId], references: [id])
+  fundedAccount FundAccount?  @relation(fields: [fundedAccountId], references: [id])
+
+  @@index([tenantId, status])
+  @@map("topup_requests")
 }

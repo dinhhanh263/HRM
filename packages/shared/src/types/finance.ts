@@ -264,6 +264,8 @@ export interface SpendingPlanDto {
   reviewedAt: string | null;
   reviewNote: string | null;
   createdById: string;
+  createdByName: string | null; // người đề xuất — để HR biết duyệt cho ai
+  createdByEmail: string | null;
   createdAt: string;
   updatedAt: string;
   items: SpendingPlanItemDto[];

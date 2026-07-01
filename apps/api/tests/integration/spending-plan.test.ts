@@ -132,6 +132,10 @@ describe('SpendingPlan (any-employee proposals + owner scope + HR review)', () =
     expect((await request(app).get('/api/v1/spending-plans?scope=all').set('Authorization', `Bearer ${empAToken}`)).status).toBe(403);
     const allAsHr = await request(app).get('/api/v1/spending-plans?scope=all').set('Authorization', `Bearer ${hrToken}`);
     expect(allAsHr.status).toBe(200);
+    // HR must see WHO requested each plan, to review confidently.
+    const anyPlan = allAsHr.body.data[0];
+    expect(anyPlan.createdByName).toBeTruthy();
+    expect(anyPlan.createdByEmail).toContain('@');
 
     // A submitted plan from Emp A.
     const created = await create(empAToken, { issuingEntityId: entityId, period: '2026-12', items: [{ title: 'Plan', amount: 3000000 }] });

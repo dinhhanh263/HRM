@@ -27,7 +27,22 @@ type PlanRow = Prisma.SpendingPlanGetPayload<{
   };
 }>;
 
-function toDto(p: PlanRow): SpendingPlanDto {
+type Creator = { fullName: string; email: string };
+
+// Resolve the requester (createdById → user) so HR knows who they're approving for.
+// createdById has no Prisma relation, so we batch-load the names separately.
+async function creatorMap(rows: PlanRow[], tenantId: string): Promise<Map<string, Creator>> {
+  const ids = [...new Set(rows.map((r) => r.createdById))];
+  if (!ids.length) return new Map();
+  const users = await db.user.findMany({
+    where: { id: { in: ids }, tenantId },
+    select: { id: true, fullName: true, email: true },
+  });
+  return new Map(users.map((u) => [u.id, { fullName: u.fullName, email: u.email }]));
+}
+
+function toDto(p: PlanRow, creators: Map<string, Creator>): SpendingPlanDto {
+  const creator = creators.get(p.createdById);
   return {
     id: p.id,
     departmentId: p.departmentId,
@@ -43,6 +58,8 @@ function toDto(p: PlanRow): SpendingPlanDto {
     reviewedAt: p.reviewedAt?.toISOString() ?? null,
     reviewNote: p.reviewNote,
     createdById: p.createdById,
+    createdByName: creator?.fullName ?? null,
+    createdByEmail: creator?.email ?? null,
     createdAt: p.createdAt.toISOString(),
     updatedAt: p.updatedAt.toISOString(),
     items: p.items.map((it) => ({
@@ -143,7 +160,8 @@ export const spendingPlanService = {
       where.createdById = actor.userId;
     }
     const rows = await spendingPlanRepository.findMany(tenantId, where);
-    return rows.map(toDto);
+    const creators = await creatorMap(rows, tenantId);
+    return rows.map((r) => toDto(r, creators));
   },
 
   async getById(id: string, tenantId: string, actor: PlanActor, canReviewAll: boolean): Promise<SpendingPlanDto> {
@@ -153,7 +171,8 @@ export const spendingPlanService = {
     if (!actor.isSuperAdmin && !canReviewAll && row.createdById !== actor.userId) {
       throw new NotFoundError('Không tìm thấy kế hoạch chi');
     }
-    return toDto(row);
+    const creators = await creatorMap([row], tenantId);
+    return toDto(row, creators);
   },
 
   async create(tenantId: string, actor: PlanActor, input: CreateSpendingPlanRequest): Promise<SpendingPlanDto> {

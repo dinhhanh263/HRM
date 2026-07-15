@@ -115,10 +115,7 @@ steps:
       - --timeout=900
       - --add-cloudsql-instances=$PROJECT_ID:${_REGION}:${_SQL_INSTANCE}
       - --set-env-vars=NODE_ENV=production,TRUST_PROXY=1,STORAGE_DRIVER=gcs,GCS_BUCKET=${_GCS_BUCKET},CORS_ORIGIN=${_WEB_URL},APP_WEB_URL=${_WEB_URL},GOOGLE_REDIRECT_URI=${_WEB_URL}/api/v1/auth/google/callback,GOOGLE_SUCCESS_REDIRECT=${_WEB_URL}/auth/google/success,GOOGLE_FAILURE_REDIRECT=${_WEB_URL}/login,JWT_ACCESS_EXPIRES_IN=15m,JWT_REFRESH_EXPIRES_IN=7d,RATE_LIMIT_DISABLED=false,TASKS_DRIVER=cloud,TASKS_PROJECT=$PROJECT_ID,TASKS_LOCATION=${_REGION},APP_INTERNAL_URL=${_API_URL}
-      # Google SSO (GOOGLE_CLIENT_ID/SECRET) is omitted — the app reads it via
-      # process.env with '' defaults and degrades gracefully. To enable: create
-      # the secret and append it here.
-      - --set-secrets=JWT_SECRET=JWT_SECRET:latest,DATABASE_URL=DATABASE_URL:latest,TASKS_SECRET=TASKS_SECRET:latest,RESEND_API_KEY=RESEND_API_KEY:latest,ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest
+      - --set-secrets=JWT_SECRET=JWT_SECRET:latest,DATABASE_URL=DATABASE_URL:latest,TASKS_SECRET=TASKS_SECRET:latest,RESEND_API_KEY=RESEND_API_KEY:latest,ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:latest,GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:latest
     waitFor: ['migrate', 'seed-rbac']
 
   # 4) Build the web SPA. VITE_API_URL=/api/v1 → calls go same-origin through the

@@ -11,7 +11,7 @@ import { AuthShell } from '../components/AuthShell';
  * Landing page for the Google SSO callback (`/auth/google/success`).
  *
  * The backend has already verified the Google identity and set the httpOnly
- * `refresh_token` cookie before bouncing the browser here. This page exchanges
+ * `__session` refresh cookie before bouncing the browser here. This page exchanges
  * that cookie for an access token via `/auth/refresh`, loads the user, then
  * enters the app. Any failure routes to `/login?error=sso` with neutral copy.
  */

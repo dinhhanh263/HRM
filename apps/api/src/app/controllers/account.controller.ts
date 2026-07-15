@@ -1,8 +1,9 @@
 import type { Request, Response } from 'express';
 import { accountService } from '../../domain/services/account.service.js';
 import { hashToken } from '../../shared/helpers/hash.helper.js';
+import { SESSION_COOKIE } from '../../shared/configs/cookie.config.js';
 
-const REFRESH_TOKEN_COOKIE = 'refresh_token';
+const REFRESH_TOKEN_COOKIE = SESSION_COOKIE;
 
 function currentTokenHash(req: Request): string | null {
   const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE];

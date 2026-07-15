@@ -85,7 +85,8 @@ describe('Google SSO API', () => {
 
       expect(res.status).toBe(302);
       expect(res.headers.location).toContain('accounts.google.com');
-      const state = cookieValue(res.headers['set-cookie'] as unknown as string[], 'g_oauth_state');
+      // `__session` — the only cookie Firebase Hosting forwards to Cloud Run.
+      const state = cookieValue(res.headers['set-cookie'] as unknown as string[], '__session');
       expect(state).toBeTruthy();
       // The consent URL must carry the same state we stashed in the cookie.
       expect(res.headers.location).toContain(`state=${state}`);
@@ -97,8 +98,8 @@ describe('Google SSO API', () => {
     async function startFlow() {
       const start = await request(app).get('/api/v1/auth/google');
       const setCookie = start.headers['set-cookie'] as unknown as string[];
-      const state = cookieValue(setCookie, 'g_oauth_state')!;
-      return { stateCookie: `g_oauth_state=${state}`, state };
+      const state = cookieValue(setCookie, '__session')!;
+      return { stateCookie: `__session=${state}`, state };
     }
 
     it('signs in an ACTIVE user and sets a refresh cookie', async () => {
@@ -111,8 +112,10 @@ describe('Google SSO API', () => {
 
       expect(res.status).toBe(302);
       expect(res.headers.location).toBe('http://localhost:5173/auth/google/success');
-      const refresh = cookieValue(res.headers['set-cookie'] as unknown as string[], 'refresh_token');
+      // Success overwrites the state cookie with the refresh token (same name).
+      const refresh = cookieValue(res.headers['set-cookie'] as unknown as string[], '__session');
       expect(refresh).toBeTruthy();
+      expect(refresh).not.toBe(state);
       expect(verifyCode).toHaveBeenCalledWith('good-code');
     });
 

@@ -2,6 +2,7 @@
 // Secrets are read from env and must never be logged. When credentials are
 // unset, `isGoogleSsoConfigured()` returns false so the auth routes can return
 // a clean "SSO not configured" error instead of crashing or leaking a stack.
+import { SESSION_COOKIE } from './cookie.config.js';
 
 /** OAuth client id from Google Cloud Console (safe to expose to the browser). */
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ?? '';
@@ -27,8 +28,9 @@ export const GOOGLE_FAILURE_REDIRECT =
 /** OAuth scopes — identity only; we never request Gmail/Drive access. */
 export const GOOGLE_SCOPES = ['openid', 'email', 'profile'];
 
-/** Name of the short-lived httpOnly cookie holding the CSRF `state` value. */
-export const GOOGLE_STATE_COOKIE = 'g_oauth_state';
+/** Name of the short-lived httpOnly cookie holding the CSRF `state` value.
+ * Aliased to the shared `__session` cookie — see cookie.config.ts for why. */
+export const GOOGLE_STATE_COOKIE = SESSION_COOKIE;
 
 /** How long the state cookie lives (ms). The consent round-trip is short. */
 export const GOOGLE_STATE_TTL_MS = 10 * 60 * 1000;

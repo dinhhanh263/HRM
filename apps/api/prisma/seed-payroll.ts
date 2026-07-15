@@ -129,6 +129,7 @@ async function main(): Promise<void> {
   // summary, runs the engine, and persists a payslip line per employee. approve
   // freezes the settings snapshot and locks the run.
   const draft = await payrollRunService.createRun(tenant.id, PERIOD, founder);
+  await payrollRunService.submit(tenant.id, draft.id, founder);
   const run = await payrollRunService.approve(tenant.id, draft.id, hr);
 
   console.log(

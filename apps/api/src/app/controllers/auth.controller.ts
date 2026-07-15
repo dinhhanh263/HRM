@@ -11,8 +11,9 @@ import {
 } from '../../shared/configs/google.config.js';
 import { logger } from '../../shared/utils/logger.js';
 import { hashToken } from '../../shared/helpers/hash.helper.js';
+import { SESSION_COOKIE } from '../../shared/configs/cookie.config.js';
 
-const REFRESH_TOKEN_COOKIE = 'refresh_token';
+const REFRESH_TOKEN_COOKIE = SESSION_COOKIE;
 const REFRESH_COOKIE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 /**
@@ -187,10 +188,18 @@ export const authController = {
    * Every failure redirects to the login page with a neutral ?error code.
    */
   async googleCallback(req: Request, res: Response) {
-    res.clearCookie(GOOGLE_STATE_COOKIE, { path: '/' });
+    // The state cookie shares its name with the refresh cookie (`__session`),
+    // so we must NOT clear it unconditionally up front: the success path
+    // overwrites it with the refresh token, and emitting both a delete and a
+    // set for the same cookie in one response is undefined across browsers.
+    // Failures clear it explicitly before redirecting.
+    const failWith = (code?: string) => {
+      res.clearCookie(GOOGLE_STATE_COOKIE, { path: '/' });
+      res.redirect(failureUrl(code));
+    };
 
     if (!isGoogleSsoConfigured()) {
-      res.redirect(failureUrl('sso_unavailable'));
+      failWith('sso_unavailable');
       return;
     }
 
@@ -204,13 +213,13 @@ export const authController = {
       state !== cookieState
     ) {
       logger.warn({ event: 'auth.google.rejected', reason: 'state_mismatch' });
-      res.redirect(failureUrl());
+      failWith();
       return;
     }
 
     if (typeof code !== 'string' || code.length === 0) {
       logger.warn({ event: 'auth.google.rejected', reason: 'missing_code' });
-      res.redirect(failureUrl());
+      failWith();
       return;
     }
 
@@ -218,6 +227,7 @@ export const authController = {
       const identity = await googleService.verifyCode(code);
       const result = await authService.loginWithGoogle(identity, req.headers['user-agent'] ?? null);
 
+      // Same cookie name as the state — this overwrites it with the session.
       res.cookie(REFRESH_TOKEN_COOKIE, result.refreshToken, refreshCookieOptions(true));
       logger.info({ event: 'auth.google.success', tenantId: result.user.tenantId });
       res.redirect(GOOGLE_SUCCESS_REDIRECT);
@@ -228,7 +238,7 @@ export const authController = {
         event: 'auth.google.rejected',
         reason: err instanceof Error ? err.name : 'unknown',
       });
-      res.redirect(failureUrl());
+      failWith();
     }
   },
 };

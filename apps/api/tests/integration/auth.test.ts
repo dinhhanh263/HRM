@@ -164,10 +164,10 @@ describe('Auth API', () => {
   });
 
   describe('POST /api/v1/auth/login — remember me', () => {
-    /** Pull the `refresh_token` Set-Cookie line out of a response. */
+    /** Pull the `__session` (refresh) Set-Cookie line out of a response. */
     function refreshCookie(res: request.Response): string {
       const cookies = (res.headers['set-cookie'] ?? []) as unknown as string[];
-      return cookies.find((c) => c.startsWith('refresh_token=')) ?? '';
+      return cookies.find((c) => c.startsWith('__session=')) ?? '';
     }
 
     it('issues a persistent cookie (Max-Age) when rememberMe is true', async () => {

@@ -24,6 +24,7 @@
     "db:seed:rbac": "tsx src/scripts/seed-rbac.ts",
     "db:seed:rbac:prod": "node dist/scripts/seed-rbac.js",
     "db:seed:timesheet": "tsx prisma/seed-timesheet.ts",
+    "db:seed:demo": "tsx prisma/seed-demo-full.ts",
     "db:seed:payroll": "tsx prisma/seed-payroll.ts",
     "db:seed:payroll:oct": "tsx prisma/seed-payroll-october.ts",
     "db:studio": "prisma studio"

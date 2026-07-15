@@ -139,8 +139,13 @@ gcloud builds submit --config cloudbuild.yaml \
 # Lấy URL service rồi chạy lại để bơm APP_INTERNAL_URL (Cloud Tasks mới gọi được /internal/tasks/*):
 API_URL=$(gcloud run services describe hrm-api --region=$REGION --format='value(status.url)')
 gcloud builds submit --config cloudbuild.yaml \
-  --substitutions=_GCS_BUCKET=hrm-cv-$PROJECT_ID,_WEB_URL=https://hrm.codecrush.asia,_API_URL=$API_URL
+  --substitutions=_GCS_BUCKET=hrm-cv-$PROJECT_ID,_WEB_URL=https://hrm.codecrush.asia,_API_URL=$API_URL,_SSO_SECRETS=',GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:latest,GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:latest'
 ```
+
+> **Google SSO:** `--set-secrets` của `deploy-api` THAY TOÀN BỘ danh sách secret mỗi lần deploy.
+> Project đã có 2 secret `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` thì PHẢI truyền `_SSO_SECRETS`
+> như trên trong MỌI lần deploy — thiếu nó SSO bị tắt âm thầm (login báo `sso_unavailable`).
+> Project chưa cấu hình SSO thì bỏ qua substitution này.
 
 > Trong pha 1, các lần enqueue job sẽ lỗi (chưa có `APP_INTERNAL_URL`) — chấp nhận được khi bring-up. Sau pha 2 mọi job chạy bình thường.
 
